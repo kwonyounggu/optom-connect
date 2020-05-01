@@ -1,0 +1,105 @@
+.footer
+{
+	/*background-color: #353743;*/
+	background-color: transparent;
+	margin-top: 20px;
+}
+
+.container
+{
+	/*border: 1px solid green !important;*/
+	color: grey;
+}
+.top-footer ul 
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.top-footer ul li
+{
+	padding-left: 10px;
+}
+.top-footer
+{
+	display: -webkit-flex; 
+	display: flex;
+	flex-flow: row wrap;
+}
+.top-column
+{
+	margin: 10px;
+	-webkit-flex: 1 1 0px;  
+    -ms-flex: 1 1 0px;  
+	flex: 1 1 0px;
+	/*border: 1px solid blue;*/
+}
+.top-column:first-of-type
+{
+	-webkit-flex: 2 2 0px;  
+    -ms-flex: 2 2 0px;  
+	flex: 2 2 0px;
+}
+.bottom-footer
+{
+	display: -webkit-flex; 
+	display: flex;
+	flex-flow: row wrap;
+}
+.bottom-column
+{
+	-webkit-flex: 1 1 0px;  
+    -ms-flex: 1 1 0x;  
+	flex: 1 1 0px;
+	/*border: 1px solid blue;*/
+}
+.bottom-column:last-of-type
+{
+	-webkit-flex: 2 2 0px;  
+    -ms-flex: 2 2 0px;  
+	flex: 2 2 0px;
+	align-self: stretch;
+}
+
+.bottom-column:last-of-type a
+{
+	padding: 10px;
+	text-decoration: none;
+	color: grey;
+	font-weight: normal;
+}
+.bottom-column:last-of-type span
+{
+	float: right;
+	padding-right: 10px;
+}
+.bottom-footer .fa
+{
+	color: #70726F;
+    font-size: 20px;
+    padding: 10px;
+    transition: all .5s ease;
+}
+.bottom-footer .fa:hover
+{
+	color: white;
+}
+/* Medium screens */
+@media all and (max-width: 800px) 
+{
+  .top-footer, .bottom-footer 
+  {
+    /* When on medium sized screens, we center it by evenly distributing empty space around items */
+    justify-content: space-around;
+  }
+}
+
+/* Small screens */
+@media all and (max-width: 500px) 
+{
+  .top-footer, .bottom-footer  
+  {
+    /* On small screens, we are no longer using row direction but column */
+    flex-direction: column;
+  }
+}

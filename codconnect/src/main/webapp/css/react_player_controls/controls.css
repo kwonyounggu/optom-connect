@@ -1,0 +1,388 @@
+.PlayButton,
+.PauseButton,
+.PrevButton,
+.NextButton,
+.SoundOnButton,
+.SoundOffButton
+{
+  margin-top: 8px;
+  margin-right: 10px;
+  margin-left: 10px;
+  padding: 8px;
+  background: #fefefe;
+  border: 2px solid #72D687;
+  border-radius: 100%;
+  outline: none; 
+  
+  zoom: 0.65;
+  -moz-transform: scale(0.65);
+}
+
+.timeDisplay
+{
+	 margin-top: 12px;
+	 margin-right: 2px;
+	 margin-left: 2px;
+	 padding: 4px;
+	 outline: none; 
+  
+	 zoom: 1;
+  	 -moz-transform: scale(1);
+}
+
+.instrumentToPlay
+{
+	 margin-top: 2px;
+	 margin-left: 2px;
+	 margin-right: 2px;
+	 padding: 2px 4px;
+
+	 outline: none; 
+  
+	 zoom: 0.8;
+  	 -moz-transform: scale(0.8);
+}
+/*
+.sidePaneManipulation
+{
+	 margin-top: 5px;
+	 margin-right: 20px;
+	 padding: 8px;
+	 background: #fefefe;
+	 border: 1px solid #72D687;
+	 border-radius: 100%;
+	 outline: none; 
+  
+	
+}
+*/
+/*added by Young
+.PlayButton, .PauseButton, .PrevButton, .sidePaneManipulation, .timeDisplay, .instrumentToPlay
+{
+	float: left;
+}
+*/
+/*added by Young*/
+.SoundOnButton, .SoundOffButton
+{
+	float: right;
+}
+  .PlayButton[disabled],
+  .PauseButton[disabled],
+  .PrevButton[disabled],
+  .NextButton[disabled],
+  .SoundOnButton[disabled],
+  .SoundOffButton[disabled] {
+    opacity: 0.5; }
+  .PlayButton.isEnabled,
+  .PauseButton.isEnabled,
+  .PrevButton.isEnabled,
+  .NextButton.isEnabled,
+  .SoundOnButton.isEnabled,
+  .SoundOffButton.isEnabled 
+  {
+    cursor: pointer; 
+  }
+  
+  .musicFullscreen:hover, .sidePaneManipulation:hover
+  {
+  	cursor: pointer; 
+  	border-color: #3ea454; 
+  }
+
+  .PlayButton.isEnabled:hover,
+  .PauseButton.isEnabled:hover,
+  .PrevButton.isEnabled:hover,
+  .NextButton.isEnabled:hover,
+  .SoundOnButton.isEnabled:hover,
+  .SoundOffButton.isEnabled:hover 
+  {
+    border-color: #3ea454; 
+  }
+  
+  .PlayButton.isEnabled:hover .Icon-shape,
+  .PauseButton.isEnabled:hover .Icon-shape,
+  .PrevButton.isEnabled:hover .Icon-shape,
+  .NextButton.isEnabled:hover .Icon-shape,
+  .SoundOnButton.isEnabled:hover .Icon-shape,
+  .SoundOffButton.isEnabled:hover .Icon-shape 
+  {
+    fill: #3ea454; 
+  }
+  .PlayButton.isEnabled:active,
+  .PauseButton.isEnabled:active,
+  .PrevButton.isEnabled:active,
+  .NextButton.isEnabled:active,
+  .SoundOnButton.isEnabled:active,
+  .SoundOffButton.isEnabled:active 
+  {
+    border-color: rgba(62, 164, 84, 0.5); 
+  }
+ .PlayButton.isEnabled:active .Icon-shape,
+ .PauseButton.isEnabled:active .Icon-shape,
+ .PrevButton.isEnabled:active .Icon-shape,
+ .NextButton.isEnabled:active .Icon-shape,
+ .SoundOnButton.isEnabled:active .Icon-shape,
+ .SoundOffButton.isEnabled:active .Icon-shape 
+ {
+   fill: rgba(62, 164, 84, 0.5); 
+ }
+
+.Icon 
+{
+  display: block;
+  width: 30px;
+  height: 30px; 
+}
+
+.Icon-shape 
+{
+  fill: #72D687; 
+}
+
+.ProgressBar, .VolumeSlider
+
+{
+  position: relative;
+  background: #eee;
+  border-radius: 4px; 
+}
+
+/*Added by Young to put this on front of all
+.VolumeSlider 
+{
+	 z-index: 1;
+}
+
+*/
+  .ProgressBar-elapsed, .ProgressBar-value,
+  .VolumeSlider-elapsed, .VolumeSlider-value 
+  {
+    background: #878C88;
+    border-radius: 4px; 
+    }
+  .ProgressBar-seek,
+  .VolumeSlider-seek 
+  {
+    position: absolute;
+    cursor: pointer; 
+  }
+  .ProgressBar-handle
+  {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #72D687;
+    border-radius: 100%;
+    transform: scale(0);
+    transition: transform 0.2s; 
+   }
+  .VolumeSlider-handle 
+  {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #72D687;
+    border-radius: 100%;
+    transform: scale(0);
+    transition: transform 0.2s; 
+   }
+  .ProgressBar.isSeekable:hover .ProgressBar-handle,
+  .ProgressBar.isSeekable:hover .VolumeSlider-handle, .ProgressBar.isEnabled:hover .ProgressBar-handle,
+  .ProgressBar.isEnabled:hover .VolumeSlider-handle,
+  .VolumeSlider.isSeekable:hover .ProgressBar-handle,
+  .VolumeSlider.isSeekable:hover .VolumeSlider-handle,
+  .VolumeSlider.isEnabled:hover .ProgressBar-handle,
+  .VolumeSlider.isEnabled:hover .VolumeSlider-handle {
+    transform: scale(1); }
+  .ProgressBar.isSeekable:hover .ProgressBar-intent,
+  .ProgressBar.isSeekable:hover .VolumeSlider-intent, .ProgressBar.isEnabled:hover .ProgressBar-intent,
+  .ProgressBar.isEnabled:hover .VolumeSlider-intent,
+  .VolumeSlider.isSeekable:hover .ProgressBar-intent,
+  .VolumeSlider.isSeekable:hover .VolumeSlider-intent,
+  .VolumeSlider.isEnabled:hover .ProgressBar-intent,
+  .VolumeSlider.isEnabled:hover .VolumeSlider-intent {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.1); }
+  .ProgressBar.isSeekable .ProgressBar-elapsed,
+  .ProgressBar.isSeekable .VolumeSlider-value, .ProgressBar.isEnabled .ProgressBar-elapsed,
+  .ProgressBar.isEnabled .VolumeSlider-value,
+  .VolumeSlider.isSeekable .ProgressBar-elapsed,
+  .VolumeSlider.isSeekable .VolumeSlider-value,
+  .VolumeSlider.isEnabled .ProgressBar-elapsed,
+  .VolumeSlider.isEnabled .VolumeSlider-value {
+    background: #72D687; }
+
+/*ProgressBar was width: 100% before*/
+/*
+.ProgressBar
+{
+  height: 8px;
+  width: 100%; 
+  margin: 5px 0; 
+  transform: scale(1, 0.5);
+ }
+ */
+.ProgressBar 
+{
+  height: 8px;
+  width: 45%; 
+  margin: 0; 
+  transform: scale(1, 0.5);
+ }
+  .ProgressBar-elapsed 
+  {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0; 
+  }
+  .ProgressBar-buffered 
+  {
+    height: 100%;
+    border-radius: 4px;
+    background: #d3d3d3; 
+   }
+  .ProgressBar-seek 
+  {
+    top: -6px;
+    right: 0;
+    bottom: -6px;
+    left: 0; 
+   }
+  .ProgressBar-handle 
+  {
+    top: 0;
+    margin: -4px 0 0 -8px; 
+  }
+  /*Size of the dragging circle*/
+  .ProgressBar.isSeekable:hover .ProgressBar-handle 
+  {
+    transform: scale(0.8, 1.6); 
+  }
+  .ProgressBar.isSeekable:hover .ProgressBar-intent 
+  {
+    top: 0;
+    left: 0;
+    height: 100%; 
+  }
+  .ProgressBar.isLoading {
+    opacity: 0.5;
+    background: #ccc;
+    animation: barLoading 2s infinite; }
+
+
+.VolumeSlider-value 
+{
+  position: absolute; 
+}
+
+/*
+.VolumeSlider.isHorizontal 
+{
+  width: 20%;
+  height: 8px;
+  transition: width 0.3s, height 0.05s; 
+}
+*/
+
+.VolumeSlider.isHorizontal 
+{
+  width: 70px;
+  height: 8px;
+  margin-top: 8px;
+  margin-left: 2px;
+  transition: width 0.3s, height 0.05s; 
+}
+
+.VolumeSlider.isHorizontal .VolumeSlider-value 
+{
+  height: 100%;
+  left: 0; 
+}
+
+/*
+.VolumeSlider.isHorizontal
+{
+  margin-top: 15px;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding: 2px 4px;
+
+  zoom: 0.8;
+  -moz-transform: scale(0.8);
+}
+ */
+
+/* Original margin: -4px 0 0 -8px;*/
+.VolumeSlider.isHorizontal
+.VolumeSlider-handle 
+{ 
+	margin: -4px 0 0 -8px;
+}
+
+.VolumeSlider.isVertical 
+{
+  width: 6px;
+  height: 70px;
+  transition: width 0.05s, height 0.3s; 
+}
+
+.VolumeSlider.isVertical .VolumeSlider-value 
+{
+  bottom: 0;
+  width: 100%; 
+}
+
+.VolumeSlider.isVertical .VolumeSlider-handle 
+{
+  left: 0;
+  margin: 0 0 -8px -5px; 
+}
+
+.VolumeSlider-seek {
+  left: -6px;
+  top: 0;
+  right: -6px;
+  bottom: 0; }
+
+.VolumeSlider.isEnabled:hover .VolumeSlider-handle 
+{
+  transform: scale(1); 
+}
+
+.VolumeSlider.isEnabled:hover .VolumeSlider-intent 
+{
+  bottom: 0;
+  left: 0;
+  width: 100%; 
+}
+  
+.reactAnimationSwitch
+{
+	vertical-align: middle;
+}
+
+/*Adding z-index: -1 effects no clicking accepted
+.abcMusicSheet
+{
+	position: relative;
+	border: 0px red solid;
+	padding: 10px 20px 10px 10px;
+  	display: block;
+}
+*/
+
+.fullScreenableNode
+{
+	margin: auto;
+}
+
+
+.fullscreen-enabled .fullScreenableNode
+{
+	background: #fff;
+	width: 100%;
+	height: 100%;
+	overflow-y: auto;
+}
