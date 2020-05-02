@@ -56,6 +56,7 @@
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-bootstrap-slider": "^2.2.3",
+    "react-bootstrap-tabs": "^1.0.2",
     "react-device-detect": "^1.6.1",
     "react-dom": "^16.13.1",
     "react-facebook": "^6.0.15",

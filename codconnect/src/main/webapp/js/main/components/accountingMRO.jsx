@@ -17,7 +17,7 @@ const styles = (theme) =>
 	}
 });
 
-const Home=(props)=>
+const AccouningMRO=(props)=>
 {
 	return (
 			<div>
@@ -29,4 +29,4 @@ const Home=(props)=>
 		   );
 };
 
-export default Home;
+export default AccouningMRO;

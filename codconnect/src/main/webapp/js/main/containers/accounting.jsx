@@ -1,10 +1,12 @@
 import React from "react";
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/styles';
-import Paper from '@material-ui/core/Paper';
+import PropTypes from "prop-types";
+import {Link, Route, Switch} from "react-router-dom";
+import { withStyles } from "@material-ui/styles";
+import Paper from "@material-ui/core/Paper";
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
-
-
+const AccountingMRO = React.lazy( () => import("../components/accountingMRO.jsx") );
 /*
  * flex-direction: row | row-reverse | column | column-reverse;
  * backgroundColor: 'white',
@@ -43,11 +45,21 @@ class Accounting extends React.Component
 	}
 	render()
 	{
-		console.log("==================>INFO: Accounting.render() is called, this.props: ", this.props);
+		console.log("INFO: Accounting.render() is called, this.props: ", this.props);
 
 		return(	
-				<Paper elevation={0} className={this.props.classes.gridPanel}/>
-				
+				<div className={this.props.classes.gridPanel}>
+					<Tabs value={this.props.location.pathname} vari="scrollable" scrollButtons="on">
+			          <Tab label="OHIP Reconciliation > Billing" value="/accounting" component={Link} to="/accounting" />
+					  <Tab label="OHIP Reconciliation > Billing" value="/accounting/bill" component={Link} to="/accounting/bill" />
+					  <Tab label="NON-OHIP Reconciliation > Billing" value="/accounting/nonohip" component={Link} to="/accounting/nonohip" />
+			        </Tabs>
+                    <Switch>
+						<Route exact path="/accounting"  ><h3>hello</h3></Route>
+						<Route path="/accounting/bill"  ><h3>hello 2</h3></Route>
+						<Route path="/accounting/nonohip"  ><h3>hello 3</h3></Route>
+					</Switch>
+				</div>
 			  );
 	}
 }
