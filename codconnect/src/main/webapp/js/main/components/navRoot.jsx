@@ -58,31 +58,7 @@ const AntTab = withStyles((theme) => ({
   },
   selected: {},
 }))((props) => <Tab disableRipple {...props} />);
-const StyledTabs = withStyles({
-  indicator: {
-    display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    '& > div': {
-      maxWidth: 40,
-      width: '100%',
-      backgroundColor: '#635ee7',
-    },
-  },
-})((props) => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
 
-const StyledTab = withStyles((theme) => ({
-  root: {
-    textTransform: 'none',
-    color: '#fff',
-    fontWeight: theme.typography.fontWeightRegular,
-    fontSize: theme.typography.pxToRem(15),
-    marginRight: theme.spacing(1),
-    '&:focus': {
-      opacity: 1,
-    },
-  },
-}))((props) => <Tab disableRipple {...props} />);
 
 const useStyles = makeStyles((theme) => 
 ({
@@ -110,6 +86,28 @@ const NavRoot=(props)=>
 {
 	console.log("In NavRoot, ",props);
 	
+	let currentMenu = null;
+	let pathname = props.location.pathname.toLowerCase();
+    switch(pathname)
+    {
+		case "/": { currentMenu=<NavRootMenuBar {...props} pathname="/"/>; break;}
+		case (pathname.match(/^\/about[\/]?/i) || {}).input: { currentMenu=<NavRootMenuBar {...props} pathname="/about"/>; break;}
+		case (pathname.match(/^\/referrals[\/]?/i) || {}).input: { currentMenu=<NavRootMenuBar {...props} pathname="/referrals"/>; break;}
+		case (pathname.match(/^\/accounting[\/]?/i) || {}).input: { currentMenu=<NavRootMenuBar {...props} pathname="/accounting"/>; break;}
+		/*case (pathname.match(/^\/login[\/]?/i) || {}).input: { pathname = "/login"; break;}
+		case (pathname.match(/^\/signup[\/]?/i) || {}).input: { pathname = "/signup"; break;}
+		case (pathname.match(/^\/forgotPassword[\/]?/i) || {}).input: { pathname = "/forgotPassword"; break;}
+		case (pathname.match(/^\/resetPassword[\/]?/i) || {}).input: { pathname = "/resetPassword"; break;} */
+		default: { currentMenu=<NavRootMenuBar {...props} pathname="/"/>; break;}
+	}
+	
+	return currentMenu;
+}
+/*
+const NavRootOrg=(props)=>
+{
+	console.log("In NavRoot, ",props);
+	
 	let currentMenu=null, pathname=props.location.pathname.startsWith("/accounting") ? "/accounting" : props.location.pathname;
 	switch(pathname)
 	{
@@ -134,7 +132,7 @@ const NavRoot=(props)=>
 	}
 	return currentMenu;
 }
-
+*/
 const NavRootMenuBar = (props) => 
 {
   const classes = useStyles();
