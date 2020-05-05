@@ -7,8 +7,7 @@ import {Provider} from "react-redux";
 import store from "./main/store.jsx";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {throttle} from "lodash";
-//import useMediaQuery from '@material-ui/core/useMediaQuery';
-import withMediaQuery from "./main/utils/withMediaQuery.jsx";
+
 
 const Home = React.lazy( () => import("./main/components/home.jsx") );
 const Accounting = React.lazy( () => import("./main/containers/accounting.jsx") );
@@ -30,19 +29,7 @@ const Error = React.lazy( () => import("./main/components/common/error.jsx") );
 
 import "./main/css/root.css";
 import "./main/css/footer.css";
-/**
-export const breakpoints = {
-  desktopLg: 1400,
-  desktopMd: 1300,
-  desktopSm: 1200,
-  tabletLg: 1040,
-  tabletMd: 991,
-  tabletSm: 840,
-  mobileLg: 767,
-  mobileMd: 540,
-  mobileSm: 400
-};
- */
+
 class MainApp extends React.Component
 {
 	static NORM_WIDTH = 900;
@@ -64,9 +51,6 @@ class MainApp extends React.Component
 		if (MainApp.NORM_WIDTH > window.innerWidth) this.rootContainer.current.style.width = "95%";
 		else this.rootContainer.current.style.width = MainApp.NORM_WIDTH+"px";
 		window.addEventListener("resize", this.onWindowResizeEventListener);
-		
-		this.match = window.matchMedia(`(max-width: 768px)`);
-		console.log("[INFO in root_index.jsx->componentDidMount() : ]", this.match);
     }
     componentWillUnmount()
     {
@@ -83,9 +67,11 @@ class MainApp extends React.Component
 	);
     render()
     {	
-		//let w = withMediaQuery;
-		
-		//console.log("[INFO in root_index.jsx->render()]: ", w.options);
+	
+		//console.log("browserInnerWidth: ", this.state.browserInnerWidth, " : ", MainApp.NORM_WIDTH);
+		//console.log("this.rootContainer.current): ", this.rootContainer.current == null ? "NULL" : this.rootContainer.current);
+		//console.log("INFO, root_index.jsx, ",this.props);
+		//const rootContainerStyles = window.getComputedStyle(this.rootContainer, null).getPropertyValue("border-radius");
 
 		
         return(

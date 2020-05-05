@@ -1,18 +1,27 @@
 import React from 'react';
 import {Link, useRouteMatch, LinkProps} from "react-router-dom";
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import CloseIcon from '@material-ui/icons/Close';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import Grid from "@material-ui/core/Grid";
 
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+
+import { green } from '@material-ui/core/colors';
 
 import {connect} from "react-redux";
 import {logout, login} from "../auth/actions/loginActions.jsx";
@@ -59,25 +68,60 @@ const AntTab = withStyles((theme) => ({
   selected: {},
 }))((props) => <Tab disableRipple {...props} />);
 
-
+const drawerWidth = 240;
 const useStyles = makeStyles((theme) => 
 ({
+  root_tmp: {
+    padding: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+      backgroundColor: theme.palette.secondary.main,
+    },
+    [theme.breakpoints.up('md')]: {
+      backgroundColor: theme.palette.primary.main,
+    },
+    [theme.breakpoints.up('lg')]: {
+      backgroundColor: green[500],
+    },
+  },
   root: 
   {
-    flexGrow: 1,
+    display: "flex"
+  },
+  appBar: 
+  {
+    zIndex: theme.zIndex.drawer + 1,
+  },
+  drawer: 
+  {
+    [theme.breakpoints.up("sm")]: {width: drawerWidth, flexShrink: 0}
   },
   menuButton: 
   {
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('xl')]: 
+	{
+      display: 'none'
+    },
   },
   title: 
   {
     display: 'none',
     [theme.breakpoints.up('sm')]: {display: 'block'}
   },
-  logo: {
-    width: 135,
-    height: 43.54
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: 
+  {
+    width: drawerWidth
+  },
+  content: 
+  {
+    flexGrow: 1,
+    padding: theme.spacing(3)
+  },
+  closeMenuButton: 
+  {
+    marginRight: "auto",
+    marginLeft: 0
   }
 }));
 
@@ -103,45 +147,56 @@ const NavRoot=(props)=>
 	
 	return currentMenu;
 }
-/*
-const NavRootOrg=(props)=>
-{
-	console.log("In NavRoot, ",props);
-	
-	let currentMenu=null, pathname=props.location.pathname.startsWith("/accounting") ? "/accounting" : props.location.pathname;
-	switch(pathname)
-	{
-		case "/": 
-		case "/login":
-		case "/about":
-		case "/referrals":
-		case "/accounting":
-		case "/signup":
-		case "/forgotPassword":
-		case "/resetPassword":
-		case (pathname.match(/^\/home[\/]?/i)||{}).input:
-		{
-			currentMenu=<NavRootMenuBar {...props} pathname={pathname}/>;
-			break;
-		}
-		default:
-		{
-			console.log("Location pathname, ", pathname,", is not defined in NavRoot of naveRoot.jsx");
-			break;
-		}
-	}
-	return currentMenu;
-}
-*/
+
 const NavRootMenuBar = (props) => 
 {
+  const dummyCategories = [
+    "Hokusai",
+    "Hiroshige",
+    "Utamaro",
+    "Kuniyoshi",
+    "Yoshitoshi"
+  ];
   const classes = useStyles();
-  //console.log("props: ", props);
+  const theme = useTheme();
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  React.useEffect(() => 
+  { //https://dev.to/vitaliemaldur/resize-event-listener-using-react-hooks-1k0c
+    //use resizeListener for the size of window when it 
+// use listener in root_index.jsx to provide as a prop value
+    console.log("width: "+window.innerWidth);
+  });
+  function handleDrawerToggle() 
+  {
+	//let matches = useMediaQuery(theme.breakpoints.up('lg'));
+	//console.log("theme.breakpoints.up('lg'): ", matches);
+	if (window.innerWidth >= 1280) //over lg size
+	{	
+		if (mobileOpen) setMobileOpen(false);
+		//if (fixedMenu is open) close it
+		//else open the fixedMenu
+	}
+	
+    else setMobileOpen(!mobileOpen);
+  }
+  const drawer = (
+    <div>
+      <List>
+        {dummyCategories.map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
   return (
-      <AppBar position="relative" color="transparent">
-        <Toolbar style={{ alignItems: "center", justifyContent: "center" }}>	
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+	<div className={classes.root}>
+	  <CssBaseline />
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>	
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="Open drawer" onClick={handleDrawerToggle}>
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
@@ -156,6 +211,37 @@ const NavRootMenuBar = (props) =>
 		
         </Toolbar>
      </AppBar>
+     <nav className={classes.drawer}>
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        {/*<Hidden mdUp implementation="css">*/}
+          <Drawer
+            variant="temporary"
+            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            classes={{ paper: classes.drawerPaper}}
+            ModalProps={{ keepMounted: true}} // Better open performance on mobile
+          >
+            <IconButton onClick={handleDrawerToggle} className={classes.closeMenuButton}>
+              <CloseIcon/>
+            </IconButton>
+            {drawer}
+          </Drawer>
+        {/*</Hidden> */}
+		<Hidden mdDown implementation="css">
+		{/*When this drawer is open, close the temporay drwawer if open */}
+          <Drawer
+            className={classes.drawer}
+            variant="permanent"
+            classes={{ paper: classes.drawerPaper }}
+          >
+            <div className={classes.toolbar} />
+            {drawer}
+          </Drawer>  
+        </Hidden>
+      </nav>
+
+	</div>
   );
 }
 
