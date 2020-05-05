@@ -52,7 +52,7 @@ class MainApp extends React.Component
         super(props);
 		this.state =
 		{
-			
+			currentWidth: window.innerWidth
 		};
 		this.rootContainer = React.createRef();
     }
@@ -61,12 +61,12 @@ class MainApp extends React.Component
     }
     componentDidMount()
     {
-		if (MainApp.NORM_WIDTH > window.innerWidth) this.rootContainer.current.style.width = "95%";
-		else this.rootContainer.current.style.width = MainApp.NORM_WIDTH+"px";
+		//if (MainApp.NORM_WIDTH > window.innerWidth) this.rootContainer.current.style.width = "95%";
+		//else this.rootContainer.current.style.width = MainApp.NORM_WIDTH+"px";
 		window.addEventListener("resize", this.onWindowResizeEventListener);
 		
-		this.match = window.matchMedia(`(max-width: 768px)`);
-		console.log("[INFO in root_index.jsx->componentDidMount() : ]", this.match);
+		//this.match = window.matchMedia(`(max-width: 768px)`);
+		//console.log("[INFO in root_index.jsx->componentDidMount() : ]", this.match);
     }
     componentWillUnmount()
     {
@@ -76,8 +76,9 @@ class MainApp extends React.Component
 	(
 			() => 
 			{
-				if (MainApp.NORM_WIDTH > window.innerWidth) this.rootContainer.current.style.width = "95%";
-				else this.rootContainer.current.style.width = MainApp.NORM_WIDTH+"px";
+				//if (MainApp.NORM_WIDTH > window.innerWidth) this.rootContainer.current.style.width = "95%";
+				//else this.rootContainer.current.style.width = MainApp.NORM_WIDTH+"px";
+				this.setState({currentWidth: window.innerWidth});
 		    },
 			1000
 	);
@@ -91,7 +92,7 @@ class MainApp extends React.Component
         return(
         		<Provider store={store}>
 		        	<BrowserRouter>
-						<Route component={(props) => <NavRoot {...props}  /> } />
+						<Route component={(props) => <NavRoot {...props} currentWidth={this.state.currentWidth}/> } />
         				<React.Suspense fallback={<div>Component being loaded ... </div>}>	
 							{ /*MainApp.NORM_WIDTH < this.state.browserInnerWidth && <div/> */}
 

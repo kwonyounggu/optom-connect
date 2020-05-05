@@ -26,7 +26,8 @@ const styles = (theme) =>
 		padding: 8,
 		border: '0px solid red',
 		borderRadius: '8px'
-	}
+	},
+	toolbar: theme.mixins.toolbar
 });
 
 const StyledTabs = withStyles({
@@ -86,7 +87,7 @@ class Accounting extends React.Component
 		}
 		
 		return(	
-				<div className={this.props.classes.gridPanel}>
+				<div className={this.props.classes.toolbar___}>
 					<Paper square>	
 					<StyledTabs value={pathname} variant="scrollable" scrollButtons="on">
 			          <StyledTab label="OHIP Billing" value="/accounting" component={Link} to="/accounting" />

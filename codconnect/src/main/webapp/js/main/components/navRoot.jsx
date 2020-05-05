@@ -69,6 +69,7 @@ const AntTab = withStyles((theme) => ({
 }))((props) => <Tab disableRipple {...props} />);
 
 const drawerWidth = 240;
+const LARGE_SCREEN = 1280;
 const useStyles = makeStyles((theme) => 
 ({
   root_tmp: {
@@ -122,9 +123,14 @@ const useStyles = makeStyles((theme) =>
   {
     marginRight: "auto",
     marginLeft: 0
+  },
+  logo:
+  {
+	width: 67,
+	height: 45
   }
 }));
-
+//logo.width=1000*50/667, height: 50
 
 const NavRoot=(props)=>
 {
@@ -160,25 +166,36 @@ const NavRootMenuBar = (props) =>
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [currentWidth, setCurrentWidth] = React.useState(props.currentWidth);
+  const [permanentOpen, setPermanentOpen] = React.useState(true);
 
+  //This will be called whenever any props value changed or UI events updated such as a GUI clicks
   React.useEffect(() => 
-  { //https://dev.to/vitaliemaldur/resize-event-listener-using-react-hooks-1k0c
-    //use resizeListener for the size of window when it 
-// use listener in root_index.jsx to provide as a prop value
-    console.log("width: "+window.innerWidth);
+  { 
+    	if (currentWidth != props.currentWidth)
+		{
+			setCurrentWidth(props.currentWidth);
+			if (mobileOpen) setMobileOpen(false);
+		}
   });
   function handleDrawerToggle() 
   {
-	//let matches = useMediaQuery(theme.breakpoints.up('lg'));
-	//console.log("theme.breakpoints.up('lg'): ", matches);
-	if (window.innerWidth >= 1280) //over lg size
+
+	if (window.innerWidth >= LARGE_SCREEN) //over lg size
 	{	
 		if (mobileOpen) setMobileOpen(false);
 		//if (fixedMenu is open) close it
 		//else open the fixedMenu
+		
+		if (permanentOpen) setPermanentOpen(false); //close it when width >= LG AND menu button is pressed
+		else setPermanentOpen(true); //open it when width >= LG and menu button is pressed
 	}
 	
-    else setMobileOpen(!mobileOpen);
+    else 
+	{
+		setMobileOpen(!mobileOpen);
+		setPermanentOpen(true);
+	}
   }
   const drawer = (
     <div>
@@ -199,10 +216,14 @@ const NavRootMenuBar = (props) =>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="Open drawer" onClick={handleDrawerToggle}>
             <MenuIcon />
           </IconButton>
+          <IconButton color="inherit" aria-label="optom connect" onClick={handleDrawerToggle}>
+            <img src={"/images/general/connect-png-2.png"} alt="logo" className={classes.logo} />
+          </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Optom CONNECT
+            OptomDr
           </Typography>
-		  <AntTabs value={props.pathname} variant="scrollable" scrollButtons="on">
+		  {/* https://stackoverflow.com/questions/50012686/both-right-and-left-aligned-icons-in-appbar-with-material-ui-next */}
+		  <AntTabs value={props.pathname} variant="scrollable" scrollButtons="on" style={{marginLeft: 'auto'}}>
 	          <AntTab label="Home" value="/" component={Link} to="/" />
 				<AntTab label="Accounting" value="/accounting" component={Link} to="/accounting" />
 				<AntTab label="Referrals" value="/referrals" component={Link} to="/referrals" />
@@ -222,9 +243,12 @@ const NavRootMenuBar = (props) =>
             classes={{ paper: classes.drawerPaper}}
             ModalProps={{ keepMounted: true}} // Better open performance on mobile
           >
-            <IconButton onClick={handleDrawerToggle} className={classes.closeMenuButton}>
-              <CloseIcon/>
-            </IconButton>
+			<div>
+				 <img src={"/images/general/connect-png-2.png"} alt="logo" className={classes.logo} />
+	            <IconButton onClick={handleDrawerToggle} className={classes.closeMenuButton}>
+	             	<CloseIcon />
+	            </IconButton>
+			</div>
             {drawer}
           </Drawer>
         {/*</Hidden> */}
@@ -232,8 +256,9 @@ const NavRootMenuBar = (props) =>
 		{/*When this drawer is open, close the temporay drwawer if open */}
           <Drawer
             className={classes.drawer}
-            variant="permanent"
+            variant="persistent"
             classes={{ paper: classes.drawerPaper }}
+			open={permanentOpen}
           >
             <div className={classes.toolbar} />
             {drawer}

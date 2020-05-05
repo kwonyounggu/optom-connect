@@ -10,10 +10,10 @@ body
 .root-container
 {
 	/*max-width: 1200px;*/
-	width: 860px;
-	margin: 0 auto;
-	/* margin-top: 55px; */
-	padding: 10px;
+	/*width: 860px;
+	margin: 0 auto;*/
+	margin-top: 64px;
+	/*padding: 0px;*/
 }
 
 .help-block
