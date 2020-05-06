@@ -3,12 +3,12 @@
  */
 import React from "react";
 import ReactDOM from "react-dom";
+import PropTypes from 'prop-types';
 import {Provider} from "react-redux";
 import store from "./main/store.jsx";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {throttle} from "lodash";
-//import useMediaQuery from '@material-ui/core/useMediaQuery';
-import withMediaQuery from "./main/utils/withMediaQuery.jsx";
+import { withStyles } from "@material-ui/core/styles";
 
 const Home = React.lazy( () => import("./main/components/home.jsx") );
 const Accounting = React.lazy( () => import("./main/containers/accounting.jsx") );
@@ -43,6 +43,28 @@ export const breakpoints = {
   mobileSm: 400
 };
  */
+/*
+const styles = (theme) =>
+({
+  	root:	
+	{
+		display: 'flex',
+		flexGrow: 1,
+		flexDirection: 'row'
+	},
+	drawerHeader: 
+	{
+	    display: 'flex',
+	    alignItems: 'center',
+	    padding: theme.spacing(0, 1),
+	    // necessary for content to be below app bar
+	    ...theme.mixins.toolbar,
+	    justifyContent: 'flex-start'
+  	},
+	toolbar: theme.mixins.toolbar
+});
+*/
+
 class MainApp extends React.Component
 {
 	static NORM_WIDTH = 900;
@@ -61,44 +83,38 @@ class MainApp extends React.Component
     }
     componentDidMount()
     {
-		//if (MainApp.NORM_WIDTH > window.innerWidth) this.rootContainer.current.style.width = "95%";
-		//else this.rootContainer.current.style.width = MainApp.NORM_WIDTH+"px";
 		window.addEventListener("resize", this.onWindowResizeEventListener);
-		
-		//this.match = window.matchMedia(`(max-width: 768px)`);
-		//console.log("[INFO in root_index.jsx->componentDidMount() : ]", this.match);
     }
     componentWillUnmount()
     {
     	window.removeEventListener("resize", this.onWindowResizeEventListener);   
     }
+    onChangeDrawerMenu = (menuOpen) =>
+    {
+		this.rootContainer.current.style.display = menuOpen ? "flex" : "block";
+	}
 	onWindowResizeEventListener = throttle
 	(
 			() => 
 			{
-				//if (MainApp.NORM_WIDTH > window.innerWidth) this.rootContainer.current.style.width = "95%";
-				//else this.rootContainer.current.style.width = MainApp.NORM_WIDTH+"px";
 				this.setState({currentWidth: window.innerWidth});
 		    },
 			1000
 	);
     render()
     {	
-		//let w = withMediaQuery;
-		
-		//console.log("[INFO in root_index.jsx->render()]: ", w.options);
-
 		
         return(
         		<Provider store={store}>
 		        	<BrowserRouter>
-						<Route component={(props) => <NavRoot {...props} currentWidth={this.state.currentWidth}/> } />
+					  <div ref={this.rootContainer} style={{display : 'flex'}} >
+						<Route component={(props) => <NavRoot {...props} currentWidth={this.state.currentWidth} onChangeDrawerMenu={this.onChangeDrawerMenu}/> } />
         				<React.Suspense fallback={<div>Component being loaded ... </div>}>	
 							{ /*MainApp.NORM_WIDTH < this.state.browserInnerWidth && <div/> */}
 
 
 	        				{/*console.log("this.rootContainer.current): ", this.rootContainer.current.style.width)*/}
-<div ref={this.rootContainer} className="root-container"> 
+							<div style={{marginTop: '64px'}}> 
 			                    <Switch>
 			                        <Route exact path="/"    component={ (props) => <Home {...props} /> } /> 
 									<Route path="/accounting"    component={ (props) => <Accounting {...props} /> } /> 
@@ -115,7 +131,8 @@ class MainApp extends React.Component
 		        				</Switch>
 	        				</div>
         				</React.Suspense>
-        				{/* <Route component={(props) => <NavRootFooter {...props} /> }/>	   */} 		  
+        				{/* <Route component={(props) => <NavRootFooter {...props} /> }/>	   */} 		 
+					  </div> 
 		            </BrowserRouter>
     			</Provider>
               );

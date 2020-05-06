@@ -184,11 +184,17 @@ const NavRootMenuBar = (props) =>
 	if (window.innerWidth >= LARGE_SCREEN) //over lg size
 	{	
 		if (mobileOpen) setMobileOpen(false);
-		//if (fixedMenu is open) close it
-		//else open the fixedMenu
 		
-		if (permanentOpen) setPermanentOpen(false); //close it when width >= LG AND menu button is pressed
-		else setPermanentOpen(true); //open it when width >= LG and menu button is pressed
+		if (permanentOpen) 
+		{
+			setPermanentOpen(false); //close it when width >= LG AND menu button is pressed
+			props.onChangeDrawerMenu(false);
+		}
+		else 
+		{
+			setPermanentOpen(true); //open it when width >= LG and menu button is pressed
+			props.onChangeDrawerMenu(true);
+		}
 	}
 	
     else 

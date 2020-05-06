@@ -87,7 +87,7 @@ class Accounting extends React.Component
 		}
 		
 		return(	
-				<div className={this.props.classes.toolbar___}>
+				<div >
 					<Paper square>	
 					<StyledTabs value={pathname} variant="scrollable" scrollButtons="on">
 			          <StyledTab label="OHIP Billing" value="/accounting" component={Link} to="/accounting" />

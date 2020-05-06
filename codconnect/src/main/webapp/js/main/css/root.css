@@ -12,8 +12,18 @@ body
 	/*max-width: 1200px;*/
 	/*width: 860px;
 	margin: 0 auto;*/
-	margin-top: 64px;
+	/*margin-top: 64px;*/
 	/*padding: 0px;*/
+	
+
+/*
+  display: flex;
+  align-items: center;
+  justifyContent: flex-end;
+  padding: 0 8px;
+  min-height: 64px;
+ */
+
 }
 
 .help-block
