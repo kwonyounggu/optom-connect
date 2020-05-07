@@ -1,25 +1,24 @@
 import React from 'react';
-import {Link, useRouteMatch, LinkProps} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import Collapse from '@material-ui/core/Collapse';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Grid from "@material-ui/core/Grid";
-
-
+import Menubar from "./common/menubar.jsx";
+import MenuIcon from '@material-ui/icons/Menu';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 import { green } from '@material-ui/core/colors';
 
@@ -163,6 +162,7 @@ const NavRootMenuBar = (props) =>
     "Kuniyoshi",
     "Yoshitoshi"
   ];
+
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -203,7 +203,9 @@ const NavRootMenuBar = (props) =>
 		setPermanentOpen(true);
 	}
   }
-  const drawer = (
+
+	/*
+	const drawer = (
     <div>
       <List>
         {dummyCategories.map((text, index) => (
@@ -213,7 +215,7 @@ const NavRootMenuBar = (props) =>
         ))}
       </List>
     </div>
-  );
+  );*/
   return (
 	<div className={classes.root}>
 	  <CssBaseline />
@@ -255,7 +257,8 @@ const NavRootMenuBar = (props) =>
 	             	<CloseIcon />
 	            </IconButton>
 			</div>
-            {drawer}
+			<Divider />
+            <Menubar />
           </Drawer>
         {/*</Hidden> */}
 		<Hidden mdDown implementation="css">
@@ -267,7 +270,7 @@ const NavRootMenuBar = (props) =>
 			open={permanentOpen}
           >
             <div className={classes.toolbar} />
-            {drawer}
+            <Menubar />
           </Drawer>  
         </Hidden>
       </nav>
