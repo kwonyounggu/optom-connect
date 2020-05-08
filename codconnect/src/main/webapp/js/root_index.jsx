@@ -43,27 +43,7 @@ export const breakpoints = {
   mobileSm: 400
 };
  */
-/*
-const styles = (theme) =>
-({
-  	root:	
-	{
-		display: 'flex',
-		flexGrow: 1,
-		flexDirection: 'row'
-	},
-	drawerHeader: 
-	{
-	    display: 'flex',
-	    alignItems: 'center',
-	    padding: theme.spacing(0, 1),
-	    // necessary for content to be below app bar
-	    ...theme.mixins.toolbar,
-	    justifyContent: 'flex-start'
-  	},
-	toolbar: theme.mixins.toolbar
-});
-*/
+
 
 class MainApp extends React.Component
 {
@@ -77,9 +57,6 @@ class MainApp extends React.Component
 			currentWidth: window.innerWidth
 		};
 		this.rootContainer = React.createRef();
-    }
-    componentWillMount()
-    { 	
     }
     componentDidMount()
     {
@@ -101,6 +78,7 @@ class MainApp extends React.Component
 		    },
 			1000
 	);
+
     render()
     {	
 		

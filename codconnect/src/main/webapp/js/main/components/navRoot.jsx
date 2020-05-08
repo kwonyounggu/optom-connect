@@ -155,14 +155,6 @@ const NavRoot=(props)=>
 
 const NavRootMenuBar = (props) => 
 {
-  const dummyCategories = [
-    "Hokusai",
-    "Hiroshige",
-    "Utamaro",
-    "Kuniyoshi",
-    "Yoshitoshi"
-  ];
-
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -204,18 +196,6 @@ const NavRootMenuBar = (props) =>
 	}
   }
 
-	/*
-	const drawer = (
-    <div>
-      <List>
-        {dummyCategories.map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );*/
   return (
 	<div className={classes.root}>
 	  <CssBaseline />
@@ -258,7 +238,7 @@ const NavRootMenuBar = (props) =>
 	            </IconButton>
 			</div>
 			<Divider />
-            <Menubar />
+            <Menubar {...props} mobileOpen={mobileOpen} permanentOpen={permanentOpen} setMobileOpen={setMobileOpen}/>
           </Drawer>
         {/*</Hidden> */}
 		<Hidden mdDown implementation="css">
@@ -270,7 +250,7 @@ const NavRootMenuBar = (props) =>
 			open={permanentOpen}
           >
             <div className={classes.toolbar} />
-            <Menubar />
+            <Menubar {...props} mobileOpen={mobileOpen} permanentOpen={permanentOpen}/>
           </Drawer>  
         </Hidden>
       </nav>

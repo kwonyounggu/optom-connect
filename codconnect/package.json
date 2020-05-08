@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:server": "webpack-dev-server --content-base src/main/webapp/ --open --host 192.168.1.81 --port 8082",
-    "build": "webpack -d && webpack-dev-server --content-base src/main/webapp/ --open --host 192.168.1.81 --port 8082",
+    "dev:server": "webpack-dev-server --content-base src/main/webapp/ --open --host 192.168.1.81 --port 8083",
+    "build": "webpack -d && webpack-dev-server --content-base src/main/webapp/ --open --host 192.168.1.81 --port 8083",
     "prod": "webpack -p",
     "dev": "webpack -d",
     "express": "webpack -d && cp src/main/webapp/index.html src/main/webapp/js/build/index.html && webpack-dev-server --inline --port 9999",
