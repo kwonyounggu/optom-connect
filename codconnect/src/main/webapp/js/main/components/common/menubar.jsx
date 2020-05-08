@@ -24,6 +24,8 @@ import { green } from '@material-ui/core/colors';
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import { ListItemIcon } from '@material-ui/core';
 
+import {menuLinks} from "./menuLinks.jsx";
+
 const useStyles = makeStyles((theme) => 
 (
 	{
@@ -54,8 +56,9 @@ const Menubar = (props) =>
 	const [accountingMenuOpen, setAccuntingMenuOpen] = React.useState(true);
 	const [ohipMenuOpen, setOhipMenuOpen] = React.useState(true);
 	const [nonohipMenuOpen, setNonohipMenuOpen] = React.useState(true);
-	const [selectedItem, setSelectedItem] = React.useState("");
+	const [selectedItem, setSelectedItem] = React.useState(props.location.pathname);
 	
+	console.log("[INFO Menubar() of menubar.jsx ]: props.location.pathname", props.location.pathname, "|", props);
 	//https://material-ui.com/components/lists/
 	const menuClick = (key) => () =>
 	{
@@ -63,17 +66,17 @@ const Menubar = (props) =>
 
 		switch(key)
 		{
-			case "accounting": setAccuntingMenuOpen(!accountingMenuOpen); break;
-			case "ohip": setOhipMenuOpen(!ohipMenuOpen); break;
-			case "non_ohip": setNonohipMenuOpen(!nonohipMenuOpen);break;
-			case "home":
-			case "ohip_convert_file":
-			case "ohip_billing":
-			case "ohip_my_record":
-			case "non_ohip_billing":
-			case "non_ohip_my_record":
-			case "referrals":
-			case "about": 
+			case "/accounting": setAccuntingMenuOpen(!accountingMenuOpen); break;
+			case "/accounting/ohip": setOhipMenuOpen(!ohipMenuOpen); break;
+			case "/accounting/non_ohip": setNonohipMenuOpen(!nonohipMenuOpen);break;
+			case "/":
+			case "/accounting/ohip/convert":
+			case "/accounting/ohip/billing":
+			case "/accounting/ohip/myrecord":
+			case "/accounting/non-ohip/billing":
+			case "/accounting/non-ohip/myrecord":
+			case "/referrals":
+			case "/about": 
 				if (props.mobileOpen) props.setMobileOpen(false);
 				setSelectedItem(key);
 			  	break;
@@ -85,80 +88,64 @@ const Menubar = (props) =>
 	return (
 	    <div>
 	      <List component="nav">
-	          <ListItem button key="Home" dense={true} selected={selectedItem=="home"} onClick={menuClick("home")}>
+	          <ListItem button dense={true} component={Link} to={menuLinks[0]} selected={selectedItem==menuLinks[0]} onClick={menuClick(menuLinks[0])}>
 				<ListItemIcon><HomeIcon color="inherit"/></ListItemIcon>
-				<Link to="/" className={classes.link}>
-	            	<ListItemText primary="Home" />
-				</Link>
+	            <ListItemText primary="Home" />
 	          </ListItem>
-			  <ListItem button key="Accounting" dense={true} onClick={menuClick("accounting")}>
+			  <ListItem button dense={true} selected={selectedItem==menuLinks[1]} onClick={menuClick(menuLinks[1])}>
 				<ListItemIcon><FolderOpenIcon color="inherit"/></ListItemIcon>
 				<ListItemText primary="Accounting" />
 				{accountingMenuOpen ? <ExpandLess /> : <ExpandMore />}
 	          </ListItem>
 			  <Collapse in={accountingMenuOpen} timeout="auto" unmountOnExit>
 				<List>
-					<ListItem button key="OHIP" dense={true} onClick={menuClick("ohip")}>
+					<ListItem button dense={true} selected={selectedItem==menuLinks[2]} onClick={menuClick(menuLinks[2])}>
 						<ListItemIcon><AccountTreeIcon color="inherit"/></ListItemIcon>
 						<ListItemText className={classes.nest_1st_level} primary="OHIP" />
 						{ohipMenuOpen ? <ExpandLess /> : <ExpandMore />}
 			        </ListItem>
 					<Collapse in={ohipMenuOpen} timeout="auto" unmountOnExit>
 						<List>
-							<ListItem button key="Convert file" dense={true} selected={selectedItem=="ohip_convert_file"} onClick={menuClick("ohip_convert_file")}>
+							<ListItem button dense={true} component={Link} to={menuLinks[3]} selected={selectedItem==menuLinks[3]} onClick={menuClick(menuLinks[3])}>
 								<ListItemIcon><AutorenewIcon color="inherit"/></ListItemIcon>
-								<Link to="/ohip/convert" className={classes.link}>
-					            	<ListItemText primary="Convert file"  className={classes.nest_2nd_level}/>
-								</Link>
+					            <ListItemText primary="Convert file"  className={classes.nest_2nd_level}/>
 					         </ListItem>
-							 <ListItem button key="Billing" dense={true} selected={selectedItem=="ohip_billing"} onClick={menuClick("ohip_billing")}>
+							 <ListItem button dense={true} component={Link} to={menuLinks[4]} selected={selectedItem==menuLinks[4]} onClick={menuClick(menuLinks[4])}>
 								<ListItemIcon><MonetizationOnIcon color="inherit"/></ListItemIcon>
-								<Link to="/ohip/billing" className={classes.link}>
-					            	<ListItemText primary="Billing" className={classes.nest_2nd_level}/>
-								</Link>
+					            <ListItemText primary="Billing" className={classes.nest_2nd_level}/>
 					         </ListItem>
-							<ListItem button key="My Record" dense={true} selected={selectedItem=="ohip_my_record"} onClick={menuClick("ohip_my_record")}>
+							<ListItem button dense={true} component={Link} to={menuLinks[5]} selected={selectedItem==menuLinks[5]} onClick={menuClick(menuLinks[5])}>
 								<ListItemIcon><AlbumIcon color="inherit"/></ListItemIcon>
-								<Link to="/ohip/myrecord" className={classes.link}>
-					            	<ListItemText primary="My Record" className={classes.nest_2nd_level} />
-								</Link>
+					            <ListItemText primary="My Record" className={classes.nest_2nd_level} />
 					         </ListItem>
 						</List>
 					</Collapse>
-					<ListItem button key="NON-OHIP" dense={true} onClick={menuClick("non_ohip")}>
+					<ListItem button key="NON-OHIP" dense={true} selected={selectedItem==menuLinks[6]} onClick={menuClick(menuLinks[6])}>
 						<ListItemIcon><AccountTreeIcon color="inherit"/></ListItemIcon>
 						<ListItemText className={classes.nest_1st_level} primary="NON-OHIP" />
 						{nonohipMenuOpen ? <ExpandLess /> : <ExpandMore />}
 			        </ListItem>
 					<Collapse in={nonohipMenuOpen} timeout="auto" unmountOnExit>
 						<List>
-							 <ListItem button key="non_ohip_billing" dense={true} selected={selectedItem=="non_ohip_billing"} onClick={menuClick("non_ohip_billing")}>
+							 <ListItem button dense={true} component={Link} to={menuLinks[7]} selected={selectedItem==menuLinks[7]} onClick={menuClick(menuLinks[7])}>
 								<ListItemIcon><MonetizationOnIcon color="inherit"/></ListItemIcon>
-								<Link to="/non-ohip/billing" className={classes.link}>
-					            	<ListItemText primary="Billing" className={classes.nest_2nd_level}/>
-								</Link>
+					            <ListItemText primary="Billing" className={classes.nest_2nd_level}/>
 					         </ListItem>
-							<ListItem button key="non_ohip_my_record" dense={true} selected={selectedItem=="non_ohip_my_record"} onClick={menuClick("non_ohip_my_record")}>
+							<ListItem button dense={true} component={Link} to={menuLinks[8]} selected={selectedItem==menuLinks[8]} onClick={menuClick(menuLinks[8])}>
 								<ListItemIcon><AlbumIcon color="inherit"/></ListItemIcon>
-								<Link to="/non-ohip/myrecord" className={classes.link}>
-					            	<ListItemText primary="My Record" className={classes.nest_2nd_level} />
-								</Link>
+					            <ListItemText primary="My Record" className={classes.nest_2nd_level} />
 					         </ListItem>
 						</List>
 					</Collapse>
 				</List>
 			  </Collapse>
-			  <ListItem button key="Referrals" dense={true} selected={selectedItem=="referrals"} onClick={menuClick("referrals")}>
+			  <ListItem button dense={true} component={Link} to={menuLinks[9]} selected={selectedItem==menuLinks[9]} onClick={menuClick(menuLinks[9])}>
 				<ListItemIcon><DynamicFeedIcon color="inherit"/></ListItemIcon>
-				<Link to="/referrals" className={classes.link}>
-	            	<ListItemText primary="Referrals" />
-				</Link>
+	            <ListItemText primary="Referrals" />
 	          </ListItem>
-	          <ListItem button key="About" dense={true} selected={selectedItem=="about"} onClick={menuClick("about")}>
+	          <ListItem button dense={true} component={Link} to={menuLinks[10]} selected={selectedItem==menuLinks[10]} onClick={menuClick(menuLinks[10])}>
 				<ListItemIcon><InfoIcon color="inherit"/></ListItemIcon>
-				<Link to="/about" className={classes.link}>
-	            	<ListItemText primary="About" />
-				</Link>
+	            <ListItemText primary="About" />
 	          </ListItem>
 	      </List>
 	    </div>

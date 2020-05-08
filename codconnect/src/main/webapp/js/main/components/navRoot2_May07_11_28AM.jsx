@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -24,12 +24,65 @@ import { green } from '@material-ui/core/colors';
 
 import {connect} from "react-redux";
 import {logout, login} from "../auth/actions/loginActions.jsx";
-import {menuLinks} from "./common/menuLinks.jsx";
+
+const AntTabs = withStyles({
+  root: {
+    borderBottom: '0px solid #e8e8e8',
+  },
+  indicator: {
+    backgroundColor: '#1890ff',
+  },
+})(Tabs);
+
+const AntTab = withStyles((theme) => ({
+  root: {
+    textTransform: 'none',
+    minWidth: 72,
+    fontWeight: theme.typography.fontWeightRegular,
+    marginRight: theme.spacing(4),
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    '&:hover': {
+      color: '#40a9ff',
+      opacity: 1,
+    },
+    '&$selected': {
+      color: '#1890ff',
+      fontWeight: theme.typography.fontWeightMedium,
+    },
+    '&:focus': {
+      color: '#40a9ff',
+    },
+  },
+  selected: {},
+}))((props) => <Tab disableRipple {...props} />);
 
 const drawerWidth = 240;
 const LARGE_SCREEN = 1280;
 const useStyles = makeStyles((theme) => 
 ({
+  root_tmp: {
+    padding: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+      backgroundColor: theme.palette.secondary.main,
+    },
+    [theme.breakpoints.up('md')]: {
+      backgroundColor: theme.palette.primary.main,
+    },
+    [theme.breakpoints.up('lg')]: {
+      backgroundColor: green[500],
+    },
+  },
   root: 
   {
     display: "flex"
@@ -86,23 +139,21 @@ const NavRoot=(props)=>
 	
 	let currentMenu = null;
 	let pathname = props.location.pathname.toLowerCase();
-	if (menuLinks.includes(pathname)) currentMenu=<NavRootMenuBar {...props} />;
-    else switch(pathname)
+    switch(pathname)
     {
-		case (pathname.match(/^\/about[\/]?/i) || {}).input: { currentMenu=<Redirect to='/about' />; break;}
-		case (pathname.match(/^\/referrals[\/]?/i) || {}).input: { currentMenu=<Redirect to='/referrals' />; break;}
-		case (pathname.match(/^\/accounting[\/]?/i) || {}).input: { currentMenu=<Redirect to='/accounting' />; break;}
+		case "/": { currentMenu=<NavRootMenuBar {...props} pathname="/"/>; break;}
+		case (pathname.match(/^\/about[\/]?/i) || {}).input: { currentMenu=<NavRootMenuBar {...props} pathname="/about"/>; break;}
+		case (pathname.match(/^\/referrals[\/]?/i) || {}).input: { currentMenu=<NavRootMenuBar {...props} pathname="/referrals"/>; break;}
+		case (pathname.match(/^\/accounting[\/]?/i) || {}).input: { currentMenu=<NavRootMenuBar {...props} pathname="/accounting"/>; break;}
 		/*case (pathname.match(/^\/login[\/]?/i) || {}).input: { pathname = "/login"; break;}
 		case (pathname.match(/^\/signup[\/]?/i) || {}).input: { pathname = "/signup"; break;}
 		case (pathname.match(/^\/forgotPassword[\/]?/i) || {}).input: { pathname = "/forgotPassword"; break;}
-		case (pathname.match(/^\/resetPassword[\/]?/i) || {}).input: { pathname = "/resetPassword"; break;} 
-		default: { currentMenu=<NavRootMenuBar {...props} pathname="/"/>; break;} */	
-		default: { currentMenu=<Redirect to='/' />; break;}
+		case (pathname.match(/^\/resetPassword[\/]?/i) || {}).input: { pathname = "/resetPassword"; break;} */
+		default: { currentMenu=<NavRootMenuBar {...props} pathname="/"/>; break;}
 	}
 	
 	return currentMenu;
 }
-
 
 const NavRootMenuBar = (props) => 
 {
@@ -111,7 +162,6 @@ const NavRootMenuBar = (props) =>
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [currentWidth, setCurrentWidth] = React.useState(props.currentWidth);
   const [permanentOpen, setPermanentOpen] = React.useState(true);
-  const [isLargeScreen, setIsLargeScreen] = React.useState(props.currentWidth >= LARGE_SCREEN);
 
   //This will be called whenever any props value changed or UI events updated such as a GUI clicks
   React.useEffect(() => 
@@ -121,8 +171,6 @@ const NavRootMenuBar = (props) =>
 			setCurrentWidth(props.currentWidth);
 			if (mobileOpen) setMobileOpen(false);
 		}
-		
-		setIsLargeScreen(props.currentWidth >= LARGE_SCREEN);
   });
   function handleDrawerToggle() 
   {
@@ -164,32 +212,50 @@ const NavRootMenuBar = (props) =>
           <Typography className={classes.title} variant="h6" noWrap>
             OptomDr
           </Typography>
+		  {/* https://stackoverflow.com/questions/50012686/both-right-and-left-aligned-icons-in-appbar-with-material-ui-next */}
+		  {/*<AntTabs value={props.pathname} variant="scrollable" scrollButtons="on" style={{marginLeft: 'auto'}}>
+	          <AntTab label="Home" value="/" component={Link} to="/" />
+				<AntTab label="Accounting" value="/accounting" component={Link} to="/accounting" />
+				<AntTab label="Referrals" value="/referrals" component={Link} to="/referrals" />
+				<AntTab label="About" value="/about" component={Link} to="/about" />
+	        </AntTabs>
+		*/}
         </Toolbar>
      </AppBar>
-    
+     <nav className={classes.drawer}>
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        {/*<Hidden mdUp implementation="css">*/}
           <Drawer
-            variant={isLargeScreen ? "persistent": "temporary"}
-            open={isLargeScreen ? permanentOpen : mobileOpen}
-            onClose={mobileOpen ? handleDrawerToggle : null}
+            variant="temporary"
+            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
             classes={{ paper: classes.drawerPaper}}
-            ModalProps={isLargeScreen ? {} : {keepMounted: true}} // Better open performance on mobile
+            ModalProps={{ keepMounted: true}} // Better open performance on mobile
           >
-            {
-				isLargeScreen? 
-					<div className={classes.toolbar} /> :
-					<React.Fragment>
-						<div>
-						 <img src={"/images/general/connect-png-2.png"} alt="logo" className={classes.logo} />
-			             <IconButton onClick={handleDrawerToggle} className={classes.closeMenuButton}>
-			             	<CloseIcon />
-			             </IconButton>
-					    </div>
-					    <Divider />
-					</React.Fragment>
-			}
+			<div>
+				 <img src={"/images/general/connect-png-2.png"} alt="logo" className={classes.logo} />
+	            <IconButton onClick={handleDrawerToggle} className={classes.closeMenuButton}>
+	             	<CloseIcon />
+	            </IconButton>
+			</div>
+			<Divider />
             <Menubar {...props} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen}/>
           </Drawer>
-   
+        {/*</Hidden> */}
+		<Hidden mdDown implementation="css">
+		{/*When this drawer is open, close the temporay drwawer if open */}
+          <Drawer
+            className={classes.drawer}
+            variant="persistent"
+            classes={{ paper: classes.drawerPaper }}
+			open={permanentOpen}
+          >
+            <div className={classes.toolbar} />
+            <Menubar {...props} mobileOpen={mobileOpen}/>
+          </Drawer>  
+        </Hidden>
+      </nav>
 
 	</div>
   );
