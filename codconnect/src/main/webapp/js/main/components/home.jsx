@@ -1,16 +1,29 @@
 import React from "react";
+import { makeStyles, withStyles, useTheme, fade } from '@material-ui/core/styles';
 
-//style={{border: "10px solid green"}}
-
-import IconButton from "@material-ui/core/IconButton";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+const useStyles = makeStyles((theme) => 
+({
+  	root:	
+	{
+		display: 'flex',
+		flexGrow: 1,
+		flexDirection: 'row'
+	},
+	gridPanel: 
+	{
+		padding: 8,
+		border: '1px solid red',
+		borderRadius: '8px'
+	}
+}));
 
 const Home=(props)=>
 {
+	const classes = useStyles();
 	return (
 			<div>
 
-				<h1 className="home" >
+				<h1  >
 					Welcome Root Home !!!
 				</h1>
 			</div>

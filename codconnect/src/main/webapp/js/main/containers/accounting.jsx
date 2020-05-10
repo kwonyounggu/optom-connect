@@ -59,9 +59,14 @@ class Accounting extends React.Component
 		return(	
 				<div >
                     <Switch>
-						<Route exact path="/accounting"  ><h3>hello</h3></Route>
-						<Route path="/accounting/bill"  ><h3>hello 2</h3></Route>
-						<Route path="/accounting/nonohip"  ><h3>hello 3</h3></Route>
+						<Route exact path="/accounting"  ><h3>show avaliable links for accouting sections</h3></Route>
+						<Route exact path="/accounting/ohip"  ><h3>provide what ohip section is providing</h3></Route>
+						<Route path="/accounting/ohip/billing"  ><h3>provide ohip billing component</h3></Route>
+						<Route path="/accounting/ohip/convert"  ><h3>provide ohip converting component</h3></Route>
+						<Route path="/accounting/ohip/myrecord"  ><h3>provide ohip my record component</h3></Route>
+						<Route exact path="/accounting/nonohip"  ><h3>provide what non-ohip section is doing</h3></Route>
+						<Route path="/accounting/non-ohip/billing"  ><h3>provide non-ohip billing component</h3></Route>
+						<Route path="/accounting/non-ohip/myrecord"  ><h3>provide non-ohip my record component</h3></Route>
 					</Switch>
 				</div>
 			  );

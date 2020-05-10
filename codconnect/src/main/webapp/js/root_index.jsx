@@ -44,10 +44,25 @@ export const breakpoints = {
   mobileSm: 400
 };
  */
-
+const styles = 
+{
+  	root:	
+	{
+		display: 'flex',
+		flexGrow: 1,
+		flexDirection: 'row'
+	},
+	gridPanel: 
+	{
+		padding: 8,
+		border: '1px solid red',
+		borderRadius: '8px'
+	}
+};
 
 class MainApp extends React.Component
 {
+	//This screen size can be changed based on the size of user's screen. May 10 2020'
 	static LARGE_SCREEN = 1024;
     constructor(props)
     {
@@ -91,7 +106,8 @@ class MainApp extends React.Component
 					  <div ref={this.rootContainer} >
 						<Route component={(props) => <NavRoot {...props} isLargeScreen={this.state.isLargeScreen} changeBodyMargin={this.changeBodyMargin}/> } />
         				<React.Suspense fallback={<div>Component being loaded ... </div>}>	
-							<div ref={this.bodyContainer} style={this.state.isLargeScreen ? {marginTop: '64px', marginLeft: DRAWER_WIDTH+'px'} : {marginTop: '64px', marginLeft: 0}}> 
+							<div ref={this.bodyContainer} style={this.state.isLargeScreen ? {marginTop: '70px', marginLeft: DRAWER_WIDTH+'px'} : {marginTop: '70px', marginLeft: 0}}>
+							    <div style={styles.gridPanel}> 
 			                    <Switch>
 			                        <Route exact path="/"    component={ (props) => <Home {...props} /> } /> 
 									<Route path="/accounting"    component={ (props) => <Accounting {...props} /> } /> 
@@ -106,6 +122,7 @@ class MainApp extends React.Component
 			                        <Route path="/privacy-policy" render={ () => {window.location.href="termsfeed-privacy-policy-html-english.html"}} />
 			                        <Route component={ (props) => <NotFound {...props} /> } />
 		        				</Switch>
+								</div>
 	        				</div>
         				</React.Suspense>
         				{/* <Route component={(props) => <NavRootFooter {...props} /> }/>	   */} 		 
