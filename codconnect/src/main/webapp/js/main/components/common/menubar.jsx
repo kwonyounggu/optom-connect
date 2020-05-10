@@ -77,7 +77,8 @@ const Menubar = (props) =>
 			case "/accounting/non-ohip/myrecord":
 			case "/referrals":
 			case "/about": 
-				if (props.mobileOpen) props.setMobileOpen(false);
+				if (!props.isLargeScreen) props.setDrawerOpen(false);
+				//else props.changeBodyMargin(true);
 				setSelectedItem(key);
 			  	break;
 			

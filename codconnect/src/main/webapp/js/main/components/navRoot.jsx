@@ -4,30 +4,22 @@ import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 
 import AppBar from '@material-ui/core/AppBar';
 import CloseIcon from '@material-ui/icons/Close';
-import Collapse from '@material-ui/core/Collapse';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+
 import Menubar from "./common/menubar.jsx";
 import MenuIcon from '@material-ui/icons/Menu';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-
-import { green } from '@material-ui/core/colors';
 
 import {connect} from "react-redux";
 import {logout, login} from "../auth/actions/loginActions.jsx";
 import {menuLinks} from "./common/menuLinks.jsx";
 
-const drawerWidth = 240;
-const LARGE_SCREEN = 1280;
+export const DRAWER_WIDTH = 240;
+
 const useStyles = makeStyles((theme) => 
 ({
   root: 
@@ -38,10 +30,10 @@ const useStyles = makeStyles((theme) =>
   {
     zIndex: theme.zIndex.drawer + 1,
   },
-
+  
   drawer: 
   {
-    [theme.breakpoints.up("md")]: {width: drawerWidth, flexShrink: 0}
+    [theme.breakpoints.up("md")]: {width: DRAWER_WIDTH, flexShrink: 0}
   },
   
   menuButton: 
@@ -60,7 +52,7 @@ const useStyles = makeStyles((theme) =>
   toolbar: theme.mixins.toolbar,
   drawerPaper: 
   {
-    width: drawerWidth
+    width: DRAWER_WIDTH
   },
   content: 
   {
@@ -107,49 +99,24 @@ const NavRoot=(props)=>
 const NavRootMenuBar = (props) => 
 {
   const classes = useStyles();
-  const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [currentWidth, setCurrentWidth] = React.useState(props.currentWidth);
-  const [permanentOpen, setPermanentOpen] = React.useState(true);
-  const [isLargeScreen, setIsLargeScreen] = React.useState(props.currentWidth >= LARGE_SCREEN);
+  const [drawerOpen, setDrawerOpen] = React.useState(props.isLargeScreen);  
+  //const [isLargeScreen, setIsLargeScreen] = React.useState(props.currentWidth >= LARGE_SCREEN);
 
   //This will be called whenever any props value changed or UI events updated such as a GUI clicks
   React.useEffect(() => 
-  { 
-    	if (currentWidth != props.currentWidth)
-		{
-			setCurrentWidth(props.currentWidth);
-			if (mobileOpen) setMobileOpen(false);
-		}
-		
-		setIsLargeScreen(props.currentWidth >= LARGE_SCREEN);
+  { 	
+	//open={drawerOpen? (props.isLargeScreen ? props.changeBodyMargin(true) : true) : false}
   });
+
   function handleDrawerToggle() 
   {
-
-	if (window.innerWidth >= LARGE_SCREEN) //over lg size
-	{	
-		if (mobileOpen) setMobileOpen(false);
-		
-		if (permanentOpen) 
-		{
-			setPermanentOpen(false); //close it when width >= LG AND menu button is pressed
-			props.onChangeDrawerMenu(false);
-		}
-		else 
-		{
-			setPermanentOpen(true); //open it when width >= LG and menu button is pressed
-			props.onChangeDrawerMenu(true);
-		}
-	}
+	if (props.isLargeScreen) 
+		if (drawerOpen) props.changeBodyMargin(false);
+		else props.changeBodyMargin(true);
 	
-    else 
-	{
-		setMobileOpen(!mobileOpen);
-		setPermanentOpen(true);
-	}
+	setDrawerOpen(!drawerOpen);
+	
   }
-
   return (
 	<div className={classes.root}>
 	  <CssBaseline />
@@ -158,7 +125,7 @@ const NavRootMenuBar = (props) =>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="Open drawer" onClick={handleDrawerToggle}>
             <MenuIcon />
           </IconButton>
-          <IconButton color="inherit" aria-label="optom connect" onClick={handleDrawerToggle}>
+          <IconButton color="inherit" aria-label="optom connect" component={Link} to="/">
             <img src={"/images/general/connect-png-2.png"} alt="logo" className={classes.logo} />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
@@ -166,16 +133,16 @@ const NavRootMenuBar = (props) =>
           </Typography>
         </Toolbar>
      </AppBar>
-    
+          {drawerOpen && props.isLargeScreen && props.changeBodyMargin(true)}
           <Drawer
-            variant={isLargeScreen ? "persistent": "temporary"}
-            open={isLargeScreen ? permanentOpen : mobileOpen}
-            onClose={mobileOpen ? handleDrawerToggle : null}
+            variant={props.isLargeScreen ? "persistent": "temporary"}
+            open={drawerOpen}
+            onClose={handleDrawerToggle}
             classes={{ paper: classes.drawerPaper}}
-            ModalProps={isLargeScreen ? {} : {keepMounted: true}} // Better open performance on mobile
+            ModalProps={props.isLargeScreen ? {} : {keepMounted: true}} // Better open performance on mobile
           >
             {
-				isLargeScreen? 
+				props.isLargeScreen? 
 					<div className={classes.toolbar} /> :
 					<React.Fragment>
 						<div>
@@ -187,7 +154,7 @@ const NavRootMenuBar = (props) =>
 					    <Divider />
 					</React.Fragment>
 			}
-            <Menubar {...props} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen}/>
+            <Menubar {...props} setDrawerOpen={setDrawerOpen}/>
           </Drawer>
    
 

@@ -18,7 +18,7 @@ const NotFound = React.lazy( () => import("./main/components/notFound.jsx") );
 
 import NavRoot from "./main/components/navRoot.jsx";
 import NavRootFooter from "./main/components/navRootFooter.jsx";
-
+import {DRAWER_WIDTH} from "./main/components/navRoot.jsx";
 
 const Signup = React.lazy( () => import("./main/auth/components/signup/signup.jsx") );
 const Activation = React.lazy( () => import("./main/auth/components/signup/activation.jsx") );
@@ -28,8 +28,9 @@ const ForgotPassword = React.lazy( () => import("./main/auth/components/forgotPa
 
 const Error = React.lazy( () => import("./main/components/common/error.jsx") );
 
-import "./main/css/root.css";
-import "./main/css/footer.css";
+
+//import "./main/css/root.css";
+//import "./main/css/footer.css";
 /**
 export const breakpoints = {
   desktopLg: 1400,
@@ -47,16 +48,16 @@ export const breakpoints = {
 
 class MainApp extends React.Component
 {
-	static NORM_WIDTH = 900;
-	
+	static LARGE_SCREEN = 1024;
     constructor(props)
     {
         super(props);
 		this.state =
 		{
-			currentWidth: window.innerWidth
+			currentWidth: window.innerWidth,
+			isLargeScreen: window.innerWidth >= MainApp.LARGE_SCREEN
 		};
-		this.rootContainer = React.createRef();
+		this.bodyContainer = React.createRef();
     }
     componentDidMount()
     {
@@ -66,17 +67,19 @@ class MainApp extends React.Component
     {
     	window.removeEventListener("resize", this.onWindowResizeEventListener);   
     }
-    onChangeDrawerMenu = (menuOpen) =>
+    changeBodyMargin = (marginal) =>
     {
-		this.rootContainer.current.style.display = menuOpen ? "flex" : "block";
+		if(this.bodyContainer.current)
+			this.bodyContainer.current.style.marginLeft = (marginal? DRAWER_WIDTH : 0) + 'px';
+		return marginal;
 	}
 	onWindowResizeEventListener = throttle
 	(
 			() => 
 			{
-				this.setState({currentWidth: window.innerWidth});
+				this.setState({currentWidth: window.innerWidth, isLargeScreen: window.innerWidth >= MainApp.LARGE_SCREEN});
 		    },
-			1000
+			500
 	);
 
     render()
@@ -85,14 +88,10 @@ class MainApp extends React.Component
         return(
         		<Provider store={store}>
 		        	<BrowserRouter>
-					  <div ref={this.rootContainer} style={{display : 'flex'}} >
-						<Route component={(props) => <NavRoot {...props} currentWidth={this.state.currentWidth} onChangeDrawerMenu={this.onChangeDrawerMenu}/> } />
+					  <div ref={this.rootContainer} >
+						<Route component={(props) => <NavRoot {...props} isLargeScreen={this.state.isLargeScreen} changeBodyMargin={this.changeBodyMargin}/> } />
         				<React.Suspense fallback={<div>Component being loaded ... </div>}>	
-							{ /*MainApp.NORM_WIDTH < this.state.browserInnerWidth && <div/> */}
-
-
-	        				{/*console.log("this.rootContainer.current): ", this.rootContainer.current.style.width)*/}
-							<div style={{marginTop: '64px'}}> 
+							<div ref={this.bodyContainer} style={this.state.isLargeScreen ? {marginTop: '64px', marginLeft: DRAWER_WIDTH+'px'} : {marginTop: '64px', marginLeft: 0}}> 
 			                    <Switch>
 			                        <Route exact path="/"    component={ (props) => <Home {...props} /> } /> 
 									<Route path="/accounting"    component={ (props) => <Accounting {...props} /> } /> 
