@@ -1,87 +1,55 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 
+import { makeStyles} from '@material-ui/core/styles';
 
-const NavRootFooter=(props)=>
+const useStyles = makeStyles((theme) => 
+({
+  root: 
+  {
+		margin: 'auto',
+		backgroundColor: '#dbdbdb',
+		textAlign: 'center',
+		minHeight: '100vh'
+  }
+}));
+const NavRootFooter = (props) => 
 {
-	console.log("In NavMain, ",props);
-	let currentFooter=null, pathname=props.location.pathname;
-	switch(pathname)
-	{
-		case "/": 
-		case "/login":
-		case "/signup":
-		case "/forgotPassword":
-		case "/resetPassword":
-		case (pathname.match(/^\/home[\/]?/i)||{}).input:
-		{
-			currentFooter=<RootFooterBar {...props} />;
-			      break;
-		}
-		default:
-		{
-			console.log("Not Found of the given route for the footer in the NavRootFooter");
-			break;
-		}
-	}
+	const classes = useStyles();
 	
-	return currentFooter;
-}
-//see https://teamtreehouse.com/library/css-flexbox-layout/building-a-layout-with-flexbox/creating-a-sticky-footer-with-flexbox
-const RootFooterBar=(props)=>
-(
-		<footer className="footer">
-		  <div className="container">
-			<div className="top-footer">
-				<div className="top-column">
-					<ul><b>About company</b>
-						<li>The company provides ...</li>
-					</ul>
-				</div>
-				<div className="top-column">
-					<ul><b>Our Company</b>
-						<li>Home</li>
-						<li>Music</li>
-						<li>MatchMaker</li>
-						<li>Etc</li>
-					</ul>
-				</div>
-				<div className="top-column">
-					<ul><b>Topics</b>
-						<li>Home</li>
-						<li>Music</li>
-						<li>MatchMaker</li>
-						<li>Etc</li>
-					</ul>
-				</div>
-				<div className="top-column">
-					<ul><b>Tracks</b>
-						<li>Home</li>
-						<li>Music</li>
-						<li>MatchMaker</li>
-						<li>Etc</li>
-					</ul>
-				</div>
-			</div>
-			<div className="bottom-footer">
-				<div className="bottom-column">
-					<a href="#"><i className="fa fa-facebook"></i></a>
-					<a href="#"><i className="fa fa-twitter"></i></a>
-					<a href="#"><i className="fa fa-linkedin"></i></a>
-					<a href="#"><i className="fa fa-github"></i></a>
-					<a href="#"><i className="fa fa-google-plus"></i></a>
-				  	<a href="#"><i className="fa fa-skype"></i></a>
-				</div>
-				<div className="bottom-column">
-					<Link to="#">About Company</Link>
-					<Link to="#">Privacy Policy</Link>
-					<Link to="#">Terms & Conditions</Link>
-					<span>&copy;2017 WebMonster Technologies</span>
-				</div>
-			</div>
+	return (
+		  <div className={classes.root}>
+			    <Grid container justify={"center"} spacing={2}>
+			      <Grid item xs={12} sm={6} md={3}>
+			        <Typography variant="caption" align={"center"} gutterBottom color={"textSecondary"}>
+			          About
+			        </Typography>
+			      </Grid>
+			      <Grid item xs={12} sm={6} md={3}>
+			        <Typography variant="caption" align={"center"} gutterBottom color={"textSecondary"}>
+			          Facebook
+			        </Typography>
+			      </Grid>
+			      <Grid item xs={12} sm={6} md={3}>
+			        <Typography variant="caption" align={"center"} gutterBottom color={"textSecondary"}>
+			          Terms & Conditions
+			        </Typography>
+			      </Grid>
+			      <Grid item xs={12} sm={6} md={3}>
+			        <Typography variant="caption" align={"center"} gutterBottom color={"textSecondary"}>
+			          Contact us
+			        </Typography>
+			      </Grid>
+			    </Grid>
+				<div style={{height: '20px'}} />
+				<Typography variant="caption" align={"center"}>
+			      © Copyright 2019
+			    </Typography>
 		  </div>
-	    </footer>
-);
+		);
+}
+NavRootFooter.propTypes = {};
+NavRootFooter.defaultProps = {};
 
 export default NavRootFooter;
-

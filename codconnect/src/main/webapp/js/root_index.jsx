@@ -103,7 +103,6 @@ class MainApp extends React.Component
         return(
         		<Provider store={store}>
 		        	<BrowserRouter>
-					  <div ref={this.rootContainer} >
 						<Route component={(props) => <NavRoot {...props} isLargeScreen={this.state.isLargeScreen} changeBodyMargin={this.changeBodyMargin}/> } />
         				<React.Suspense fallback={<div>Component being loaded ... </div>}>	
 							<div ref={this.bodyContainer} style={this.state.isLargeScreen ? {marginTop: '70px', marginLeft: DRAWER_WIDTH+'px'} : {marginTop: '70px', marginLeft: 0}}>
@@ -123,10 +122,10 @@ class MainApp extends React.Component
 			                        <Route component={ (props) => <NotFound {...props} /> } />
 		        				</Switch>
 								</div>
+								<Route component={(props) => <NavRootFooter {...props} /> }/>
 	        				</div>
         				</React.Suspense>
-        				{/* <Route component={(props) => <NavRootFooter {...props} /> }/>	   */} 		 
-					  </div> 
+        					 
 		            </BrowserRouter>
     			</Provider>
               );
