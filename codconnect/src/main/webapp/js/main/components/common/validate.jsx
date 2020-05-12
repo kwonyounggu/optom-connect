@@ -1,5 +1,7 @@
-function validateFileExtension(component,msg_id,msg,extns)
+function validateFileExtension(fileName)
 {
+	let extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+	return (extension.lenth == 3) && extension.match(/[0-9]/);
    var flag=0;
    with(component)
    {
