@@ -62,12 +62,6 @@ class Accounting extends React.Component
 	{
 		super(props);
 	}
-	componentWillMount()
-	{
-	}
-	componentWillUnmount()
-	{
-	}
 	componentDidMount()
 	{
 

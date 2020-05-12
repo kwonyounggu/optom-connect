@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) =>
   */
   menuButton: 
   {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(1),
     [theme.breakpoints.up('xl')]: 
 	{
       display: 'none'
@@ -74,6 +74,7 @@ const useStyles = makeStyles((theme) =>
   },
   logo:
   {
+	marginLeft: 0,
 	width: 67,
 	height: 45,
 	verticalAlign: 'middle'
@@ -182,7 +183,7 @@ const NavRootMenuBar = (props) =>
   return (
 	<div className={classes.root}>
 	  <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar position="static" className={classes.appBar}>
         <Toolbar>	
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="Open drawer" onClick={handleDrawerToggle}>
             <MenuIcon />
