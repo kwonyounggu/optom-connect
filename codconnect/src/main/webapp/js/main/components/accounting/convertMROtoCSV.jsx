@@ -106,7 +106,8 @@ class ConvertMROtoCSV extends React.Component
 			isFileExtensionValid: true,
 			isFileSizeValid: false,
 			isFileChosen: false,
-			converting: false
+			converting: false,
+			mroFile: null
 		}
 	}
 	componentDidMount()
@@ -130,7 +131,8 @@ class ConvertMROtoCSV extends React.Component
 			{
 				isFileExtensionValid: (extension.length == 3) && /^\d+$/.test(extension), 
 				isFileChosen: true,
-				isFileSizeValid: event.target.files[0].size < MAX_FILE_SIZE
+				isFileSizeValid: event.target.files[0].size < MAX_FILE_SIZE,
+				mroFile: event.target.files[0]
 			}
 		);
 	}

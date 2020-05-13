@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {LANG_MESSAGE} from "./types.jsx";
 import {setLang} from "../utils/utils.jsx";
 

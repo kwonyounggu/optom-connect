@@ -1,0 +1,1 @@
+1. after completion of js-file-bunch, test with servlet path or jsp path on how it responds
