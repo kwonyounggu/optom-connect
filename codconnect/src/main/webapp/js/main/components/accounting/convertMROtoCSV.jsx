@@ -1,5 +1,5 @@
 import React from "react";
-
+import axios from 'axios';
 import { withStyles } from "@material-ui/core/styles";
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -145,6 +145,15 @@ class ConvertMROtoCSV extends React.Component
 		//		2) display summary of the table
 		//		3) display the converted file to download
 		//		4) display a button to goback to more conversion
+		const data = new FormData();
+		data.append('file', this.state.mroFile);
+		axios.post("https://192.168.1.81:8443/upload", data).then
+				(
+					(response) =>
+					{
+						console.info("From Upload: ", response);
+					}
+				)
 	}
 	render()
 	{
