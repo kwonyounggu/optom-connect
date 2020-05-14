@@ -95,7 +95,7 @@ const MyBreadcrumbs = (props) =>
 		  );
 }
 
-const MAX_FILE_SIZE = 1000000;
+const MRO_MAX_FILE_SIZE = 1000000;
 class ConvertMROtoCSV extends React.Component
 {
 	constructor(props)
@@ -131,8 +131,10 @@ class ConvertMROtoCSV extends React.Component
 			{
 				isFileExtensionValid: (extension.length == 3) && /^\d+$/.test(extension), 
 				isFileChosen: true,
-				isFileSizeValid: event.target.files[0].size < MAX_FILE_SIZE,
-				mroFile: event.target.files[0]
+				isFileSizeValid: event.target.files[0].size < MRO_MAX_FILE_SIZE,
+				mroFile: event.target.files[0],
+				returnStatus: 0, //0: initial, 1:successful, 3: errorneous
+				returnMessage: "" //from the servlet
 			}
 		);
 	}
@@ -146,12 +148,33 @@ class ConvertMROtoCSV extends React.Component
 		//		3) display the converted file to download
 		//		4) display a button to goback to more conversion
 		const data = new FormData();
-		data.append('file', this.state.mroFile);
+		data.append('mroFile', this.state.mroFile);
+		this.setState({returnStatus: 0, returnMessage: ""});
 		axios.post("https://192.168.1.81:8443/upload", data).then
 				(
 					(response) =>
 					{
 						console.info("From Upload: ", response);
+						if (response.status == 200)
+						{
+							if (response.data.indexOf("ERROR:") > -1) 
+							{
+								this.setState({returnStatus: 2, returnMessage: response.data.substring(7), converting: false});
+							}
+							else
+							{
+								//prepare to display csv file download and table
+								//the converting box will be hidden completly
+							}
+						}
+						else
+						{
+							this.setState({returnStatus: 2, returnMessage: (response.status + "due to an unknown reason."), converting: false});
+						}
+					},
+					(error) =>
+					{
+						this.setState({returnStatus: 2, returnMessage: error, converting: false});
 					}
 				)
 	}
@@ -172,12 +195,17 @@ class ConvertMROtoCSV extends React.Component
 						  <Grid item xs={12}>
 					       	<hr />
 					      </Grid>
+						  <Grid item xs={12}>
+								<Collapse in={this.state.returnStatus == 2}>
+									  <Alert severity="error">{this.state.returnMessage} — check it out</Alert>
+								</Collapse>
+						  </Grid>
 					      <Grid item xs={12}>
 					       	<Paper variant="outlined" className={classes.paper}>
 								<Grid container direction="column" justify="center" alignItems="center" spacing={2}>
 									<Grid item>
 										<Typography style={{fontSize: '14px', fontWeight: 'bold'}} color="primary" gutterBottom>
-								          Please choose a valid MRO file with a three digit extension.
+								          Please choose a valid MRO file having a three digit extension.
 								        </Typography>
 									</Grid>
 									<Grid item>
