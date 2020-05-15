@@ -101,6 +101,7 @@ class ConvertMROtoCSV extends React.Component
 	constructor(props)
 	{
 		super(props);
+		//console.log("INFO constructor() of ConvertMROtoCSV.jsx: ", props);
 		this.state = 
 		{
 			isFileExtensionValid: true,
@@ -150,7 +151,7 @@ class ConvertMROtoCSV extends React.Component
 		const data = new FormData();
 		data.append('mroFile', this.state.mroFile);
 		this.setState({returnStatus: 0, returnMessage: ""});
-		axios.post("https://192.168.1.81:8443/upload", data).then
+		axios.post("https://192.168.1.81:8443/upload", data, this.props.user).then
 				(
 					(response) =>
 					{
@@ -180,6 +181,7 @@ class ConvertMROtoCSV extends React.Component
 	}
 	render()
 	{
+		console.log("INFO: ConvertMROtoCSX.jsx.render() is called, this.props: ", this.props);
 		const {classes} = this.props;
 		return (
 				  <div className={classes.root}>

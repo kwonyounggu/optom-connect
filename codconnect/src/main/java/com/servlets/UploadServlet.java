@@ -12,6 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.utilities.TokenUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.crypto.MacProvider;
+
 import java.util.Enumeration;
 import java.util.logging.Logger;
 /**
@@ -36,7 +43,7 @@ public class UploadServlet extends HttpServlet
 		/********************************************************************************************************
 		 * Checkin headers and parameters of request
 		 ********************************************************************************************************/
-		/*
+		/**/
 		Enumeration<String> headerNames = request.getHeaderNames();
 		while(headerNames.hasMoreElements()) 
 		{
@@ -50,16 +57,30 @@ public class UploadServlet extends HttpServlet
 		 String paramName = params.nextElement();
 		 log.info("Parameter Name - "+paramName+", Value - "+request.getParameter(paramName));
 		}
-		********************************************************************************************************/
+		/********************************************************************************************************/
 		
-		String fileName = "";
 		//Supposed to request through POST not GET or other method
 		if (!request.getMethod().equalsIgnoreCase("POST")) throw new Exception("Not expected method of request.");
 		//The following check can be expaned with other files being uploaded from other known path
 		else if (request.getHeader("Referer").lastIndexOf("/accounting/ohip/convert") < 0) throw new Exception("Not expected referer of request.");
 		else if (Integer.parseInt(request.getHeader("Content-Length")) > MRO_MAX_FILE_SIZE) throw new Exception("Not expected over-sized file of request.");
-		else if (request.getHeader("Content-Type").indexOf("multipart/form-data") < 0) throw new Exception("Not expected form-data file of request.");
+		else if (request.getContentType().indexOf("multipart/form-data") < 0) throw new Exception("Not expected form-data file of request.");
+		try
+		{
+			String token = request.getHeader("Authorization");
+			if (token == null || !token.startsWith("Bearer ")) throw new Exception("No authorization token provided. Try logout and login again.");
 		
+			token = token.replace("Bearer ", "");
+		 	TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
+		 	tokenUtil.verifyToken(token, "");
+		}
+		catch(Exception e)
+		{
+			log.info("ERROR: " + e.getMessage());
+			//Authorization time 
+			//How the time it works.
+			throw new Exception("Signature failed. Please logout and login again. Then try!");
+		}
 		return true;
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

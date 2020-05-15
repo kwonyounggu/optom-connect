@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link, Redirect} from "react-router-dom";
+import {PropTypes} from "prop-types";
 import { makeStyles, withStyles, useTheme, fade } from '@material-ui/core/styles';
 
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -149,6 +150,7 @@ const NavRoot=(props)=>
 		case (pathname.match(/^\/about[\/]?/i) || {}).input: { currentMenu=<Redirect to='/about' />; break;}
 		case (pathname.match(/^\/referrals[\/]?/i) || {}).input: { currentMenu=<Redirect to='/referrals' />; break;}
 		case (pathname.match(/^\/accounting[\/]?/i) || {}).input: { currentMenu=<Redirect to='/accounting' />; break;}
+		case (pathname.match(/^\/login[\/]?/i) || {}).input: {currentMenu=<NavRootMenuBar {...props} />; break;}
 		/*case (pathname.match(/^\/login[\/]?/i) || {}).input: { pathname = "/login"; break;}
 		case (pathname.match(/^\/signup[\/]?/i) || {}).input: { pathname = "/signup"; break;}
 		case (pathname.match(/^\/forgotPassword[\/]?/i) || {}).input: { pathname = "/forgotPassword"; break;}
@@ -170,7 +172,10 @@ const NavRootMenuBar = (props) =>
   React.useEffect(() => 
   { 	
   });
-
+  function onLogout()
+  {
+	 props.logout();
+  }
   function handleDrawerToggle() 
   {
 	if (props.isLargeScreen) 
@@ -215,7 +220,7 @@ const NavRootMenuBar = (props) =>
               </Badge>
             </IconButton>
 			<Tooltip title="SignIn SignUp SignOut" arrow>
-			  <IconButton aria-label="SignIn"  color="inherit">
+			  <IconButton aria-label="SignIn"  color="inherit" onClick={onLogout}>
 			    <LockOutlinedIcon/>
 			  </IconButton>
 			</Tooltip>
@@ -268,7 +273,12 @@ const NavRootMenuBar = (props) =>
 	</div>
   );
 }
-
+NavRootMenuBar.propTypes = 
+{
+  auth: PropTypes.object.isRequired,
+  rootReducer: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired
+}
 function mapStateToProps(state) 
 {
   return {

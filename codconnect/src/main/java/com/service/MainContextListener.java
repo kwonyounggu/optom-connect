@@ -46,6 +46,7 @@ import com.dao.AuthDao;
 import com.utilities.DatasourceUtil;
 import com.utilities.Email;
 import com.utilities.JdbcDriver;
+import com.utilities.TokenUtil;
 import com.utilities.Utils;
 
 //import com.scheduled.UploadHvacManualsTask;
@@ -133,6 +134,7 @@ public class MainContextListener implements ServletContextListener
 			
 			ServletContext context=event.getServletContext();
 			context.setAttribute("osClusterDs", osClusterDs);
+			context.setAttribute("tokenUtil", new TokenUtil());
 
 			//This is to get additional DEs if being existed due to the addition from remote hospitals
 			//uploadHvacManualsScheduler = new Scheduler();

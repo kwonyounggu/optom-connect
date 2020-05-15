@@ -42,15 +42,24 @@ public class TokenUtil
 		return builder.compact();
 	}
 	
-	public boolean verifyToken(String token, String id)
+	public boolean verifyToken(String token, String id) throws Exception
 	{
-		Claims claims = Jwts.parser().setSigningKey(base64SecretBytes)
-									 .parseClaimsJws(token)
-									 .getBody();
-		log.info("ID: " + claims.getId() + "\n" +
-				"Subject: " + claims.getSubject() + "\n" +
-				"Issuer: " + claims.getIssuer() + "\n" +
-				"Expiration: " + claims.getExpiration());
+		try
+		{
+			Claims claims = Jwts.parser().setSigningKey(base64SecretBytes)
+										 .parseClaimsJws(token)
+										 .getBody();
+			System.err.println("ID: " + claims.getId() + "\n" +
+					"Subject: " + claims.getSubject() + "\n" +
+					"Issuer: " + claims.getIssuer() + "\n" +
+					"Expiration: " + claims.getExpiration());
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			throw new Exception("Caused by "+e.getCause()+", Msg: "+e.getMessage());
+		}
+		
 		return true;
 	}
 }

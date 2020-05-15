@@ -84,7 +84,8 @@
 				}
 				else
 				{
-					TokenUtil tokenUtil = new TokenUtil();
+					//TokenUtil tokenUtil = new TokenUtil();
+					TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
 					jsonObj.put("token", tokenUtil.getJWT(jsonObj.getString("email"), ab.getName(), "login", TokenUtil.expMinutes*60*1000));
 				}
 			}
@@ -104,7 +105,8 @@
 					   AuthUserDetailsInternalBean.isValidPassword(jsonObj.getString("password"), ab.getPasswordHash())
 					  )
 					{
-						TokenUtil tokenUtil = new TokenUtil();
+						//TokenUtil tokenUtil = new TokenUtil();
+						TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
 						jsonObj.put("token", tokenUtil.getJWT(jsonObj.getString("email"), ab.getFullName(), "login", TokenUtil.expMinutes*60*1000));			
 					}
 					else //Incorrect password or email id

@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Link, Route, Switch} from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
+import {connect} from "react-redux";
 
 const ConvertMROtoCSV = React.lazy( () => import("../components/accounting/convertMROtoCSV.jsx") );
 /*
@@ -59,7 +60,7 @@ class Accounting extends React.Component
 						<Route exact path="/accounting"  ><h3>show avaliable links for accouting sections</h3></Route>
 						<Route exact path="/accounting/ohip"  ><h3>provide what ohip section is providing</h3></Route>
 						<Route path="/accounting/ohip/billing"  ><h3>provide ohip billing component</h3></Route>
-						<Route path="/accounting/ohip/convert"  component={ (props) => <ConvertMROtoCSV {...props} /> } />
+						<Route path="/accounting/ohip/convert"  component={ (props) => <ConvertMROtoCSV {...props} auth={this.props.auth}/> } />
 						<Route path="/accounting/ohip/myrecord"  ><h3>provide ohip my record component</h3></Route>
 						<Route exact path="/accounting/nonohip"  ><h3>provide what non-ohip section is doing</h3></Route>
 						<Route path="/accounting/non-ohip/billing"  ><h3>provide non-ohip billing component</h3></Route>
@@ -70,29 +71,19 @@ class Accounting extends React.Component
 	}
 }
 
-
-/*
-<Route component={(props) => <NavRootFooter {...props} /> }/>
 const mapStateToProps=(state)=>
 (	//return omitted for simplication
 	{
-		playMusicPanesReducer: state.playMusicPanesReducer
+		auth: state.authReducer,
+		rootReducer: state.rootReducer
 	}
 );
-
-
-
-const mapDispatchToProps=(dispatch)=>
-(
-    {
-    	playMusicPanesActions: bindActionCreators(playMusicPanesActions, dispatch)
-    }
-);
-export default connect(mapStateToProps, mapDispatchToProps) (PlayMusicContainer);
-*/
 Accounting.propTypes =
 {
 	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles) (Accounting);
+export default connect(mapStateToProps) (withStyles(styles) (Accounting));
+/************************** Hope this works:
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ComponentName))
+**********************************/
