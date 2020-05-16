@@ -65,12 +65,13 @@ public class UploadServlet extends HttpServlet
 		else if (request.getHeader("Referer").lastIndexOf("/accounting/ohip/convert") < 0) throw new Exception("Not expected referer of request.");
 		else if (Integer.parseInt(request.getHeader("Content-Length")) > MRO_MAX_FILE_SIZE) throw new Exception("Not expected over-sized file of request.");
 		else if (request.getContentType().indexOf("multipart/form-data") < 0) throw new Exception("Not expected form-data file of request.");
+		
+		String token = request.getHeader("Authorization");
+		if (token == null || !token.startsWith("Bearer ")) throw new Exception("No authorization token provided. Try logout and login again.");
+		token = token.replace("Bearer ", "");
+		
 		try
 		{
-			String token = request.getHeader("Authorization");
-			if (token == null || !token.startsWith("Bearer ")) throw new Exception("No authorization token provided. Try logout and login again.");
-		
-			token = token.replace("Bearer ", "");
 		 	TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
 		 	tokenUtil.verifyToken(token, "");
 		}

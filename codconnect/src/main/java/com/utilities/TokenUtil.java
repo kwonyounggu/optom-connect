@@ -13,6 +13,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 
+/*
+ * https://www.programcreek.com/java-api-examples/?class=io.jsonwebtoken.JwtBuilder&method=setExpiration
+ */
 public class TokenUtil
 {
 	private Logger log = Logger.getLogger(this.getClass().getName());

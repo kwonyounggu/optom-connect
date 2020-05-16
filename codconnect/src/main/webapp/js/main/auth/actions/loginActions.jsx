@@ -19,10 +19,11 @@ export function logout()
 	  {
 	    setAuthorizationToken(false);
 	    dispatch(setCurrentUser({}));
-	    dispatch(deleteAllAlertMessages());
+	    //dispatch(deleteAllAlertMessages());
 	  };
 }
 
+/*
 export function login(data) 
 {
 	  return dispatch => 
@@ -34,7 +35,7 @@ export function login(data)
 	    });
 	  };
 }
-
+*/
 export function loginRequest(data) 
 {   //console.log("[INFO IN loginRequest(..) in loginActions.jsx] axios.post(", serviceHost, "jsp/api/users/login.jsp)");
 	console.log("[INFO IN loginRequest(..) in loginActions.jsx] axios.post(", serviceHost, "jsp/api/users/login.jsp", data, ")");
