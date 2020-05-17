@@ -29,14 +29,13 @@
 		{
 
 			JsonUtils.printJsonObject(jsonObj);
-			System.err.println("[INFO] in webapp/jsp/api/users/login.jsp for jsonObj.has(snsProvider)	: " + jsonObj.has("snsProvider"));
-			if (jsonObj.has("snsProvider")) /* Is login through "FACEBOOK"? */
+			System.err.println("[INFO] in webapp/jsp/api/users/refreshToken.jsp for jsonObj.has(snsProvider)	: " + jsonObj.has("snsProvider"));
+			/*if (jsonObj.has("snsProvider")) //Is login through FACEBOOK?
 			{
-				/*
-				 *	two tables update
-				 	1. if(there is a record (accountId, email, snsProvider))
-				 	-- Think about adding one more field in Login Account table
-				*/
+				
+				 //	two tables update
+				 //	1. if(there is a record (accountId, email, snsProvider))
+				 //	-- Think about adding one more field in Login Account table
 				
 				AuthUserExternalLoginBean ab = new AuthUserExternalLoginBean();
 				
@@ -69,11 +68,11 @@
 						aDao.snsRegistration(ab);
 					}
 				}
-				/*
-				* if(select disabled from auth_user_external_login where ... )
-					"Ooops your account is disabled"
-				  else provide the following token
-				*/
+				
+				// if(select disabled from auth_user_external_login where ... )
+				//	"Ooops your account is disabled"
+				//  else provide the following token
+				
 				o = aDao.queryObject
 				    (
 				    	"select disabled from auth_user_external_login " +
@@ -92,7 +91,7 @@
 					jsonObj.put("token", tokenUtil.getJWT(jsonObj.getString("email"), ab.getName(), "login", TokenUtil.expMinutes*60*1000));
 				}
 			}
-			else /* Internal Login */
+			else //Internal Login 
 			{	//Validate One more time in the server side
 				JsonUtils.validateLogin(jsonObj);
 				
@@ -124,12 +123,15 @@
 				jsonObj.remove("email");
 				jsonObj.remove("password");
 			}
+			*/
 		}
 		catch(Exception e)
 		{
+			/*
 			System.err.println("ERROR (login.jsp): "+ e);
 			jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
 			jsonObj.put("invalid", true);
+			*/
 		}
 					
 		out.print(jsonObj);
