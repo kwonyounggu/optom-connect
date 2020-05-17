@@ -2,9 +2,9 @@ import axios from 'axios';
 import {setAuthorizationToken} from "../utils/utils.jsx";
 import jwtDecode from 'jwt-decode';
 import { SET_CURRENT_USER } from "./types.jsx";
-import {deleteAllAlertMessages} from "../../actions/alertMessageActions.jsx";
-import {serviceHost} from "../../utils/utils.jsx";
-import https from 'https';
+//import {deleteAllAlertMessages} from "../../actions/alertMessageActions.jsx";
+//import {serviceHost} from "../../utils/utils.jsx";
+//import https from 'https';
 
 export function setCurrentUser(user) 
 {
@@ -39,10 +39,10 @@ export function login(data)
 */
 export function loginRequest(data) 
 {   
-	console.log("[INFO IN loginRequest(..) in loginActions.jsx] axios.post(", serviceHost, "jsp/api/users/login.jsp", data, ")");
+	console.log("[INFO IN loginRequest(..) in loginActions.jsx] axios.post(jsp/api/users/login.jsp", data, ")");
 	return (dispatch) => 
 	  {
-		  return axios.post(serviceHost + "jsp/api/users/login.jsp", data)
+		  return axios.post("jsp/api/users/login.jsp", data)
 	  }
 }
 /************************************************************************************
@@ -56,8 +56,8 @@ const httpsAgent = new https.Agent({
 ****************************************************************************************/
 export function refreshToken(user)
 {
-	console.log("[INFO IN refreshToken(..) in loginActions.jsx] axios.post(", serviceHost, "jsp/api/users/refreshToken.jsp", user, ")");
-	axios.post(serviceHost + "jsp/api/users/refreshToken.jsp", user).then
+	console.log("[INFO IN refreshToken(..) in loginActions.jsx] axios.post(jsp/api/users/refreshToken.jsp", user, ")");
+	axios.post("jsp/api/users/refreshToken.jsp", user).then
 	  (
 		
 			(response) =>

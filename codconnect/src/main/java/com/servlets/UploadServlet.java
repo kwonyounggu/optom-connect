@@ -1,23 +1,19 @@
 package com.servlets;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
+
 
 import com.utilities.TokenUtil;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.crypto.MacProvider;
+
 
 import java.util.Enumeration;
 import java.util.logging.Logger;
@@ -73,13 +69,12 @@ public class UploadServlet extends HttpServlet
 		try
 		{
 		 	TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
-		 	tokenUtil.verifyToken(token, "");
+		 	Claims claims = tokenUtil.verifyToken(token, "");
 		}
 		catch(Exception e)
 		{
+			//This exception is called to due to an invalid token or expired token.
 			log.info("ERROR: " + e.getMessage());
-			//Authorization time 
-			//How the time it works.
 			throw new Exception("Signature failed. Please logout and login again. Then try!");
 		}
 		return true;

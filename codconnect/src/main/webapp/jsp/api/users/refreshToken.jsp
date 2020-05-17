@@ -19,7 +19,13 @@
 	You read an old token, get name and email then get a new token.
 */
 	response.setContentType("application/json");
-
+	System.err.println("refreshToken.jsp is called");
+	String token = request.getHeader("Authorization");
+	if (token == null || !token.startsWith("Bearer ")) //throw new Exception("No authorization token provided. Try logout and login again.");
+	 System.err.println("No authorization token is provided");
+	else token = token.replace("Bearer ", "");
+	 	System.err.println("token="+token);
+	//If token is expired, then get a new token by using id and pwd from db.
 	if(request.getMethod().equals("POST"))
 	{
 		String payloadString = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
@@ -135,6 +141,6 @@
 		}
 					
 		out.print(jsonObj);
-		
+		System.err.println("refreshToken.jsp is ended");
 	}
 %>

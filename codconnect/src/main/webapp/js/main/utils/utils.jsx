@@ -26,5 +26,6 @@ export const siteKey="6Lc--T0UAAAAAICcpz5L__QZoNxxnUoFhU1SbNar";
 /***************************************************************************************/
 //Alternatively either using local wildfly server or openshift server
 /***************************************************************************************/
-export const serviceHost = "https://192.168.1.81:8443/";
+//export const serviceHost = "https://192.168.1.81:8443/";
+
 //export const serviceHost = "http://" + location.hostname + "/";

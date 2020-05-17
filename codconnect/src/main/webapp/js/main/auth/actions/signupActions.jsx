@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {serviceHost} from "../../utils/utils.jsx";
+//import {serviceHost} from "../../utils/utils.jsx";
 
 export function userSignupRequest(userData) 
 {
@@ -15,6 +15,6 @@ export function isUserExists(id, value)
 	  //console.log("isUserExists(",id, ", ",value,")");
 	  return dispatch => 
 	  {
-	    return axios.get(`${serviceHost}jsp/api/users/isUserExists.jsp?${id}=${value}`);
+	    return axios.get(`jsp/api/users/isUserExists.jsp?${id}=${value}`);
 	  }
 }

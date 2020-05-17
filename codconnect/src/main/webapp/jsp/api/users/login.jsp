@@ -16,7 +16,7 @@
 
 <%
 	response.setContentType("application/json");
-
+    System.err.println("login.jsp is called");
 	if(request.getMethod().equals("POST"))
 	{
 		String payloadString = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
@@ -130,6 +130,7 @@
 		}
 					
 		out.print(jsonObj);
+		System.err.println("login.jsp is ended");
 		
 	}
 %>
