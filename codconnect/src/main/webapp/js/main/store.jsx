@@ -1,5 +1,5 @@
 import {applyMiddleware, createStore, combineReducers} from "redux";
-//import axios from 'axios';
+import axios from 'axios';
 import logger from "redux-logger";
 import thunk from "redux-thunk";
 import promise from "redux-promise-middleware";
@@ -11,40 +11,7 @@ import {setAuthorizationToken} from "./auth/utils/utils.jsx";
 
 
 import jwtDecode from "jwt-decode";
-import {setCurrentUser, refreshToken, logout} from "./auth/actions/loginActions.jsx";
-
-import {SET_CURRENT_USER} from './auth/actions/types.jsx';
-
-//import {serviceHost} from "./utils/utils.jsx";
-
-const checkTokenExpirationMiddleware = store => next => action => 
-{
-	console.log("checkTokenExpirationMiddleware is called and will dispatch ", action);
-  /*const token =
-    JSON.parse(localStorage.getItem("user")) &&
-    JSON.parse(localStorage.getItem("user"))["token"];
-  if (jwtDecode(token).exp < Date.now() / 1000) 
-  {
-    next(action);
-    localStorage.clear();
-  }*/
-	if (action.type == SET_CURRENT_USER && !isEmpty(action.user)) //empty object of auth
-	{
-		console.log("action.type is " + action.type + "Exp: " + new Date(action.user.exp * 1000) +"| current time: " + new Date() + "| Date.now(): "+Date.now()/1000);
-		
-		console.log("exp: "+action.user.exp+", now(): "+Date.now()/1000+" difference: " +(action.user.exp - (Date.now()/1000)));
-		if (action.user.exp < (Date.now()/1000)) //if expired
-		{
-			//1. logout and login again
-			//1. logout and get a token again
-			console.log("Token is expired...");
-			refreshToken(action.user); 
-
-		}
-	}
-  return next(action);
-};
-
+import {setCurrentUser} from "./auth/actions/loginActions.jsx";
 
 const middleware = applyMiddleware(promise(), thunk, logger);
 const store = createStore(combinedReducers, middleware);
@@ -74,5 +41,41 @@ if (localStorage.authToken)
 	  	store.dispatch(setCurrentUser(user));
 	}
 }
+
+axios.interceptors.request.use
+(
+	(config) =>
+	{
+	    // Do something before request is sent
+		//check nagator.online and server is alive before
+		console.log("[BEFORE axios request] config: ", config);
+	    return config;
+	}, 
+	(error) =>
+	{
+	    // Do something with request error
+		console.log("[BEFORE axios request] error: ", error);
+	    return Promise.reject(error);
+	}
+);
+axios.interceptors.response.use
+(
+    (response) => 
+    {
+		console.log("[RESPONSE value]: ", reponse);
+        return response
+    },
+    (error) => 
+	{
+        if (!error.response) 
+		{
+            console.log("Please check your internet connection.");
+        }
+
+        //return Promise.reject(error);
+    }
+);
+
+
 
 export default store;

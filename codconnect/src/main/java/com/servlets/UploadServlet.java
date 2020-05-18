@@ -70,6 +70,7 @@ public class UploadServlet extends HttpServlet
 		{
 		 	TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
 		 	Claims claims = tokenUtil.verifyToken(token, "");
+		 	//https://stackoverflow.com/questions/38916912/how-to-decode-jwt-header-and-body-in-java-using-apache-commons-codec
 		}
 		catch(Exception e)
 		{

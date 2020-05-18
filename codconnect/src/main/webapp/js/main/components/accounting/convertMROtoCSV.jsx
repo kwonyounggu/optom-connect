@@ -175,15 +175,32 @@ class ConvertMROtoCSV extends React.Component
 					},
 					(error) =>
 					{
+						console.log("[ERROR in axios.then block]: ", error)
 						this.setState({returnStatus: 2, returnMessage: error, converting: false});
 					}
-				)
+				).catch // Without returning a response object 
+				(
+					(error) =>			
+					{
+						if (!error.response)
+						{
+							console.log("[ERROR in catch of error.response==false]: Network Error")
+						}
+						else
+						{
+							console.log("[ERROR in catch of error.response==true]:" + error.response.data.message)
+						}
+						//http errors (like 400, 404, 403..etc). 
+						//this error consists of an html page cotents
+						//console.log("[ERROR in onConvertButtonClick() of convertMROtoCSV.jsx]: ", error);
+					}
+				);
 	}
 	render()
 	{
 		console.log("INFO: ConvertMROtoCSX.jsx.render() is called, this.props: ", this.props);
 		const {classes} = this.props;
-		return (
+		return (  
 				  <div className={classes.root}>
 					    <Grid container spacing={1}>
 					      <Grid item xs={12}>
