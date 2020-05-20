@@ -12,6 +12,7 @@ import {setAuthorizationToken} from "./auth/utils/utils.jsx";
 
 import jwtDecode from "jwt-decode";
 import {setCurrentUser} from "./auth/actions/loginActions.jsx";
+import {addAlertMessage} from "./actions/alertMessageActions.jsx";
 
 const middleware = applyMiddleware(promise(), thunk, logger);
 const store = createStore(combinedReducers, middleware);
@@ -48,13 +49,13 @@ axios.interceptors.request.use
 	{
 	    // Do something before request is sent
 		//check nagator.online and server is alive before
-		console.log("[BEFORE axios request] config: ", config);
+		//console.log("[BEFORE axios request] config: ", config);
 	    return config;
 	}, 
 	(error) =>
 	{
 	    // Do something with request error
-		console.log("[BEFORE axios request] error: ", error);
+		//console.log("[BEFORE axios request] error: ", error);
 	    return Promise.reject(error);
 	}
 );
@@ -62,17 +63,26 @@ axios.interceptors.response.use
 (
     (response) => 
     {
-		console.log("[RESPONSE value]: ", reponse);
-        return response
+		console.log("[INFO in axios.interceptors.response.use] response: ", response);
+		if (response.status < 200 || response.status > 300)
+		{
+			//do something
+			//return Promise.reject("There is an error having a status such as ...")
+			console.log("[INFO 200>status>300] status: ", response.status);
+		}
+			
+        return response;
     },
     (error) => 
 	{
         if (!error.response) 
 		{
-            console.log("Please check your internet connection.");
+            console.log("Please check your internet connection.--------------", error);
+			store.dispatch(addAlertMessage({turnOn: true, type: "error", text: "Oops, the server connection is failed, -- Check & try it later!"}));
         }
 
-        //return Promise.reject(error);
+		return Promise.reject(error);
+		//return Promise.resolve({error});
     }
 );
 

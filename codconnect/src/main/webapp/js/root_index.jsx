@@ -9,6 +9,7 @@ import store from "./main/store.jsx";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {throttle} from "lodash";
 import { withStyles } from "@material-ui/core/styles";
+import {addAlertMessage} from "./main/actions/alertMessageActions.jsx"
 
 const Home = React.lazy( () => import("./main/components/home.jsx") );
 const Accounting = React.lazy( () => import("./main/containers/accounting.jsx") );
@@ -27,7 +28,7 @@ const ResetPassword = React.lazy( () => import("./main/auth/components/resetPass
 const ForgotPassword = React.lazy( () => import("./main/auth/components/forgotPassword/forgotPassword.jsx") );
 
 const Error = React.lazy( () => import("./main/components/common/error.jsx") );
-
+const GlobalAlert = React.lazy( () => import("./main/components/common/globalAlert.jsx") );
 
 //import "./main/css/root.css";
 //import "./main/css/footer.css";
@@ -77,10 +78,14 @@ class MainApp extends React.Component
     componentDidMount()
     {
 		window.addEventListener("resize", this.onWindowResizeEventListener);
+		window.addEventListener("online", this.onInternetConnection);
+  		window.addEventListener("offline",this.onInternetConnection);
     }
     componentWillUnmount()
     {
     	window.removeEventListener("resize", this.onWindowResizeEventListener);   
+		window.removeEventListener("online", this.onInternetConnection);
+  		window.removeEventListener("offline",this.onInternetConnection);
     }
     changeBodyMargin = (marginal) =>
     {
@@ -96,7 +101,13 @@ class MainApp extends React.Component
 		    },
 			500
 	);
-
+	onInternetConnection = (e) =>
+	{	console.log("[INFO onInternetConnection of root_idnex.jsx] status: ", navigator.onLine);
+		let alertMsg = navigator.onLine ?
+					   {turnOn: false, text: "", type:"success"} :
+					   {turnOn: true, text: "Your internet connection is off. -- Check it out!", type: "error"};
+		store.dispatch(addAlertMessage(alertMsg));
+	}
     render()
     {	
 		
@@ -106,7 +117,8 @@ class MainApp extends React.Component
 						<Route component={(props) => <NavRoot {...props} isLargeScreen={this.state.isLargeScreen} changeBodyMargin={this.changeBodyMargin}/> } />
         				<React.Suspense fallback={<div>Component being loaded ... </div>}>	
 							<div ref={this.bodyContainer} style={this.state.isLargeScreen ? {marginLeft: DRAWER_WIDTH+'px'} : {marginLeft: 0}}>
-							    <div style={styles.gridPanel}> 
+							    <GlobalAlert />
+								<div style={styles.gridPanel}> 
 			                    <Switch>
 			                        <Route exact path="/"    component={ (props) => <Home {...props} /> } /> 
 									<Route path="/accounting"    component={ (props) => <Accounting {...props} /> } /> 

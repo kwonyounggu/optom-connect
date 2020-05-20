@@ -115,7 +115,16 @@ class ConvertMROtoCSV extends React.Component
 	{
 
 	}
-	
+	/*static getDerivedStateFromProps(nextProps, prevState) 
+	{
+		console.log("[INFO getDerivedStateFromProps] nextPorps: ", nextProps, "| prevState", prevState);
+	 	return {};
+	}*/
+	componentDidUpdate(prevProps, prevState)
+	{
+		console.log("[INFO componentDidUpdate(...) of convertMROtoCSV.jsx] nextProps.rootReducer: " , prevProps.rootReducer);
+		//if (nextProps.rootReducer.)
+	}
 	renderTemp()
 	{
 		return(<MyBreadcrumbs {...this.props} />)
@@ -151,6 +160,8 @@ class ConvertMROtoCSV extends React.Component
 		const data = new FormData();
 		data.append('mroFile', this.state.mroFile);
 		this.setState({returnStatus: 0, returnMessage: ""});
+		this.props.convertMroToCSV(data, this.props.user);
+		if (1==1) return;
 		axios.post("upload", data, this.props.user).then
 				(
 					(response) =>
@@ -216,7 +227,7 @@ class ConvertMROtoCSV extends React.Component
 					      </Grid>
 						  <Grid item xs={12}>
 								<Collapse in={this.state.returnStatus == 2}>
-									  <Alert severity="error">{this.state.returnMessage} — check it out</Alert>
+									  <Alert severity="error">{this.state.returnMessage} — check it out!</Alert>
 								</Collapse>
 						  </Grid>
 					      <Grid item xs={12}>
@@ -235,7 +246,7 @@ class ConvertMROtoCSV extends React.Component
 									        <Alert severity="error">The file extension is not supported — check it out!</Alert>
 									    </Collapse>
 										<Collapse in={!this.state.isFileSizeValid && this.state.isFileChosen}>
-									        <Alert severity="error">The file size is not supported — check it out</Alert>
+									        <Alert severity="error">The file size is not supported — check it out!</Alert>
 									    </Collapse>
 									</Grid>
 									<Grid item>

@@ -1,5 +1,4 @@
 import axios from 'axios';
-//import {serviceHost} from "../../utils/utils.jsx";
 
 export function forgotPasswordRequest(data) 
 {

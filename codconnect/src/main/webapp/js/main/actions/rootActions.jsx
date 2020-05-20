@@ -1,10 +1,11 @@
-import {LANG_MESSAGE} from "./types.jsx";
+import axios from "axios";
+import ActionTypes from "./actionTypes.jsx";
 import {setLang} from "../utils/utils.jsx";
 
 export function notifyLang(lang) 
 {
   return {
-		    type: LANG_MESSAGE,
+		    type: ActionTypes.LANG_MESSAGE,
 		    payload: {lang: lang}
 		 };
 }
@@ -15,4 +16,11 @@ export function changeLang(lang)
 	    setLang(lang);
 	    dispatch(notifyLang(lang));
 	};
+}
+export function convertMroToCSV(formData, user) 
+{
+	  return { 
+		  		type: ActionTypes.CONVERT_MRO_FILE,
+		  		payload: axios.post("upload", formData, user)
+	  		 };
 }
