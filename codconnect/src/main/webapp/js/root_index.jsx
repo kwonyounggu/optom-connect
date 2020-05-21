@@ -9,7 +9,7 @@ import store from "./main/store.jsx";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {throttle} from "lodash";
 import { withStyles } from "@material-ui/core/styles";
-import {addAlertMessage} from "./main/actions/alertMessageActions.jsx"
+import {addAlertMessage} from "./main/actions/alertMessageActions.jsx";
 
 const Home = React.lazy( () => import("./main/components/home.jsx") );
 const Accounting = React.lazy( () => import("./main/containers/accounting.jsx") );
@@ -104,8 +104,8 @@ class MainApp extends React.Component
 	onInternetConnection = (e) =>
 	{	console.log("[INFO onInternetConnection of root_idnex.jsx] status: ", navigator.onLine);
 		let alertMsg = navigator.onLine ?
-					   {turnOn: false, text: "", type:"success"} :
-					   {turnOn: true, text: "Your internet connection is off. -- Check it out!", type: "error"};
+					   {turnOn: false, text: "", type:"success", level: 1} :
+					   {turnOn: true, text: "Your internet connection is off. -- Check it out!", type: "error", level: 1};
 		store.dispatch(addAlertMessage(alertMsg));
 	}
     render()

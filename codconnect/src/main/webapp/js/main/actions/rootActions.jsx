@@ -17,10 +17,10 @@ export function changeLang(lang)
 	    dispatch(notifyLang(lang));
 	};
 }
-export function convertMroToCSV(formData, user) 
+export function convertMroToCSV(formData) 
 {
 	  return { 
 		  		type: ActionTypes.CONVERT_MRO_FILE,
-		  		payload: axios.post("upload", formData, user)
+		  		payload: axios.post("upload", formData)
 	  		 };
 }

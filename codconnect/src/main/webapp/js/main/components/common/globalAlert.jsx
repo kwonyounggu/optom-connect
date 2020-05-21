@@ -5,10 +5,14 @@ import Alert from '@material-ui/lab/Alert';
 import Collapse from '@material-ui/core/Collapse';
 class GlobalAlert extends React.Component
 {
+	constructor(props)
+    {
+        super(props);
+    }
 	render()
 	{
 				
-		return (<Collapse in={this.props.alertState.turnOn}>
+		return (<Collapse in={this.props.alertState.turnOn} >
 					<Alert severity={this.props.alertState.type}>{this.props.alertState.text}</Alert>
 				</Collapse>
 			   );

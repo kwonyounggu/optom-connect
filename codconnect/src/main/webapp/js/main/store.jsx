@@ -59,11 +59,33 @@ axios.interceptors.request.use
 	    return Promise.reject(error);
 	}
 );
+/*
+validateStatus: function (status) {
+    return status >= 200 && status < 300; // default in axios
+  },
+*/
 axios.interceptors.response.use
 (
     (response) => 
     {
 		console.log("[INFO in axios.interceptors.response.use] response: ", response);
+		if (response.status == 200)
+		{
+			if (typeof response.data === "object")
+			{
+				if (!response.data.isItValid)
+				{
+					store.dispatch(addAlertMessage({turnOn: true, type: "error", level: 2, text: response.data.errorMessage}));
+				}
+				else //result data comes here
+				{
+					//----
+					//dispatch only if trunOn is true and level==2
+					//store.getState
+					store.dispatch(addAlertMessage({turnOn: false, type: "success", level: 2, text: ""}));
+				}
+			}
+		}
 		if (response.status < 200 || response.status > 300)
 		{
 			//do something
@@ -77,8 +99,8 @@ axios.interceptors.response.use
 	{
         if (!error.response) 
 		{
-            console.log("Please check your internet connection.--------------", error);
-			store.dispatch(addAlertMessage({turnOn: true, type: "error", text: "Oops, the server connection is failed, -- Check & try it later!"}));
+            //console.log("[INFO Please check your internet connection] error: ", error);
+			store.dispatch(addAlertMessage({turnOn: true, type: "error", level: 2, text: "Oops, the server connection is failed, -- Check & try it later!"}));
         }
 
 		return Promise.reject(error);

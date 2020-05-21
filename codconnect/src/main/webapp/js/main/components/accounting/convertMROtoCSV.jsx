@@ -160,7 +160,7 @@ class ConvertMROtoCSV extends React.Component
 		const data = new FormData();
 		data.append('mroFile', this.state.mroFile);
 		this.setState({returnStatus: 0, returnMessage: ""});
-		this.props.convertMroToCSV(data, this.props.user);
+		this.props.convertMroToCSV(data);
 		if (1==1) return;
 		axios.post("upload", data, this.props.user).then
 				(

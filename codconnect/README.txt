@@ -4,3 +4,4 @@ wildfly10.x to access, type admin/277312
 2. To make https from http, you have to change ssl in standalone/configuration/standalone.xml
 3. Multiple domains in one wildfly server setting, study more accordingly later
 ---LAST UPDATE: MAY 13 -2020
+ if the user changes any personal information, then localStorage information needs to be updated by logout and login again.

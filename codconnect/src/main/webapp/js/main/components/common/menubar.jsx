@@ -88,7 +88,11 @@ const Menubar = (props) =>
 			
 			default: break;
 		}
-		
+		//This is a right place to remove a temporay GlobalAlert message
+		if (props.alertState.turnOn && props.alertState.level == 2)//turn it (GloablAlert)off due to a menu change
+		{
+			props.addAlertMessage({turnOn: false, type: "error", text: "", level: 2});
+		}
 	}
 	return (
 	    <div>

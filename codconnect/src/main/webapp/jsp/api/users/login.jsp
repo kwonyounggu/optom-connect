@@ -86,7 +86,7 @@
 				{
 					//TokenUtil tokenUtil = new TokenUtil();
 					TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
-					jsonObj.put("token", tokenUtil.getJWT(jsonObj.getString("email"), ab.getName(), "login", TokenUtil.expMinutes*60*1000));
+					jsonObj.put("token", tokenUtil.getJWT(jsonObj.getString("email"), ab.getName(), "externalLogin", TokenUtil.expMinutes*60*1000));
 				}
 			}
 			else /* Internal Login */
@@ -107,7 +107,7 @@
 					{
 						//TokenUtil tokenUtil = new TokenUtil();
 						TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
-						jsonObj.put("token", tokenUtil.getJWT(jsonObj.getString("email"), ab.getFullName(), "login", TokenUtil.expMinutes*60*1000));			
+						jsonObj.put("token", tokenUtil.getJWT(jsonObj.getString("email"), ab.getFullName(), "internalLogin", TokenUtil.expMinutes*60*1000));			
 					}
 					else //Incorrect password or email id
 					{

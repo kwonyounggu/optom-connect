@@ -24,7 +24,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
 import {connect} from "react-redux";
-import {logout, login} from "../auth/actions/loginActions.jsx";
+import {logout} from "../auth/actions/loginActions.jsx";
+import {addAlertMessage} from "../actions/alertMessageActions.jsx";
 import {menuLinks} from "./common/menuLinks.jsx";
 
 export const DRAWER_WIDTH = 240;
@@ -268,8 +269,6 @@ const NavRootMenuBar = (props) =>
 			}
             <Menubar {...props} setDrawerOpen={setDrawerOpen}/>
           </Drawer>
-   
-
 	</div>
   );
 }
@@ -277,16 +276,18 @@ NavRootMenuBar.propTypes =
 {
   auth: PropTypes.object.isRequired,
   rootReducer: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired
+  alertState: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
 }
 function mapStateToProps(state) 
 {
   return {
 		    auth: state.authReducer,
-		    rootReducer: state.rootReducer
+		    rootReducer: state.rootReducer,
+			alertState: state.alertMessageReducer
 		 };
 }
 
-export default connect(mapStateToProps, {logout})(NavRoot);
+export default connect(mapStateToProps, {logout, addAlertMessage})(NavRoot);
 //export default NavRoot;
 
