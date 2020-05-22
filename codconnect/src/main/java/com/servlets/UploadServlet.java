@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import com.beans.FileInfoBean;
+import com.ohip.payments.beans.RVHR1Bean;
 import com.utilities.JsonUtils;
 import com.utilities.TokenUtil;
 import io.jsonwebtoken.Claims;
@@ -65,7 +66,7 @@ public class UploadServlet extends HttpServlet
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		BufferedReader reader = null;
-		JSONObject jsonObj = new JSONObject();
+		JSONObject returnJson = new JSONObject();
 		try
 		{
 			
@@ -90,28 +91,50 @@ public class UploadServlet extends HttpServlet
 					line = reader.readLine();
 				}
 			    
+				if (fb.getfType() == 'P')
+				switch (fb.getfType())
+				{
+					case 'P':  
+					{
+						handleRemittanceAdviceFile(reader, fb, decodedToken, returnJson); 
+						break;
+					}
+					case 'E':  
+					case 'F':  
+					{
+						throw new Exception("Error files are not ready to handle yet. -- Try it later!"); 
+					}
+					case 'X':  
+					{
+						throw new Exception("Rejection files are not ready to handle yet. -- Try it later!"); 
+					}
+					default: 
+					{
+						throw new Exception("The given file name is corrupted. -- Try it agin with the right one!");
+					}
+				}
 				//response.getWriter().print("SUCCESS: ");
 				
-				jsonObj.put("cvs", "cvs file type");
-				jsonObj.put("isItValid", true);
+				returnJson.put("cvs", "cvs file type");
+				returnJson.put("isItValid", true);
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 			//response.getWriter().print("ERROR: " + e.getMessage());
-			jsonObj.put("isItValid", false);
-			jsonObj.put("errorMessage", e.getMessage());
+			returnJson.put("isItValid", false);
+			returnJson.put("errorMessage", e.getMessage());
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			//response.getWriter().print("ERROR: " + e.getMessage());
-			jsonObj.put("isItValid", false);
-			jsonObj.put("errorMessage", e.getMessage());
+			returnJson.put("isItValid", false);
+			returnJson.put("errorMessage", e.getMessage());
 		}
 		finally
 		{
-			response.getWriter().print(jsonObj);
+			response.getWriter().print(returnJson);
 			response.getWriter().flush();
 			response.getWriter().close();
 			if (reader != null) reader.close();
@@ -131,7 +154,52 @@ public class UploadServlet extends HttpServlet
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
+	private void handleRemittanceAdviceFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken, JSONObject returnJson) throws IOException, Exception
+	{
+		String line = reader.readLine();
+		for (int i=0; line != null; i++)
+		{
+			if (line.startsWith("HR1"))
+			{
+				RVHR1Bean hr1Bean = new RVHR1Bean(line);
+				hr1Bean.printFirstRecord();
+				if (decodedToken != null)
+				{
+					//insert it into db
+				}
+			}
+			else if (line.startsWith("HR2"))
+			{
+				
+			}
+			else if (line.startsWith("HR3"))
+			{
+				
+			}
+			else if (line.startsWith("HR4"))
+			{
+				
+			}
+			else if (line.startsWith("HR5"))
+			{
+				
+			}
+			else if (line.startsWith("HR6"))
+			{
+				
+			}
+			else if (line.startsWith("HR7"))
+			{
+				
+			}
+			else if (line.startsWith("HR8"))
+			{
+				
+			}
+			
+			line = reader.readLine();
+		}
+	}
     //docstore.mik.ua/orelly/java-ent/servlet/ch04_04.htm
 	private String[] extractDispositionInfo(String line) throws IOException 
 	{ 

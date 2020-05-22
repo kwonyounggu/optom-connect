@@ -5,3 +5,4 @@ wildfly10.x to access, type admin/277312
 3. Multiple domains in one wildfly server setting, study more accordingly later
 ---LAST UPDATE: MAY 13 -2020
  if the user changes any personal information, then localStorage information needs to be updated by logout and login again.
+ In converting MRO files, ComponentDidMount, axios.get("getHTML text") in json, then display below of 'Convert file' - May 22nd

@@ -53,7 +53,13 @@ module.exports=
 					"file-loader?name=[path][name].[ext]",
 					"image-webpack-loader"
 				  ]
-				}
+				},
+				{
+					//https://github.com/webpack-contrib/file-loader/issues/259
+			        test: /\.json$/,
+			        loader: "file-loader",
+			        type: "javascript/auto"
+			    }
 			]
 		},
 		devServer:

@@ -14,7 +14,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import { green } from '@material-ui/core/colors';
 
+import accountingText from "../../data/accountingText.json";
 
+//const json = require("../../data/accountingText.json");
 import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
 
 const styles = (theme) =>
@@ -96,6 +98,7 @@ const MyBreadcrumbs = (props) =>
 }
 
 const MRO_MAX_FILE_SIZE = 1000000;
+const EXPECTED_FILE_NAME = /(^[EFPX]{1})+([ABCDEFGHIJKL]{1})+([0-9]{4,6})+(.\d{3})$/;
 class ConvertMROtoCSV extends React.Component
 {
 	constructor(props)
@@ -104,7 +107,7 @@ class ConvertMROtoCSV extends React.Component
 		//console.log("INFO constructor() of ConvertMROtoCSV.jsx: ", props);
 		this.state = 
 		{
-			isFileExtensionValid: true,
+			isFileNameValid: true,
 			isFileSizeValid: false,
 			isFileChosen: false,
 			converting: false,
@@ -113,6 +116,13 @@ class ConvertMROtoCSV extends React.Component
 	}
 	componentDidMount()
 	{
+		
+		fetch(accountingText)
+      .then((res) => res.json())
+      .then((data) => console.log("[TEST]: ", data.fileNameError));
+
+		
+		//console.info('[REGEX]: ', EXPECTED_FILE_NAME.test("EL990000.123"));
 
 	}
 	/*static getDerivedStateFromProps(nextProps, prevState) 
@@ -123,7 +133,6 @@ class ConvertMROtoCSV extends React.Component
 	componentDidUpdate(prevProps, prevState)
 	{
 		console.log("[INFO componentDidUpdate(...) of convertMROtoCSV.jsx] nextProps.rootReducer: " , prevProps.rootReducer);
-		//if (nextProps.rootReducer.)
 	}
 	renderTemp()
 	{
@@ -134,12 +143,11 @@ class ConvertMROtoCSV extends React.Component
 		if (!event.target.files[0]) return; //it may be undefined due to unselection
     	console.log("file: ", event.target.files[0], "|", typeof event.target.files[0].size);
 		let fileName = event.target.files[0].name;
-		let extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-	    console.info("file extension is supported: ", extension, "|", extension.length, "|", /^\d+$/.test(extension), "|", (extension.length == 3) && /^\d+$/.test(extension));
+		
 		this.setState
 		(
 			{
-				isFileExtensionValid: (extension.length == 3) && /^\d+$/.test(extension), 
+				isFileNameValid: EXPECTED_FILE_NAME.test(fileName), 
 				isFileChosen: true,
 				isFileSizeValid: event.target.files[0].size < MRO_MAX_FILE_SIZE,
 				mroFile: event.target.files[0],
@@ -161,51 +169,6 @@ class ConvertMROtoCSV extends React.Component
 		data.append('mroFile', this.state.mroFile);
 		this.setState({returnStatus: 0, returnMessage: ""});
 		this.props.convertMroToCSV(data);
-		if (1==1) return;
-		axios.post("upload", data, this.props.user).then
-				(
-					(response) =>
-					{
-						console.info("From Upload: ", response);
-						if (response.status == 200)
-						{
-							if (response.data.indexOf("ERROR:") > -1) 
-							{
-								this.setState({returnStatus: 2, returnMessage: response.data.substring(7), converting: false});
-							}
-							else
-							{
-								//prepare to display csv file download and table
-								//the converting box will be hidden completly
-							}
-						}
-						else
-						{
-							this.setState({returnStatus: 2, returnMessage: (response.status + "due to an unknown reason."), converting: false});
-						}
-					},
-					(error) =>
-					{
-						console.log("[ERROR in axios.then block]: ", error)
-						this.setState({returnStatus: 2, returnMessage: error, converting: false});
-					}
-				).catch // Without returning a response object 
-				(
-					(error) =>			
-					{
-						if (!error.response)
-						{
-							console.log("[ERROR in catch of error.response==false]: Network Error")
-						}
-						else
-						{
-							console.log("[ERROR in catch of error.response==true]:" + error.response.data.message)
-						}
-						//http errors (like 400, 404, 403..etc). 
-						//this error consists of an html page cotents
-						//console.log("[ERROR in onConvertButtonClick() of convertMROtoCSV.jsx]: ", error);
-					}
-				);
 	}
 	render()
 	{
@@ -242,8 +205,8 @@ class ConvertMROtoCSV extends React.Component
 										<input type="file" name="file" pattern=".^[0-9]{3}" onChange={this.onChangeHandler} disabled={this.state.converting}/>
 									</Grid>
 									<Grid item>
-										<Collapse in={!this.state.isFileExtensionValid && this.state.isFileChosen}>
-									        <Alert severity="error">The file extension is not supported — check it out!</Alert>
+										<Collapse in={!this.state.isFileNameValid && this.state.isFileChosen}>
+									        <Alert severity="error">The file name is not one expected — check it out!</Alert>
 									    </Collapse>
 										<Collapse in={!this.state.isFileSizeValid && this.state.isFileChosen}>
 									        <Alert severity="error">The file size is not supported — check it out!</Alert>
@@ -254,7 +217,7 @@ class ConvertMROtoCSV extends React.Component
 									        <Button
 									          variant="contained"
 									          color="primary"
-									          disabled={this.state.converting || !(this.state.isFileChosen && this.state.isFileExtensionValid && this.state.isFileSizeValid)}
+									          disabled={this.state.converting || !(this.state.isFileChosen && this.state.isFileNameValid && this.state.isFileSizeValid)}
 									          onClick={this.onConvertButtonClick}
 									        >
 									          Convert to Excel CSV
@@ -282,3 +245,23 @@ class ConvertMROtoCSV extends React.Component
 }
 
 export default withStyles(styles)(ConvertMROtoCSV);
+
+/***********************************************************
+		let extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+	    console.info("file extension is supported: ", extension, "|", extension.length, "|", /^\d+$/.test(extension), "|", (extension.length == 3) && /^\d+$/.test(extension));
+		this.setState
+		(
+			{
+				isFileExtensionValid: (extension.length == 3) && /^\d+$/.test(extension), 
+				isFileChosen: true,
+				isFileSizeValid: event.target.files[0].size < MRO_MAX_FILE_SIZE,
+				mroFile: event.target.files[0],
+				returnStatus: 0, //0: initial, 1:successful, 3: errorneous
+				returnMessage: "" //from the servlet
+			}
+		);
+		
+		--------------
+		
+		//console.info("[REGEX]: ", /(^[EFPX]{1})+([ABCDEFGHIJKL]{1})+([0-9]{4,6})+(.\d{3})$/.test("EL990000.123"));
+ */

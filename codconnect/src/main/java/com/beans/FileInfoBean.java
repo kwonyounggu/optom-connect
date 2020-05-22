@@ -70,12 +70,13 @@ public class FileInfoBean implements Serializable
 	{
 		return fileName;
 	}
-	public void setFileName(String fileName)
+	public void setFileName(String fileName) throws Exception
 	{
 		this.fileName = fileName;
 		this.fExt = fileName.split("\\.")[1];
 		this.fType = fileName.charAt(0);
 		this.fMonth = Character.getNumericValue(fileName.charAt(1)) - 9; //So A: 1... D:4
+		this.fNumber = fileName.substring(2, fileName.lastIndexOf('.'));
 	}
 	@Override
 	public String toString()
