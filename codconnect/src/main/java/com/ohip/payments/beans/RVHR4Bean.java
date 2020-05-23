@@ -36,7 +36,7 @@ public class RVHR4Bean implements Serializable
 	}
 	public RVHR4Bean(String line) throws Exception
 	{
-		if (!hr4Record(line)) throw new Exception("ERROR: invalid in decoding a hr4 record");
+		if (!hr4Record(line)) throw new Exception("HR4 record is corrupted. -- Try again with a standard file!");
 	}
 	public String getTransactionIdentifier()
 	{

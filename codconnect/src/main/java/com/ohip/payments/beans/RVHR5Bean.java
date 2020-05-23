@@ -41,7 +41,7 @@ public class RVHR5Bean implements Serializable
 	}
 	public RVHR5Bean(String line) throws Exception
 	{
-		if (!hr5Record(line)) throw new Exception("ERROR: invalid in decoding a hr5 record");
+		if (!hr5Record(line)) throw new Exception("HR5 record is corrupted. -- Try again with a standard file!");
 	}
 	public String getTransactionIdentifier()
 	{

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-import com.beans.FileInfoBean;
+import com.ohip.payments.beans.FileInfoBean;
 import com.ohip.payments.beans.RVHR1Bean;
 import com.utilities.JsonUtils;
 import com.utilities.TokenUtil;

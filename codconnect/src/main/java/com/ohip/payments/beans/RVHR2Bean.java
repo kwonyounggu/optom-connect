@@ -23,6 +23,10 @@ public class RVHR2Bean implements Serializable
 	{
 		// TODO Auto-generated constructor stub
 	}
+	public RVHR2Bean(String line) throws Exception
+	{
+		if (!secondRecord(line)) throw new Exception("HR2 record is corrupted. -- Try again with a standard file!");
+	}
 	public String getTransactionIdentifier()
 	{
 		return transactionIdentifier;
