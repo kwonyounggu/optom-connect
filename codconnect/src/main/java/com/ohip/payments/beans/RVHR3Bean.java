@@ -2,6 +2,8 @@ package com.ohip.payments.beans;
 
 import java.io.Serializable;
 
+import org.json.JSONObject;
+
 
 public class RVHR3Bean implements Serializable
 {
@@ -26,7 +28,7 @@ public class RVHR3Bean implements Serializable
 	}
 	public RVHR3Bean(String line) throws Exception
 	{
-		if (!thirdRecord(line)) throw new Exception("HR3 record is corrupted. -- Try again with a standard file!");
+		if (!hrRecord(line)) throw new Exception("HR3 record is corrupted. -- Try again with a standard file!");
 	}
 	public String getTransactionIdentifier()
 	{
@@ -76,7 +78,13 @@ public class RVHR3Bean implements Serializable
 				+ ", addressLine2=" + addressLine2 + ", addressLine3=" + addressLine3 + ", reservedForMOH="
 				+ reservedForMOH + "]";
 	}
-	public void printThirdRecord()
+	public JSONObject getJson()
+	{
+		JSONObject json = new JSONObject();
+		
+		return json;
+	}
+	public void printRecord()
 	{
 		String[] addr = addressLine2.split("\\s+");
 		//System.out.println(" ,\"" + addressLine2 + "\"");
@@ -89,7 +97,7 @@ public class RVHR3Bean implements Serializable
 		System.out.println();
 	}
 	//Occurs Once in every file - always the first record
-	public boolean thirdRecord(String line)
+	public boolean hrRecord(String line)
 	{
 		boolean valid = true;
 		//System.err.println("line.indexOf(\"HR3\") = " + line.indexOf("HR3") + ", TOTAL LENGTH = " + line.length());//total len = 80

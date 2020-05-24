@@ -37,7 +37,7 @@ public class RVHR7Bean implements Serializable
 	}
 	public RVHR7Bean(String line) throws Exception
 	{
-		if (!hr7Record(line)) throw new Exception("HR7 record is corrupted. -- Try again with a standard file!");
+		if (!hrRecord(line)) throw new Exception("HR7 record is corrupted. -- Try again with a standard file!");
 	}
 	public String getTransactionIdentifier()
 	{
@@ -138,7 +138,7 @@ public class RVHR7Bean implements Serializable
 				+ ", transactionMessage=" + transactionMessage + ", reservedForMOH=" + reservedForMOH 
 				+ ", transactionDate=" + simpleDate.format(transactionDate) + "]";
 	}
-	public JSONObject getHR7Json()
+	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
 		switch(Integer.parseInt(transactionCode))
@@ -169,7 +169,7 @@ public class RVHR7Bean implements Serializable
 		
 		return json;
 	}
-	public void printAccountingTxRecord()
+	public void printRecord()
 	{
 		System.out.println("Accounting Tx Record - Health Reconciliation");
 		System.out.print("Tx Code:, ");
@@ -202,7 +202,7 @@ public class RVHR7Bean implements Serializable
 		
 	}
 	//Occurs Once in every file
-	public boolean hr7Record(String line)
+	public boolean hrRecord(String line)
 	{
 		boolean valid = true;
 

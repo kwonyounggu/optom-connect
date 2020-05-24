@@ -6,3 +6,8 @@ wildfly10.x to access, type admin/277312
 ---LAST UPDATE: MAY 13 -2020
  if the user changes any personal information, then localStorage information needs to be updated by logout and login again.
  In converting MRO files, ComponentDidMount, axios.get("getHTML text") in json, then display below of 'Convert file' - May 22nd
+ 
+
+ After converting a file successfully, when you upload an anther file, there is an error 'containing all the previous data' with 404 as follows
+ [INFO componentDidUpdate(...) of convertMROtoCSV.jsx] nextProps.rootReducer:  {lang: "kr", fetching: false, fetched: true, data: {…}, error: Error: Request failed with status code 404
+    at createError (webpack:///./node_modules/axios/lib/…}

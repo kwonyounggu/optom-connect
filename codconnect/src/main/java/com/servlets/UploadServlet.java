@@ -4,25 +4,21 @@ import java.io.BufferedReader;
 
 import java.io.IOException;
 
-import javax.mail.internet.ContentDisposition;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.ohip.payments.beans.FileInfoBean;
-import com.ohip.payments.beans.RVHR1Bean;
+import com.ohip.payments.beans.*;
 import com.utilities.JsonUtils;
 import com.utilities.TokenUtil;
-import io.jsonwebtoken.Claims;
 
-
-import java.util.Enumeration;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
+
 
 /**
  * Servlet implementation class UploadServlet
@@ -86,17 +82,19 @@ public class UploadServlet extends HttpServlet
 						fb.setName(dispInfo[1]);
 						fb.setFileName(dispInfo[2].toUpperCase());
 						log.info(fb.toString());
+						
+						returnJson.put("fileInfo", fb.getJson());
 						break;
 					}
 					line = reader.readLine();
 				}
-			    
+
 				if (fb.getfType() == 'P')
 				switch (fb.getfType())
 				{
 					case 'P':  
 					{
-						handleRemittanceAdviceFile(reader, fb, decodedToken, returnJson); 
+						returnJson.put("report", handleRemittanceAdviceFile(reader, fb, decodedToken)); 
 						break;
 					}
 					case 'E':  
@@ -118,17 +116,17 @@ public class UploadServlet extends HttpServlet
 				returnJson.put("cvs", "cvs file type");
 				returnJson.put("isItValid", true);
 		}
-		catch (IOException e)
+		catch (Exception | Error e)
 		{
-			e.printStackTrace();
-			//response.getWriter().print("ERROR: " + e.getMessage());
-			returnJson.put("isItValid", false);
-			returnJson.put("errorMessage", e.getMessage());
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			//response.getWriter().print("ERROR: " + e.getMessage());
+			System.err.println(e.getMessage());
+			try
+			{
+				JsonUtils.removeAll(returnJson.getJSONObject("report")); //Not necessary
+			}
+			catch(Exception | Error jsonE)
+			{
+				System.err.println(jsonE.getMessage());
+			}
 			returnJson.put("isItValid", false);
 			returnJson.put("errorMessage", e.getMessage());
 		}
@@ -154,51 +152,77 @@ public class UploadServlet extends HttpServlet
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	private void handleRemittanceAdviceFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken, JSONObject returnJson) throws IOException, Exception
+	private JSONObject handleRemittanceAdviceFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken) throws IOException, Exception
 	{
+		JSONObject reportJson = new JSONObject();
+		reportJson.put("hr4", new JSONArray());
+		reportJson.put("hr5", new JSONArray());
+		reportJson.put("hr8", new JSONArray());
+		
 		String line = reader.readLine();
 		for (int i=0; line != null; i++)
 		{
 			if (line.startsWith("HR1"))
 			{
-				RVHR1Bean hr1Bean = new RVHR1Bean(line);
-				hr1Bean.printFirstRecord();
-				if (decodedToken != null)
-				{
-					//insert it into db
-				}
+				RVHR1Bean hrBean = new RVHR1Bean(line);
+				hrBean.printRecord();
+				reportJson.put("hr1", hrBean.getJson());
 			}
 			else if (line.startsWith("HR2"))
 			{
-				
+				RVHR2Bean hrBean = new RVHR2Bean(line);
+				hrBean.printRecord();
+				reportJson.put("hr2", hrBean.getJson());
 			}
 			else if (line.startsWith("HR3"))
 			{
-				
+				RVHR3Bean hrBean = new RVHR3Bean(line);
+				hrBean.printRecord();
+				reportJson.put("hr3", hrBean.getJson());
 			}
 			else if (line.startsWith("HR4"))
 			{
-				
+				RVHR4Bean hrBean = new RVHR4Bean(line);
+				hrBean.printRecord();
+				reportJson.getJSONArray("hr4").put(hrBean.getJson());
 			}
 			else if (line.startsWith("HR5"))
 			{
-				
+				RVHR5Bean hrBean = new RVHR5Bean(line);
+				hrBean.printRecord();
+				reportJson.getJSONArray("hr5").put(hrBean.getJson());
 			}
 			else if (line.startsWith("HR6"))
 			{
-				
+				RVHR6Bean hrBean = new RVHR6Bean(line);
+				hrBean.printRecord();
+				reportJson.put("hr6", hrBean.getJson());
 			}
 			else if (line.startsWith("HR7"))
 			{
-				
+				RVHR7Bean hrBean = new RVHR7Bean(line);
+				hrBean.printRecord();
+				reportJson.put("hr7", hrBean.getJson());
 			}
 			else if (line.startsWith("HR8"))
 			{
-				
+				RVHR8Bean hrBean = new RVHR8Bean(line);
+				hrBean.printRecord();
+				reportJson.getJSONArray("hr8").put(hrBean.getJson());
 			}
-			
+			else if (line.trim().isEmpty() || line.startsWith("Content") || line.startsWith("---")) {}
+			else
+			{
+				throw new Exception("The file content is corrupted. -- Please try again with the original!");
+			}
 			line = reader.readLine();
 		}
+		
+		if (decodedToken != null)
+		{
+			//Insert into db
+		}
+		return reportJson;
 	}
     //docstore.mik.ua/orelly/java-ent/servlet/ch04_04.htm
 	private String[] extractDispositionInfo(String line) throws IOException 

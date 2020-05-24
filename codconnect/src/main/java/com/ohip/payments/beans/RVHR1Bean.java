@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.json.JSONObject;
+
 public class RVHR1Bean implements Serializable
 {
 
@@ -44,7 +46,7 @@ public class RVHR1Bean implements Serializable
 	}
 	public RVHR1Bean(String line) throws Exception
 	{
-		if (!firstRecord(line)) throw new Exception("HR1 record is corrupted. -- Try again with a standard file!");
+		if (!hrRecord(line)) throw new Exception("HR1 record is corrupted. -- Try again with a standard file!");
 	}
 	public String getTransactionIdentifier()
 	{
@@ -208,7 +210,13 @@ public class RVHR1Bean implements Serializable
 				+ ", reservedForMOH2=" + reservedForMOH2 
 				+ ", paymentDate=" + simpleDate.format(paymentDate) + "]";
 	}
-	public void printFirstRecord()
+	public JSONObject getJson()
+	{
+		JSONObject json = new JSONObject();
+		
+		return json;
+	}
+	public void printRecord()
 	{
 		System.out.println("Provider Number:, " + healthCareProvider);
 		System.out.println("Payment Date:, " + simpleDate.format(paymentDate));
@@ -219,7 +227,7 @@ public class RVHR1Bean implements Serializable
 		//System.out.println("(Accumulation of the Amount Paid for all claim items appearing on the remittance advice Plus and/or Minus any Accounting Transactions and Balance Forward amounts)");
 	}
 	//Occurs Once in every file - always the first record
-	public boolean firstRecord(String line)
+	public boolean hrRecord(String line)
 	{
 		boolean valid = true;
 		//System.err.println("line.indexOf(\"HR1V030\") = " + line.indexOf("HR1V030") + ", TOTAL LENGTH = " + line.length());//total len = 79

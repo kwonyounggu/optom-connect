@@ -32,7 +32,7 @@ public class RVHR8Bean implements Serializable
 	}
 	public RVHR8Bean(String line) throws Exception
 	{
-		if (!hr8Record(line)) throw new Exception("HR8 record is corrupted. -- Try again with a standard file!");
+		if (!hrRecord(line)) throw new Exception("HR8 record is corrupted. -- Try again with a standard file!");
 	}
 	public String getTransactionIdentifier()
 	{
@@ -74,7 +74,7 @@ public class RVHR8Bean implements Serializable
 	{
 		this.simpleDate = simpleDate;
 	}
-	public void printHR8Record()
+	public void printRecord()
 	{
 		System.out.println("Message Facility Record – Health Reconciliation");
 		
@@ -116,7 +116,7 @@ public class RVHR8Bean implements Serializable
 		return "RVHR8Bean [transactionIdentifier=" + transactionIdentifier + ", recordType=" + recordType
 				+ ", messageText=" + messageText + ", reservedForMOH=" + reservedForMOH + "]";
 	}
-	public JSONObject getHR8Json()
+	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
 		json.put("messageText", messageText);
@@ -124,7 +124,7 @@ public class RVHR8Bean implements Serializable
 		return json;
 	}
 	//Occurs Once in every file
-	public boolean hr8Record(String line)
+	public boolean hrRecord(String line)
 	{
 		boolean valid = true;
 

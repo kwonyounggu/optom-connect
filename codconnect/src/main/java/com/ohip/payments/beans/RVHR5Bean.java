@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.json.JSONObject;
+
 public class RVHR5Bean implements Serializable
 {
 
@@ -41,7 +43,7 @@ public class RVHR5Bean implements Serializable
 	}
 	public RVHR5Bean(String line) throws Exception
 	{
-		if (!hr5Record(line)) throw new Exception("HR5 record is corrupted. -- Try again with a standard file!");
+		if (!hrRecord(line)) throw new Exception("HR5 record is corrupted. -- Try again with a standard file!");
 	}
 	public String getTransactionIdentifier()
 	{
@@ -204,12 +206,18 @@ public class RVHR5Bean implements Serializable
 				+ ", reservedForMOH2=" + reservedForMOH2 + ", accountingNumber=" + accountingNumber + ", clinicName="
 				+ clinicName + ", simpleDate=" + simpleDate.format(serviceDate) + ", currencyFormat=" + currencyFormat + "]";
 	}
-	public void printHR5Record()
+	public JSONObject getJson()
+	{
+		JSONObject json = new JSONObject();
+		
+		return json;
+	}
+	public void printRecord()
 	{
 		System.out.println(", " + claimNumber + ", " + transactionType + ", " + numberOfServices + ", " + serviceCode + ", " + simpleDate.format(serviceDate) + ", " + currencyFormat.format((double)amountSubmitted) + ", " + currencyFormat.format((double)amountPaid));
 	}
 	//Occurs Once in every file - always the first record
-	public boolean hr5Record(String line)
+	public boolean hrRecord(String line)
 	{
 		boolean valid = true;
 		//System.err.println("line.indexOf(\"HR5\") = " + line.indexOf("HR5") + ", TOTAL LENGTH = " + line.length());//total len = 79

@@ -2,6 +2,8 @@ package com.ohip.payments.beans;
 
 import java.io.Serializable;
 
+import org.json.JSONObject;
+
 public class FileInfoBean implements Serializable
 {
 	/**
@@ -77,6 +79,14 @@ public class FileInfoBean implements Serializable
 		this.fType = fileName.charAt(0);
 		this.fMonth = Character.getNumericValue(fileName.charAt(1)) - 9; //So A: 1... D:4
 		this.fNumber = fileName.substring(2, fileName.lastIndexOf('.'));
+	}
+	public JSONObject getJson()
+	{
+		JSONObject json = new JSONObject();
+		json.put("fileName", fileName);
+		json.put("reportType", Character.toString(fType));
+		json.put("idNumber", fNumber);//group number, provider number, etc as in the doc
+		return json;
 	}
 	@Override
 	public String toString()

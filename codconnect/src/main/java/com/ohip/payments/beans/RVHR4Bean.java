@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.json.JSONObject;
+
 public class RVHR4Bean implements Serializable
 {
 
@@ -36,7 +38,7 @@ public class RVHR4Bean implements Serializable
 	}
 	public RVHR4Bean(String line) throws Exception
 	{
-		if (!hr4Record(line)) throw new Exception("HR4 record is corrupted. -- Try again with a standard file!");
+		if (!hrRecord(line)) throw new Exception("HR4 record is corrupted. -- Try again with a standard file!");
 	}
 	public String getTransactionIdentifier()
 	{
@@ -170,12 +172,18 @@ public class RVHR4Bean implements Serializable
 				+ "serviceLocator=" + serviceLocator + ", mohGroupIdentifier=" + mohGroupIdentifier
 				+ ", reservedForMOH=" + reservedForMOH + "]";
 	}
-	public void printHR4Record()
+	public JSONObject getJson()
+	{
+		JSONObject json = new JSONObject();
+		
+		return json;
+	}
+	public void printRecord()
 	{
 		System.out.print(accountingNumber + ", " + claimNumber + ", " + transactionType + ", " + healthRegistrationNumber + ", " + versionCode);
 	}
 	//Occurs Once in every file - always the first record
-	public boolean hr4Record(String line)
+	public boolean hrRecord(String line)
 	{
 		boolean valid = true;
 		//System.err.println("line.indexOf(\"HR4\") = " + line.indexOf("HR4") + ", TOTAL LENGTH = " + line.length());//total len = 79

@@ -39,7 +39,7 @@ public class RVHR6Bean implements Serializable
 	}
 	public RVHR6Bean(String line) throws Exception
 	{
-		if (!hr6Record(line)) throw new Exception("HR6 record is corrupted. -- Try again with a standard file!");
+		if (!hrRecord(line)) throw new Exception("HR6 record is corrupted. -- Try again with a standard file!");
 	}
 	public String getTransactionIdentifier()
 	{
@@ -129,7 +129,7 @@ public class RVHR6Bean implements Serializable
 	{
 		this.reservedForMOH = reservedForMOH;
 	}
-	public void printHR6Record()
+	public void printRecord()
 	{
 		System.out.println("Balance Forward Record – Health Reconciliation");
 		
@@ -177,7 +177,7 @@ public class RVHR6Bean implements Serializable
 				+ ", amtBrtFwdOtherReductions=" + amtBrtFwdOtherReductions + ", amtBrtFwdOtherReductionsSign="
 				+ amtBrtFwdOtherReductionsSign + ", reservedForMOH=" + reservedForMOH + "]";
 	}
-	public JSONObject getHR6Json()
+	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
 		json.put("amtBrtFwdClaimsAdjustment", amtBrtFwdClaimsAdjustment);
@@ -192,7 +192,7 @@ public class RVHR6Bean implements Serializable
 		return json;
 	}
 	//Occurs Once in every file
-	public boolean hr6Record(String line)
+	public boolean hrRecord(String line)
 	{
 		boolean valid = true;
 

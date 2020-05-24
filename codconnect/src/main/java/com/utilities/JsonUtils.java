@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +34,15 @@ public class JsonUtils
 	    //if (JSON_NULL_STR.equals(value)) return "";
 	    return value;
 	}
-	
+	public static void removeAll(JSONObject root)
+	{
+		Iterator<String> keys = root.keys();
+		while (keys.hasNext()) 
+		{
+			System.err.println("key: " + keys.toString());
+			root.remove((String)root.keys().next());
+		}
+	}
 	public static Object getStringPropertyAsJSON(JSONObject jsonObject, String key, String nonJSONPropertyKey) throws JSONException 
 	{
 	    Object value = jsonObject.opt(key);
