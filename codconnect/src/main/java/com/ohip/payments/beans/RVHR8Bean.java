@@ -119,6 +119,7 @@ public class RVHR8Bean implements Serializable
 	public JSONObject getHR8Json()
 	{
 		JSONObject json = new JSONObject();
+		json.put("messageText", messageText);
 		
 		return json;
 	}

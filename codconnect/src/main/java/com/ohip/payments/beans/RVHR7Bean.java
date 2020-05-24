@@ -6,6 +6,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import org.json.JSONObject;
+
 import java.lang.Character;
 
 public class RVHR7Bean implements Serializable
@@ -135,7 +138,37 @@ public class RVHR7Bean implements Serializable
 				+ ", transactionMessage=" + transactionMessage + ", reservedForMOH=" + reservedForMOH 
 				+ ", transactionDate=" + simpleDate.format(transactionDate) + "]";
 	}
+	public JSONObject getHR7Json()
+	{
+		JSONObject json = new JSONObject();
+		switch(Integer.parseInt(transactionCode))
+		{
+			case 10: json.put("transactionCode", "Advance"); break;
+			case 20: json.put("transactionCode", "Reduction"); break;
+			case 30: json.put("transactionCode", "Unused"); break;
+			case 40: json.put("transactionCode", "Advance repayment"); break;
+			case 50: json.put("transactionCode", "Accounting adjustment"); break;
+			case 60: json.put("transactionCode", "Error or Unknown"); break;
+			case 70: json.put("transactionCode", "Attachments"); break;
+			default: json.put("transactionCode", "Unknown"); break;
+		}
 
+		switch(chequeIndicator)
+		{
+			case 'M': json.put("chequeIndicator", "Manual Cheque issued"); break;
+			case 'C': json.put("chequeIndicator", "Computer Cheque issued"); break;
+			case 'I': json.put("chequeIndicator", "Interim payment/Direct Bank Deposit issued"); break;
+			default:  json.put("chequeIndicator", "Unknown"); break;
+		}
+		
+		json.put("transactionDate", simpleDate.format(transactionDate));
+		json.put("transactionAmount", transactionAmount);
+		
+		json.put("transactionAmountSign", (Character.isWhitespace(transactionAmountSign) ? "Positive" : (transactionAmountSign == '-' ? "Negative" : "Unknown")));
+		json.put("transactionMessage", transactionMessage);
+		
+		return json;
+	}
 	public void printAccountingTxRecord()
 	{
 		System.out.println("Accounting Tx Record - Health Reconciliation");

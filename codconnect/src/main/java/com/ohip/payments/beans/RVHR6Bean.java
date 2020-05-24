@@ -6,6 +6,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import org.json.JSONObject;
+
 import java.lang.Character;
 
 public class RVHR6Bean implements Serializable
@@ -173,6 +176,20 @@ public class RVHR6Bean implements Serializable
 				+ amtBrtFwdReductions + ", amtBrtFwdReductionsSign=" + amtBrtFwdReductionsSign
 				+ ", amtBrtFwdOtherReductions=" + amtBrtFwdOtherReductions + ", amtBrtFwdOtherReductionsSign="
 				+ amtBrtFwdOtherReductionsSign + ", reservedForMOH=" + reservedForMOH + "]";
+	}
+	public JSONObject getHR6Json()
+	{
+		JSONObject json = new JSONObject();
+		json.put("amtBrtFwdClaimsAdjustment", amtBrtFwdClaimsAdjustment);
+		json.put("amtBrtFwdClaimsAdjustmentSign", amtBrtFwdClaimsAdjustmentSign);
+		json.put("amtBrtFwdClaimsAdvances", amtBrtFwdClaimsAdvances);
+		json.put("amtBrtFwdClaimsAdvancesSign", amtBrtFwdClaimsAdvancesSign);
+		json.put("amtBrtFwdReductions", amtBrtFwdReductions);
+		json.put("amtBrtFwdReductionsSign", amtBrtFwdReductionsSign);
+		json.put("amtBrtFwdOtherReductions", amtBrtFwdOtherReductions);
+		json.put("amtBrtFwdOtherReductionsSign", amtBrtFwdOtherReductionsSign);
+	
+		return json;
 	}
 	//Occurs Once in every file
 	public boolean hr6Record(String line)
