@@ -175,6 +175,18 @@ public class RVHR4Bean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
+		json.put("claimNumber", claimNumber);
+		json.put("transactionType", transactionType);
+		json.put("healthcareProvider", healthcareProvider);
+		json.put("speciality", speciality);
+		json.put("accountingNumber", accountingNumber);
+		json.put("patientLastName", patientLastName.trim());
+		json.put("patientFirstName", patientFirstName.trim());
+		json.put("provinceCode", provinceCode);
+		json.put("healthRegistrationNumber", healthRegistrationNumber.trim());
+		json.put("versionCode", versionCode.trim());
+		json.put("paymentProgram", paymentProgram);
+		json.put("serviceLocator", serviceLocator.trim());
 		
 		return json;
 	}
@@ -183,7 +195,7 @@ public class RVHR4Bean implements Serializable
 		System.out.print(accountingNumber + ", " + claimNumber + ", " + transactionType + ", " + healthRegistrationNumber + ", " + versionCode);
 	}
 	//Occurs Once in every file - always the first record
-	public boolean hrRecord(String line)
+	public boolean hrRecord(String line) throws Exception
 	{
 		boolean valid = true;
 		//System.err.println("line.indexOf(\"HR4\") = " + line.indexOf("HR4") + ", TOTAL LENGTH = " + line.length());//total len = 79
@@ -191,11 +203,6 @@ public class RVHR4Bean implements Serializable
 		if (line.length() != 79)
 		{
 			System.err.println("ERROR: the hr4 record of this file does not contain total length, 79, but " + line.length() + " as specified in the spec.");
-			valid = false;
-		}
-		else if (line.indexOf("HR4") != 0)
-		{
-			System.err.println("ERROR: this file does not contain HR4 in the record.");
 			valid = false;
 		}
 		else

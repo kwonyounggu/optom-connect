@@ -48,6 +48,10 @@ public class FileInfoBean implements Serializable
 	{
 		return fNumber;
 	}
+	public int getfNumberInt()
+	{
+		return Integer.parseInt(fNumber);
+	}
 	public void setfNumber(String fNumber)
 	{
 		this.fNumber = fNumber;

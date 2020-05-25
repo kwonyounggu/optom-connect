@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.ohip.payments.beans.*;
@@ -84,6 +85,10 @@ public class UploadServlet extends HttpServlet
 						log.info(fb.toString());
 						
 						returnJson.put("fileInfo", fb.getJson());
+						
+						if (Integer.parseInt(fb.getfNumber()) == 0)
+							throw new Exception("Group/Provider number is not valid. -- Try again with the original!");
+						
 						break;
 					}
 					line = reader.readLine();
@@ -169,6 +174,13 @@ public class UploadServlet extends HttpServlet
 			{
 				RVHR1Bean hrBean = new RVHR1Bean(line);
 				hrBean.printRecord();
+				
+				if (fb.getfNumber().length()==4 && !hrBean.getGroupNumber().equals(fb.getfNumber()))
+					throw new Exception("Group number is not matching. -- Try again with the original!");
+				else if (fb.getfNumber().length()==6 && hrBean.getHealthCareProvider() != fb.getfNumberInt())
+					throw new Exception("Provider number is not matching. -- Try again with the original!");
+				else if (hrBean.getSpeciality() != 56)
+					throw new Exception("The remittance advice report is only for eye doctors (O.D)!");
 				reportJson.put("hr1", hrBean.getJson());
 			}
 			else if (line.startsWith("HR2"))
@@ -221,6 +233,18 @@ public class UploadServlet extends HttpServlet
 			line = reader.readLine();
 		}
 		
+		try
+		{
+			//Check if the required records are existing minimally in the file.
+			if (!(reportJson.has("hr1") && reportJson.has("hr2") && reportJson.has("hr3") && reportJson.has("hr8") &&
+				!reportJson.getJSONArray("hr4").isEmpty() && !reportJson.getJSONArray("hr5").isEmpty()))
+				throw new Exception("The minimal records are not in the file. -- Try again with the original!");
+		}
+		catch(JSONException e)
+		{
+			log.info("ERROR: " + e.getMessage());
+			throw new Exception(e.getMessage());
+		}
 		if (decodedToken != null)
 		{
 			//Insert into db

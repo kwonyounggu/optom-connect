@@ -180,14 +180,14 @@ public class RVHR6Bean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
-		json.put("amtBrtFwdClaimsAdjustment", amtBrtFwdClaimsAdjustment);
-		json.put("amtBrtFwdClaimsAdjustmentSign", amtBrtFwdClaimsAdjustmentSign);
-		json.put("amtBrtFwdClaimsAdvances", amtBrtFwdClaimsAdvances);
-		json.put("amtBrtFwdClaimsAdvancesSign", amtBrtFwdClaimsAdvancesSign);
-		json.put("amtBrtFwdReductions", amtBrtFwdReductions);
-		json.put("amtBrtFwdReductionsSign", amtBrtFwdReductionsSign);
-		json.put("amtBrtFwdOtherReductions", amtBrtFwdOtherReductions);
-		json.put("amtBrtFwdOtherReductionsSign", amtBrtFwdOtherReductionsSign);
+		json.put("amtBrtFwdClaimsAdjustment", Character.compare(amtBrtFwdClaimsAdjustmentSign, '-')==0 ? (-amtBrtFwdClaimsAdjustment) : amtBrtFwdClaimsAdjustment);
+		json.put("amtBrtFwdClaimsAdjustmentSign", Character.toString(amtBrtFwdClaimsAdjustmentSign).trim());
+		json.put("amtBrtFwdClaimsAdvances", Character.compare(amtBrtFwdClaimsAdvancesSign, '-')==0 ? (-amtBrtFwdClaimsAdvances) : amtBrtFwdClaimsAdvances);
+		json.put("amtBrtFwdClaimsAdvancesSign", Character.toString(amtBrtFwdClaimsAdvancesSign).trim());
+		json.put("amtBrtFwdReductions", Character.compare(amtBrtFwdReductionsSign, '-')==0 ? (-amtBrtFwdReductions) : amtBrtFwdReductions);
+		json.put("amtBrtFwdReductionsSign", Character.toString(amtBrtFwdReductionsSign).trim());
+		json.put("amtBrtFwdOtherReductions", Character.compare(amtBrtFwdOtherReductionsSign, '-')==0 ? (-amtBrtFwdOtherReductions) : amtBrtFwdOtherReductions);
+		json.put("amtBrtFwdOtherReductionsSign", Character.toString(amtBrtFwdOtherReductionsSign).trim());
 	
 		return json;
 	}

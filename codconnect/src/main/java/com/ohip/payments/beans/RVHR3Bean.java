@@ -81,6 +81,8 @@ public class RVHR3Bean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
+		json.put("addressLineTwo", addressLine2.trim());
+		json.put("addressLineThree", addressLine3.trim());
 		
 		return json;
 	}
@@ -97,7 +99,7 @@ public class RVHR3Bean implements Serializable
 		System.out.println();
 	}
 	//Occurs Once in every file - always the first record
-	public boolean hrRecord(String line)
+	public boolean hrRecord(String line) throws Exception
 	{
 		boolean valid = true;
 		//System.err.println("line.indexOf(\"HR3\") = " + line.indexOf("HR3") + ", TOTAL LENGTH = " + line.length());//total len = 80
@@ -105,11 +107,6 @@ public class RVHR3Bean implements Serializable
 		if (line.length() != 79)
 		{
 			System.err.println("ERROR: the 3rd record of this file does not contain total length, 79, but " + line.length() + " as specified in the spec.");
-			valid = false;
-		}
-		else if (line.indexOf("HR3") != 0)
-		{
-			System.err.println("ERROR: this file does not contain HR3 in the 3rd record.");
 			valid = false;
 		}
 		else

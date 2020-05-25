@@ -92,7 +92,10 @@ public class RVHR1Bean implements Serializable
 	{
 		return groupNumber;
 	}
-
+	/*public boolean isEqualGroupNumber(String groupNumber)
+	{
+		return groupNumber.equals(groupNumber);
+	}*/
 	public void setGroupNumber(String groupNumber)
 	{
 		this.groupNumber = groupNumber;
@@ -102,7 +105,10 @@ public class RVHR1Bean implements Serializable
 	{
 		return healthCareProvider;
 	}
-
+    /*public boolean isEqualHealthCareProvider(int providerNumber)
+    {
+    	return healthCareProvider == providerNumber;
+    }*/
 	public void setHealthCareProvider(int healthCareProvider)
 	{
 		this.healthCareProvider = healthCareProvider;
@@ -216,13 +222,14 @@ public class RVHR1Bean implements Serializable
 		json.put("groupNumber", groupNumber);//Check this with fileInfo
 		json.put("healthCareProvider", healthCareProvider);//Check this with fileInfo
 		json.put("speciality", speciality);
-		json.put("remittanceAdviceSequence", remittanceAdviceSequence);
+		json.put("remittanceAdviceSequence", remittanceAdviceSequence); //Type 7 which is in tech spec.
 		json.put("paymentDate", simpleDate.format(paymentDate));
-		json.put("payeeName", payeeName);
+		//json.put("payeeName", payeeName);
 		json.put("lastName", payeeName.substring(0, 24).trim());
 		json.put("title", payeeName.substring(25, 27).trim());
 		json.put("initials", payeeName.substring(28).trim());
 		json.put("totalAmountPayable", Character.compare(totalAmountPayableSign, '-')==0 ? (-totalAmountPayable) : totalAmountPayable);
+		json.put("totalAmountPayableSign", Character.toString(totalAmountPayableSign).trim());
 		json.put("chequeNumber", (chequeNumber.equals("99999999") ? "Direct deposit" : (chequeNumber.trim().isEmpty() ? "Pay Patient" : chequeNumber)));
 		
 		return json;
@@ -238,7 +245,7 @@ public class RVHR1Bean implements Serializable
 		//System.out.println("(Accumulation of the Amount Paid for all claim items appearing on the remittance advice Plus and/or Minus any Accounting Transactions and Balance Forward amounts)");
 	}
 	//Occurs Once in every file - always the first record
-	public boolean hrRecord(String line)
+	public boolean hrRecord(String line) throws Exception
 	{
 		boolean valid = true;
 		//System.err.println("line.indexOf(\"HR1V030\") = " + line.indexOf("HR1V030") + ", TOTAL LENGTH = " + line.length());//total len = 79

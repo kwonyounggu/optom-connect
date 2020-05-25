@@ -162,10 +162,10 @@ public class RVHR7Bean implements Serializable
 		}
 		
 		json.put("transactionDate", simpleDate.format(transactionDate));
-		json.put("transactionAmount", transactionAmount);
-		
-		json.put("transactionAmountSign", (Character.isWhitespace(transactionAmountSign) ? "Positive" : (transactionAmountSign == '-' ? "Negative" : "Unknown")));
-		json.put("transactionMessage", transactionMessage);
+		json.put("transactionAmount", Character.compare(transactionAmountSign, '-')==0 ? (-transactionAmount) : transactionAmount);
+
+		json.put("transactionAmountSign", Character.toString(transactionAmountSign).trim());
+		json.put("transactionMessage", transactionMessage.trim());
 		
 		return json;
 	}

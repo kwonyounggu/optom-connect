@@ -209,6 +209,15 @@ public class RVHR5Bean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
+		json.put("claimNumber", claimNumber);
+		json.put("transactionType", transactionType);
+		json.put("serviceDate", simpleDate.format(serviceDate));
+		json.put("numberOfServices", numberOfServices);
+		json.put("serviceCode", serviceCode);
+		json.put("amountSubmitted", amountSubmitted);
+		json.put("amountPaid", Character.compare(amountPaidSign, '-')==0 ? (-amountPaid) : amountPaid);
+		json.put("amountPaidSign", Character.toString(amountPaidSign).trim());
+		json.put("explanatoryCode", explanatoryCode.trim());
 		
 		return json;
 	}
