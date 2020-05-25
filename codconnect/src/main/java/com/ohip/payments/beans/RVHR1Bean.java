@@ -213,6 +213,17 @@ public class RVHR1Bean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
+		json.put("groupNumber", groupNumber);//Check this with fileInfo
+		json.put("healthCareProvider", healthCareProvider);//Check this with fileInfo
+		json.put("speciality", speciality);
+		json.put("remittanceAdviceSequence", remittanceAdviceSequence);
+		json.put("paymentDate", simpleDate.format(paymentDate));
+		json.put("payeeName", payeeName);
+		json.put("lastName", payeeName.substring(0, 24).trim());
+		json.put("title", payeeName.substring(25, 27).trim());
+		json.put("initials", payeeName.substring(28).trim());
+		json.put("totalAmountPayable", Character.compare(totalAmountPayableSign, '-')==0 ? (-totalAmountPayable) : totalAmountPayable);
+		json.put("chequeNumber", (chequeNumber.equals("99999999") ? "Direct deposit" : (chequeNumber.trim().isEmpty() ? "Pay Patient" : chequeNumber)));
 		
 		return json;
 	}

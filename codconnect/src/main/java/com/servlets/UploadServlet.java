@@ -152,6 +152,9 @@ public class UploadServlet extends HttpServlet
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+	//**************************************************************************************************************************
+	//* Check if there exists HR1, HR2, HR3, HR4, HR5, HR8 which should be included all the time.
+	//**************************************************************************************************************************
 	private JSONObject handleRemittanceAdviceFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken) throws IOException, Exception
 	{
 		JSONObject reportJson = new JSONObject();
