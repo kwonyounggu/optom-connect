@@ -14,7 +14,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.dao.OHIPReportDao;
 import com.ohip.payments.beans.*;
+import com.utilities.DatasourceUtil;
 import com.utilities.JsonUtils;
 import com.utilities.TokenUtil;
 
@@ -54,6 +56,8 @@ public class UploadServlet extends HttpServlet
 			
 			TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
 			decodedToken = tokenUtil.verifyToken(token);
+			
+			//Note you need to validate if the user is still in the database whose id is still valid/enabled
 		}
 	
 		return decodedToken;
@@ -173,7 +177,7 @@ public class UploadServlet extends HttpServlet
 			if (line.startsWith("HR1"))
 			{
 				RVHR1Bean hrBean = new RVHR1Bean(line);
-				hrBean.printRecord();
+				//hrBean.printRecord();
 				
 				if (fb.getfNumber().length()==4 && !hrBean.getGroupNumber().equals(fb.getfNumber()))
 					throw new Exception("Group number is not matching. -- Try again with the original!");
@@ -186,43 +190,43 @@ public class UploadServlet extends HttpServlet
 			else if (line.startsWith("HR2"))
 			{
 				RVHR2Bean hrBean = new RVHR2Bean(line);
-				hrBean.printRecord();
+				//hrBean.printRecord();
 				reportJson.put("hr2", hrBean.getJson());
 			}
 			else if (line.startsWith("HR3"))
 			{
 				RVHR3Bean hrBean = new RVHR3Bean(line);
-				hrBean.printRecord();
+				//hrBean.printRecord();
 				reportJson.put("hr3", hrBean.getJson());
 			}
 			else if (line.startsWith("HR4"))
 			{
 				RVHR4Bean hrBean = new RVHR4Bean(line);
-				hrBean.printRecord();
+				//hrBean.printRecord();
 				reportJson.getJSONArray("hr4").put(hrBean.getJson());
 			}
 			else if (line.startsWith("HR5"))
 			{
 				RVHR5Bean hrBean = new RVHR5Bean(line);
-				hrBean.printRecord();
+				//hrBean.printRecord();
 				reportJson.getJSONArray("hr5").put(hrBean.getJson());
 			}
 			else if (line.startsWith("HR6"))
 			{
 				RVHR6Bean hrBean = new RVHR6Bean(line);
-				hrBean.printRecord();
+				//hrBean.printRecord();
 				reportJson.put("hr6", hrBean.getJson());
 			}
 			else if (line.startsWith("HR7"))
 			{
 				RVHR7Bean hrBean = new RVHR7Bean(line);
-				hrBean.printRecord();
+				//hrBean.printRecord();
 				reportJson.put("hr7", hrBean.getJson());
 			}
 			else if (line.startsWith("HR8"))
 			{
 				RVHR8Bean hrBean = new RVHR8Bean(line);
-				hrBean.printRecord();
+				//hrBean.printRecord();
 				reportJson.getJSONArray("hr8").put(hrBean.getJson());
 			}
 			else if (line.trim().isEmpty() || line.startsWith("Content") || line.startsWith("---")) {}
@@ -238,17 +242,25 @@ public class UploadServlet extends HttpServlet
 			//Check if the required records are existing minimally in the file.
 			if (!(reportJson.has("hr1") && reportJson.has("hr2") && reportJson.has("hr3") && reportJson.has("hr8") &&
 				!reportJson.getJSONArray("hr4").isEmpty() && !reportJson.getJSONArray("hr5").isEmpty()))
+			{
 				throw new Exception("The minimal records are not in the file. -- Try again with the original!");
+			}
 		}
 		catch(JSONException e)
 		{
-			log.info("ERROR: " + e.getMessage());
+			log.severe("ERROR: " + e.getMessage());
 			throw new Exception(e.getMessage());
 		}
 		if (decodedToken != null)
 		{
+			//Check if the user allows data insertion in terms of auth_user_matrix_with_settings
 			//Insert into db
+			OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
+			reportDao.insertRAData(reportJson, fb, decodedToken);
+		
 		}
+		
+		//make CSV file
 		return reportJson;
 	}
     //docstore.mik.ua/orelly/java-ent/servlet/ch04_04.htm

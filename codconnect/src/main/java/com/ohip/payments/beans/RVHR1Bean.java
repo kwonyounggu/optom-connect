@@ -222,6 +222,7 @@ public class RVHR1Bean implements Serializable
 		json.put("groupNumber", groupNumber);//Check this with fileInfo
 		json.put("healthCareProvider", healthCareProvider);//Check this with fileInfo
 		json.put("speciality", speciality);
+		json.put("mohOfficeCode", Character.toString(mohOfficeCode));
 		json.put("remittanceAdviceSequence", remittanceAdviceSequence); //Type 7 which is in tech spec.
 		json.put("paymentDate", simpleDate.format(paymentDate));
 		//json.put("payeeName", payeeName);
@@ -233,6 +234,28 @@ public class RVHR1Bean implements Serializable
 		json.put("chequeNumber", (chequeNumber.equals("99999999") ? "Direct deposit" : (chequeNumber.trim().isEmpty() ? "Pay Patient" : chequeNumber)));
 		
 		return json;
+	}
+	public String getInsertStmtTo_ohip_mro_hr1(JSONObject json, int ohip_mro_tx_history_id)
+	{
+		return null;
+		/*
+		return "insert into ohip_mro_hr1 values(default, 'HR', '1', 'V03', '0', '" + groupNumber + "', " +
+														"" + healthCareProvider + ", " +
+														"" + speciality + ", " +
+													   "'" + mohOfficeCode + "', " +
+														"" + remittanceAdviceSequence + ", " +
+													   "'" + simpleDate.format(paymentDate) + "', " +
+													   "'" + json.getString("title") + "|" + json.getString("initials") + "|" + json.getString("lastName") + "', " +
+														"'" + fType + "', " +
+														"'" + fType + "', " +
+														"'" + fType + "', " +
+														"'" + fType + "', " +
+														       "'" + fNumber + "', " +
+														           + fMonth + ", " +
+														       "'" + fExt + "', " +
+														           + auth_user_account_id + ");";
+		*/
+														           
 	}
 	public void printRecord()
 	{

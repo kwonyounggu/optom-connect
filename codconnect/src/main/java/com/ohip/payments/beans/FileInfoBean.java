@@ -98,5 +98,15 @@ public class FileInfoBean implements Serializable
 		return "FileInfoBean [fType=" + fType + ", fMonth=" + fMonth + ", fNumber=" + fNumber + ", fExt=" + fExt
 				+ ", name=" + name + ", fileName=" + fileName + "]";
 	}
+	public String getInsertStmtTo_ohip_mro_tx_history(int auth_user_account_id)
+	{
+		return "insert into ohip_mro_tx_history values(default, '" + fileName + "', " +
+														       "'" + fType + "', " +
+														       "'" + fNumber + "', " +
+														           + fMonth + ", " +
+														       "'" + fExt + "', " +
+														           + auth_user_account_id + ");";
+														           
+	}
 	
 }

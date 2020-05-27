@@ -120,6 +120,8 @@ public class RVHR8Bean implements Serializable
 	{
 		JSONObject json = new JSONObject();
 		json.put("messageText", messageText.trim());
+		String temp = (String)json.get("messageText");
+		if (temp.startsWith("*")) json.put("messageText", "*" + temp.length()); //eg: *78, means 78 asterisks
 		
 		return json;
 	}
