@@ -1,15 +1,10 @@
 package com.ohip.payments.beans;
 
 import java.io.Serializable;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import org.json.JSONObject;
 
-import java.lang.Character;
 
 public class RVHR8Bean implements Serializable
 {
@@ -119,11 +114,23 @@ public class RVHR8Bean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
-		json.put("messageText", messageText.trim());
-		String temp = (String)json.get("messageText");
-		if (temp.startsWith("*")) json.put("messageText", "*" + temp.length()); //eg: *78, means 78 asterisks
+		
+		if (messageText.startsWith("*")) json.put("messageText", "*" + messageText.length()); //eg: *78, means 78 asterisks
+		else json.put("messageText", messageText);
+		
+		json.put("reservedForMOH", reservedForMOH);
 		
 		return json;
+	}
+	/*
+	 * Note StringEscapeUtils in Dev/carm/src/com/sickkids/caliper/dao/AllReviewDataBean.java 
+	 */
+	public static String getInsertStmtTo_ohip_mro_hr8(JSONObject json, int ohip_mro_hr1_id)
+	{
+		return "insert into ohip_mro_hr8 values(default, 'HR', '8', " + 
+														"'" + json.getString("messageText").replace("'", "''") + "', " +  //replace all occurrence
+													   "'" + json.getString("reservedForMOH") + "', " +
+														   + ohip_mro_hr1_id + ");";										           
 	}
 	//Occurs Once in every file
 	public boolean hrRecord(String line)
@@ -141,8 +148,8 @@ public class RVHR8Bean implements Serializable
 			{
 				transactionIdentifier = line.substring(0, 0+2);
 				recordType = line.substring(2, 2+1).charAt(0);
-				messageText = line.substring(3, 3+70);
-				reservedForMOH = line.substring(73, 73+6);
+				messageText = line.substring(3, 3+70).trim();
+				reservedForMOH = line.substring(73, 73+6).trim();
 			}
 			catch (Exception e)
 			{

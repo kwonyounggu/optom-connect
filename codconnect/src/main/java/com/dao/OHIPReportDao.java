@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -18,6 +19,14 @@ import org.json.JSONObject;
 import com.beans.MusicTracksBean;
 import com.exceptions.DAOException;
 import com.ohip.payments.beans.FileInfoBean;
+import com.ohip.payments.beans.RVHR1Bean;
+import com.ohip.payments.beans.RVHR2Bean;
+import com.ohip.payments.beans.RVHR3Bean;
+import com.ohip.payments.beans.RVHR4Bean;
+import com.ohip.payments.beans.RVHR5Bean;
+import com.ohip.payments.beans.RVHR6Bean;
+import com.ohip.payments.beans.RVHR7Bean;
+import com.ohip.payments.beans.RVHR8Bean;
 import com.utilities.JsonUtils;
 
 public class OHIPReportDao
@@ -54,7 +63,7 @@ public class OHIPReportDao
 			rs = s.executeQuery(sqlCmd);
 			if (rs.next()) token.put("authUserAccountId", rs.getInt(1));
 			else throw new DAOException("Oops DB corrupted, please logout and login. -- Do it again!");
-			//1. check if the person or other person has already put the same file data through ohip_mro_tx_history
+			//1. check if the same person has already put the same file data through ohip_mro_tx_history
 			// ********** CHECK IF THE SAME FILE IS ALREADY INSERTED BY THE SAME USER_ID **********
 			// if it is already in, then update or discard
 			sqlCmd = "select 1 from ohip_mro_tx_history where file_name='" + fb.getFileName() + "' " +
@@ -69,27 +78,52 @@ public class OHIPReportDao
 			{
 				//First , insert into ohip_mro_tx_history in order to have a ohip_mro_history_id
 				sqlCmd = fb.getInsertStmtTo_ohip_mro_tx_history(token.getInt("authUserAccountId"));
-				log.info(sqlCmd);
+				//log.info(sqlCmd);
 				s.executeUpdate(sqlCmd);
 				sqlCmd = "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_tx_history', 'ohip_mro_tx_history_id'));";
-				rs = s.executeQuery(sqlCmd);
+				rs = s.executeQuery(sqlCmd); //to have ohip_mro_tx_history_id into the ohip_mro_hr1 as a fk.
 				if (rs.next()) 
-				log.info("ohip_mro_tx_history_id: " + rs.getInt(1));
-				//Insert into ohip_mro_hr1 and get ohip_mro_hr1_id, later remove constraint.
-				//This table will allow any duplicated records but unique with a user
+				{
+					s.executeUpdate(RVHR1Bean.getInsertStmtTo_ohip_mro_hr1(jsonData.getJSONObject("hr1"), rs.getInt(1)));
+				}
+				sqlCmd = "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_hr1', 'ohip_mro_hr1_id'));";
+				rs = s.executeQuery(sqlCmd); //ohip_mro_hr1_id for hr2 ... hr8
+				int ohipMroHr1Id = -1;
+				if (rs.next())
+				{
+					ohipMroHr1Id = rs.getInt(1);
+					s.executeUpdate(RVHR2Bean.getInsertStmtTo_ohip_mro_hr2(jsonData.getJSONObject("hr2"), ohipMroHr1Id));
+				}
+				s.executeUpdate(RVHR3Bean.getInsertStmtTo_ohip_mro_hr3(jsonData.getJSONObject("hr3"), ohipMroHr1Id));
+				JSONArray hrArray = jsonData.getJSONArray("hr4");
+				for (int i=0, size=hrArray.length(); i < size; i++)
+				{
+					JSONObject hr4Bean = hrArray.getJSONObject(i);
+					s.executeUpdate(RVHR4Bean.getInsertStmtTo_ohip_mro_hr4(hr4Bean, ohipMroHr1Id));
+				}
+				hrArray = jsonData.getJSONArray("hr5");
+				for (int i=0, size=hrArray.length(); i < size; i++)
+				{
+					JSONObject hr5Bean = hrArray.getJSONObject(i);
+					s.executeUpdate(RVHR5Bean.getInsertStmtTo_ohip_mro_hr5(hr5Bean, ohipMroHr1Id));
+				}
+				if (jsonData.has("hr6"))
+					s.executeUpdate(RVHR6Bean.getInsertStmtTo_ohip_mro_hr6(jsonData.getJSONObject("hr6"), ohipMroHr1Id));
+				
+				if (jsonData.has("hr7"))
+					s.executeUpdate(RVHR7Bean.getInsertStmtTo_ohip_mro_hr7(jsonData.getJSONObject("hr7"), ohipMroHr1Id));
+				hrArray = jsonData.getJSONArray("hr8");
+				log.info("length of hr8: " + hrArray.length());
+				for (int i=0, size=hrArray.length(); i < size; i++)
+				{
+					JSONObject hr8Bean = hrArray.getJSONObject(i);
+					s.executeUpdate(RVHR8Bean.getInsertStmtTo_ohip_mro_hr8(hr8Bean, ohipMroHr1Id));
+				}
+				
 			}
-			
-			//2. insert into ohip_mro_hr1 and get ohip_mro_hr1_id
-			//3. insert into ohip_mro_hr2
-			//4. insert into ohip_mro_hr3
-			//5. insert into ohip_mro_hr4
-			//6 insert into ohip_mro_hr5
-			//7. insert into ohip_mro_hr6
-			//8. insert into ohip_mro_hr7
-			//9. insert into ohip_mro_hr8
-			
-			c.rollback();
-			//c.commit();
+
+			//c.rollback();
+			c.commit();
 		}
 		catch (Exception e)
 		{

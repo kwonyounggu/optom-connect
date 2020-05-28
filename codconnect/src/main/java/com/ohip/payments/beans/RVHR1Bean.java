@@ -231,30 +231,26 @@ public class RVHR1Bean implements Serializable
 		json.put("initials", payeeName.substring(28).trim());
 		json.put("totalAmountPayable", Character.compare(totalAmountPayableSign, '-')==0 ? (-totalAmountPayable) : totalAmountPayable);
 		json.put("totalAmountPayableSign", Character.toString(totalAmountPayableSign).trim());
-		json.put("chequeNumber", (chequeNumber.equals("99999999") ? "Direct deposit" : (chequeNumber.trim().isEmpty() ? "Pay Patient" : chequeNumber)));
-		
+		json.put("chequeNumber", chequeNumber);
+		//json.put("chequeNumber", (chequeNumber.equals("99999999") ? "Direct deposit" : (chequeNumber.trim().isEmpty() ? "Pay Patient" : chequeNumber)));
+		json.put("reservedForMOH2", reservedForMOH2);
 		return json;
 	}
-	public String getInsertStmtTo_ohip_mro_hr1(JSONObject json, int ohip_mro_tx_history_id)
+	public static String getInsertStmtTo_ohip_mro_hr1(JSONObject json, int ohip_mro_tx_history_id)
 	{
-		return null;
-		/*
-		return "insert into ohip_mro_hr1 values(default, 'HR', '1', 'V03', '0', '" + groupNumber + "', " +
-														"" + healthCareProvider + ", " +
-														"" + speciality + ", " +
-													   "'" + mohOfficeCode + "', " +
-														"" + remittanceAdviceSequence + ", " +
-													   "'" + simpleDate.format(paymentDate) + "', " +
+		return "insert into ohip_mro_hr1 values(default, 'HR', '1', 'V03', '0', '" + json.getString("groupNumber") + "', " +
+														"" + json.getInt("healthCareProvider") + ", " +
+														"" + json.getInt("speciality") + ", " +
+													   "'" + json.getString("mohOfficeCode") + "', " +
+														"" + json.getInt("remittanceAdviceSequence") + ", " +
+													   "'" + json.getString("paymentDate") + "', " +
 													   "'" + json.getString("title") + "|" + json.getString("initials") + "|" + json.getString("lastName") + "', " +
-														"'" + fType + "', " +
-														"'" + fType + "', " +
-														"'" + fType + "', " +
-														"'" + fType + "', " +
-														       "'" + fNumber + "', " +
-														           + fMonth + ", " +
-														       "'" + fExt + "', " +
-														           + auth_user_account_id + ");";
-		*/
+													    "" + json.getFloat("totalAmountPayable") + ", " +
+													   "'" + json.getString("totalAmountPayableSign") + "', " +
+													   "'" + json.getString("chequeNumber") + "', " +
+													   "'" + json.getString("reservedForMOH2") + "', " +
+														   + ohip_mro_tx_history_id + ");";
+		
 														           
 	}
 	public void printRecord()

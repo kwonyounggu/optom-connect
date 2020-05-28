@@ -27,8 +27,8 @@ public class RVHR6Bean implements Serializable
 	private char amtBrtFwdClaimsAdvancesSign = '\0'; 
 	private double amtBrtFwdReductions = 0.0d; 
 	private char amtBrtFwdReductionsSign = '\0'; 
-	private double amtBrtFwdOtherReductions = 0.0d; 
-	private char amtBrtFwdOtherReductionsSign = '\0'; 
+	private double amtBrtFwdOtherDeductions = 0.0d; 
+	private char amtBrtFwdOtherDeductionsSign = '\0'; 
 	private String reservedForMOH = ""; 
 	
 	private SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd");
@@ -105,21 +105,21 @@ public class RVHR6Bean implements Serializable
 	{
 		this.amtBrtFwdReductionsSign = amtBrtFwdReductionsSign;
 	}
-	public double getAmtBrtFwdOtherReductions()
+	public double getAmtBrtFwdOtherDeductions()
 	{
-		return amtBrtFwdOtherReductions;
+		return amtBrtFwdOtherDeductions;
 	}
-	public void setAmtBrtFwdOtherReductions(double amtBrtFwdOtherReductions)
+	public void setAmtBrtFwdOtherDeductions(double amtBrtFwdOtherDeductions)
 	{
-		this.amtBrtFwdOtherReductions = amtBrtFwdOtherReductions;
+		this.amtBrtFwdOtherDeductions = amtBrtFwdOtherDeductions;
 	}
-	public char getAmtBrtFwdOtherReductionsSign()
+	public char getAmtBrtFwdOtherDeductionsSign()
 	{
-		return amtBrtFwdOtherReductionsSign;
+		return amtBrtFwdOtherDeductionsSign;
 	}
-	public void setAmtBrtFwdOtherReductionsSign(char amtBrtFwdOtherReductionsSign)
+	public void setAmtBrtFwdOtherDeductionsSign(char amtBrtFwdOtherDeductionsSign)
 	{
-		this.amtBrtFwdOtherReductionsSign = amtBrtFwdOtherReductionsSign;
+		this.amtBrtFwdOtherDeductionsSign = amtBrtFwdOtherDeductionsSign;
 	}
 	public String getReservedForMOH()
 	{
@@ -174,8 +174,8 @@ public class RVHR6Bean implements Serializable
 				+ amtBrtFwdClaimsAdjustmentSign + ", amtBrtFwdClaimsAdvances=" + amtBrtFwdClaimsAdvances
 				+ ", amtBrtFwdClaimsAdvancesSign=" + amtBrtFwdClaimsAdvancesSign + ", amtBrtFwdReductions="
 				+ amtBrtFwdReductions + ", amtBrtFwdReductionsSign=" + amtBrtFwdReductionsSign
-				+ ", amtBrtFwdOtherReductions=" + amtBrtFwdOtherReductions + ", amtBrtFwdOtherReductionsSign="
-				+ amtBrtFwdOtherReductionsSign + ", reservedForMOH=" + reservedForMOH + "]";
+				+ ", amtBrtFwdOtherDeductions=" + amtBrtFwdOtherDeductions + ", amtBrtFwdOtherDeductionsSign="
+				+ amtBrtFwdOtherDeductionsSign + ", reservedForMOH=" + reservedForMOH + "]";
 	}
 	public JSONObject getJson()
 	{
@@ -186,10 +186,26 @@ public class RVHR6Bean implements Serializable
 		json.put("amtBrtFwdClaimsAdvancesSign", Character.toString(amtBrtFwdClaimsAdvancesSign).trim());
 		json.put("amtBrtFwdReductions", Character.compare(amtBrtFwdReductionsSign, '-')==0 ? (-amtBrtFwdReductions) : amtBrtFwdReductions);
 		json.put("amtBrtFwdReductionsSign", Character.toString(amtBrtFwdReductionsSign).trim());
-		json.put("amtBrtFwdOtherReductions", Character.compare(amtBrtFwdOtherReductionsSign, '-')==0 ? (-amtBrtFwdOtherReductions) : amtBrtFwdOtherReductions);
-		json.put("amtBrtFwdOtherReductionsSign", Character.toString(amtBrtFwdOtherReductionsSign).trim());
-	
+		json.put("amtBrtFwdOtherDeductions", Character.compare(amtBrtFwdOtherDeductionsSign, '-')==0 ? (-amtBrtFwdOtherDeductions) : amtBrtFwdOtherDeductions);
+		json.put("amtBrtFwdOtherDeductionsSign", Character.toString(amtBrtFwdOtherDeductionsSign).trim());
+	    json.put("reservedForMOH", reservedForMOH);
 		return json;
+	}
+	public static String getInsertStmtTo_ohip_mro_hr6(JSONObject json, int ohip_mro_hr1_id)
+	{
+		return "insert into ohip_mro_hr6 values(default, 'HR', '6', " + 
+														"" + json.getFloat("amtBrtFwdClaimsAdjustment") + ", " +
+													   "'" + json.getString("amtBrtFwdClaimsAdjustmentSign") + "', " +
+													   "" + json.getFloat("amtBrtFwdClaimsAdvances") + ", " +
+													   "'" + json.getString("amtBrtFwdClaimsAdvancesSign") + "', " +
+													   "" + json.getFloat("amtBrtFwdReductions") + ", " +
+													   "'" + json.getString("amtBrtFwdReductionsSign") + "', " +
+													   "" + json.getFloat("amtBrtFwdOtherDeductions") + ", " +
+													   "'" + json.getString("amtBrtFwdOtherDeductionsSign") + "', " +
+													   "'" + json.getString("reservedForMOH") + "', " +
+														   + ohip_mro_hr1_id + ");";
+		
+														           
 	}
 	//Occurs Once in every file
 	public boolean hrRecord(String line)
@@ -213,10 +229,10 @@ public class RVHR6Bean implements Serializable
 				amtBrtFwdClaimsAdvancesSign = line.substring(22, 22+1).charAt(0);
 				amtBrtFwdReductions = Double.parseDouble(line.substring(23, 23+9))/100;
 				amtBrtFwdReductionsSign = line.substring(32, 32+1).charAt(0);
-				amtBrtFwdOtherReductions = Double.parseDouble(line.substring(33, 33+9))/100;
-				amtBrtFwdOtherReductionsSign = line.substring(42, 42+1).charAt(0);
+				amtBrtFwdOtherDeductions = Double.parseDouble(line.substring(33, 33+9))/100;
+				amtBrtFwdOtherDeductionsSign = line.substring(42, 42+1).charAt(0);
 
-				reservedForMOH = line.substring(43, 43+36);
+				reservedForMOH = line.substring(43, 43+36).trim();
 			}
 			catch (NumberFormatException e)
 			{

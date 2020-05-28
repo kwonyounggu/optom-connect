@@ -81,10 +81,19 @@ public class RVHR3Bean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
-		json.put("addressLineTwo", addressLine2.trim());
-		json.put("addressLineThree", addressLine3.trim());
-		
+		json.put("addressLineTwo", addressLine2);
+		json.put("addressLineThree", addressLine3);
+		json.put("reservedForMOH", reservedForMOH);
 		return json;
+	}
+	public static String getInsertStmtTo_ohip_mro_hr3(JSONObject json, int ohip_mro_hr1_id)
+	{
+		return "insert into ohip_mro_hr3 values(default, 'HR', '3', '" + json.getString("addressLineTwo") + "', " +
+														"'" + json.getString("addressLineThree") + "', " +
+														"'" + json.getString("reservedForMOH") + "', " +
+														   + ohip_mro_hr1_id + ");";
+		
+														           
 	}
 	public void printRecord()
 	{
@@ -113,9 +122,9 @@ public class RVHR3Bean implements Serializable
 		{
 			transactionIdentifier = line.substring(0, 0+2);
 			recordType = line.substring(2, 2+1).charAt(0);
-			addressLine2 = line.substring(3, 3+25);
-			addressLine3 = line.substring(28, 28+25);
-			reservedForMOH = line.substring(53, 53+26);
+			addressLine2 = line.substring(3, 3+25).trim();
+			addressLine3 = line.substring(28, 28+25).trim();
+			reservedForMOH = line.substring(53, 53+26).trim();
 		}
 		return valid;
 	}

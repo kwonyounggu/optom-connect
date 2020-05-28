@@ -152,7 +152,8 @@ public class RVHR7Bean implements Serializable
 			case 70: json.put("transactionCode", "Attachments"); break;
 			default: json.put("transactionCode", "Unknown"); break;
 		}
-
+		json.put("txCodeOrg", transactionCode);
+		
 		switch(chequeIndicator)
 		{
 			case 'M': json.put("chequeIndicator", "Manual Cheque issued"); break;
@@ -160,14 +161,30 @@ public class RVHR7Bean implements Serializable
 			case 'I': json.put("chequeIndicator", "Interim payment/Direct Bank Deposit issued"); break;
 			default:  json.put("chequeIndicator", "Unknown"); break;
 		}
+		json.put("ciOrg", Character.toString(chequeIndicator));
 		
 		json.put("transactionDate", simpleDate.format(transactionDate));
 		json.put("transactionAmount", Character.compare(transactionAmountSign, '-')==0 ? (-transactionAmount) : transactionAmount);
 
 		json.put("transactionAmountSign", Character.toString(transactionAmountSign).trim());
-		json.put("transactionMessage", transactionMessage.trim());
+		json.put("transactionMessage", transactionMessage);
+		json.put("reservedForMOH", reservedForMOH);
 		
 		return json;
+	}
+	public static String getInsertStmtTo_ohip_mro_hr7(JSONObject json, int ohip_mro_hr1_id)
+	{
+		return "insert into ohip_mro_hr7 values(default, 'HR', '7', " + 
+														"'" + json.getString("txCodeOrg") + "', " +
+													   "'" + json.getString("ciOrg") + "', " +
+													   "'" + json.getString("transactionDate") + "', " +
+													   "" + json.getFloat("transactionAmount") + ", " +
+													   "'" + json.getString("transactionAmountSign") + "', " +
+													   "'" + json.getString("transactionMessage") + "', " +
+													   "'" + json.getString("reservedForMOH") + "', " +
+														   + ohip_mro_hr1_id + ");";
+		
+														           
 	}
 	public void printRecord()
 	{
@@ -228,8 +245,8 @@ public class RVHR7Bean implements Serializable
 	
 				transactionAmount = (float)Integer.parseInt(line.substring(14, 14+8))/100;
 				transactionAmountSign = line.substring(22, 23).charAt(0);
-				transactionMessage  = line.substring(23, 23+50);
-				reservedForMOH = line.substring(73, 73+6);
+				transactionMessage  = line.substring(23, 23+50).trim();
+				reservedForMOH = line.substring(73, 73+6).trim();
 			}
 			catch (NumberFormatException e)
 			{

@@ -127,17 +127,18 @@ public class UploadServlet extends HttpServlet
 		}
 		catch (Exception | Error e)
 		{
-			System.err.println(e.getMessage());
+			log.severe(e.getMessage());
 			try
 			{
 				JsonUtils.removeAll(returnJson.getJSONObject("report")); //Not necessary
 			}
 			catch(Exception | Error jsonE)
 			{
-				System.err.println(jsonE.getMessage());
+				log.severe(jsonE.getMessage());
 			}
 			returnJson.put("isItValid", false);
-			returnJson.put("errorMessage", e.getMessage());
+			returnJson.put("errorMessage", e.getMessage().trim().isEmpty() ? 
+					                      (e.getCause()+ "There is an unknown error. -- Try it later!") : e.getMessage());
 		}
 		finally
 		{

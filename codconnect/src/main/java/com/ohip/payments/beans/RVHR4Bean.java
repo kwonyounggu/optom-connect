@@ -180,15 +180,37 @@ public class RVHR4Bean implements Serializable
 		json.put("healthcareProvider", healthcareProvider);
 		json.put("speciality", speciality);
 		json.put("accountingNumber", accountingNumber);
-		json.put("patientLastName", patientLastName.trim());
-		json.put("patientFirstName", patientFirstName.trim());
+		json.put("patientLastName", patientLastName);
+		json.put("patientFirstName", patientFirstName);
 		json.put("provinceCode", provinceCode);
-		json.put("healthRegistrationNumber", healthRegistrationNumber.trim());
-		json.put("versionCode", versionCode.trim());
+		json.put("healthRegistrationNumber", healthRegistrationNumber);
+		json.put("versionCode", versionCode);
 		json.put("paymentProgram", paymentProgram);
-		json.put("serviceLocator", serviceLocator.trim());
+		json.put("serviceLocator", serviceLocator);
+		json.put("mohGroupIdentifier", mohGroupIdentifier);
+		json.put("reservedForMOH", reservedForMOH);
 		
 		return json;
+	}
+	public static String getInsertStmtTo_ohip_mro_hr4(JSONObject json, int ohip_mro_hr1_id)
+	{
+		return "insert into ohip_mro_hr4 values(default, 'HR', '4', '" + json.getString("claimNumber") + "', " +
+														"" + json.getInt("transactionType") + ", " +
+														"" + json.getInt("healthcareProvider") + ", " +
+													    "" + json.getInt("speciality") + ", " +
+													   "'" + json.getString("accountingNumber") + "', " +
+													   "'" + json.getString("patientLastName") + "', " +
+													   "'" + json.getString("patientFirstName") + "', " +
+													   "'" + json.getString("provinceCode") + "', " +
+													   "'" + json.getString("healthRegistrationNumber") + "', " +
+													   "'" + json.getString("versionCode") + "', " +
+													   "'" + json.getString("paymentProgram") + "', " +
+													   "'" + json.getString("serviceLocator") + "', " +
+													   "'" + json.getString("mohGroupIdentifier") + "', " + 
+													   "'" + json.getString("reservedForMOH") + "', " +
+														   + ohip_mro_hr1_id + ");";
+		
+														           
 	}
 	public void printRecord()
 	{
@@ -214,15 +236,15 @@ public class RVHR4Bean implements Serializable
 			healthcareProvider = Integer.parseInt(line.substring(15, 15+6));
 			speciality = Integer.parseInt(line.substring(21, 21+2));
 			accountingNumber = line.substring(23, 23+8);
-			patientLastName = line.substring(31, 31+14);
-			patientFirstName = line.substring(45, 45+5);
+			patientLastName = line.substring(31, 31+14).trim();
+			patientFirstName = line.substring(45, 45+5).trim();
 			provinceCode = line.substring(50, 50+2);
-			healthRegistrationNumber = line.substring(52, 52+12);
-			versionCode = line.substring(64, 64+2);
+			healthRegistrationNumber = line.substring(52, 52+12).trim();
+			versionCode = line.substring(64, 64+2).trim();
 			paymentProgram = line.substring(66, 66+3);
-			serviceLocator = line.substring(69, 69+4);
+			serviceLocator = line.substring(69, 69+4).trim();
 			mohGroupIdentifier = line.substring(73, 73+4);
-			reservedForMOH = line.substring(77, 77+2);
+			reservedForMOH = line.substring(77, 77+2).trim();
 		}
 		return valid;
 	}

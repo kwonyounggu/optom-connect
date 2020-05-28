@@ -214,12 +214,35 @@ public class RVHR5Bean implements Serializable
 		json.put("serviceDate", simpleDate.format(serviceDate));
 		json.put("numberOfServices", numberOfServices);
 		json.put("serviceCode", serviceCode);
+		json.put("reservedForMOH1", reservedForMOH1);
 		json.put("amountSubmitted", amountSubmitted);
 		json.put("amountPaid", Character.compare(amountPaidSign, '-')==0 ? (-amountPaid) : amountPaid);
-		json.put("amountPaidSign", Character.toString(amountPaidSign).trim());
-		json.put("explanatoryCode", explanatoryCode.trim());
+		json.put("amountPaidSign", Character.toString(amountPaidSign));
+		json.put("explanatoryCode", explanatoryCode);
+		json.put("reservedForMOH2", reservedForMOH2);
 		
 		return json;
+	}
+	/*
+	 * Note that FK from ohip_mro_hr4_id in HR4 is null in default because HR4 record is not one to one corresponding. May 28-2020. 
+	 */
+	public static String getInsertStmtTo_ohip_mro_hr5(JSONObject json, int ohip_mro_hr1_id)
+	{
+		return "insert into ohip_mro_hr5 values(default, 'HR', '5', '" + json.getString("claimNumber") + "', " +
+														"" + json.getInt("transactionType") + ", " +
+														"'" + json.getString("serviceDate") + "', " +
+														"" + json.getInt("numberOfServices") + ", " +
+													   "'" + json.getString("serviceCode") + "', " +
+													   "'" + json.getString("reservedForMOH1") + "', " +
+													   "" + json.getFloat("amountSubmitted") + ", " +
+													   "" + json.getFloat("amountPaid") + ", " +
+													   "'" + json.getString("amountPaidSign") + "', " +
+													   "'" + json.getString("explanatoryCode") + "', " +
+													   "'" + json.getString("reservedForMOH2") + "', " +
+													   ""  + null + ", " +  //ohip_mro_hr4_id is for future use in case onf one to one map bewteen header and item
+														   + ohip_mro_hr1_id + ");";
+		
+														           
 	}
 	public void printRecord()
 	{
@@ -257,7 +280,7 @@ public class RVHR5Bean implements Serializable
 				amountPaid = (float)Integer.parseInt(line.substring(37, 37+6))/100;
 				amountPaidSign = line.substring(43, 44).charAt(0);
 				explanatoryCode = line.substring(44, 44+2);
-				reservedForMOH2 = line.substring(46, 46+33);
+				reservedForMOH2 = line.substring(46, 46+33).trim();
 			}
 			catch (NumberFormatException e)
 			{
