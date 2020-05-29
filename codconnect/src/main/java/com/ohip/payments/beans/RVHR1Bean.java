@@ -292,7 +292,7 @@ public class RVHR1Bean implements Serializable
 				payeeName = line.substring(29, 29+30);
 				totalAmountPayable = (float)Integer.parseInt(line.substring(59, 59+9))/100;
 				totalAmountPayableSign = line.substring(68, 69).charAt(0);
-				chequeNumber = line.substring(69, 69+8);
+				chequeNumber = line.substring(69, 69+8).trim();
 				reservedForMOH2 = line.substring(77, 77+2);
 			}
 			catch (NumberFormatException e)

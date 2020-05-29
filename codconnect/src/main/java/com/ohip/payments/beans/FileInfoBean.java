@@ -90,6 +90,8 @@ public class FileInfoBean implements Serializable
 		json.put("fileName", fileName);
 		json.put("reportType", Character.toString(fType));
 		json.put("idNumber", fNumber);//group number, provider number, etc as in the doc
+		json.put("raMonth", fMonth);
+		
 		return json;
 	}
 	@Override

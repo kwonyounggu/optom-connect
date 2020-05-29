@@ -1,5 +1,4 @@
 import React from "react";
-import axios from 'axios';
 import { withStyles } from "@material-ui/core/styles";
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -18,6 +17,8 @@ import accountingText from "../../data/accountingText.json";
 
 //const json = require("../../data/accountingText.json");
 import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
+
+import RAReport from "./raReport.jsx";
 
 const styles = (theme) =>
 ({
@@ -125,11 +126,14 @@ class ConvertMROtoCSV extends React.Component
 		//console.info('[REGEX]: ', EXPECTED_FILE_NAME.test("EL990000.123"));
 
 	}
-	/*static getDerivedStateFromProps(nextProps, prevState) 
+	static getDerivedStateFromProps(nextProps, prevState) 
 	{
 		console.log("[INFO getDerivedStateFromProps] nextPorps: ", nextProps, "| prevState", prevState);
-	 	return {};
-	}*/
+		console.log(nextProps.rootReducer.convertFetched && nextProps.rootReducer.data.isItValid);
+		if (nextProps.rootReducer.convertFetched && nextProps.rootReducer.data.isItValid)
+	 		return {};
+		return{};
+	}
 	componentDidUpdate(prevProps, prevState)
 	{
 		console.log("[INFO componentDidUpdate(...) of convertMROtoCSV.jsx] nextProps.rootReducer: " , prevProps.rootReducer);
@@ -173,13 +177,28 @@ class ConvertMROtoCSV extends React.Component
 	render()
 	{
 		console.log("INFO: ConvertMROtoCSX.jsx.render() is called, this.props: ", this.props);
-		const {classes} = this.props;
+		const {classes, rootReducer} = this.props;
+		
+		let report = null, pageHeader = null;
+		if (rootReducer.convertFetched && rootReducer.data.isItValid)
+			switch(rootReducer.data.fileInfo.reportType)
+			{
+				case "P": report = <RAReport data={rootReducer.data}/>;
+						  pageHeader = "Remittance Advice Report";
+						  break;
+				case "E":
+				case "F":
+						  break;
+				case "B":
+						  break;
+				default: break;
+			}
 		return (  
 				  <div className={classes.root}>
 					    <Grid container spacing={1}>
 					      <Grid item xs={12}>
 					        <Typography variant="h6">
-					          Start converting OHIP MRO files in Health Reconciliation to Excel CSV.
+					          {pageHeader !=null ? pageHeader : "Start converting OHIP MRO files in Health Reconciliation to Excel CSV!"}
 					        </Typography>
 					      </Grid>
 						  <Grid item xs={12}>
@@ -193,7 +212,9 @@ class ConvertMROtoCSV extends React.Component
 									  <Alert severity="error">{this.state.returnMessage} — check it out!</Alert>
 								</Collapse>
 						  </Grid>
-					      <Grid item xs={12}>
+						  <Grid item xs={12}> {report} </Grid>
+					      { report == null &&
+							<Grid item xs={12}>
 					       	<Paper variant="outlined" className={classes.paper}>
 								<Grid container direction="column" justify="center" alignItems="center" spacing={2}>
 									<Grid item>
@@ -228,6 +249,7 @@ class ConvertMROtoCSV extends React.Component
 								</Grid>
 							</Paper>
 					      </Grid>
+						  }
 					      <Grid item xs={12}>
 					        <Typography variant="caption" align={"center"} gutterBottom color={"textSecondary"}>
 					          Terms & Conditions

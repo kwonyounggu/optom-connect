@@ -18,17 +18,17 @@ function rootReducer
         }
     	case ActionTypes.CONVERT_MRO_FILE_PENDING://only for Promise while bringing data from the server
     	{
-    		state={...state, fetching: true, fetched: false};
+    		state={...state, convertFetching: true, convertFetched: false};
             break;
     	}
     	case ActionTypes.CONVERT_MRO_FILE_FULFILLED: //for both Promise and Thunk
     	{   		
-    		state={...state, fetching: false, fetched: true, data: action.payload.data};
+    		state={...state, convertFetching: false, convertFetched: true, data: action.payload.data};
             break;
     	}
     	case ActionTypes.CONVERT_MRO_FILE_REJECTED: //for both Promise and Thunk
     	{
-			state={...state, fetching: false, fetched: false, error: action.payload};
+			state={...state, convertFetching: false, convertFetched: false, error: action.payload};
             break;
     	}
         default: 
