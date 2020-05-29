@@ -279,7 +279,7 @@ public class RVHR5Bean implements Serializable
 				amountSubmitted = (float)Integer.parseInt(line.substring(31, 31+6))/100;
 				amountPaid = (float)Integer.parseInt(line.substring(37, 37+6))/100;
 				amountPaidSign = line.substring(43, 44).charAt(0);
-				explanatoryCode = line.substring(44, 44+2);
+				explanatoryCode = line.substring(44, 44+2).trim();
 				reservedForMOH2 = line.substring(46, 46+33).trim();
 			}
 			catch (NumberFormatException e)

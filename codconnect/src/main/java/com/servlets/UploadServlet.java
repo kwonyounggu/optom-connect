@@ -171,6 +171,7 @@ public class UploadServlet extends HttpServlet
 		reportJson.put("hr4", new JSONArray());
 		reportJson.put("hr5", new JSONArray());
 		reportJson.put("hr8", new JSONArray());
+		reportJson.put("hr45", new JSONArray()); //combine two of hr4 and hr5
 		
 		String line = reader.readLine();
 		for (int i=0; line != null; i++)
@@ -210,7 +211,38 @@ public class UploadServlet extends HttpServlet
 			{
 				RVHR5Bean hrBean = new RVHR5Bean(line);
 				//hrBean.printRecord();
-				reportJson.getJSONArray("hr5").put(hrBean.getJson());
+				JSONObject hr5Json = hrBean.getJson();
+				reportJson.getJSONArray("hr5").put(hr5Json);
+				
+				// ***** Make HR45 COMBINATION ARRAY ****
+				// This way more than one item with a claim header can be in the list
+				// from such as HR4, HR5, HR5, HR5.
+				JSONArray hr4Array = reportJson.getJSONArray("hr4");
+				JSONObject hr4Json = (JSONObject)hr4Array.get(hr4Array.length() - 1);
+				
+				if (hr4Json.getString("claimNumber").equals(hr5Json.getString("claimNumber")))
+				{
+					JSONObject hr45Bean = new JSONObject();
+					
+					hr45Bean.put("accountingNumber", hr4Json.getString("accountingNumber"));
+					hr45Bean.put("claimNumber", hr4Json.getString("claimNumber"));
+					hr45Bean.put("transactionType", hr4Json.getInt("transactionType"));
+					hr45Bean.put("healthcareProvider", hr4Json.getInt("healthcareProvider"));
+					hr45Bean.put("speciality", hr4Json.getInt("speciality"));
+					hr45Bean.put("provinceCode", hr4Json.getString("provinceCode"));
+					hr45Bean.put("healthRegistrationNumber", hr4Json.getString("healthRegistrationNumber"));
+					hr45Bean.put("versionCode", hr4Json.getString("versionCode"));
+					hr45Bean.put("paymentProgram", hr4Json.getString("paymentProgram"));
+					
+					hr45Bean.put("serviceDate", hr5Json.getString("serviceDate"));
+					hr45Bean.put("numberOfServices", hr5Json.getInt("numberOfServices"));
+					hr45Bean.put("serviceCode", hr5Json.getString("serviceCode"));
+					hr45Bean.put("amountSubmitted", hr5Json.getFloat("amountSubmitted"));
+					hr45Bean.put("amountPaid", hr5Json.getFloat("amountPaid"));
+					hr45Bean.put("explanatoryCode", hr5Json.getString("explanatoryCode"));
+					
+					reportJson.getJSONArray("hr45").put(hr45Bean);
+				}
 			}
 			else if (line.startsWith("HR6"))
 			{
