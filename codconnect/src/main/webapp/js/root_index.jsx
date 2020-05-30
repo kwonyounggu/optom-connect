@@ -116,7 +116,7 @@ class MainApp extends React.Component
 		        	<BrowserRouter>
 						<Route component={(props) => <NavRoot {...props} isLargeScreen={this.state.isLargeScreen} changeBodyMargin={this.changeBodyMargin}/> } />
         				<React.Suspense fallback={<div>Component being loaded ... </div>}>	
-							<div ref={this.bodyContainer} style={this.state.isLargeScreen ? {marginLeft: DRAWER_WIDTH+'px'} : {marginLeft: 0}}>
+							<div ref={this.bodyContainer} style={this.state.isLargeScreen ? {marginLeft: DRAWER_WIDTH+'px', marginTop: '70px'} : {marginLeft: 0, marginTop: '70px'}}>
 							    <GlobalAlert />
 								<div style={styles.gridPanel}> 
 			                    <Switch>

@@ -173,6 +173,11 @@ public class UploadServlet extends HttpServlet
 		reportJson.put("hr8", new JSONArray());
 		reportJson.put("hr45", new JSONArray()); //combine two of hr4 and hr5
 		
+		JSONObject total = new JSONObject();
+		total.put("numberOfServices", 0);
+		total.put("amountSubmitted", 0.0);
+		total.put("amountPaid", 0.0);
+		
 		String line = reader.readLine();
 		for (int i=0; line != null; i++)
 		{
@@ -210,6 +215,9 @@ public class UploadServlet extends HttpServlet
 			else if (line.startsWith("HR5"))
 			{
 				RVHR5Bean hrBean = new RVHR5Bean(line);
+				total.put("numberOfServices", total.getInt("numberOfServices") + hrBean.getNumberOfServices());
+				total.put("amountSubmitted", total.getFloat("amountSubmitted") + hrBean.getAmountSubmitted());
+				total.put("amountPaid", total.getFloat("amountPaid") + hrBean.getAmountPaid());
 				//hrBean.printRecord();
 				JSONObject hr5Json = hrBean.getJson();
 				reportJson.getJSONArray("hr5").put(hr5Json);
@@ -293,7 +301,7 @@ public class UploadServlet extends HttpServlet
 		
 		}
 		
-		//make CSV file
+		reportJson.put("total", total);
 		return reportJson;
 	}
     //docstore.mik.ua/orelly/java-ent/servlet/ch04_04.htm

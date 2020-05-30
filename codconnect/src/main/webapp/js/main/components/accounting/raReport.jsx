@@ -16,7 +16,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 const styles = (theme) =>
 ({
@@ -25,18 +25,50 @@ const styles = (theme) =>
     {
 		textAlign: 'left',
 		padding: '10px'
-    },
-	gridRight:
-	{
-		textAlign: 'right'
-	},
-	gridLeft:
-	{
-		textAlign: 'left'
-	}
+    }
 });
+const StyledTableCell = withStyles
+(
+	(theme) => 
+	(
+		{
+		  head: 
+		  {
+		    backgroundColor: theme.palette.common.black,
+		    color: theme.palette.common.white,
+		  },
+		  body: 
+		  {
+		  }
+		}
+	)
+)(TableCell);
 
+const StyledTableRow = withStyles
+(
+	(theme) => 
+	(
+		{
+		  root: 
+		  {
+		    '&:nth-of-type(odd)': {backgroundColor: theme.palette.action.hover}
+		  }
+		}
+	)
+)(TableRow);
 const currency = new Intl.NumberFormat('en-CA', {style: 'currency', currency: 'CAD'});
+const headCells =
+[
+	{id: 'serviceDate', label: 'SERVICE DATE'},
+	{id: 'accountingNumber', label: 'ACCOUNTING NUMBER'},
+	{id: 'claimNumber', label: 'CLAIM NUMBER'},
+	{id: 'registrationNumber', label: 'REGISTRATION NUMBER'},
+	{id: 'serviceCode', label: 'SERVICE CODE'},
+	{id: 'serviceNumber', label: 'SERVICE NUMBER'},
+	{id: 'amountSubmitted', label: 'AMOUNT SUBMITTED'},
+	{id: 'amountPaid', label: 'AMOUNT PAID'}
+];
+
 class RAReport extends React.Component
 {
 	constructor(props)
@@ -45,7 +77,7 @@ class RAReport extends React.Component
 		console.log("INFO constructor() of raReport.jsx: ", props);
 		this.state = 
 		{
-			
+			hr45: props.data.report.hr45
 		}
 	}
 	componentDidMount()
@@ -57,22 +89,51 @@ class RAReport extends React.Component
 */
 		
 		//console.info('[REGEX]: ', EXPECTED_FILE_NAME.test("EL990000.123"));
+		
+		this.onHandlingSort(this.state.hr45, 'amountPaid');
 
 	}
-	/*static getDerivedStateFromProps(nextProps, prevState) 
+	/*
+	static getDerivedStateFromProps(nextProps, prevState) 
 	{
 		console.log("[INFO getDerivedStateFromProps] nextPorps: ", nextProps, "| prevState", prevState);
-	 	return {};
+	 	return {r445: nextProps.data.report.hr45};
 	}*/
 	componentDidUpdate(prevProps, prevState)
 	{
-		console.log("[INFO componentDidUpdate(...) of raReport.jsx] nextProps: " , prevProps);
+		console.log("[INFO componentDidUpdate(...) of raReport.jsx] nextProps: " , prevProps, "| prevState", prevState);
 	}
-	
+	onHandlingSort = (hr45List, cellId) => (event) =>
+	{
+		console.log("---------------", event, "|", cellId);
+		this.state.hr45.sort
+		(
+			(a, b) =>
+			{
+				console.log(a, "| ", b);
+				switch(cellId)
+				{
+					case "serviceDate": 
+					{
+						let dateA = a.serviceDate.split("/");
+						let dateB = b.serviceDate.split("/");
+						console.log("[INFO sorting]", dateA[0], dateA[1], dateA[2], " | ", dateB[0], dateB[1], dateB[2]);
+						return (new Date(dateA[0], dateA[1], dateA[2]) - new Date(dateB[0], dateB[1], dateB[2])).reverse();
+					}
+					case "accountingNumber":
+					{
+						return (parseInt(a.accountingNumber) - parseInt(b.accountingNumber));
+					}
+					default: return;
+				}
+			}
+		);
+	}
 	render()
 	{
 		const {report, fileInfo} = this.props.data;
 		const {classes} = this.props;
+		const {hr45} = this.state;
 		return (
 			<Grid container space={1}>
 				<Grid item xs={12}>						
@@ -109,42 +170,68 @@ class RAReport extends React.Component
 					        </Grid>
 						</Grid>
 				</Grid>
+				<Grid item xs={12} >&nbsp;</Grid>
 				<Grid item xs={12}>
 					<TableContainer>
-					<Table aria-label="simple table">
-					    <TableHead>
+					<Table size="small" aria-label="HR45">
+					    <TableHead >
 					      <TableRow>
-					        <TableCell>ACCOUNTING NUMBER</TableCell>
-					        <TableCell>CLAIM NUMBER</TableCell>
-					        <TableCell>REGISTRAION NUMBER</TableCell>
-					        <TableCell>SERVICE NUMBER</TableCell>
-					        <TableCell>SERVICE CODE</TableCell>
-							<TableCell>SERVICE DATE</TableCell>
-					        <TableCell>AMOUNT SUBMITTED</TableCell>
-					        <TableCell>AMOUNT PAID</TableCell>
+							{
+								headCells.map
+								(
+									(cell, index) =>
+									(
+										<StyledTableCell key={index}>
+								 			<TableSortLabel onClick={this.onHandlingSort(report.hr45, cell.id)}>
+												{cell.label}
+											</TableSortLabel>
+										</StyledTableCell>
+									)
+								)
+							}
+							{/*
+							<StyledTableCell>
+								 <TableSortLabel onClick={onHandlingSort(report.h45, ""serviceDate)}>
+								SERVICE DATE
+								</TableSortLabel>
+							</StyledTableCell>
+					        <StyledTableCell>ACCOUNTING NUMBER</StyledTableCell>
+					        <StyledTableCell>CLAIM NUMBER</StyledTableCell>
+					        <StyledTableCell>REGISTRAION NUMBER</StyledTableCell>					        
+					        <StyledTableCell>SERVICE CODE</StyledTableCell>
+							<StyledTableCell>SERVICE NUMBER</StyledTableCell>
+					        <StyledTableCell>AMOUNT SUBMITTED</StyledTableCell>
+					        <StyledTableCell>AMOUNT PAID</StyledTableCell>
+							*/}
 					      </TableRow>
 					    </TableHead>
 					    <TableBody>
 					    {
-							report.hr45.map
+							hr45.map
 							(
 								(row, index) => 
 								(
-							        <TableRow key={index}>
-							          <TableCell component="th" scope="row">
-							            {row.accountingNumber}
-							          </TableCell>
-							          <TableCell>{row.claimNumber}</TableCell>
-									  <TableCell>{row.healthRegistrationNumber}</TableCell>
-									  <TableCell>{row.numberOfServices}</TableCell>
-									  <TableCell>{row.serviceCode}</TableCell>
-									  <TableCell>{row.serviceDate}</TableCell>
-									  <TableCell>{currency.format(row.amountSubmitted)}</TableCell>
-									  <TableCell>{currency.format(row.amountPaid)}</TableCell>
-							        </TableRow>
+							        <StyledTableRow key={index}>
+							          <StyledTableCell component="th" scope="row">
+							            {row.serviceDate}
+							          </StyledTableCell>
+									  <StyledTableCell>{row.accountingNumber}</StyledTableCell>
+							          <StyledTableCell>{row.claimNumber}</StyledTableCell>
+									  <StyledTableCell>{row.healthRegistrationNumber}</StyledTableCell> 
+									  <StyledTableCell align="right">{row.serviceCode}</StyledTableCell>
+									  <StyledTableCell>{row.numberOfServices}</StyledTableCell>
+									  <StyledTableCell>{currency.format(row.amountSubmitted)}</StyledTableCell>
+									  <StyledTableCell>{currency.format(row.amountPaid)}</StyledTableCell>
+							        </StyledTableRow>
 					      		)
 							)
 						}
+							<StyledTableRow>
+									  <StyledTableCell align="right" colSpan={5}>TOTAL</StyledTableCell>
+									  <StyledTableCell>{report.total.numberOfServices}</StyledTableCell>
+									  <StyledTableCell>{currency.format(report.total.amountSubmitted)}</StyledTableCell>
+									  <StyledTableCell>{currency.format(report.total.amountPaid)}</StyledTableCell>
+							</StyledTableRow>						
 					    </TableBody>
 					  </Table>
 						</TableContainer>

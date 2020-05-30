@@ -189,7 +189,7 @@ const NavRootMenuBar = (props) =>
   return (
 	<div className={classes.root}>
 	  <CssBaseline />
-      <AppBar position="static" className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>	
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="Open drawer" onClick={handleDrawerToggle}>
             <MenuIcon />
