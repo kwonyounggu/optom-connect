@@ -89,8 +89,8 @@ class RAReport extends React.Component
 */
 		
 		//console.info('[REGEX]: ', EXPECTED_FILE_NAME.test("EL990000.123"));
-		
-		this.onHandlingSort(this.state.hr45, 'amountPaid');
+		console.log("[INFO in componentDidMount of raReport.jsx]");
+		this.handleSorting(this.state.hr45, 'amountPaid');
 
 	}
 	/*
@@ -103,14 +103,13 @@ class RAReport extends React.Component
 	{
 		console.log("[INFO componentDidUpdate(...) of raReport.jsx] nextProps: " , prevProps, "| prevState", prevState);
 	}
-	onHandlingSort = (hr45List, cellId) => (event) =>
+	handleSorting = (hr45List, cellId) =>
 	{
-		console.log("---------------", event, "|", cellId);
+		console.log("[INFO handleSorting of raReport.jsx]");
 		this.state.hr45.sort
 		(
 			(a, b) =>
 			{
-				console.log(a, "| ", b);
 				switch(cellId)
 				{
 					case "serviceDate": 
@@ -124,10 +123,19 @@ class RAReport extends React.Component
 					{
 						return (parseInt(a.accountingNumber) - parseInt(b.accountingNumber));
 					}
+					case "amountPaid":
+					{
+						return (a.amountPaid - b.amountPaid);
+					}
 					default: return;
 				}
 			}
 		);
+	}
+	onSortClick = (hr45List, cellId) => (event) =>
+	{
+		this.handleSorting(hr45List, cellId);
+		
 	}
 	render()
 	{
@@ -182,7 +190,7 @@ class RAReport extends React.Component
 									(cell, index) =>
 									(
 										<StyledTableCell key={index}>
-								 			<TableSortLabel onClick={this.onHandlingSort(report.hr45, cell.id)}>
+								 			<TableSortLabel onClick={this.onSortClick(report.hr45, cell.id)}>
 												{cell.label}
 											</TableSortLabel>
 										</StyledTableCell>
