@@ -13,7 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import { green } from '@material-ui/core/colors';
 
-import accountingText from "../../data/accountingText.json";
+//import accountingText from "../../data/accountingText.json";
 
 //const json = require("../../data/accountingText.json");
 import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
@@ -117,30 +117,26 @@ class ConvertMROtoCSV extends React.Component
 	}
 	componentDidMount()
 	{
-		
+		/*
 		fetch(accountingText)
       .then((res) => res.json())
       .then((data) => console.log("[TEST]: ", data.fileNameError));
-
+	  */
 		
 		//console.info('[REGEX]: ', EXPECTED_FILE_NAME.test("EL990000.123"));
 
 	}
 	static getDerivedStateFromProps(nextProps, prevState) 
 	{
-		console.log("[INFO getDerivedStateFromProps] nextPorps: ", nextProps, "| prevState", prevState);
-		console.log(nextProps.rootReducer.convertFetched && nextProps.rootReducer.data.isItValid);
 		if (nextProps.rootReducer.convertFetched && nextProps.rootReducer.data.isItValid)
-	 		return {};
+	 	{
+			console.log("[INFO getDerivedStateFromProps of convertMROtoCSV.jsx] called. DATA RECEIVED NOW !!");
+		}
 		return{};
 	}
 	componentDidUpdate(prevProps, prevState)
 	{
 		console.log("[INFO componentDidUpdate(...) of convertMROtoCSV.jsx] nextProps.rootReducer: " , prevProps.rootReducer);
-	}
-	renderTemp()
-	{
-		return(<MyBreadcrumbs {...this.props} />)
 	}
 	onChangeHandler = (event) =>
 	{

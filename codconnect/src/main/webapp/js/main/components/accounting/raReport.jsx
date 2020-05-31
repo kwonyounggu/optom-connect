@@ -1,15 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
-import 
-{
-  useTable,
-  useGroupBy,
-  useFilters,
-  useSortBy,
-  useExpanded,
-  usePagination,
-} from 'react-table';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -17,6 +8,18 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
+
+import orderBy from "lodash/orderBy";
+
+import { CSVLink } from "react-csv";
+
+
+const csvData = [
+  ["firstname", "lastname", "email"],
+  ["Ahmed", "Tomi", "ah@smthing.co.com"],
+  ["Raed", "Labes", "rl@smthing.co.com"],
+  ["Yezzi", "Min l3b", "ymin@cocococo.com"]
+];
 
 const styles = (theme) =>
 ({
@@ -27,6 +30,10 @@ const styles = (theme) =>
 		padding: '10px'
     }
 });
+/**
+backgroundColor: theme.palette.common.black,
+		    color: theme.palette.common.white,
+ */
 const StyledTableCell = withStyles
 (
 	(theme) => 
@@ -34,8 +41,7 @@ const StyledTableCell = withStyles
 		{
 		  head: 
 		  {
-		    backgroundColor: theme.palette.common.black,
-		    color: theme.palette.common.white,
+		    fontWeight: 'bold'
 		  },
 		  body: 
 		  {
@@ -62,7 +68,7 @@ const headCells =
 	{id: 'serviceDate', label: 'SERVICE DATE'},
 	{id: 'accountingNumber', label: 'ACCOUNTING NUMBER'},
 	{id: 'claimNumber', label: 'CLAIM NUMBER'},
-	{id: 'registrationNumber', label: 'REGISTRATION NUMBER'},
+	{id: 'healthRegistrationNumber', label: 'REGISTRATION NUMBER'},
 	{id: 'serviceCode', label: 'SERVICE CODE'},
 	{id: 'serviceNumber', label: 'SERVICE NUMBER'},
 	{id: 'amountSubmitted', label: 'AMOUNT SUBMITTED'},
@@ -75,37 +81,51 @@ class RAReport extends React.Component
 	{
 		super(props);
 		console.log("INFO constructor() of raReport.jsx: ", props);
+		
+		const {hr1, hr2, hr3} = props.data.report;
+		var csvData =
+		[
+			["PAYEE NAME:", hr1.title + ". " + hr1.initials + " " + hr1.lastName, "HEALTH CARE PROVIDER:", hr1.healthCareProvider],
+			["GROUP NUMBER:", hr1.groupNumber, "PAYMENT DATE: ", hr1.paymentDate],
+			["PAYMENT METHOD:", hr1.chequeNumber === "99999999" ? "Direcct Deposit" : (hr1.chequeNumber.length == 0 ? "Pay Patient" : hr1.chequeNumber), "TOTAL AMOUNT:", hr1.totalAmountPayable],
+			["RA SEQUENCE:", hr1.remittanceAdviceSequence, "SPECIALITY:", hr1.sepciality],
+			["BILLING AGENT:", hr2.addressLineOne, hr3.addressLineTwo, hr3.addressLineThree]
+		];
+		
 		this.state = 
 		{
-			hr45: props.data.report.hr45
+			hr45: props.data.report.hr45,
+			order: 'asc',
+			orderby: 'accountingNumber',
+			csvData: csvData
 		}
 	}
 	componentDidMount()
 	{
-	/*	
-		fetch(accountingText)
-      .then((res) => res.json())
-      .then((data) => console.log("[TEST]: ", data.fileNameError));
-*/
+		/*	
+			fetch(accountingText)
+	      .then((res) => res.json())
+	      .then((data) => console.log("[TEST]: ", data.fileNameError));
+		*/
 		
-		//console.info('[REGEX]: ', EXPECTED_FILE_NAME.test("EL990000.123"));
-		console.log("[INFO in componentDidMount of raReport.jsx]");
-		this.handleSorting(this.state.hr45, 'amountPaid');
-
+		console.log("[INFO in componentDidMount() of jaReport.jsx is called.]");
 	}
 	/*
 	static getDerivedStateFromProps(nextProps, prevState) 
 	{
 		console.log("[INFO getDerivedStateFromProps] nextPorps: ", nextProps, "| prevState", prevState);
-	 	return {r445: nextProps.data.report.hr45};
+	 	return {hr45: nextProps.data.report.hr45};
 	}*/
 	componentDidUpdate(prevProps, prevState)
 	{
-		console.log("[INFO componentDidUpdate(...) of raReport.jsx] nextProps: " , prevProps, "| prevState", prevState);
+		if (this.props !== prevProps)
+		{
+			console.log("[INFO componentDidUpdate() of raReport.jsx] is called with difference between this.props and prevProps");
+		}
 	}
-	handleSorting = (hr45List, cellId) =>
+	handleSorting = (cellId) =>
 	{
-		console.log("[INFO handleSorting of raReport.jsx]");
+		/*
 		this.state.hr45.sort
 		(
 			(a, b) =>
@@ -130,18 +150,20 @@ class RAReport extends React.Component
 					default: return;
 				}
 			}
-		);
+		).reverse();
+		*/
+		this.setState((prevState) => ({hr45: orderBy(prevState.hr45, [cellId], [(prevState.order === 'asc') ? 'desc' : 'asc']), orderby: cellId, order: ((prevState.order === 'asc') ? 'desc' : 'asc')}));	
 	}
-	onSortClick = (hr45List, cellId) => (event) =>
+	onSortClick = (cellId) => (event) =>
 	{
-		this.handleSorting(hr45List, cellId);
+		this.handleSorting(cellId);
 		
 	}
 	render()
 	{
 		const {report, fileInfo} = this.props.data;
 		const {classes} = this.props;
-		const {hr45} = this.state;
+		const {hr45, order, orderby} = this.state;
 		return (
 			<Grid container space={1}>
 				<Grid item xs={12}>						
@@ -174,7 +196,7 @@ class RAReport extends React.Component
 								<span>{report.hr3.addressLineTwo}&nbsp;{report.hr3.addressLineThree}</span>					      
 					        </Grid>
 							<Grid item xs={6}>
-					           <span></span>
+					           <CSVLink data={this.state.csvData} filename={fileInfo.fileName+".csv"}>Download {fileInfo.fileName+".csv"} Excel</CSVLink>
 					        </Grid>
 						</Grid>
 				</Grid>
@@ -189,8 +211,11 @@ class RAReport extends React.Component
 								(
 									(cell, index) =>
 									(
-										<StyledTableCell key={index}>
-								 			<TableSortLabel onClick={this.onSortClick(report.hr45, cell.id)}>
+										<StyledTableCell key={index} sortDirection={orderby === cell.id ? order : false}>
+								 			<TableSortLabel onClick={this.onSortClick(cell.id)}
+													active={orderby === cell.id}
+													direction={orderby === cell.id ? order : 'asc'}
+										    >
 												{cell.label}
 											</TableSortLabel>
 										</StyledTableCell>
