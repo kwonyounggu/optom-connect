@@ -8,18 +8,14 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
 
 import orderBy from "lodash/orderBy";
 
 import { CSVLink } from "react-csv";
-
-
-const csvData = [
-  ["firstname", "lastname", "email"],
-  ["Ahmed", "Tomi", "ah@smthing.co.com"],
-  ["Raed", "Labes", "rl@smthing.co.com"],
-  ["Yezzi", "Min l3b", "ymin@cocococo.com"]
-];
+import {generateRA} from "./generateCSV.jsx";
 
 const styles = (theme) =>
 ({
@@ -30,6 +26,16 @@ const styles = (theme) =>
 		padding: '10px'
     }
 });
+
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 /**
 backgroundColor: theme.palette.common.black,
 		    color: theme.palette.common.white,
@@ -81,23 +87,13 @@ class RAReport extends React.Component
 	{
 		super(props);
 		console.log("INFO constructor() of raReport.jsx: ", props);
-		
-		const {hr1, hr2, hr3} = props.data.report;
-		var csvData =
-		[
-			["PAYEE NAME:", hr1.title + ". " + hr1.initials + " " + hr1.lastName, "HEALTH CARE PROVIDER:", hr1.healthCareProvider],
-			["GROUP NUMBER:", hr1.groupNumber, "PAYMENT DATE: ", hr1.paymentDate],
-			["PAYMENT METHOD:", hr1.chequeNumber === "99999999" ? "Direcct Deposit" : (hr1.chequeNumber.length == 0 ? "Pay Patient" : hr1.chequeNumber), "TOTAL AMOUNT:", hr1.totalAmountPayable],
-			["RA SEQUENCE:", hr1.remittanceAdviceSequence, "SPECIALITY:", hr1.sepciality],
-			["BILLING AGENT:", hr2.addressLineOne, hr3.addressLineTwo, hr3.addressLineThree]
-		];
-		
+
 		this.state = 
 		{
 			hr45: props.data.report.hr45,
 			order: 'asc',
 			orderby: 'accountingNumber',
-			csvData: csvData
+			csvData: generateRA(props.data.report, currency)
 		}
 	}
 	componentDidMount()
@@ -157,7 +153,27 @@ class RAReport extends React.Component
 	onSortClick = (cellId) => (event) =>
 	{
 		this.handleSorting(cellId);
+	}
+	withToolip = (element) =>
+	{
+		//let title = "";
+		//if (element.explanatoryCode.length != 0) title = element.explanatoryCode;
 		
+		return (<div>hello</div>)
+		/*
+		return (     <HtmlTooltip
+        title={
+          <React.Fragment>
+            <Typography color="inherit">Tooltip with HTML</Typography>
+            <em>{"And here's"}</em> <b>{'some'}</b> <u>{'amazing content'}</u>.{' '}
+            {"It's very engaging. Right?"}
+          </React.Fragment>
+        }
+      >
+        <Button>{element.accountingNumber}</Button>
+      </HtmlTooltip>
+		);
+		*/
 	}
 	render()
 	{
@@ -222,20 +238,6 @@ class RAReport extends React.Component
 									)
 								)
 							}
-							{/*
-							<StyledTableCell>
-								 <TableSortLabel onClick={onHandlingSort(report.h45, ""serviceDate)}>
-								SERVICE DATE
-								</TableSortLabel>
-							</StyledTableCell>
-					        <StyledTableCell>ACCOUNTING NUMBER</StyledTableCell>
-					        <StyledTableCell>CLAIM NUMBER</StyledTableCell>
-					        <StyledTableCell>REGISTRAION NUMBER</StyledTableCell>					        
-					        <StyledTableCell>SERVICE CODE</StyledTableCell>
-							<StyledTableCell>SERVICE NUMBER</StyledTableCell>
-					        <StyledTableCell>AMOUNT SUBMITTED</StyledTableCell>
-					        <StyledTableCell>AMOUNT PAID</StyledTableCell>
-							*/}
 					      </TableRow>
 					    </TableHead>
 					    <TableBody>
@@ -248,7 +250,7 @@ class RAReport extends React.Component
 							          <StyledTableCell component="th" scope="row">
 							            {row.serviceDate}
 							          </StyledTableCell>
-									  <StyledTableCell>{row.accountingNumber}</StyledTableCell>
+									  <StyledTableCell>{withToolip(row)}</StyledTableCell>
 							          <StyledTableCell>{row.claimNumber}</StyledTableCell>
 									  <StyledTableCell>{row.healthRegistrationNumber}</StyledTableCell> 
 									  <StyledTableCell align="right">{row.serviceCode}</StyledTableCell>
@@ -267,7 +269,72 @@ class RAReport extends React.Component
 							</StyledTableRow>						
 					    </TableBody>
 					  </Table>
-						</TableContainer>
+					</TableContainer>
+				</Grid>
+				{report.hr6 && <Grid item xs={12} >&nbsp;</Grid>}
+				<Grid item xs={12}>
+					{ report.hr6 && 
+						(<Grid container space={1}>
+							<Grid item xs={12}>
+					           <span><strong>Balance Forward Record</strong></span>
+					        </Grid>
+							<Grid item xs={12}>
+					           <span>Amount Brought Forward  – Claims Adjustment:&nbsp;{currency.format(report.hr6.amtBrtFwdClaimsAdjustment)}</span>
+					        </Grid>
+					        <Grid item xs={12}>
+					           <span>Amount Brought Forward  – Advances:&nbsp;{currency.format(report.hr6.amtBrtFwdClaimsAdvances)}</span>
+					        </Grid>
+							<Grid item xs={12}>
+					           <span>Amount Brought Forward  – Reductions:&nbsp;{currency.format(report.hr6.amtBrtFwdReductions)}</span>
+					        </Grid>
+							<Grid item xs={12}>
+					           <span>Amount Brought Forward  – Other Deductions:&nbsp;{currency.format(report.hr6.amtBrtFwdOtherDeductions)}</span>
+					        </Grid>
+						</Grid>
+						)
+					}
+				</Grid>
+				{report.hr7 && <Grid item xs={12} >&nbsp;</Grid>}
+				<Grid item xs={12}>
+					{ report.hr7 && 
+						(<Grid container space={1}>
+							<Grid item xs={12}>
+					           <span><strong>Accounting Transaction Record</strong></span>
+					        </Grid>
+							<Grid item xs={12}>
+					           <span>Transaction Code[{report.hr7.txCodeOrg}]:&nbsp;{report.hr7.transactionCode}</span>
+					        </Grid>
+					        <Grid item xs={12}>
+					           <span>Transaction Date:&nbsp;{report.hr7.transactionDate}</span>
+					        </Grid>
+							<Grid item xs={12}>
+					           <span>Transaction Amount:&nbsp;{currency.format(report.hr7.transactionAmount)}</span>
+					        </Grid>
+							<Grid item xs={12}>
+					           <span>Transaction Message:&nbsp;{report.hr7.transactionMessage}</span>
+					        </Grid>
+						</Grid>
+						)
+					}
+				</Grid>
+				{report.hr8 && <Grid item xs={12} >&nbsp;</Grid>}
+				{report.hr8 && <Grid item xs={12} ><span><strong>Message Facility Record</strong></span></Grid>}
+				<Grid item xs={12}>
+					{ report.hr8 && 
+						(<Grid container space={1}>
+							{
+								report.hr8.map
+								(
+									(row, index) =>
+										(<Grid item xs={12} key={index}>
+								           <span>{row.messageText.startsWith("*") ? <br /> : row.messageText}</span>
+								        </Grid>
+										)
+								)
+							}
+						</Grid>
+						)
+					}
 				</Grid>
 			</Grid>
 			   )
