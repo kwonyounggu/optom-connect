@@ -12,10 +12,10 @@ import Collapse from '@material-ui/core/Collapse';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import { green } from '@material-ui/core/colors';
+import ReactToPrint from "react-to-print";
+import PrintIcon from '@material-ui/icons/Print';
+import IconButton from '@material-ui/core/IconButton';
 
-//import accountingText from "../../data/accountingText.json";
-
-//const json = require("../../data/accountingText.json");
 import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
 
 import RAReport from "./raReport.jsx";
@@ -179,7 +179,7 @@ class ConvertMROtoCSV extends React.Component
 		if (rootReducer.convertFetched && rootReducer.data.isItValid)
 			switch(rootReducer.data.fileInfo.reportType)
 			{
-				case "P": report = <RAReport data={rootReducer.data}/>;
+				case "P": report = <RAReport ref={(el) => (this.reportRef = el)} data={rootReducer.data}/>;
 						  pageHeader = "Remittance Advice Report";
 						  break;
 				case "E":
@@ -197,8 +197,20 @@ class ConvertMROtoCSV extends React.Component
 					          {pageHeader !=null ? pageHeader : "Start converting OHIP MRO files in Health Reconciliation to Excel CSV!"}
 					        </Typography>
 					      </Grid>
-						  <Grid item xs={12}>
+						  <Grid item xs={10}>
 					        <MyBreadcrumbs {...this.props} />
+					      </Grid>
+						  <Grid item xs={2} >
+					        {pageHeader && <ReactToPrint
+												documentTitle={rootReducer.data.fileInfo.fileName}
+									          trigger={
+														() =>
+															<IconButton color="primary" aria-label="Print the RA page" component="span">
+													          <PrintIcon />
+													        </IconButton>
+													  }
+									          content={() => this.reportRef}
+									        />}
 					      </Grid>
 						  <Grid item xs={12}>
 					       	<hr />

@@ -8,14 +8,14 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import Chip from '@material-ui/core/Chip';
 
 import orderBy from "lodash/orderBy";
 
 import { CSVLink } from "react-csv";
-import {generateRA} from "./generateCSV.jsx";
+import {generateRA1, generateRA2} from "./generateCSV.jsx";
 
 const styles = (theme) =>
 ({
@@ -71,12 +71,12 @@ const StyledTableRow = withStyles
 const currency = new Intl.NumberFormat('en-CA', {style: 'currency', currency: 'CAD'});
 const headCells =
 [
-	{id: 'serviceDate', label: 'SERVICE DATE'},
-	{id: 'accountingNumber', label: 'ACCOUNTING NUMBER'},
-	{id: 'claimNumber', label: 'CLAIM NUMBER'},
-	{id: 'healthRegistrationNumber', label: 'REGISTRATION NUMBER'},
-	{id: 'serviceCode', label: 'SERVICE CODE'},
-	{id: 'serviceNumber', label: 'SERVICE NUMBER'},
+	{id: 'serviceDate', label: 'SVC DATE'},
+	{id: 'accountingNumber', label: 'ACCOUNT NUM'},
+	{id: 'claimNumber', label: 'CLAIM NUM'},
+	{id: 'healthRegistrationNumber', label: 'REGSTN NUM'},
+	{id: 'serviceCode', label: 'SVC CODE'},
+	{id: 'serviceNumber', label: 'SVC NUM'},
 	{id: 'amountSubmitted', label: 'AMOUNT SUBMITTED'},
 	{id: 'amountPaid', label: 'AMOUNT PAID'}
 ];
@@ -93,7 +93,8 @@ class RAReport extends React.Component
 			hr45: props.data.report.hr45,
 			order: 'asc',
 			orderby: 'accountingNumber',
-			csvData: generateRA(props.data.report, currency)
+			csvData_1: generateRA1(props.data.report, currency),
+			csvData_2: generateRA2(props.data.report, currency)
 		}
 	}
 	componentDidMount()
@@ -154,6 +155,48 @@ class RAReport extends React.Component
 	{
 		this.handleSorting(cellId);
 	}
+	tableBody = (row) =>
+	{
+		let txType = row.transactionType; //1: original claim, 2: adjustment to original claim
+		let explanatory = row.explanatoryCode.length > 0;
+		let color = null;
+		
+		if (txType == 2 && explanatory) color = {color: "#a84a32"};
+		else if (txType == 2) color = {color: "#32a860"};
+		else if (explanatory) color = {color: "#ad5834"};
+		else color = {color: "inherit"};
+		
+		let amountPaid =
+				(<HtmlTooltip
+			        title={
+			          <React.Fragment>
+			            <Typography color="inherit">Tooltip with HTML</Typography>
+			            <em>{"And here's"}</em> <b>{'some'}</b> <u>{'amazing content'}</u>.{' '}
+			            {"It's very engaging. Right?"}
+			          </React.Fragment>
+			        }
+			      >
+					<Chip label={currency.format(row.amountPaid)} style={color} variant="outlined" />
+					
+      			</HtmlTooltip>
+				);
+				
+		return (<React.Fragment>
+				  <StyledTableCell component="th" scope="row">
+		            <span style={color}>{row.serviceDate}</span>
+		          </StyledTableCell>
+				  <StyledTableCell>
+						<span style={color}>{row.accountingNumber}</span>
+				  </StyledTableCell>
+		          <StyledTableCell ><span style={color}>{row.claimNumber}</span></StyledTableCell>
+				  <StyledTableCell><span style={color}>{row.healthRegistrationNumber}</span></StyledTableCell> 
+				  <StyledTableCell align="right"><span style={color}>{row.serviceCode}</span></StyledTableCell>
+				  <StyledTableCell><span style={color}>{row.numberOfServices}</span></StyledTableCell>
+				  <StyledTableCell><span style={color}>{currency.format(row.amountSubmitted)}</span></StyledTableCell>
+				  <StyledTableCell>{amountPaid}</StyledTableCell>
+				</React.Fragment>
+				);
+	}
 	render()
 	{
 		const {report, fileInfo} = this.props.data;
@@ -161,8 +204,8 @@ class RAReport extends React.Component
 		const {hr45, order, orderby} = this.state;
 		return (
 			<Grid container space={1}>
-				<Grid item xs={12}>						
-						<Grid container space={1}>
+				<Grid item xs={12} >						
+						<Grid container space={1} style={{padding: "20px"}}>
 							<Grid item xs={6}>
 					           <span><strong>PAYEE NAME:</strong>&nbsp;{report.hr1.title}.&nbsp;{report.hr1.initials}&nbsp;{report.hr1.lastName}</span>
 					        </Grid>
@@ -176,7 +219,7 @@ class RAReport extends React.Component
 					           <span><strong>PAYMENT DATE:</strong>&nbsp;{report.hr1.paymentDate}</span>
 					        </Grid>
 							<Grid item xs={6}>
-					           <span><strong>PAYMENT METHOD:</strong>&nbsp;{report.hr1.chequeNumber === "99999999" ? "Direcct Deposit" : (report.hr1.chequeNumber.length == 0 ? "Pay Patient" : report.hr1.chequeNumber)}</span>
+					           <span><strong>PAYMENT METHOD:</strong>&nbsp;{report.hr1.chequeNumber === "99999999" ? "Direct Deposit" : (report.hr1.chequeNumber.length == 0 ? "Pay Patient" : report.hr1.chequeNumber)}</span>
 					        </Grid>
 							<Grid item xs={6}>
 					           <span><strong>TOTAL AMOUNT:</strong>&nbsp;{currency.format(report.hr1.totalAmountPayable)}</span>
@@ -191,7 +234,8 @@ class RAReport extends React.Component
 								<span>{report.hr3.addressLineTwo}&nbsp;{report.hr3.addressLineThree}</span>					      
 					        </Grid>
 							<Grid item xs={6}>
-					           <CSVLink data={this.state.csvData} filename={fileInfo.fileName+".csv"}>Download {fileInfo.fileName+".csv"} Excel</CSVLink>
+					           <CSVLink data={this.state.csvData_1} filename={fileInfo.fileName+"_1.csv"}>Download {fileInfo.fileName+"_1.csv"}</CSVLink>&nbsp;&amp;&nbsp;
+					           <CSVLink data={this.state.csvData_2} filename={fileInfo.fileName+"_2.csv"}>{fileInfo.fileName+"_2.csv"}</CSVLink>
 					        </Grid>
 						</Grid>
 				</Grid>
@@ -225,7 +269,8 @@ class RAReport extends React.Component
 							(
 								(row, index) => 
 								(
-							        <StyledTableRow key={index}>
+							        <StyledTableRow key={index}>{this.tableBody(row)}
+										{/*
 							          <StyledTableCell component="th" scope="row">
 							            {row.serviceDate}
 							          </StyledTableCell>
@@ -237,13 +282,13 @@ class RAReport extends React.Component
 									  <StyledTableCell align="right">{row.serviceCode}</StyledTableCell>
 									  <StyledTableCell>{row.numberOfServices}</StyledTableCell>
 									  <StyledTableCell>{currency.format(row.amountSubmitted)}</StyledTableCell>
-									  <StyledTableCell>{currency.format(row.amountPaid)}</StyledTableCell>
+									  <StyledTableCell>{currency.format(row.amountPaid)}</StyledTableCell>*/}
 							        </StyledTableRow>
 					      		)
 							)
 						}
 							<StyledTableRow>
-									  <StyledTableCell align="right" colSpan={5}>TOTAL</StyledTableCell>
+									  <StyledTableCell align="right" colSpan={5}><span><strong>TOTAL</strong></span></StyledTableCell>
 									  <StyledTableCell>{report.total.numberOfServices}</StyledTableCell>
 									  <StyledTableCell>{currency.format(report.total.amountSubmitted)}</StyledTableCell>
 									  <StyledTableCell>{currency.format(report.total.amountPaid)}</StyledTableCell>
@@ -255,7 +300,7 @@ class RAReport extends React.Component
 				{report.hr6 && <Grid item xs={12} >&nbsp;</Grid>}
 				<Grid item xs={12}>
 					{ report.hr6 && 
-						(<Grid container space={1}>
+						(<Grid container space={1} style={{padding: "20px"}}>
 							<Grid item xs={12}>
 					           <span><strong>Balance Forward Record</strong></span>
 					        </Grid>
@@ -278,7 +323,7 @@ class RAReport extends React.Component
 				{report.hr7 && <Grid item xs={12} >&nbsp;</Grid>}
 				<Grid item xs={12}>
 					{ report.hr7 && 
-						(<Grid container space={1}>
+						(<Grid container space={1} style={{padding: "20px"}}>
 							<Grid item xs={12}>
 					           <span><strong>Accounting Transaction Record</strong></span>
 					        </Grid>
@@ -300,10 +345,10 @@ class RAReport extends React.Component
 					}
 				</Grid>
 				{report.hr8 && <Grid item xs={12} >&nbsp;</Grid>}
-				{report.hr8 && <Grid item xs={12} ><span><strong>Message Facility Record</strong></span></Grid>}
+				{report.hr8 && <Grid item xs={12} style={{paddingLeft: "20px"}}><span><strong>Message Facility Record</strong></span></Grid>}
 				<Grid item xs={12}>
 					{ report.hr8 && 
-						(<Grid container space={1}>
+						(<Grid container space={1} style={{paddingLeft: "20px"}}>
 							{
 								report.hr8.map
 								(
