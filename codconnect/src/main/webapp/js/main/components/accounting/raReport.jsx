@@ -154,27 +154,6 @@ class RAReport extends React.Component
 	{
 		this.handleSorting(cellId);
 	}
-	withToolip = (element) =>
-	{
-		//let title = "";
-		//if (element.explanatoryCode.length != 0) title = element.explanatoryCode;
-		
-		return (<div>hello</div>)
-		/*
-		return (     <HtmlTooltip
-        title={
-          <React.Fragment>
-            <Typography color="inherit">Tooltip with HTML</Typography>
-            <em>{"And here's"}</em> <b>{'some'}</b> <u>{'amazing content'}</u>.{' '}
-            {"It's very engaging. Right?"}
-          </React.Fragment>
-        }
-      >
-        <Button>{element.accountingNumber}</Button>
-      </HtmlTooltip>
-		);
-		*/
-	}
 	render()
 	{
 		const {report, fileInfo} = this.props.data;
@@ -250,8 +229,10 @@ class RAReport extends React.Component
 							          <StyledTableCell component="th" scope="row">
 							            {row.serviceDate}
 							          </StyledTableCell>
-									  <StyledTableCell>{withToolip(row)}</StyledTableCell>
-							          <StyledTableCell>{row.claimNumber}</StyledTableCell>
+									  <StyledTableCell title={row.explanatoryCode.length > 0 ? ("Explanatory Code: " + row.explanatoryCode + ", Tx Type: " + row.transactionType) : ("Explanatory Code: N/A, Tx Type: " + row.transactionType)}>
+											<span style={row.explanatoryCode.length > 0 ? {color: "#ad5834"} : {color: "inherit"}}>{row.accountingNumber}</span>
+									  </StyledTableCell>
+							          <StyledTableCell >{row.claimNumber}</StyledTableCell>
 									  <StyledTableCell>{row.healthRegistrationNumber}</StyledTableCell> 
 									  <StyledTableCell align="right">{row.serviceCode}</StyledTableCell>
 									  <StyledTableCell>{row.numberOfServices}</StyledTableCell>
@@ -301,6 +282,7 @@ class RAReport extends React.Component
 							<Grid item xs={12}>
 					           <span><strong>Accounting Transaction Record</strong></span>
 					        </Grid>
+							<Grid item xs={12} >&nbsp;</Grid>
 							<Grid item xs={12}>
 					           <span>Transaction Code[{report.hr7.txCodeOrg}]:&nbsp;{report.hr7.transactionCode}</span>
 					        </Grid>
