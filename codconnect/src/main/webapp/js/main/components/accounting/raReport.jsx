@@ -31,7 +31,7 @@ const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
     backgroundColor: '#f5f5f9',
     color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: 220,
+    maxWidth: 350,
     fontSize: theme.typography.pxToRem(12),
     border: '1px solid #dadde9',
   },
@@ -71,14 +71,14 @@ const StyledTableRow = withStyles
 const currency = new Intl.NumberFormat('en-CA', {style: 'currency', currency: 'CAD'});
 const headCells =
 [
-	{id: 'serviceDate', label: 'SVC DATE'},
-	{id: 'accountingNumber', label: 'ACCOUNT NUM'},
-	{id: 'claimNumber', label: 'CLAIM NUM'},
-	{id: 'healthRegistrationNumber', label: 'REGSTN NUM'},
-	{id: 'serviceCode', label: 'SVC CODE'},
-	{id: 'serviceNumber', label: 'SVC NUM'},
-	{id: 'amountSubmitted', label: 'AMOUNT SUBMITTED'},
-	{id: 'amountPaid', label: 'AMOUNT PAID'}
+	{id: 'serviceDate', label: 'SVC DATE', labelDesc: 'Service Date'},
+	{id: 'accountingNumber', label: 'ACCOUNT NUM', labelDesc: 'Accounting Number'},
+	{id: 'claimNumber', label: 'CLAIM NUM', labelDesc: 'Claim Number'},
+	{id: 'healthRegistrationNumber', label: 'REGSTN NUM', labelDesc: 'Health Registration Number'},
+	{id: 'serviceCode', label: 'SVC CODE', labelDesc: 'Service Code'},
+	{id: 'serviceNumber', label: 'SVC NUM', labelDesc: 'Service Number'},
+	{id: 'amountSubmitted', label: 'AMOUNT SUBMITTED', labelDesc: 'Amount Submitted by You'},
+	{id: 'amountPaid', label: 'AMOUNT PAID', labelDesc: 'Amount Paid for You'}
 ];
 
 class RAReport extends React.Component
@@ -161,20 +161,32 @@ class RAReport extends React.Component
 		let explanatory = row.explanatoryCode.length > 0;
 		let color = null;
 		
-		if (txType == 2 && explanatory) color = {color: "#a84a32"};
-		else if (txType == 2) color = {color: "#32a860"};
-		else if (explanatory) color = {color: "#ad5834"};
+		let txTypeDesc = (txType == 1 ? "Transaction Type: Original Claim" : "Transaction Type: Adjustment to Original Claim");
+		let explantoryCodeDesc = "Explantory Code: " + (explanatory ? row.explanatoryCode : "N/A"); //row.explanatoryCode + ", " + row.explanatoryCodeDesc
+		
+		if (txType == 2 && explanatory) 
+		{
+			color = {color: "#a84a32"};
+		}
+		else if (txType == 2) 
+		{
+			color = {color: "#32a860"};
+		}
+		else if (explanatory) 
+		{
+			color = {color: "#ad5834"};
+		}
 		else color = {color: "inherit"};
 		
 		let amountPaid =
 				(<HtmlTooltip
 			        title={
-			          <React.Fragment>
-			            <Typography color="inherit">Tooltip with HTML</Typography>
-			            <em>{"And here's"}</em> <b>{'some'}</b> <u>{'amazing content'}</u>.{' '}
-			            {"It's very engaging. Right?"}
-			          </React.Fragment>
-			        }
+					          <React.Fragment>
+					            <Typography color="inherit">More Information</Typography>
+					            {explantoryCodeDesc}<br />
+					            {txTypeDesc}
+					          </React.Fragment>
+			        	  }
 			      >
 					<Chip label={currency.format(row.amountPaid)} style={color} variant="outlined" />
 					
@@ -250,7 +262,7 @@ class RAReport extends React.Component
 								(
 									(cell, index) =>
 									(
-										<StyledTableCell key={index} sortDirection={orderby === cell.id ? order : false}>
+										<StyledTableCell title={cell.labelDesc} key={index} sortDirection={orderby === cell.id ? order : false}>
 								 			<TableSortLabel onClick={this.onSortClick(cell.id)}
 													active={orderby === cell.id}
 													direction={orderby === cell.id ? order : 'asc'}
