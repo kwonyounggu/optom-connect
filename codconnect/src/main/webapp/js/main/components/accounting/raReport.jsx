@@ -162,7 +162,7 @@ class RAReport extends React.Component
 		let color = null;
 		
 		let txTypeDesc = (txType == 1 ? "Transaction Type: Original Claim" : "Transaction Type: Adjustment to Original Claim");
-		let explantoryCodeDesc = "Explantory Code: " + (explanatory ? row.explanatoryCode : "N/A"); //row.explanatoryCode + ", " + row.explanatoryCodeDesc
+		let explantoryCodeDesc = "Explantory Code: " + (explanatory ? (row.explanatoryCode + ", " + row.explanatoryCodeDesc) : "N/A"); //row.explanatoryCode + ", " + row.explanatoryCodeDesc
 		
 		if (txType == 2 && explanatory) 
 		{
@@ -182,9 +182,14 @@ class RAReport extends React.Component
 				(<HtmlTooltip
 			        title={
 					          <React.Fragment>
-					            <Typography color="inherit">More Information</Typography>
-					            {explantoryCodeDesc}<br />
-					            {txTypeDesc}
+					            <Typography color="inherit" align="center">More Information about the record</Typography>
+								<ul>
+					            <li>{explantoryCodeDesc}</li>
+					            <li>{txTypeDesc}</li>
+								<li>{"Payment Program: " + row.paymentProgram}</li>
+								<li>{"Province Code: " + row.provinceCode}</li>
+								<li>{"Version Code: " + row.versionCode}</li>
+								</ul>
 					          </React.Fragment>
 			        	  }
 			      >

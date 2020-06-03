@@ -80,7 +80,7 @@ public class UploadServlet extends HttpServlet
 				FileInfoBean fb = new FileInfoBean();
 				//find file information in detail
 				for (int i=0; line != null; i++)
-				{
+				{log.info(line);
 					if (line.startsWith("Content-Disposition:"))
 					{						
 						String[] dispInfo = extractDispositionInfo(line);
@@ -98,7 +98,7 @@ public class UploadServlet extends HttpServlet
 					line = reader.readLine();
 				}
 
-				if (fb.getfType() == 'P')
+				//if (fb.getfType() == 'P')
 				switch (fb.getfType())
 				{
 					case 'P':  
@@ -109,7 +109,9 @@ public class UploadServlet extends HttpServlet
 					case 'E':  
 					case 'F':  
 					{
-						throw new Exception("Error files are not ready to handle yet. -- Try it later!"); 
+						returnJson.put("claimError", handleClaimErrorFile(reader, fb, decodedToken)); 
+						break;
+						//throw new Exception("Error files are not ready to handle yet. -- Try it later!"); 
 					}
 					case 'X':  
 					{
@@ -165,6 +167,135 @@ public class UploadServlet extends HttpServlet
 	//**************************************************************************************************************************
 	//* Check if there exists HR1, HR2, HR3, HR4, HR5, HR8 which should be included all the time.
 	//**************************************************************************************************************************
+	private JSONObject handleClaimErrorFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken) throws IOException, Exception
+	{
+		
+		JSONObject reportJson = new JSONObject();
+		/*reportJson.put("hr4", new JSONArray());
+		reportJson.put("hr5", new JSONArray());
+		reportJson.put("hr8", new JSONArray());
+		reportJson.put("hr45", new JSONArray()); //combine two of hr4 and hr5
+		
+		JSONObject total = new JSONObject();
+		total.put("numberOfServices", 0);
+		total.put("amountSubmitted", 0.0);
+		total.put("amountPaid", 0.0);
+		
+		OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
+		*/
+		String line = reader.readLine();
+		for (int i=0; line != null; i++)
+		{
+			System.err.println("[LINE:" + i + " ], " + line);
+			if (line.startsWith("HX1"))
+			{
+				CEHX1Bean bean = new CEHX1Bean(line);
+				System.out.println(bean.toString());
+			}
+			/*
+			if (line.startsWith("HR1"))
+			{
+				RVHR1Bean hrBean = new RVHR1Bean(line);
+				//hrBean.printRecord();
+				
+				if (fb.getfNumber().length()==4 && !hrBean.getGroupNumber().equals(fb.getfNumber()))
+					throw new Exception("Group number is not matching. -- Try again with the original!");
+				else if (fb.getfNumber().length()==6 && hrBean.getHealthCareProvider() != fb.getfNumberInt())
+					throw new Exception("Provider number is not matching. -- Try again with the original!");
+				else if (hrBean.getSpeciality() != 56)
+					throw new Exception("The remittance advice report is only for eye doctors (O.D)!");
+				reportJson.put("hr1", hrBean.getJson());
+			}
+			else if (line.startsWith("HR2"))
+			{
+				RVHR2Bean hrBean = new RVHR2Bean(line);
+				//hrBean.printRecord();
+				reportJson.put("hr2", hrBean.getJson());
+			}
+			else if (line.startsWith("HR3"))
+			{
+				RVHR3Bean hrBean = new RVHR3Bean(line);
+				//hrBean.printRecord();
+				reportJson.put("hr3", hrBean.getJson());
+			}
+			else if (line.startsWith("HR4"))
+			{
+				RVHR4Bean hrBean = new RVHR4Bean(line);
+				//hrBean.printRecord();
+				reportJson.getJSONArray("hr4").put(hrBean.getJson());
+			}
+			else if (line.startsWith("HR5"))
+			{
+				RVHR5Bean hrBean = new RVHR5Bean(line);
+				total.put("numberOfServices", total.getInt("numberOfServices") + hrBean.getNumberOfServices());
+				total.put("amountSubmitted", total.getFloat("amountSubmitted") + hrBean.getAmountSubmitted());
+				total.put("amountPaid", total.getFloat("amountPaid") + hrBean.getAmountPaid());
+				//hrBean.printRecord();
+				JSONObject hr5Json = hrBean.getJson();
+				reportJson.getJSONArray("hr5").put(hr5Json);
+				
+				// This way more than one item with a claim header can be in the list
+				// from such as HR4, HR5, HR5, HR5.
+				JSONArray hr4Array = reportJson.getJSONArray("hr4");
+				JSONObject hr4Json = (JSONObject)hr4Array.get(hr4Array.length() - 1);
+			}
+			else if (line.startsWith("HR6"))
+			{
+				RVHR6Bean hrBean = new RVHR6Bean(line);
+				//hrBean.printRecord();
+				reportJson.put("hr6", hrBean.getJson());
+			}
+			else if (line.startsWith("HR7"))
+			{
+				RVHR7Bean hrBean = new RVHR7Bean(line);
+				//hrBean.printRecord();
+				reportJson.put("hr7", hrBean.getJson());
+			}
+			else if (line.startsWith("HR8"))
+			{
+				RVHR8Bean hrBean = new RVHR8Bean(line);
+				//hrBean.printRecord();
+				reportJson.getJSONArray("hr8").put(hrBean.getJson());
+			}
+			else if (line.trim().isEmpty() || line.startsWith("Content") || line.startsWith("---")) {}
+			else
+			{
+				throw new Exception("The file content is corrupted. -- Please try again with the original!");
+			}*/
+			line = reader.readLine();
+		}
+		
+		try
+		{
+			//Check if the required records are existing minimally in the file.
+			/*
+			if (!(reportJson.has("hr1") && reportJson.has("hr2") && reportJson.has("hr3") && reportJson.has("hr8") &&
+				!reportJson.getJSONArray("hr4").isEmpty() && !reportJson.getJSONArray("hr5").isEmpty()))
+			{
+				throw new Exception("The minimal records are not in the file. -- Try again with the original!");
+			}
+			*/
+		}
+		catch(JSONException e)
+		{
+			log.severe("ERROR: " + e.getMessage());
+			throw new Exception(e.getMessage());
+		}
+		if (decodedToken != null)
+		{
+			//Check if the user allows data insertion in terms of auth_user_matrix_with_settings
+			//Insert into db
+			
+			//reportDao.insertRAData(reportJson, fb, decodedToken);
+		
+		}
+
+		return reportJson;
+	}
+
+	//**************************************************************************************************************************
+	//* Check if there exists HR1, HR2, HR3, HR4, HR5, HR8 which should be included all the time.
+	//**************************************************************************************************************************
 	private JSONObject handleRemittanceAdviceFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken) throws IOException, Exception
 	{
 		JSONObject reportJson = new JSONObject();
@@ -177,6 +308,8 @@ public class UploadServlet extends HttpServlet
 		total.put("numberOfServices", 0);
 		total.put("amountSubmitted", 0.0);
 		total.put("amountPaid", 0.0);
+		
+		OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
 		
 		String line = reader.readLine();
 		for (int i=0; line != null; i++)
@@ -249,6 +382,15 @@ public class UploadServlet extends HttpServlet
 					hr45Bean.put("amountPaid", hr5Json.getFloat("amountPaid"));
 					hr45Bean.put("explanatoryCode", hr5Json.getString("explanatoryCode"));
 					
+					if (hr5Json.getString("explanatoryCode").length() == 2)
+					{
+						Object codeDesc = reportDao.queryObject("select code_description from ohip_mro_remittance_advice_explantory_codes_v68 where codes='" + hr5Json.getString("explanatoryCode") +"'" );
+						if (codeDesc == null)
+							hr45Bean.put("explanatoryCodeDesc", "Unknown");
+						else
+							hr45Bean.put("explanatoryCodeDesc", (String)codeDesc);
+					}
+					
 					reportJson.getJSONArray("hr45").put(hr45Bean);
 				}
 			}
@@ -296,7 +438,7 @@ public class UploadServlet extends HttpServlet
 		{
 			//Check if the user allows data insertion in terms of auth_user_matrix_with_settings
 			//Insert into db
-			OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
+			//OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
 			reportDao.insertRAData(reportJson, fb, decodedToken);
 		
 		}
