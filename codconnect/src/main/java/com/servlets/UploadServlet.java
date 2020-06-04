@@ -192,6 +192,11 @@ public class UploadServlet extends HttpServlet
 				CEHX1Bean bean = new CEHX1Bean(line);
 				System.out.println(bean.toString());
 			}
+			else if (line.startsWith("HXH"))
+			{
+				CEHXHBean bean = new CEHXHBean(line);
+				System.out.println(bean.toString());
+			}
 			/*
 			if (line.startsWith("HR1"))
 			{

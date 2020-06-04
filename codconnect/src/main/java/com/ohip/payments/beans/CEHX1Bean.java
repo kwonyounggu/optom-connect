@@ -173,14 +173,6 @@ public class CEHX1Bean implements Serializable
 	}
 	public void printRecord()
 	{
-		/*
-		System.out.println("Provider Number:, " + healthCareProvider);
-		System.out.println("Payment Date:, " + simpleDate.format(paymentDate));
-		System.out.println("Payee Name:, " + "\"" + payeeName + "\"");
-		System.out.println("Payment Method:, " + (chequeNumber.equals("99999999") ? "Direct deposit" : ("Cheque: " + chequeNumber)));
-		NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.CANADA);
-		System.out.println("Total Amount Payable:, \"" + currencyFormat.format((double)totalAmountPayable) + "\"");
-		*/
 	}
 
 	@Override
@@ -190,7 +182,7 @@ public class CEHX1Bean implements Serializable
 				+ ", techSpecReleaseIdentifier=" + techSpecReleaseIdentifier + ", mohOfficeCode=" + mohOfficeCode
 				+ ", reservedForMOH1=" + reservedForMOH1 + ", operatorNumber=" + operatorNumber + ", groupNumber="
 				+ groupNumber + ", providerNumber=" + providerNumber + ", speciality=" + speciality + ", stationNumber="
-				+ stationNumber + ", claimProcessDate=" + claimProcessDate + ", reservedForMOH2=" + reservedForMOH2
+				+ stationNumber + ", claimProcessDate=" + simpleDate.format(claimProcessDate) + ", reservedForMOH2=" + reservedForMOH2
 				+ "]";
 	}
 	//Occurs Once in every file - always the first record
@@ -224,7 +216,7 @@ public class CEHX1Bean implements Serializable
 				speciality = Integer.parseInt(line.substring(33, 33+2));
 				stationNumber = line.substring(35, 35+3);
 				claimProcessDate = new SimpleDateFormat("yyyy/MM/dd").parse(line.substring(38, 38+4)+"/"+line.substring(42, 42+2)+"/"+line.substring(44, 44+2));
-				reservedForMOH2 = line.substring(46, 46+33);
+				reservedForMOH2 = line.substring(46, 46+33).trim();
 			}
 			catch (NumberFormatException e)
 			{

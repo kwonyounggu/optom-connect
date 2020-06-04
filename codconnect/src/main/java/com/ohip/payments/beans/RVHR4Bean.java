@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
@@ -14,6 +15,7 @@ public class RVHR4Bean implements Serializable
 	 * Note that the INDEX should be subtracted by one
 	 */
 	private static final long serialVersionUID = 1L;
+	private Logger log = Logger.getLogger(this.getClass().getName());
 	
 	private String transactionIdentifier = "hr"; //INDEX = 1, LENGTH = 2
 	private char recordType = '4'; //INDEX = 3, LENGTH = 1
@@ -224,7 +226,7 @@ public class RVHR4Bean implements Serializable
 		
 		if (line.length() != 79)
 		{
-			System.err.println("ERROR: the hr4 record of this file does not contain total length, 79, but " + line.length() + " as specified in the spec.");
+			log.severe("ERROR: the hr4 record of this file does not contain total length, 79, but " + line.length() + " as specified in the spec.");
 			valid = false;
 		}
 		else

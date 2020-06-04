@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
@@ -16,6 +17,7 @@ public class RVHR5Bean implements Serializable
 	 * Note that the INDEX should be subtracted by one
 	 */
 	private static final long serialVersionUID = 1L;
+	private Logger log = Logger.getLogger(this.getClass().getName());
 	
 	private String transactionIdentifier = "hr"; //INDEX = 1, LENGTH = 2
 	private char recordType = '5'; //INDEX = 3, LENGTH = 1
@@ -256,12 +258,12 @@ public class RVHR5Bean implements Serializable
 		
 		if (line.length() != 79)
 		{
-			System.err.println("ERROR: the hr5 record of this file does not contain total length, 79, but " + line.length() + " as specified in the spec.");
+			log.severe("ERROR: the hr5 record of this file does not contain total length, 79, but " + line.length() + " as specified in the spec.");
 			valid = false;
 		}
 		else if (line.indexOf("HR5") != 0)
 		{
-			System.err.println("ERROR: this file does not contain HR5 in the record.");
+			log.severe("ERROR: this file does not contain HR5 in the record.");
 			valid = false;
 		}
 		else
@@ -284,11 +286,18 @@ public class RVHR5Bean implements Serializable
 			}
 			catch (NumberFormatException e)
 			{
-				System.err.println("ERROR -> NumberFormatException: " + e.getMessage());
+				log.severe("ERROR -> NumberFormatException: " + e.getMessage());
+				valid = false;
 			}
 			catch (ParseException e)
 			{
-				System.err.println("ERROR -> ParseException: " + e.getMessage());
+				log.severe("ERROR -> ParseException: " + e.getMessage());
+				valid = false;
+			}
+			catch(Exception e)
+			{
+				log.severe("Caused by " + e.getCause() + ", " + e.getMessage());
+				valid = false;
 			}
 		}
 		return valid;

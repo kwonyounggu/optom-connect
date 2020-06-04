@@ -2,6 +2,7 @@ package com.ohip.payments.beans;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
@@ -13,6 +14,7 @@ public class RVHR8Bean implements Serializable
 	 * Note that the INDEX should be subtracted by one
 	 */
 	private static final long serialVersionUID = 1L;
+	private Logger log = Logger.getLogger(this.getClass().getName());
 	
 	private String transactionIdentifier = ""; //INDEX = 1, LENGTH = 2
 	private char recordType = '0'; //INDEX = 3, LENGTH = 1, should be 7
@@ -139,7 +141,7 @@ public class RVHR8Bean implements Serializable
 
 		if (line.length() != 79)
 		{
-			System.err.println("ERROR: Message Facility Record – Health Reconciliation of this file does not contain total length, 79, but " + line.length() + " as specified in the spec.");
+			log.severe("ERROR: Message Facility Record – Health Reconciliation of this file does not contain total length, 79, but " + line.length() + " as specified in the spec.");
 			valid = false;
 		}
 		else
@@ -153,7 +155,7 @@ public class RVHR8Bean implements Serializable
 			}
 			catch (Exception e)
 			{
-				System.err.println("ERROR -> Exception: " + e.getMessage());
+				log.severe("ERROR -> Exception: " + e.getMessage());
 				valid = false;
 			}
 		}
