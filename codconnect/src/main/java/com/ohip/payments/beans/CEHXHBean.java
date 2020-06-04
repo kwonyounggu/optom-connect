@@ -197,23 +197,29 @@ public class CEHXHBean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
-		/*
-		json.put("groupNumber", groupNumber);//Check this with fileInfo
-		json.put("healthCareProvider", healthCareProvider);//Check this with fileInfo
-		json.put("speciality", speciality);
-		json.put("mohOfficeCode", Character.toString(mohOfficeCode));
-		json.put("remittanceAdviceSequence", remittanceAdviceSequence); //Type 7 which is in tech spec.
-		json.put("paymentDate", simpleDate.format(paymentDate));
-		//json.put("payeeName", payeeName);
-		json.put("lastName", payeeName.substring(0, 24).trim());
-		json.put("title", payeeName.substring(25, 27).trim());
-		json.put("initials", payeeName.substring(28).trim());
-		json.put("totalAmountPayable", Character.compare(totalAmountPayableSign, '-')==0 ? (-totalAmountPayable) : totalAmountPayable);
-		json.put("totalAmountPayableSign", Character.toString(totalAmountPayableSign).trim());
-		json.put("chequeNumber", chequeNumber);
-		//json.put("chequeNumber", (chequeNumber.equals("99999999") ? "Direct deposit" : (chequeNumber.trim().isEmpty() ? "Pay Patient" : chequeNumber)));
-		json.put("reservedForMOH2", reservedForMOH2);
-		*/
+		json.put("healthNumber", healthNumber);
+		json.put("versionCode", versionCode);
+		if (patientBirthdate != null)
+			json.put("patientBirthdate", simpleDate.format(patientBirthdate));
+		else
+			json.put("patientBirthdate", "0000/00/00");
+		json.put("accountingNumber", accountingNumber);
+		json.put("paymentProgram", paymentProgram);
+		json.put("payee", Character.toString(payee));
+		json.put("referringProviderNumber", referringProviderNumber);
+		json.put("masterNumber", masterNumber);
+		if (patientAdmissionDate != null)
+			json.put("patientAdmissionDate", simpleDate.format(patientAdmissionDate));
+		else
+			json.put("patientAdmissionDate", "0000/00/00");
+		json.put("referringLabLicence", referringLabLicence);
+		json.put("serviceLocationIndicator", serviceLocationIndicator);
+		json.put("errorCode1", errorCode1);
+		json.put("errorCode2", errorCode2);
+		json.put("errorCode3", errorCode3);
+		json.put("errorCode4", errorCode4);
+		json.put("errorCode5", errorCode5);
+
 		return json;
 	}
 	public static String getInsertStmtTo_ohip_mro_hr1(JSONObject json, int ohip_mro_tx_history_id)

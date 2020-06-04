@@ -231,22 +231,35 @@ public class RVHR4Bean implements Serializable
 		}
 		else
 		{
-			transactionIdentifier = line.substring(0, 0+2);
-			recordType = line.substring(2, 2+1).charAt(0);
-			claimNumber = line.substring(3, 3+11);
-			transactionType = Integer.parseInt(line.substring(14, 15));
-			healthcareProvider = Integer.parseInt(line.substring(15, 15+6));
-			speciality = Integer.parseInt(line.substring(21, 21+2));
-			accountingNumber = line.substring(23, 23+8);
-			patientLastName = line.substring(31, 31+14).trim();
-			patientFirstName = line.substring(45, 45+5).trim();
-			provinceCode = line.substring(50, 50+2);
-			healthRegistrationNumber = line.substring(52, 52+12).trim();
-			versionCode = line.substring(64, 64+2).trim();
-			paymentProgram = line.substring(66, 66+3);
-			serviceLocator = line.substring(69, 69+4).trim();
-			mohGroupIdentifier = line.substring(73, 73+4);
-			reservedForMOH = line.substring(77, 77+2).trim();
+			try
+			{
+				transactionIdentifier = line.substring(0, 0+2);
+				recordType = line.substring(2, 2+1).charAt(0);
+				claimNumber = line.substring(3, 3+11);
+				transactionType = Integer.parseInt(line.substring(14, 15));
+				healthcareProvider = Integer.parseInt(line.substring(15, 15+6));
+				speciality = Integer.parseInt(line.substring(21, 21+2));
+				accountingNumber = line.substring(23, 23+8);
+				patientLastName = line.substring(31, 31+14).trim();
+				patientFirstName = line.substring(45, 45+5).trim();
+				provinceCode = line.substring(50, 50+2);
+				healthRegistrationNumber = line.substring(52, 52+12).trim();
+				versionCode = line.substring(64, 64+2).trim();
+				paymentProgram = line.substring(66, 66+3);
+				serviceLocator = line.substring(69, 69+4).trim();
+				mohGroupIdentifier = line.substring(73, 73+4);
+				reservedForMOH = line.substring(77, 77+2).trim();
+			}
+			catch (NumberFormatException e)
+			{
+				log.severe("ERROR -> NumberFormatException: " + e.getMessage());
+				valid = false;
+			}
+			catch(Exception e)
+			{
+				log.severe("Caused by " + e.getCause() + ", " + e.getMessage());
+				valid = false;
+			}
 		}
 		return valid;
 	}

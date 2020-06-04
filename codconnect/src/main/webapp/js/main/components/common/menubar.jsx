@@ -74,7 +74,7 @@ const Menubar = (props) =>
 			case "/accounting/ohip": setOhipMenuOpen(!ohipMenuOpen); break;
 			case "/accounting/non_ohip": setNonohipMenuOpen(!nonohipMenuOpen);break;
 			case "/":
-			case "/accounting/ohip/convert":
+			case "/accounting/ohip/convert": //if rootReducer.data is not null, nullify by sending DATA_RESET
 			case "/accounting/ohip/billing":
 			case "/accounting/ohip/myrecord":
 			case "/accounting/non-ohip/billing":

@@ -31,6 +31,11 @@ function rootReducer
 			state={...state, convertFetching: false, convertFetched: false, error: action.payload};
             break;
     	}
+        case ActionTypes.CONVERT_MRO_DATA_RESET:
+    	{
+			state={...state, convertFetching: false, convertFetched: false, data: null};
+            break;
+    	}
         default: 
         {
             break;

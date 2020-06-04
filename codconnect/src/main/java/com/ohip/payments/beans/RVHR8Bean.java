@@ -74,38 +74,7 @@ public class RVHR8Bean implements Serializable
 	public void printRecord()
 	{
 		System.out.println("Message Facility Record – Health Reconciliation");
-		
-		/*
-		System.out.print("Tx Code:, ");
-		switch(Integer.parseInt(transactionCode))
-		{
-			case 10: System.out.println("10 - Advance"); break;
-			case 20: System.out.println("20 - Reduction"); break;
-			case 30: System.out.println("30 - Unused"); break;
-			case 40: System.out.println("40 - Advance repayment"); break;
-			case 50: System.out.println("50 - Accounting adjustment"); break;
-			case 60: System.out.println("60 - Error or Unknown"); break;
-			case 70: System.out.println("70 - Attachments"); break;
-			default: System.out.println("Unknown - " + transactionCode); break;
-		}
-		System.out.print("Cheque Indicator: ,");
-		switch(chequeIndicator)
-		{
-			case 'M': System.out.println("M - Manual Cheque issued"); break;
-			case 'C': System.out.println("C - Computer Cheque issued"); break;
-			case 'I': System.out.println("I - Interim payment/Direct Bank Deposit issued"); break;
-			default: System.out.println("Unknown - " + chequeIndicator); break;
-		}
-		
-		System.out.println("Transaction Date:, " + simpleDate.format(transactionDate));
-		NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.CANADA);
-		System.out.println("Transaction Amount:, \"" + currencyFormat.format((double)transactionAmount) + "\"");
-		
-		System.out.println("Transaction Amount Sign: , " + (Character.isWhitespace(transactionAmountSign) ? "Positive" : (transactionAmountSign == '-' ? "Negative" : "Unknown")));
-		System.out.println("Transaction Message:, " + transactionMessage);
-		
-		*/
-		
+	
 	}
 	@Override
 	public String toString()

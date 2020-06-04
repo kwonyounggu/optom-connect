@@ -1,6 +1,8 @@
 package com.ohip.payments.beans;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Logger;
 
 import org.json.JSONObject;
@@ -118,11 +120,24 @@ public class RVHR2Bean implements Serializable
 		}
 		else
 		{
-			transactionIdentifier = line.substring(0, 0+2);
-			recordType = line.substring(2, 2+1).charAt(0);
-			billingAgent = line.substring(3, 3+30).trim();
-			billingAgentAddress = line.substring(33, 33+25).trim();
-			reservedForMOH = line.substring(58, 58+21).trim();
+			try
+			{
+				transactionIdentifier = line.substring(0, 0+2);
+				recordType = line.substring(2, 2+1).charAt(0);
+				billingAgent = line.substring(3, 3+30).trim();
+				billingAgentAddress = line.substring(33, 33+25).trim();
+				reservedForMOH = line.substring(58, 58+21).trim();
+			}
+			catch (NumberFormatException e)
+			{
+				log.severe("ERROR -> NumberFormatException: " + e.getMessage());
+				valid = false;
+			}
+			catch(Exception e)
+			{
+				log.severe("Caused by " + e.getCause() + ", " + e.getMessage());
+				valid = false;
+			}
 		}
 		return valid;
 	}

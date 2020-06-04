@@ -124,7 +124,6 @@ public class UploadServlet extends HttpServlet
 				}
 				//response.getWriter().print("SUCCESS: ");
 				
-				returnJson.put("cvs", "cvs file type");
 				returnJson.put("isItValid", true);
 		}
 		catch (Exception | Error e)
@@ -170,12 +169,12 @@ public class UploadServlet extends HttpServlet
 	private JSONObject handleClaimErrorFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken) throws IOException, Exception
 	{
 		
-		JSONObject reportJson = new JSONObject();
-		/*reportJson.put("hr4", new JSONArray());
-		reportJson.put("hr5", new JSONArray());
-		reportJson.put("hr8", new JSONArray());
-		reportJson.put("hr45", new JSONArray()); //combine two of hr4 and hr5
-		
+		JSONObject claminErrorJson = new JSONObject();
+		claminErrorJson.put("hxh", new JSONArray());
+		claminErrorJson.put("hxr", new JSONArray());
+		claminErrorJson.put("hxt", new JSONArray());
+		claminErrorJson.put("hx8", new JSONArray());
+		/*
 		JSONObject total = new JSONObject();
 		total.put("numberOfServices", 0);
 		total.put("amountSubmitted", 0.0);
@@ -191,11 +190,37 @@ public class UploadServlet extends HttpServlet
 			{
 				CEHX1Bean bean = new CEHX1Bean(line);
 				System.out.println(bean.toString());
+				claminErrorJson.put("hx1", bean.getJson());
 			}
 			else if (line.startsWith("HXH"))
 			{
 				CEHXHBean bean = new CEHXHBean(line);
 				System.out.println(bean.toString());
+				claminErrorJson.getJSONArray("hxh").put(bean.getJson());
+			}
+			else if (line.startsWith("HXR"))
+			{
+				CEHXRBean bean = new CEHXRBean(line);
+				System.out.println(bean.toString());
+				claminErrorJson.getJSONArray("hxr").put(bean.getJson());
+			}
+			else if (line.startsWith("HXT"))
+			{
+				CEHXTBean bean = new CEHXTBean(line);
+				System.out.println(bean.toString());
+				claminErrorJson.getJSONArray("hxt").put(bean.getJson());
+			}
+			else if (line.startsWith("HX8"))
+			{
+				CEHX8Bean bean = new CEHX8Bean(line);
+				System.out.println(bean.toString());
+				claminErrorJson.getJSONArray("hx8").put(bean.getJson());
+			}
+			else if (line.startsWith("HX9"))
+			{
+				CEHX9Bean bean = new CEHX9Bean(line);
+				System.out.println(bean.toString());
+				claminErrorJson.put("hx9", bean.getJson());
 			}
 			/*
 			if (line.startsWith("HR1"))
@@ -295,7 +320,7 @@ public class UploadServlet extends HttpServlet
 		
 		}
 
-		return reportJson;
+		return claminErrorJson;
 	}
 
 	//**************************************************************************************************************************

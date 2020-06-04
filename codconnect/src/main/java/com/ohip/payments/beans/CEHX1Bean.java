@@ -133,23 +133,16 @@ public class CEHX1Bean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
-		/*
-		json.put("groupNumber", groupNumber);//Check this with fileInfo
-		json.put("healthCareProvider", healthCareProvider);//Check this with fileInfo
+		json.put("operatorNumber", operatorNumber);
+		json.put("groupNumber", groupNumber);
+		json.put("providerNumber", providerNumber);
 		json.put("speciality", speciality);
-		json.put("mohOfficeCode", Character.toString(mohOfficeCode));
-		json.put("remittanceAdviceSequence", remittanceAdviceSequence); //Type 7 which is in tech spec.
-		json.put("paymentDate", simpleDate.format(paymentDate));
-		//json.put("payeeName", payeeName);
-		json.put("lastName", payeeName.substring(0, 24).trim());
-		json.put("title", payeeName.substring(25, 27).trim());
-		json.put("initials", payeeName.substring(28).trim());
-		json.put("totalAmountPayable", Character.compare(totalAmountPayableSign, '-')==0 ? (-totalAmountPayable) : totalAmountPayable);
-		json.put("totalAmountPayableSign", Character.toString(totalAmountPayableSign).trim());
-		json.put("chequeNumber", chequeNumber);
-		//json.put("chequeNumber", (chequeNumber.equals("99999999") ? "Direct deposit" : (chequeNumber.trim().isEmpty() ? "Pay Patient" : chequeNumber)));
-		json.put("reservedForMOH2", reservedForMOH2);
-		*/
+		json.put("stationNumber", stationNumber);
+		if (claimProcessDate != null)
+			json.put("claimProcessDate", simpleDate.format(claimProcessDate));
+		else
+			json.put("claimProcessDate", "0000/00/00");
+
 		return json;
 	}
 	public static String getInsertStmtTo_ohip_mro_hr1(JSONObject json, int ohip_mro_tx_history_id)
@@ -182,7 +175,7 @@ public class CEHX1Bean implements Serializable
 				+ ", techSpecReleaseIdentifier=" + techSpecReleaseIdentifier + ", mohOfficeCode=" + mohOfficeCode
 				+ ", reservedForMOH1=" + reservedForMOH1 + ", operatorNumber=" + operatorNumber + ", groupNumber="
 				+ groupNumber + ", providerNumber=" + providerNumber + ", speciality=" + speciality + ", stationNumber="
-				+ stationNumber + ", claimProcessDate=" + simpleDate.format(claimProcessDate) + ", reservedForMOH2=" + reservedForMOH2
+				+ stationNumber + ", claimProcessDate=" + (claimProcessDate!=null ? simpleDate.format(claimProcessDate) : null) + ", reservedForMOH2=" + reservedForMOH2
 				+ "]";
 	}
 	//Occurs Once in every file - always the first record
@@ -215,7 +208,9 @@ public class CEHX1Bean implements Serializable
 				providerNumber = line.substring(27, 27+6);
 				speciality = Integer.parseInt(line.substring(33, 33+2));
 				stationNumber = line.substring(35, 35+3);
-				claimProcessDate = new SimpleDateFormat("yyyy/MM/dd").parse(line.substring(38, 38+4)+"/"+line.substring(42, 42+2)+"/"+line.substring(44, 44+2));
+				String temp = line.substring(38, 38+8).trim();
+				if (temp.length() == 8)
+					claimProcessDate = new SimpleDateFormat("yyyy/MM/dd").parse(line.substring(38, 38+4)+"/"+line.substring(42, 42+2)+"/"+line.substring(44, 44+2));
 				reservedForMOH2 = line.substring(46, 46+33).trim();
 			}
 			catch (NumberFormatException e)
