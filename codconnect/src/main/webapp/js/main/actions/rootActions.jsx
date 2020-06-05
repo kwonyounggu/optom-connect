@@ -24,3 +24,7 @@ export function convertMroToCSV(formData)
 		  		payload: axios.post("upload", formData)
 	  		 };
 }
+export function resetMROData()
+{
+	return { type: ActionTypes.RESET_MRO_DATA};
+}

@@ -179,7 +179,7 @@ class ConvertMROtoCSV extends React.Component
 		if (rootReducer.convertFetched && rootReducer.data.isItValid)
 			switch(rootReducer.data.fileInfo.reportType)
 			{
-				case "P": report = <RAReport ref={(el) => (this.reportRef = el)} data={rootReducer.data}/>;
+				case "P": report = <RAReport ref={(el) => (this.reportRef = el)} data={rootReducer.data} resetMROData={this.props.resetMROData}/>;
 						  pageHeader = "Remittance Advice Report";
 						  break;
 				case "E":

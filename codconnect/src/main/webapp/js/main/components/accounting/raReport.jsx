@@ -120,6 +120,14 @@ class RAReport extends React.Component
 			console.log("[INFO componentDidUpdate() of raReport.jsx] is called with difference between this.props and prevProps");
 		}
 	}
+	componentWillUnmount()
+	{
+	    console.log("INFO: accounting.jsx -> convertMROtoCSV.jsx -> raReport.jsx -> componentWillUnmount(), see this.props: ", this.props);
+		/*The following statement does not work because this.props.data is a read only property.
+	    this.props.data = null; //in order to recall the music list when a forward button is pressed after a backward button.
+		*/
+		this.props.resetMROData();
+	}
 	handleSorting = (cellId) =>
 	{
 		/*

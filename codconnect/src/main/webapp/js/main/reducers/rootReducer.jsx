@@ -31,11 +31,11 @@ function rootReducer
 			state={...state, convertFetching: false, convertFetched: false, error: action.payload};
             break;
     	}
-        case ActionTypes.CONVERT_MRO_DATA_RESET:
-    	{
+		case ActionTypes.RESET_MRO_DATA://being called whenever the raReport, claimError report, etc are left from its pages.
+		{
 			state={...state, convertFetching: false, convertFetched: false, data: null};
-            break;
-    	}
+			break;	
+		}
         default: 
         {
             break;

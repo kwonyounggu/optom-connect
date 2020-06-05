@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {Link, Route, Switch} from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import {connect} from "react-redux";
-import {convertMroToCSV} from "../actions/rootActions.jsx";
+import {convertMroToCSV, resetMROData} from "../actions/rootActions.jsx";
 import {addAlertMessage} from "../actions/alertMessageActions.jsx";
 
 const ConvertMROtoCSV = React.lazy( () => import("../components/accounting/convertMROtoCSV.jsx") );
@@ -62,7 +62,16 @@ class Accounting extends React.Component
 						<Route exact path="/accounting"  ><h3>show avaliable links for accouting sections</h3></Route>
 						<Route exact path="/accounting/ohip"  ><h3>provide what ohip section is providing</h3></Route>
 						<Route path="/accounting/ohip/billing"  ><h3>provide ohip billing component</h3></Route>
-						<Route path="/accounting/ohip/convert"  component={ (props) => <ConvertMROtoCSV {...props} auth={this.props.auth} rootReducer={this.props.rootReducer} convertMroToCSV={this.props.convertMroToCSV} addAlertMessage={this.props.addAlertMessage}/> } />
+						<Route path="/accounting/ohip/convert"  component={ (props) => 
+																				<ConvertMROtoCSV {...props} 
+																					auth={this.props.auth} 
+																					rootReducer={this.props.rootReducer} 
+																					convertMroToCSV={this.props.convertMroToCSV} 
+																					addAlertMessage={this.props.addAlertMessage}
+																					resetMROData={this.props.resetMROData}
+																				/> 
+																			} 
+						/>
 						<Route path="/accounting/ohip/myrecord"  ><h3>provide ohip my record component</h3></Route>
 						<Route exact path="/accounting/nonohip"  ><h3>provide what non-ohip section is doing</h3></Route>
 						<Route path="/accounting/non-ohip/billing"  ><h3>provide non-ohip billing component</h3></Route>
@@ -84,10 +93,11 @@ Accounting.propTypes =
 {
 	classes: PropTypes.object.isRequired,
 	convertMroToCSV: PropTypes.func.isRequired,
+	resetMROData: PropTypes.func.isRequired,
 	addAlertMessage: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {convertMroToCSV, addAlertMessage}) (withStyles(styles) (Accounting));
+export default connect(mapStateToProps, {convertMroToCSV, addAlertMessage, resetMROData}) (withStyles(styles) (Accounting));
 /************************** Hope this works:
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ComponentName))
 **********************************/
