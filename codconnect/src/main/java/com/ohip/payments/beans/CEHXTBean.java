@@ -152,6 +152,7 @@ public class CEHXTBean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
+		json.put("transactionIdentifier", "HXT");
 		json.put("serviceCode", serviceCode);
 		json.put("feeSubmitted", feeSubmitted);
 		json.put("numberOfServices", numberOfServices);

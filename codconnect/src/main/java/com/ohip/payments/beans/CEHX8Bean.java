@@ -82,6 +82,7 @@ public class CEHX8Bean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
+		json.put("transactionIdentifier", "HX8");
 		json.put("explanatoryCode", explanatoryCode);
 		json.put("explanatoryDescription", explanatoryDescription);
 		

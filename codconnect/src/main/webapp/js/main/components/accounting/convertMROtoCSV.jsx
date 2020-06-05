@@ -19,6 +19,7 @@ import IconButton from '@material-ui/core/IconButton';
 import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
 
 import RAReport from "./raReport.jsx";
+import ClaimErrorReport from "./claimErrorReport.jsx";
 
 const styles = (theme) =>
 ({
@@ -68,20 +69,7 @@ const MyBreadcrumbs = (props) =>
 {
 	//console.info("MyBreadscrumbs: props, ", props.location.pathname);
 	let path = props.location.pathname.split("\/");
-	/*console.info("MyBreadscrumbs: path, ", path);
-	path.map((item, i)=>
-		{
-			if (i==0) return ;
-			else 
-			{
-				let index = props.location.pathname.indexOf(item);
-				if (index > 0) console.info(props.location.pathname.substring(0, index+item.length));
-				return item;
-			}	
-		}
-	)
-  */
-  return (
+    return (
 		    <Breadcrumbs aria-label="breadcrumb" maxItems={2}>
 				{
 					path.map
@@ -159,12 +147,7 @@ class ConvertMROtoCSV extends React.Component
 	onConvertButtonClick = () =>
 	{
 		this.setState({converting: true});
-		//if there found an error, then display the error message and setState({converting: false})
-		//else 
-		//		1) display none this section
-		//		2) display summary of the table
-		//		3) display the converted file to download
-		//		4) display a button to goback to more conversion
+
 		const data = new FormData();
 		data.append('mroFile', this.state.mroFile);
 		this.setState({returnStatus: 0, returnMessage: ""});
@@ -184,6 +167,8 @@ class ConvertMROtoCSV extends React.Component
 						  break;
 				case "E":
 				case "F":
+						  report = <ClaimErrorReport ref={(el) => (this.reportRef = el)} data={rootReducer.data} resetMROData={this.props.resetMROData}/>;
+						  pageHeader = "Claim Error Report";
 						  break;
 				case "B":
 						  break;
@@ -194,7 +179,7 @@ class ConvertMROtoCSV extends React.Component
 					    <Grid container spacing={1}>
 					      <Grid item xs={12}>
 					        <Typography variant="h6">
-					          {pageHeader !=null ? pageHeader : "Start converting OHIP MRO files in Health Reconciliation to Excel CSV!"}
+					          {pageHeader !=null ? pageHeader : "Start converting OHIP Remittance Advice, Claim Error MRO files to Excel CSV!"}
 					        </Typography>
 					      </Grid>
 						  <Grid item xs={10}>
@@ -205,7 +190,7 @@ class ConvertMROtoCSV extends React.Component
 												documentTitle={rootReducer.data.fileInfo.fileName}
 									          trigger={
 														() =>
-															<IconButton color="primary" aria-label="Print the RA page" component="span">
+															<IconButton color="primary" aria-label="Print the report page" component="span">
 													          <PrintIcon />
 													        </IconButton>
 													  }

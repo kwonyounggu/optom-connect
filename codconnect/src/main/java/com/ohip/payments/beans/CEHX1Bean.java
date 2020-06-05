@@ -133,6 +133,7 @@ public class CEHX1Bean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
+		json.put("transactionIdentifier", "HX1");
 		json.put("operatorNumber", operatorNumber);
 		json.put("groupNumber", groupNumber);
 		json.put("providerNumber", providerNumber);

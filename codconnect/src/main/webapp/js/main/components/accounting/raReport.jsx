@@ -295,19 +295,6 @@ class RAReport extends React.Component
 								(row, index) => 
 								(
 							        <StyledTableRow key={index}>{this.tableBody(row)}
-										{/*
-							          <StyledTableCell component="th" scope="row">
-							            {row.serviceDate}
-							          </StyledTableCell>
-									  <StyledTableCell title={row.explanatoryCode.length > 0 ? ("Explanatory Code: " + row.explanatoryCode + ", Tx Type: " + row.transactionType) : ("Explanatory Code: N/A, Tx Type: " + row.transactionType)}>
-											<span style={row.explanatoryCode.length > 0 ? {color: "#ad5834"} : {color: "inherit"}}>{row.accountingNumber}</span>
-									  </StyledTableCell>
-							          <StyledTableCell >{row.claimNumber}</StyledTableCell>
-									  <StyledTableCell>{row.healthRegistrationNumber}</StyledTableCell> 
-									  <StyledTableCell align="right">{row.serviceCode}</StyledTableCell>
-									  <StyledTableCell>{row.numberOfServices}</StyledTableCell>
-									  <StyledTableCell>{currency.format(row.amountSubmitted)}</StyledTableCell>
-									  <StyledTableCell>{currency.format(row.amountPaid)}</StyledTableCell>*/}
 							        </StyledTableRow>
 					      		)
 							)

@@ -166,14 +166,18 @@ public class UploadServlet extends HttpServlet
 	//**************************************************************************************************************************
 	//* Check if there exists HR1, HR2, HR3, HR4, HR5, HR8 which should be included all the time.
 	//**************************************************************************************************************************
-	private JSONObject handleClaimErrorFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken) throws IOException, Exception
+	private JSONArray handleClaimErrorFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken) throws IOException, Exception
 	{
-		
+		/*
 		JSONObject claminErrorJson = new JSONObject();
+		claminErrorJson.put("hx1", new JSONArray());
 		claminErrorJson.put("hxh", new JSONArray());
 		claminErrorJson.put("hxr", new JSONArray());
 		claminErrorJson.put("hxt", new JSONArray());
 		claminErrorJson.put("hx8", new JSONArray());
+		claminErrorJson.put("hx9", new JSONArray());
+		*/
+		JSONArray claminErrorJson = new JSONArray();
 		/*
 		JSONObject total = new JSONObject();
 		total.put("numberOfServices", 0);
@@ -190,37 +194,37 @@ public class UploadServlet extends HttpServlet
 			{
 				CEHX1Bean bean = new CEHX1Bean(line);
 				System.out.println(bean.toString());
-				claminErrorJson.put("hx1", bean.getJson());
+				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.startsWith("HXH"))
 			{
 				CEHXHBean bean = new CEHXHBean(line);
 				System.out.println(bean.toString());
-				claminErrorJson.getJSONArray("hxh").put(bean.getJson());
+				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.startsWith("HXR"))
 			{
 				CEHXRBean bean = new CEHXRBean(line);
 				System.out.println(bean.toString());
-				claminErrorJson.getJSONArray("hxr").put(bean.getJson());
+				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.startsWith("HXT"))
 			{
 				CEHXTBean bean = new CEHXTBean(line);
 				System.out.println(bean.toString());
-				claminErrorJson.getJSONArray("hxt").put(bean.getJson());
+				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.startsWith("HX8"))
 			{
 				CEHX8Bean bean = new CEHX8Bean(line);
 				System.out.println(bean.toString());
-				claminErrorJson.getJSONArray("hx8").put(bean.getJson());
+				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.startsWith("HX9"))
 			{
 				CEHX9Bean bean = new CEHX9Bean(line);
 				System.out.println(bean.toString());
-				claminErrorJson.put("hx9", bean.getJson());
+				claminErrorJson.put(bean.getJson());
 			}
 			/*
 			if (line.startsWith("HR1"))

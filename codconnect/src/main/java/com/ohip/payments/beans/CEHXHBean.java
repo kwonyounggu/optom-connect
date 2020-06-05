@@ -197,6 +197,7 @@ public class CEHXHBean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
+		json.put("transactionIdentifier", "HXH");
 		json.put("healthNumber", healthNumber);
 		json.put("versionCode", versionCode);
 		if (patientBirthdate != null)

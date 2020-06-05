@@ -21,7 +21,7 @@ public class CEHXRBean implements Serializable
 	
 	private String transactionIdentifier = ""; 
 	private char recordIdentifier = '0'; 
-	private String registrationNumber = "000000000012";
+	private String registrationNumber = "000000000000";
 	private String patientLastName = "000000000";
 	private String patientFirstName = "00000";
 	private char patientSex = '0';
@@ -142,6 +142,7 @@ public class CEHXRBean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
+		json.put("transactionIdentifier", "HXR");
 		json.put("registrationNumber", registrationNumber);
 		json.put("patientLastName", patientLastName);
 		json.put("patientFirstName", patientFirstName);

@@ -93,6 +93,7 @@ public class CEHX9Bean implements Serializable
 	public JSONObject getJson()
 	{
 		JSONObject json = new JSONObject();
+		json.put("transactionIdentifier", "HX9");
 		json.put("hxhCount", hxhCount);
 		json.put("hxrCount", hxrCount);
 		json.put("hxtCount", hxtCount);
