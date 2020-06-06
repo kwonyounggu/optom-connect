@@ -63,7 +63,7 @@ class ClaimErrorReport extends React.Component
 	componentWillUnmount()
 	{
 	    console.log("INFO: accounting.jsx -> convertMROtoCSV.jsx -> claimErrorReport.jsx -> componentWillUnmount(), see this.props: ", this.props);
-		this.props.resetMROData();
+		//this.props.resetMROData();
 	}
 	hx1Record = (hx1) =>
 	{

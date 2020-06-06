@@ -126,7 +126,7 @@ class RAReport extends React.Component
 		/*The following statement does not work because this.props.data is a read only property.
 	    this.props.data = null; //in order to recall the music list when a forward button is pressed after a backward button.
 		*/
-		this.props.resetMROData();
+		//this.props.resetMROData();
 	}
 	handleSorting = (cellId) =>
 	{

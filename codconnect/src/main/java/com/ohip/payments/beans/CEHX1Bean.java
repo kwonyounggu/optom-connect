@@ -27,7 +27,7 @@ public class CEHX1Bean implements Serializable
 	private String operatorNumber = "000000"; //from batch header 
 	private String groupNumber = "0000"; //from batch header
 	private String providerNumber = "000000"; //from batch header
-	private int speciality = -1; //from batch header
+	private String speciality = "00"; //from batch header
 	private String stationNumber = "000";
 	private Date claimProcessDate = null; //20191015, INDEX = 22, LENGTH = 8
 	private String reservedForMOH2 = ""; //INDEX = 7, LENGTH = 1
@@ -98,11 +98,11 @@ public class CEHX1Bean implements Serializable
 	{
 		this.providerNumber = providerNumber;
 	}
-	public int getSpeciality()
+	public String getSpeciality()
 	{
 		return speciality;
 	}
-	public void setSpeciality(int speciality)
+	public void setSpeciality(String speciality)
 	{
 		this.speciality = speciality;
 	}
@@ -207,7 +207,7 @@ public class CEHX1Bean implements Serializable
 				operatorNumber = line.substring(17, 17+6);
 				groupNumber = line.substring(23, 23+4);
 				providerNumber = line.substring(27, 27+6);
-				speciality = Integer.parseInt(line.substring(33, 33+2));
+				speciality = line.substring(33, 33+2);
 				stationNumber = line.substring(35, 35+3);
 				String temp = line.substring(38, 38+8).trim();
 				if (temp.length() == 8)
