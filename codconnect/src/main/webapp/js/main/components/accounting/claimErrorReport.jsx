@@ -9,6 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import { CSVLink } from "react-csv";
 import {generateRA1, generateRA2} from "./generateCSV.jsx";
 
+import {menuLinks} from "../common/menuLinks.jsx";
+
 const styles = (theme) =>
 ({
 
@@ -48,6 +50,7 @@ class ClaimErrorReport extends React.Component
 			csvData_2: generateRA2(props.data.report, currency)
 			*/
 		}
+		this.sequenceCount = 0;
 	}
 	componentDidMount()
 	{
@@ -62,8 +65,8 @@ class ClaimErrorReport extends React.Component
 	}
 	componentWillUnmount()
 	{
-	    console.log("INFO: accounting.jsx -> convertMROtoCSV.jsx -> claimErrorReport.jsx -> componentWillUnmount(), see this.props: ", this.props);
-		//this.props.resetMROData();
+		console.log("[INFO: accounting.jsx -> convertMROtoCSV.jsx -> claimErrorReport.jsx -> componentWillUnmount() window.location changed to] :", window.location, " [from]: ", menuLinks[3]);
+		if (window.location.pathname != menuLinks[3]) this.props.resetMROData();
 	}
 	hx1Record = (hx1) =>
 	{
@@ -74,6 +77,7 @@ class ClaimErrorReport extends React.Component
 						          Group/Provider Header Record  (HX1)
 						</Typography>
 					</Grid>
+					<Grid item xs={12}>&nbsp;</Grid>
 					<Grid item xs={6}>
 					    <span><strong>OPERATOR NUMBER:</strong>&nbsp;{hx1.operatorNumber}</span>
 			        </Grid>
@@ -104,6 +108,7 @@ class ClaimErrorReport extends React.Component
 						          Claim Error Header 1 Record (HXH)
 						</Typography>
 					</Grid>
+					<Grid item xs={12}>&nbsp;</Grid>
 					<Grid item xs={6}>
 					    <span><strong>HEALTH NUMBER:</strong>&nbsp;{obj.healthNumber}</span>
 			        </Grid>
@@ -164,6 +169,7 @@ class ClaimErrorReport extends React.Component
 						          Claim Error Item Record (HXT)
 						</Typography>
 					</Grid>
+					<Grid item xs={12}>&nbsp;</Grid>
 					<Grid item xs={6}>
 					    <span><strong>SERVICE CODE:</strong>&nbsp;{obj.serviceCode}</span>
 			        </Grid>
@@ -209,6 +215,7 @@ class ClaimErrorReport extends React.Component
 						          Claim Error Header 2 Record (HXR - RMB Claim)
 						</Typography>
 					</Grid>
+					<Grid item xs={12}>&nbsp;</Grid>
 					<Grid item xs={6}>
 					    <span><strong>REGISTRATION NUMBER:</strong>&nbsp;{obj.registrationNumber}</span>
 			        </Grid>
@@ -251,6 +258,7 @@ class ClaimErrorReport extends React.Component
 						          Claim Error Explanation Code Message Record (HX8)
 						</Typography>
 					</Grid>
+					<Grid item xs={12}>&nbsp;</Grid>
 					<Grid item xs={12}>
 					    <span><strong>CODE:</strong>&nbsp;{obj.explanatoryCode},&nbsp;{obj.explanatoryDescription}</span>
 			        </Grid>
@@ -266,6 +274,7 @@ class ClaimErrorReport extends React.Component
 						          Claim Error Trailer Record (HX9)
 						</Typography>
 					</Grid>
+					<Grid item xs={12}>&nbsp;</Grid>
 					<Grid item xs={6}>
 					    <span><strong>Count of HXH Records:</strong>&nbsp;{obj.hxhCount}</span>
 			        </Grid>
@@ -308,11 +317,14 @@ class ClaimErrorReport extends React.Component
 					(
 						<React.Fragment key={index}>
 				            <Grid item xs={12}>{this.manifolder(row)}</Grid>
-							<Grid item>&nbsp;</Grid>
+							<Grid item xs={12}>&nbsp;</Grid>
 						</React.Fragment>
 		      		)
 				)
 			}
+				<Grid item xs={12}>
+					<span style={{fontSize: "12px", color: "grey"}}>{"The report is generated from "}{this.props.data.fileInfo.fileName}{"."}</span>
+				</Grid>
 			</Grid>
 			   )
 	}

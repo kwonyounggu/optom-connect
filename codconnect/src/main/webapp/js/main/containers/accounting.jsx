@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Link, Route, Switch} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import {connect} from "react-redux";
 import {convertMroToCSV, resetMROData} from "../actions/rootActions.jsx";
@@ -62,15 +62,19 @@ class Accounting extends React.Component
 						<Route exact path="/accounting"  ><h3>show avaliable links for accouting sections</h3></Route>
 						<Route exact path="/accounting/ohip"  ><h3>provide what ohip section is providing</h3></Route>
 						<Route path="/accounting/ohip/billing"  ><h3>provide ohip billing component</h3></Route>
-						<Route path="/accounting/ohip/convert"  component={ (props) => 
-																				<ConvertMROtoCSV {...props} 
-																					auth={this.props.auth} 
-																					rootReducer={this.props.rootReducer} 
-																					convertMroToCSV={this.props.convertMroToCSV} 
-																					addAlertMessage={this.props.addAlertMessage}
-																					resetMROData={this.props.resetMROData}
-																				/> 
-																			} 
+						<Route path="/accounting/ohip/convert"  
+							   component=
+							   { 
+									(props) => 
+									
+									<ConvertMROtoCSV {...props} 
+										auth={this.props.auth} 
+										rootReducer={this.props.rootReducer} 
+										convertMroToCSV={this.props.convertMroToCSV} 
+										addAlertMessage={this.props.addAlertMessage}
+										resetMROData={this.props.resetMROData}
+									/> 
+								} 
 						/>
 						<Route path="/accounting/ohip/myrecord"  ><h3>provide ohip my record component</h3></Route>
 						<Route exact path="/accounting/nonohip"  ><h3>provide what non-ohip section is doing</h3></Route>

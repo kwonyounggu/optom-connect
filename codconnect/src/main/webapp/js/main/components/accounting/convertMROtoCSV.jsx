@@ -6,6 +6,7 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import HomeIcon from '@material-ui/icons/Home';
 import Grid from '@material-ui/core/Grid';
 
+import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
 import Alert from '@material-ui/lab/Alert';
 import Collapse from '@material-ui/core/Collapse';
@@ -14,6 +15,7 @@ import Button from '@material-ui/core/Button';
 import { green } from '@material-ui/core/colors';
 import ReactToPrint from "react-to-print";
 import PrintIcon from '@material-ui/icons/Print';
+import FiberNewIcon from '@material-ui/icons/FiberNew';
 import IconButton from '@material-ui/core/IconButton';
 
 import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
@@ -117,14 +119,14 @@ class ConvertMROtoCSV extends React.Component
 		//if (this.props.rootReducer.convertFetched && this.props.rootReducer.data.isItValid) this.props.resetMROData();
 
 	}
-	static getDerivedStateFromProps(nextProps, prevState) 
+	/*static getDerivedStateFromProps(nextProps, prevState) 
 	{
 		if (nextProps.rootReducer.convertFetched && nextProps.rootReducer.data.isItValid)
 	 	{
 			console.log("[INFO getDerivedStateFromProps of convertMROtoCSV.jsx] called. DATA RECEIVED NOW !!");
 		}
 		return{};
-	}
+	}*/
 	componentDidUpdate(prevProps, prevState)
 	{
 		console.log("[INFO componentDidUpdate(...) of convertMROtoCSV.jsx] nextProps.rootReducer: " , prevProps.rootReducer);
@@ -190,15 +192,30 @@ class ConvertMROtoCSV extends React.Component
 					      </Grid>
 						  <Grid item xs={2} >
 					        {pageHeader && <ReactToPrint
-												documentTitle={rootReducer.data.fileInfo.fileName}
-									          trigger={
-														() =>
-															<IconButton color="primary" aria-label="Print the report page" component="span">
-													          <PrintIcon />
-													        </IconButton>
-													  }
+											  documentTitle={rootReducer.data.fileInfo.fileName}
+									          trigger=
+											  {
+												() =>
+												 <Tooltip title={<span style={{fontSize: "14px"}}>Click to print the current page</span>}>
+													<IconButton color="primary" aria-label="Print the report page" component="span">
+											          <PrintIcon />
+											        </IconButton>
+												</Tooltip>
+											  }
 									          content={() => this.reportRef}
-									        />}
+									        />
+							}
+							{
+								pageHeader && <Tooltip title={<span style={{fontSize: "14px"}}>Click to convert another file</span>}>
+												<IconButton color="primary" 
+														  aria-label="Another MRO file conversion" 
+												          component="span"
+														  onClick={() => {this.props.resetMROData()}}
+											  >
+											          <FiberNewIcon />
+											  </IconButton>
+											</Tooltip>
+							}
 					      </Grid>
 						  <Grid item xs={12}>
 					       	<hr />

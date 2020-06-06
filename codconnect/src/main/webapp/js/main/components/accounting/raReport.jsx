@@ -16,6 +16,7 @@ import orderBy from "lodash/orderBy";
 
 import { CSVLink } from "react-csv";
 import {generateRA1, generateRA2} from "./generateCSV.jsx";
+import {menuLinks} from "../common/menuLinks.jsx";
 
 const styles = (theme) =>
 ({
@@ -122,11 +123,8 @@ class RAReport extends React.Component
 	}
 	componentWillUnmount()
 	{
-	    console.log("INFO: accounting.jsx -> convertMROtoCSV.jsx -> raReport.jsx -> componentWillUnmount(), see this.props: ", this.props);
-		/*The following statement does not work because this.props.data is a read only property.
-	    this.props.data = null; //in order to recall the music list when a forward button is pressed after a backward button.
-		*/
-		//this.props.resetMROData();
+		console.log("[INFO: accounting.jsx -> convertMROtoCSV.jsx -> raReport.jsx -> componentWillUnmount() window.location changed to] :", window.location, " [from]: ", menuLinks[3]);
+		if (window.location.pathname != menuLinks[3]) this.props.resetMROData();
 	}
 	handleSorting = (cellId) =>
 	{

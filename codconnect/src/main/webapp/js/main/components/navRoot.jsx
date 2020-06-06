@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, Redirect} from "react-router-dom";
+import {Link, Redirect, useLocation} from "react-router-dom";
 import {PropTypes} from "prop-types";
 import { makeStyles, withStyles, useTheme, fade } from '@material-ui/core/styles';
 
@@ -142,7 +142,17 @@ const useStyles = makeStyles((theme) =>
 const NavRoot=(props)=>
 {
 	console.log("In NavRoot, ",props);
-	
+	/*
+	const location = useLocation();
+	React.useEffect
+	(
+		() =>
+		{
+			console.log("=================>LOCATION CHANGE: ", location.pathname);
+		},
+		[location]
+	);
+	*/
 	let currentMenu = null;
 	let pathname = props.location.pathname.toLowerCase();
 	if (menuLinks.includes(pathname)) currentMenu=<NavRootMenuBar {...props} />;
@@ -171,7 +181,7 @@ const NavRootMenuBar = (props) =>
   
   //This will be called whenever any props value changed or UI events updated such as a GUI clicks
   React.useEffect(() => 
-  { 	
+  { 
   });
   function onLogout()
   {

@@ -3,12 +3,12 @@
  */
 import React from "react";
 import ReactDOM from "react-dom";
-import PropTypes from 'prop-types';
+
 import {Provider} from "react-redux";
 import store from "./main/store.jsx";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {throttle} from "lodash";
-import { withStyles } from "@material-ui/core/styles";
+
 import {addAlertMessage} from "./main/actions/alertMessageActions.jsx";
 
 const Home = React.lazy( () => import("./main/components/home.jsx") );
@@ -108,6 +108,7 @@ class MainApp extends React.Component
 					   {turnOn: true, text: "Your internet connection is off. -- Check it out!", type: "error", level: 1};
 		store.dispatch(addAlertMessage(alertMsg));
 	}
+
     render()
     {	
 		
