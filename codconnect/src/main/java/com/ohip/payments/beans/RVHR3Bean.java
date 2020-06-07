@@ -94,7 +94,7 @@ public class RVHR3Bean implements Serializable
 		return "insert into ohip_mro_hr3 values(default, 'HR', '3', '" + json.getString("addressLineTwo") + "', " +
 														"'" + json.getString("addressLineThree") + "', " +
 														"'" + json.getString("reservedForMOH") + "', " +
-														   + ohip_mro_hr1_id + ");";
+														      ohip_mro_hr1_id + ");";
 		
 														           
 	}

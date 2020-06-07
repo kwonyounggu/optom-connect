@@ -251,7 +251,7 @@ public class RVHR1Bean implements Serializable
 													   "'" + json.getString("totalAmountPayableSign") + "', " +
 													   "'" + json.getString("chequeNumber") + "', " +
 													   "'" + json.getString("reservedForMOH2") + "', " +
-														   + ohip_mro_tx_history_id + ");";
+														     ohip_mro_tx_history_id + ");";
 		
 														           
 	}

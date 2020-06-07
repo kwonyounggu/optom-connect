@@ -154,13 +154,15 @@ public class CEHXTBean implements Serializable
 		JSONObject json = new JSONObject();
 		json.put("transactionIdentifier", "HXT");
 		json.put("serviceCode", serviceCode);
+		json.put("reservedForMOH1", reservedForMOH1);
 		json.put("feeSubmitted", feeSubmitted);
 		json.put("numberOfServices", numberOfServices);
 		if (serviceDate != null)
 			json.put("serviceDate", simpleDate.format(serviceDate));
 		else
-			json.put("serviceDate", "0000/00/00");
+			json.put("serviceDate", "1111/11/11");
 		json.put("diagnosticCode", diagnosticCode);
+		json.put("reservedForMOH2", reservedForMOH2);
 		json.put("explanatoryCode", explanatoryCode);
 		json.put("errorCode1", errorCode1);
 		json.put("errorCode2", errorCode2);
@@ -170,24 +172,24 @@ public class CEHXTBean implements Serializable
 
 		return json;
 	}
-	public static String getInsertStmtTo_ohip_mro_hr1(JSONObject json, int ohip_mro_tx_history_id)
+	public static String getInsertStmtTo_ohip_mro_hxt(JSONObject json, int ohip_mro_hx1_id, int ohip_mro_hxh_id)
 	{
-		/*
-		return "insert into ohip_mro_hr1 values(default, 'HR', '1', 'V03', '0', '" + json.getString("groupNumber") + "', " +
-														"" + json.getInt("healthCareProvider") + ", " +
-														"" + json.getInt("speciality") + ", " +
-													   "'" + json.getString("mohOfficeCode") + "', " +
-														"" + json.getInt("remittanceAdviceSequence") + ", " +
-													   "'" + json.getString("paymentDate") + "', " +
-													   "'" + json.getString("title") + "|" + json.getString("initials") + "|" + json.getString("lastName") + "', " +
-													    "" + json.getFloat("totalAmountPayable") + ", " +
-													   "'" + json.getString("totalAmountPayableSign") + "', " +
-													   "'" + json.getString("chequeNumber") + "', " +
-													   "'" + json.getString("reservedForMOH2") + "', " +
-														   + ohip_mro_tx_history_id + ");";
-		*/
-		
-		return null;												           
+		return "insert into ohip_mro_hxt values(default, 'HX', 'T', " +
+				"'" + json.getString("serviceCode") + "', " +
+				"'" + json.getString("reservedForMOH1") + "', " +
+				"" + json.getFloat("feeSubmitted") + ", " +
+				"" + json.getInt("numberOfServices") + ", " +
+				"'" + json.getString("serviceDate") + "', " +
+				"'" + json.getString("diagnosticCode") + "', " +
+				"'" + json.getString("reservedForMOH2") + "', " +
+				"'" + json.getString("explanatoryCode") + "', " +
+				"'" + json.getString("errorCode1") + "', " +
+				"'" + json.getString("errorCode2") + "', " +
+				"'" + json.getString("errorCode3") + "', " +
+				"'" + json.getString("errorCode4") + "', " +
+				"'" + json.getString("errorCode5") + "', " +
+					  ohip_mro_hx1_id + ", " +
+					  ohip_mro_hxh_id + ");";									           
 	}
 	public void printRecord()
 	{

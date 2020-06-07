@@ -210,7 +210,7 @@ public class RVHR4Bean implements Serializable
 													   "'" + json.getString("serviceLocator") + "', " +
 													   "'" + json.getString("mohGroupIdentifier") + "', " + 
 													   "'" + json.getString("reservedForMOH") + "', " +
-														   + ohip_mro_hr1_id + ");";
+														     ohip_mro_hr1_id + ");";
 		
 														           
 	}

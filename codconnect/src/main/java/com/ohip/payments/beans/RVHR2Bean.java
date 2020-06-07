@@ -94,7 +94,7 @@ public class RVHR2Bean implements Serializable
 		return "insert into ohip_mro_hr2 values(default, 'HR', '2', '" + json.getString("billingAgent") + "', " +
 														"'" + json.getString("addressLineOne") + "', " +
 														"'" + json.getString("reservedForMOH") + "', " +
-														   + ohip_mro_hr1_id + ");";
+														      ohip_mro_hr1_id + ");";
 		
 														           
 	}

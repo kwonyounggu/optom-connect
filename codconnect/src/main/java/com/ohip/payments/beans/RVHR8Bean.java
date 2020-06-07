@@ -101,7 +101,7 @@ public class RVHR8Bean implements Serializable
 		return "insert into ohip_mro_hr8 values(default, 'HR', '8', " + 
 														"'" + json.getString("messageText").replace("'", "''") + "', " +  //replace all occurrence
 													   "'" + json.getString("reservedForMOH") + "', " +
-														   + ohip_mro_hr1_id + ");";										           
+														     ohip_mro_hr1_id + ");";										           
 	}
 	//Occurs Once in every file
 	public boolean hrRecord(String line)

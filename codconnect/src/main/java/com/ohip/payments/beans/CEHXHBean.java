@@ -203,7 +203,7 @@ public class CEHXHBean implements Serializable
 		if (patientBirthdate != null)
 			json.put("patientBirthdate", simpleDate.format(patientBirthdate));
 		else
-			json.put("patientBirthdate", "0000/00/00");
+			json.put("patientBirthdate", "1111/11/11");
 		json.put("accountingNumber", accountingNumber);
 		json.put("paymentProgram", paymentProgram);
 		json.put("payee", Character.toString(payee));
@@ -212,9 +212,10 @@ public class CEHXHBean implements Serializable
 		if (patientAdmissionDate != null)
 			json.put("patientAdmissionDate", simpleDate.format(patientAdmissionDate));
 		else
-			json.put("patientAdmissionDate", "0000/00/00");
+			json.put("patientAdmissionDate", "1111/11/11");
 		json.put("referringLabLicence", referringLabLicence);
 		json.put("serviceLocationIndicator", serviceLocationIndicator);
+		json.put("reservedForMOH", reservedForMOH);
 		json.put("errorCode1", errorCode1);
 		json.put("errorCode2", errorCode2);
 		json.put("errorCode3", errorCode3);
@@ -223,24 +224,28 @@ public class CEHXHBean implements Serializable
 
 		return json;
 	}
-	public static String getInsertStmtTo_ohip_mro_hr1(JSONObject json, int ohip_mro_tx_history_id)
+	public static String getInsertStmtTo_ohip_mro_hxh(JSONObject json, int ohip_mro_hx1_id)
 	{
-		/*
-		return "insert into ohip_mro_hr1 values(default, 'HR', '1', 'V03', '0', '" + json.getString("groupNumber") + "', " +
-														"" + json.getInt("healthCareProvider") + ", " +
-														"" + json.getInt("speciality") + ", " +
-													   "'" + json.getString("mohOfficeCode") + "', " +
-														"" + json.getInt("remittanceAdviceSequence") + ", " +
-													   "'" + json.getString("paymentDate") + "', " +
-													   "'" + json.getString("title") + "|" + json.getString("initials") + "|" + json.getString("lastName") + "', " +
-													    "" + json.getFloat("totalAmountPayable") + ", " +
-													   "'" + json.getString("totalAmountPayableSign") + "', " +
-													   "'" + json.getString("chequeNumber") + "', " +
-													   "'" + json.getString("reservedForMOH2") + "', " +
-														   + ohip_mro_tx_history_id + ");";
-		*/
-		
-		return null;												           
+		return "insert into ohip_mro_hxh values(default, 'HX', 'H', " +
+				"'" + json.getString("healthNumber") + "', " +
+				"'" + json.getString("versionCode") + "', " +
+				"'" + json.getString("patientBirthdate") + "', " +
+				"'" + json.getString("accountingNumber") + "', " +
+				"'" + json.getString("paymentProgram") + "', " +
+				"'" + json.getString("payee") + "', " +
+				"" + json.getInt("referringProviderNumber") + ", " +
+				"'" + json.getString("masterNumber") + "', " +
+				"'" + json.getString("patientAdmissionDate") + "', " +
+				"'" + json.getString("referringLabLicence") + "', " +
+				"'" + json.getString("serviceLocationIndicator") + "', " +
+				"'" + json.getString("reservedForMOH") + "', " +
+				"'" + json.getString("errorCode1") + "', " +
+				"'" + json.getString("errorCode2") + "', " +
+				"'" + json.getString("errorCode3") + "', " +
+				"'" + json.getString("errorCode4") + "', " +
+				"'" + json.getString("errorCode5") + "', " +
+					   ohip_mro_hx1_id + ");";
+											           
 	}
 	public void printRecord()
 	{

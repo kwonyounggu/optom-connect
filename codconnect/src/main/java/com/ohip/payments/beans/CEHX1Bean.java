@@ -134,6 +134,8 @@ public class CEHX1Bean implements Serializable
 	{
 		JSONObject json = new JSONObject();
 		json.put("transactionIdentifier", "HX1");
+		json.put("mohOfficeCode", Character.toString(mohOfficeCode));
+		json.put("reservedForMOH1", reservedForMOH1);
 		json.put("operatorNumber", operatorNumber);
 		json.put("groupNumber", groupNumber);
 		json.put("providerNumber", providerNumber);
@@ -142,28 +144,23 @@ public class CEHX1Bean implements Serializable
 		if (claimProcessDate != null)
 			json.put("claimProcessDate", simpleDate.format(claimProcessDate));
 		else
-			json.put("claimProcessDate", "0000/00/00");
-
+			json.put("claimProcessDate", "1111/11/11");
+		json.put("reservedForMOH2", reservedForMOH2);
 		return json;
 	}
-	public static String getInsertStmtTo_ohip_mro_hr1(JSONObject json, int ohip_mro_tx_history_id)
+	public static String getInsertStmtTo_ohip_mro_hx1(JSONObject json, int ohip_mro_tx_history_id)
 	{
-		/*
-		return "insert into ohip_mro_hr1 values(default, 'HR', '1', 'V03', '0', '" + json.getString("groupNumber") + "', " +
-														"" + json.getInt("healthCareProvider") + ", " +
-														"" + json.getInt("speciality") + ", " +
-													   "'" + json.getString("mohOfficeCode") + "', " +
-														"" + json.getInt("remittanceAdviceSequence") + ", " +
-													   "'" + json.getString("paymentDate") + "', " +
-													   "'" + json.getString("title") + "|" + json.getString("initials") + "|" + json.getString("lastName") + "', " +
-													    "" + json.getFloat("totalAmountPayable") + ", " +
-													   "'" + json.getString("totalAmountPayableSign") + "', " +
-													   "'" + json.getString("chequeNumber") + "', " +
+		return "insert into ohip_mro_hr1 values(default, 'HX', '1', 'V03', " +
+														"'" + json.getString("mohOfficeCode") + "', " +
+														"'" + json.getString("reservedForMOH1") + "', " +
+														"'" + json.getString("operatorNumber") + "', " +
+														"'" + json.getString("groupNumber") + "', " +
+														"" + json.getInt("providerNumber") + ", " +
+														"'" + json.getString("speciality") + "', " +
+														"'" + json.getString("stationNumber") + "', " +
+														"'" + json.getString("claimProcessDate") + "', " +
 													   "'" + json.getString("reservedForMOH2") + "', " +
-														   + ohip_mro_tx_history_id + ");";
-		*/
-		
-		return null;												           
+														     ohip_mro_tx_history_id + ");";											           
 	}
 	public void printRecord()
 	{

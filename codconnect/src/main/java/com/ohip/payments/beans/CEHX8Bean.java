@@ -85,20 +85,21 @@ public class CEHX8Bean implements Serializable
 		json.put("transactionIdentifier", "HX8");
 		json.put("explanatoryCode", explanatoryCode);
 		json.put("explanatoryDescription", explanatoryDescription);
+		json.put("reservedForMOH", reservedForMOH);
 		
 		return json;
 	}
-	/*
-	 * Note StringEscapeUtils in Dev/carm/src/com/sickkids/caliper/dao/AllReviewDataBean.java 
-	 */
-	public static String getInsertStmtTo_ohip_mro_HX8(JSONObject json, int ohip_mro_hr1_id)
+
+	public static String getInsertStmtTo_ohip_mro_hx8(JSONObject json, int ohip_mro_hx1_id, int ohip_mro_hxh_id, int ohip_mro_hxt_id)
 	{
-		return "insert into ohip_mro_HX8 values(default, 'HR', '8', " + 
-														"'" + json.getString("messageText").replace("'", "''") + "', " +  //replace all occurrence
-													   "'" + json.getString("reservedForMOH") + "', " +
-														   + ohip_mro_hr1_id + ");";										           
+		return "insert into ohip_mro_hx8 values(default, 'HX', '8', " +
+				"'" + json.getString("explanatoryCode") + "', " +
+				"'" + json.getString("explanatoryDescription").replace("'", "''") + "', " +
+				"'" + json.getString("reservedForMOH") + "', " +
+					  ohip_mro_hx1_id + ", " +
+					  ohip_mro_hxh_id + ", " +
+					  ohip_mro_hxt_id + ");";									           
 	}
-	
 	@Override
 	public String toString()
 	{

@@ -205,7 +205,7 @@ public class RVHR6Bean implements Serializable
 													   "" + json.getFloat("amtBrtFwdOtherDeductions") + ", " +
 													   "'" + json.getString("amtBrtFwdOtherDeductionsSign") + "', " +
 													   "'" + json.getString("reservedForMOH") + "', " +
-														   + ohip_mro_hr1_id + ");";
+														     ohip_mro_hr1_id + ");";
 		
 														           
 	}

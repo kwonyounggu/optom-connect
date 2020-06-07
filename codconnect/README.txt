@@ -13,3 +13,4 @@ wildfly10.x to access, type admin/277312
     at createError (webpack:///./node_modules/axios/lib/…}
     
  Checking if the health care provider number is not being used by someone. -- It seems ok as long as it is used with another login person
+ SignUp includes -- HEALTH CARE PROVIDER NUMBER -- LIKE IN DR.BILL, check the site

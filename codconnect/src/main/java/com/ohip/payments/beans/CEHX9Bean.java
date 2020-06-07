@@ -98,18 +98,20 @@ public class CEHX9Bean implements Serializable
 		json.put("hxrCount", hxrCount);
 		json.put("hxtCount", hxtCount);
 		json.put("hx8Count", hx8Count);
+		json.put("reservedForMOH", reservedForMOH);
 		
 		return json;
 	}
-	/*
-	 * Note StringEscapeUtils in Dev/carm/src/com/sickkids/caliper/dao/AllReviewDataBean.java 
-	 */
-	public static String getInsertStmtTo_ohip_mro_HX9(JSONObject json, int ohip_mro_hr1_id)
+	public static String getInsertStmtTo_ohip_mro_hx9(JSONObject json, int ohip_mro_tx_history_id)
 	{
-		return "insert into ohip_mro_HX9 values(default, 'HR', '8', " + 
-														"'" + json.getString("messageText").replace("'", "''") + "', " +  //replace all occurrence
-													   "'" + json.getString("reservedForMOH") + "', " +
-														   + ohip_mro_hr1_id + ");";										           
+		return "insert into ohip_mro_hx8 values(default, 'HX', '9', " +
+				"" + json.getInt("hxhCount") + ", " +
+				"" + json.getInt("hxrCount") + ", " +
+				"" + json.getInt("hxtCount") + ", " +
+				"" + json.getInt("hx8Count") + ", " +
+				"'" + json.getString("reservedForMOH") + "', " +
+
+					  ohip_mro_tx_history_id + ");";									           
 	}
 
 	@Override

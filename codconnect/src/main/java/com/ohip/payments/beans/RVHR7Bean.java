@@ -184,7 +184,7 @@ public class RVHR7Bean implements Serializable
 													   "'" + json.getString("transactionAmountSign") + "', " +
 													   "'" + json.getString("transactionMessage") + "', " +
 													   "'" + json.getString("reservedForMOH") + "', " +
-														   + ohip_mro_hr1_id + ");";
+														     ohip_mro_hr1_id + ");";
 		
 														           
 	}
