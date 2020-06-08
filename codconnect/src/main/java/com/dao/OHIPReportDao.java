@@ -44,6 +44,9 @@ public class OHIPReportDao
 	{
 		_ds = ds;
 	}
+	@SuppressWarnings(
+		"resource"
+	)
 	public boolean insertRAData(JSONObject jsonData, FileInfoBean fb, JSONObject token) throws DAOException
 	{
 		Connection c = null;
@@ -72,9 +75,7 @@ public class OHIPReportDao
 			//1. check if the same person has already put the same file data through ohip_mro_tx_history
 			// ********** CHECK IF THE SAME FILE IS ALREADY INSERTED BY THE SAME USER_ID **********
 			// if it is already in, then update or discard
-			sqlCmd = "select 1 from ohip_mro_tx_history where file_name='" + fb.getFileName() + "' " +
-					 "and auth_user_account_id=" + token.getInt("authUserAccountId") + " limit 1;";
-			rs = s.executeQuery(sqlCmd);
+			rs = s.executeQuery(fb.getSqlIfArecordExists(token.getInt("authUserAccountId")));
 			if (rs.next())
 			{
 				//There is already file info in the tables so update it, do it later for updating hr1 to hr8 and ohip_mro_tx_history
@@ -84,17 +85,14 @@ public class OHIPReportDao
 			{
 				//First , insert into ohip_mro_tx_history in order to have a ohip_mro_history_id
 				sqlCmd = fb.getInsertStmtTo_ohip_mro_tx_history(token.getInt("authUserAccountId"));
-				//log.info(sqlCmd);
 				s.executeUpdate(sqlCmd);
-				sqlCmd = "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_tx_history', 'ohip_mro_tx_history_id'));";
-				rs = s.executeQuery(sqlCmd); //to have ohip_mro_tx_history_id into the ohip_mro_hr1 as a fk.
+				rs = s.executeQuery(fb.getSqlOfAutoIncrementId()); //to have ohip_mro_tx_history_id into the ohip_mro_hr1 as a fk.
 				if (rs.next()) 
 				{
 					s.executeUpdate(RVHR1Bean.getInsertStmtTo_ohip_mro_hr1(jsonData.getJSONObject("hr1"), rs.getInt(1)));
 				}
-				sqlCmd = "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_hr1', 'ohip_mro_hr1_id'));";
-				rs = s.executeQuery(sqlCmd); //ohip_mro_hr1_id for hr2 ... hr8
 				int ohipMroHr1Id = -1;
+				rs = s.executeQuery(RVHR1Bean.getSqlOfAutoIncrementId()); //ohip_mro_hr1_id for hr2 ... hr8				
 				if (rs.next())
 				{
 					ohipMroHr1Id = rs.getInt(1);
@@ -156,6 +154,9 @@ public class OHIPReportDao
 	/*
 	 * Check if hx sequence is minimally in the tracks such as hx1, hxh, hxt, hx9
 	 */
+	@SuppressWarnings(
+		"resource"
+	)
 	public boolean insertClaimErrorData(JSONArray jsonData, FileInfoBean fb, JSONObject token) throws DAOException
 	{
 		Connection c = null;
@@ -184,9 +185,7 @@ public class OHIPReportDao
 			//1. check if the same person has already put the same file data through ohip_mro_tx_history
 			// ********** CHECK IF THE SAME FILE IS ALREADY INSERTED BY THE SAME USER_ID **********
 			// if it is already in, then update or discard
-			sqlCmd = "select 1 from ohip_mro_tx_history where file_name='" + fb.getFileName() + "' " +
-					 "and auth_user_account_id=" + token.getInt("authUserAccountId") + " limit 1;";
-			rs = s.executeQuery(sqlCmd);
+			rs = s.executeQuery(fb.getSqlIfArecordExists(token.getInt("authUserAccountId")));
 			if (rs.next())
 			{
 				//There is already file info in the tables so update it, do it later for updating hr1 to hr8 and ohip_mro_tx_history
@@ -194,17 +193,16 @@ public class OHIPReportDao
 			// ********** INSERT INTO TABLES SUCH AS HX1 ... HX9 AND HISTORY TABLE **********
 			else
 			{
-				//First , insert into ohip_mro_tx_history in order to have a ohip_mro_history_id
-				sqlCmd = fb.getInsertStmtTo_ohip_mro_tx_history(token.getInt("authUserAccountId"));
-				//log.info(sqlCmd);
-				s.executeUpdate(sqlCmd);
-				sqlCmd = "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_tx_history', 'ohip_mro_tx_history_id'));";
-				rs = s.executeQuery(sqlCmd); //to have ohip_mro_tx_history_id into the ohip_mro_hr1 as a fk.
 				int ohipMroTxHistoryId = -1;
 				int ohipMroHx1Id = -1;
 				int ohipMroHxhId = -1;
 				int ohipMroHxtId = -1;
+				int hxhCount = 0, hxrCount = 0, hxtCount = 0, hx8Count = 0;
 				String hxSequence = "";
+				//First , insert into ohip_mro_tx_history in order to have a ohip_mro_history_id
+				s.executeUpdate(fb.getInsertStmtTo_ohip_mro_tx_history(token.getInt("authUserAccountId")));
+				rs = s.executeQuery(fb.getSqlOfAutoIncrementId()); //to have ohip_mro_tx_history_id into the ohip_mro_hr1 as a fk.
+				
 				if (rs.next()) ohipMroTxHistoryId = rs.getInt(1);
 				for (int i=0, size=jsonData.length(); i < size; i++)
 				{
@@ -215,58 +213,67 @@ public class OHIPReportDao
 						{
 							hxSequence += "HX1";
 							s.executeUpdate(CEHX1Bean.getInsertStmtTo_ohip_mro_hx1(jo, ohipMroTxHistoryId));
-							sqlCmd = "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_hx1', 'ohip_mro_hx1_id'));";
-							rs = s.executeQuery(sqlCmd); 
+							rs = s.executeQuery(CEHX1Bean.getSqlOfAutoIncrementId()); 
 							if (rs.next()) ohipMroHx1Id = rs.getInt(1);
+							//System.err.println("-- after hx1 --");
 							break;
 						}
 						case "HXH":
 						{
 							hxSequence += ",HXH";
+							hxhCount++;
 							s.executeUpdate(CEHXHBean.getInsertStmtTo_ohip_mro_hxh(jo, ohipMroHx1Id));
-							sqlCmd = "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_hxh', 'ohip_mro_hxh_id'));";
-							rs = s.executeQuery(sqlCmd); 
+							rs = s.executeQuery(CEHXHBean.getSqlOfAutoIncrementId()); 
 							if (rs.next()) ohipMroHxhId = rs.getInt(1);
+							//System.err.println("-- after hxh --");
 							break;
 						}
 						case "HXR":
 						{
 							hxSequence += ",HXR";
+							hxrCount++;
 							s.executeUpdate(CEHXRBean.getInsertStmtTo_ohip_mro_hxr(jo, ohipMroHx1Id, ohipMroHxhId));
+							//System.err.println("-- after hxr --");
 							break;
 						}
 						case "HXT":
 						{
 							hxSequence += ",HXT";
+							hxtCount++;
 							s.executeUpdate(CEHXTBean.getInsertStmtTo_ohip_mro_hxt(jo, ohipMroHx1Id, ohipMroHxhId));
-							sqlCmd = "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_hxt', 'ohip_mro_hxt_id'));";
-							rs = s.executeQuery(sqlCmd); 
+							rs = s.executeQuery(CEHXTBean.getSqlOfAutoIncrementId()); 
 							if (rs.next()) ohipMroHxtId = rs.getInt(1);
+							//System.err.println("-- after hxt --");
 							break;
 						}
 						case "HX8":
 						{
 							hxSequence += ",HX8";
+							hx8Count++;
 							s.executeUpdate(CEHX8Bean.getInsertStmtTo_ohip_mro_hx8(jo, ohipMroHx1Id, ohipMroHxhId, ohipMroHxtId));
+							//System.err.println("-- after hx8 --");
 							break;
 						}
 						case "HX9":
 						{
 							hxSequence += ",HX9";
+							if (!CEHX9Bean.isCountMatching(jo, hxhCount, hxrCount, hxtCount, hx8Count))
+								throw new Exception("Expected record counting not matching. -- Try again with the original! --");
 							s.executeUpdate(CEHX9Bean.getInsertStmtTo_ohip_mro_hx9(jo, ohipMroTxHistoryId, hxSequence));
+							//System.err.println("-- after hx9 --");
 							break;
 						}
 						default: 
 						{
-							throw new Exception("Unknown Transaction Identifier in Claim Error. -- Try again with the orignial!");
+							throw new Exception("Unknown Transaction Identifier in Claim Error. -- Try again with the orignial! --");
 						}
 							
 					}
 				}
 			}
 
-			c.rollback();
-			//c.commit();
+			//c.rollback();
+			c.commit();
 		}
 		catch (Exception e)
 		{

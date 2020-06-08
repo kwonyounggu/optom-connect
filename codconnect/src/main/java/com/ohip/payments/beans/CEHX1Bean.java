@@ -150,17 +150,23 @@ public class CEHX1Bean implements Serializable
 	}
 	public static String getInsertStmtTo_ohip_mro_hx1(JSONObject json, int ohip_mro_tx_history_id)
 	{
-		return "insert into ohip_mro_hr1 values(default, 'HX', '1', 'V03', " +
+		String sqlCmd = "insert into ohip_mro_hx1 values(default, 'HX', '1', 'V03', " +
 														"'" + json.getString("mohOfficeCode") + "', " +
 														"'" + json.getString("reservedForMOH1") + "', " +
 														"'" + json.getString("operatorNumber") + "', " +
 														"'" + json.getString("groupNumber") + "', " +
-														"" + json.getInt("providerNumber") + ", " +
+														"'" +  json.getString("providerNumber") + "', " +
 														"'" + json.getString("speciality") + "', " +
 														"'" + json.getString("stationNumber") + "', " +
 														"'" + json.getString("claimProcessDate") + "', " +
 													   "'" + json.getString("reservedForMOH2") + "', " +
-														     ohip_mro_tx_history_id + ");";											           
+														     ohip_mro_tx_history_id + ");";	
+		//System.err.println("[HX1 SQL]"+sqlCmd);
+		return sqlCmd;
+	}
+	public static String getSqlOfAutoIncrementId()
+	{
+		return "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_hx1', 'ohip_mro_hx1_id'));";
 	}
 	public void printRecord()
 	{

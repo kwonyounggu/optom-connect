@@ -104,16 +104,27 @@ public class CEHX9Bean implements Serializable
 	}
 	public static String getInsertStmtTo_ohip_mro_hx9(JSONObject json, int ohip_mro_tx_history_id, String hxSequence)
 	{
-		return "insert into ohip_mro_hx8 values(default, 'HX', '9', " +
+		String sqlCmd= "insert into ohip_mro_hx9 values(default, 'HX', '9', " +
 				"" + json.getInt("hxhCount") + ", " +
 				"" + json.getInt("hxrCount") + ", " +
 				"" + json.getInt("hxtCount") + ", " +
 				"" + json.getInt("hx8Count") + ", " +
 				"'" + json.getString("reservedForMOH") + "', " +
-				"'" + hxSequence + "', " +
-					  ohip_mro_tx_history_id + ");";									           
+					ohip_mro_tx_history_id + ", " +
+				"'" + hxSequence + "');";	
+		
+		//System.err.println("[HX9 SQL]"+sqlCmd);
+		return sqlCmd;
 	}
-
+    public static boolean isCountMatching(JSONObject jo, int hxhCount, int hxrCount, int hxtCount, int hx8Count)
+    {
+    	return (jo.getInt("hxhCount") == hxhCount &&
+    			jo.getInt("hxrCount") == hxrCount &&
+    			jo.getInt("hxtCount") == hxtCount &&
+    			jo.getInt("hx8Count") == hx8Count
+    		   );
+    }
+    
 	@Override
 	public String toString()
 	{

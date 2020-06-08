@@ -191,6 +191,10 @@ public class CEHXTBean implements Serializable
 					  ohip_mro_hx1_id + ", " +
 					  ohip_mro_hxh_id + ");";									           
 	}
+	public static String getSqlOfAutoIncrementId()
+	{
+		return "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_hxt', 'ohip_mro_hxt_id'));";
+	}
 	public void printRecord()
 	{
 
@@ -226,7 +230,7 @@ public class CEHXTBean implements Serializable
 			try
 			{
 				transactionIdentifier = "HX";
-				recordIdentifier = 'R';
+				recordIdentifier = 'T';
 				serviceCode = line.substring(3, 3+5).trim();
 				reservedForMOH1 = line.substring(8, 8+2).trim();
 				String temp = line.substring(10, 10+6).trim();

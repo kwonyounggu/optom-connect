@@ -163,53 +163,48 @@ public class UploadServlet extends HttpServlet
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	//**************************************************************************************************************************
-	//* Check if there exists HR1, HR2, HR3, HR4, HR5, HR8 which should be included all the time.
-	//**************************************************************************************************************************
+
 	private JSONArray handleClaimErrorFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken) throws IOException, Exception
 	{
 		JSONArray claminErrorJson = new JSONArray();
-
-		OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
-		
 		String line = reader.readLine();
 		for (int i=0; line != null; i++)
 		{
-			System.err.println("[LINE:" + i + " ], " + line);
+			//System.err.println("[LINE:" + i + " ], " + line);
 			if (line.startsWith("HX1"))
 			{
 				CEHX1Bean bean = new CEHX1Bean(line);
-				System.out.println(bean.toString());
+				//System.out.println(bean.toString());
 				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.startsWith("HXH"))
 			{
 				CEHXHBean bean = new CEHXHBean(line);
-				System.out.println(bean.toString());
+				//System.out.println(bean.toString());
 				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.startsWith("HXR"))
 			{
 				CEHXRBean bean = new CEHXRBean(line);
-				System.out.println(bean.toString());
+				//System.out.println(bean.toString());
 				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.startsWith("HXT"))
 			{
 				CEHXTBean bean = new CEHXTBean(line);
-				System.out.println(bean.toString());
+				//System.out.println(bean.toString());
 				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.startsWith("HX8"))
 			{
 				CEHX8Bean bean = new CEHX8Bean(line);
-				System.out.println(bean.toString());
+				//System.out.println(bean.toString());
 				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.startsWith("HX9"))
 			{
 				CEHX9Bean bean = new CEHX9Bean(line);
-				System.out.println(bean.toString());
+				//System.out.println(bean.toString());
 				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.trim().isEmpty() || line.startsWith("Content") || line.startsWith("---")) {}
@@ -220,27 +215,11 @@ public class UploadServlet extends HttpServlet
 			line = reader.readLine();
 		}
 		
-		try
-		{
-			//Check if the required records are existing minimally in the file.
-			/*
-			if (!(reportJson.has("hr1") && reportJson.has("hr2") && reportJson.has("hr3") && reportJson.has("hr8") &&
-				!reportJson.getJSONArray("hr4").isEmpty() && !reportJson.getJSONArray("hr5").isEmpty()))
-			{
-				throw new Exception("The minimal records are not in the file. -- Try again with the original!");
-			}
-			*/
-		}
-		catch(JSONException e)
-		{
-			log.severe("ERROR: " + e.getMessage());
-			throw new Exception(e.getMessage());
-		}
 		if (decodedToken != null)
 		{
 			//Check if the user allows data insertion in terms of auth_user_matrix_with_settings
 			//Insert into db
-			
+			OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
 			reportDao.insertClaimErrorData(claminErrorJson, fb, decodedToken);
 		
 		}

@@ -255,6 +255,10 @@ public class RVHR1Bean implements Serializable
 		
 														           
 	}
+	public static String getSqlOfAutoIncrementId()
+	{
+		return "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_hr1', 'ohip_mro_hr1_id'));";
+	}
 	public void printRecord()
 	{
 		System.out.println("Provider Number:, " + healthCareProvider);
