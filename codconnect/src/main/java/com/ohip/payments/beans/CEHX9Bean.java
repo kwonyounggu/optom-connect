@@ -102,7 +102,7 @@ public class CEHX9Bean implements Serializable
 		
 		return json;
 	}
-	public static String getInsertStmtTo_ohip_mro_hx9(JSONObject json, int ohip_mro_tx_history_id)
+	public static String getInsertStmtTo_ohip_mro_hx9(JSONObject json, int ohip_mro_tx_history_id, String hxSequence)
 	{
 		return "insert into ohip_mro_hx8 values(default, 'HX', '9', " +
 				"" + json.getInt("hxhCount") + ", " +
@@ -110,7 +110,7 @@ public class CEHX9Bean implements Serializable
 				"" + json.getInt("hxtCount") + ", " +
 				"" + json.getInt("hx8Count") + ", " +
 				"'" + json.getString("reservedForMOH") + "', " +
-
+				"'" + hxSequence + "', " +
 					  ohip_mro_tx_history_id + ");";									           
 	}
 

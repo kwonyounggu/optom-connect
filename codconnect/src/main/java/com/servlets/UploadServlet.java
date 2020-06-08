@@ -168,24 +168,10 @@ public class UploadServlet extends HttpServlet
 	//**************************************************************************************************************************
 	private JSONArray handleClaimErrorFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken) throws IOException, Exception
 	{
-		/*
-		JSONObject claminErrorJson = new JSONObject();
-		claminErrorJson.put("hx1", new JSONArray());
-		claminErrorJson.put("hxh", new JSONArray());
-		claminErrorJson.put("hxr", new JSONArray());
-		claminErrorJson.put("hxt", new JSONArray());
-		claminErrorJson.put("hx8", new JSONArray());
-		claminErrorJson.put("hx9", new JSONArray());
-		*/
 		JSONArray claminErrorJson = new JSONArray();
-		/*
-		JSONObject total = new JSONObject();
-		total.put("numberOfServices", 0);
-		total.put("amountSubmitted", 0.0);
-		total.put("amountPaid", 0.0);
-		
+
 		OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
-		*/
+		
 		String line = reader.readLine();
 		for (int i=0; line != null; i++)
 		{
@@ -226,76 +212,11 @@ public class UploadServlet extends HttpServlet
 				System.out.println(bean.toString());
 				claminErrorJson.put(bean.getJson());
 			}
-			/*
-			if (line.startsWith("HR1"))
-			{
-				RVHR1Bean hrBean = new RVHR1Bean(line);
-				//hrBean.printRecord();
-				
-				if (fb.getfNumber().length()==4 && !hrBean.getGroupNumber().equals(fb.getfNumber()))
-					throw new Exception("Group number is not matching. -- Try again with the original!");
-				else if (fb.getfNumber().length()==6 && hrBean.getHealthCareProvider() != fb.getfNumberInt())
-					throw new Exception("Provider number is not matching. -- Try again with the original!");
-				else if (hrBean.getSpeciality() != 56)
-					throw new Exception("The remittance advice report is only for eye doctors (O.D)!");
-				reportJson.put("hr1", hrBean.getJson());
-			}
-			else if (line.startsWith("HR2"))
-			{
-				RVHR2Bean hrBean = new RVHR2Bean(line);
-				//hrBean.printRecord();
-				reportJson.put("hr2", hrBean.getJson());
-			}
-			else if (line.startsWith("HR3"))
-			{
-				RVHR3Bean hrBean = new RVHR3Bean(line);
-				//hrBean.printRecord();
-				reportJson.put("hr3", hrBean.getJson());
-			}
-			else if (line.startsWith("HR4"))
-			{
-				RVHR4Bean hrBean = new RVHR4Bean(line);
-				//hrBean.printRecord();
-				reportJson.getJSONArray("hr4").put(hrBean.getJson());
-			}
-			else if (line.startsWith("HR5"))
-			{
-				RVHR5Bean hrBean = new RVHR5Bean(line);
-				total.put("numberOfServices", total.getInt("numberOfServices") + hrBean.getNumberOfServices());
-				total.put("amountSubmitted", total.getFloat("amountSubmitted") + hrBean.getAmountSubmitted());
-				total.put("amountPaid", total.getFloat("amountPaid") + hrBean.getAmountPaid());
-				//hrBean.printRecord();
-				JSONObject hr5Json = hrBean.getJson();
-				reportJson.getJSONArray("hr5").put(hr5Json);
-				
-				// This way more than one item with a claim header can be in the list
-				// from such as HR4, HR5, HR5, HR5.
-				JSONArray hr4Array = reportJson.getJSONArray("hr4");
-				JSONObject hr4Json = (JSONObject)hr4Array.get(hr4Array.length() - 1);
-			}
-			else if (line.startsWith("HR6"))
-			{
-				RVHR6Bean hrBean = new RVHR6Bean(line);
-				//hrBean.printRecord();
-				reportJson.put("hr6", hrBean.getJson());
-			}
-			else if (line.startsWith("HR7"))
-			{
-				RVHR7Bean hrBean = new RVHR7Bean(line);
-				//hrBean.printRecord();
-				reportJson.put("hr7", hrBean.getJson());
-			}
-			else if (line.startsWith("HR8"))
-			{
-				RVHR8Bean hrBean = new RVHR8Bean(line);
-				//hrBean.printRecord();
-				reportJson.getJSONArray("hr8").put(hrBean.getJson());
-			}
 			else if (line.trim().isEmpty() || line.startsWith("Content") || line.startsWith("---")) {}
 			else
 			{
 				throw new Exception("The file content is corrupted. -- Please try again with the original!");
-			}*/
+			}
 			line = reader.readLine();
 		}
 		
@@ -320,7 +241,7 @@ public class UploadServlet extends HttpServlet
 			//Check if the user allows data insertion in terms of auth_user_matrix_with_settings
 			//Insert into db
 			
-			//reportDao.insertRAData(reportJson, fb, decodedToken);
+			reportDao.insertClaimErrorData(claminErrorJson, fb, decodedToken);
 		
 		}
 
