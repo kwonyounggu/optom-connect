@@ -89,7 +89,7 @@ const MyBreadcrumbs = (props) =>
 }
 
 const MRO_MAX_FILE_SIZE = 1000000;
-const EXPECTED_FILE_NAME = /(^[EFPX]{1})+([ABCDEFGHIJKL]{1})+([0-9]{4,6})+(.\d{3})$/;
+const EXPECTED_FILE_NAME = /(^[BEFPX]{1})+([ABCDEFGHIJKL]{1})+([0-9]{4,6})+(.\d{3})$/;
 class ConvertMROtoCSV extends React.Component
 {
 	constructor(props)
