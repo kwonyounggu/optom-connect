@@ -101,9 +101,9 @@ public class UploadServlet extends HttpServlet
 				//if (fb.getfType() == 'P')
 				switch (fb.getfType())
 				{
-					case 'P':  
+					case 'B':  
 					{
-						returnJson.put("report", handleRemittanceAdviceFile(reader, fb, decodedToken)); 
+						returnJson.put("batchEdit", handleBatchEditFile(reader, fb, decodedToken)); 
 						break;
 					}
 					case 'E':  
@@ -111,7 +111,11 @@ public class UploadServlet extends HttpServlet
 					{
 						returnJson.put("claimError", handleClaimErrorFile(reader, fb, decodedToken)); 
 						break;
-						//throw new Exception("Error files are not ready to handle yet. -- Try it later!"); 
+					}
+					case 'P':  
+					{
+						returnJson.put("report", handleRemittanceAdviceFile(reader, fb, decodedToken)); 
+						break;
 					}
 					case 'X':  
 					{
@@ -163,7 +167,39 @@ public class UploadServlet extends HttpServlet
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+	private JSONArray handleBatchEditFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken) throws IOException, Exception
+	{
+		JSONArray batchEditJson = new JSONArray();//upto three records such as hcp/wcb totals, rmb totals, batch totals
+		String line = reader.readLine();
+		for (int i=0; line != null; i++)
+		{
+			//System.err.println("[LINE:" + i + " ], " + line);
+			if (line.startsWith("HB1"))
+			{
+				BEHB1Bean bean = new BEHB1Bean(line);
+				System.out.println(bean.toString());
+				batchEditJson.put(bean.getJson());
+			}
 
+			else if (line.trim().isEmpty() || line.startsWith("Content") || line.startsWith("---")) {}
+			else
+			{
+				throw new Exception("The file content is corrupted. -- Please try again with the original!");
+			}
+			line = reader.readLine();
+		}
+		
+		if (decodedToken != null)
+		{
+			//Check if the user allows data insertion in terms of auth_user_matrix_with_settings
+			//Insert into db
+			//OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
+			//reportDao.insertClaimErrorData(claminErrorJson, fb, decodedToken);
+		
+		}
+
+		return batchEditJson;
+	}
 	private JSONArray handleClaimErrorFile(BufferedReader reader, FileInfoBean fb, JSONObject decodedToken) throws IOException, Exception
 	{
 		JSONArray claminErrorJson = new JSONArray();
