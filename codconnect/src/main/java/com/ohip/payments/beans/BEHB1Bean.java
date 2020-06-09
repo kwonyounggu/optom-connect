@@ -1,6 +1,9 @@
 package com.ohip.payments.beans;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,7 +35,7 @@ public class BEHB1Bean implements Serializable
 	private String groupNumber = "0000";
 	private String providerNumber = "000000";
 	private int numberOfClaims = -1;
-	private int numberofRecords = -1;
+	private int numberOfRecords = -1;
 	private Date batchProcessDate = null;
 	private String editMessage = "";
 	private String reservedForMOH = ""; 
@@ -153,11 +156,11 @@ public class BEHB1Bean implements Serializable
 	}
 	public int getNumberofRecords()
 	{
-		return numberofRecords;
+		return numberOfRecords;
 	}
-	public void setNumberofRecords(int numberofRecords)
+	public void setNumberofRecords(int numberOfRecords)
 	{
-		this.numberofRecords = numberofRecords;
+		this.numberOfRecords = numberOfRecords;
 	}
 	public Date getBatchProcessDate()
 	{
@@ -197,28 +200,57 @@ public class BEHB1Bean implements Serializable
 		json.put("groupNumber", groupNumber);
 		json.put("providerNumber", providerNumber);
 		json.put("numberOfClaims", numberOfClaims);
-		json.put("numberofRecords", numberofRecords);
+		json.put("numberOfRecords", numberOfRecords);
 		json.put("batchProcessDate", simpleDate.format(batchProcessDate));
 		json.put("editMessage", editMessage);
 		json.put("reservedForMOH", reservedForMOH);
 
 		return json;
 	}
-	public static String getInsertStmtTo_ohip_mro_hx1(JSONObject json, int ohip_mro_tx_history_id)
+	public static String getInsertStmtTo_ohip_mro_hb1(JSONObject json, int ohip_mro_tx_history_id)
 	{
-		String sqlCmd = "insert into ohip_mro_hx1 values(default, 'HX', '1', 'V03', " +
-														"'" + json.getString("mohOfficeCode") + "', " +
-														"'" + json.getString("reservedForMOH1") + "', " +
+		String sqlCmd = "insert into ohip_mro_hb1 values(default, 'HB', '1', 'V03', " +
+														"'" + json.getString("batchNumber") + "', " +
 														"'" + json.getString("operatorNumber") + "', " +
+														"'" + json.getString("batchCreateDate") + "', " +
+														"'" + json.getString("batchSequenceNumber") + "', " +
+														"'" + json.getString("microStart") + "', " +
+														"'" + json.getString("microEnd") + "', " +
+														"'" + json.getString("microType") + "', " + // slash inside makes a problem in insertion
 														"'" + json.getString("groupNumber") + "', " +
-														"'" +  json.getString("providerNumber") + "', " +
-														"'" + json.getString("speciality") + "', " +
-														"'" + json.getString("stationNumber") + "', " +
-														"'" + json.getString("claimProcessDate") + "', " +
-													   "'" + json.getString("reservedForMOH2") + "', " +
+														"'" + json.getString("providerNumber") + "', " +
+														 "" + json.getInt("numberOfClaims") + ", " +
+														 "" + json.getInt("numberOfRecords") + ", " +
+														"'" + json.getString("batchProcessDate") + "', " +
+														"'" +  json.getString("editMessage") + "', " +
+													    "'" + json.getString("reservedForMOH") + "', " +
 														     ohip_mro_tx_history_id + ");";	
-		//System.err.println("[HX1 SQL]"+sqlCmd);
+		System.err.println("[HB1 SQL]"+sqlCmd);
 		return sqlCmd;
+	}
+	public static PreparedStatement getInsertStmtTo_ohip_mro_hb1(Connection c, JSONObject json, int ohip_mro_tx_history_id) throws SQLException, Exception
+	{
+		String sqlCmd = "insert into ohip_mro_hb1 values(default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)";
+		PreparedStatement ps = c.prepareStatement(sqlCmd);
+		ps.setString(1, "HB");
+		ps.setString(2, "1");
+		ps.setString(3, "V03");
+		ps.setString(4, json.getString("batchNumber") );
+		ps.setString(5, json.getString("operatorNumber"));
+		ps.setDate(6, java.sql.Date.valueOf(json.getString("batchCreateDate").replace("/", "-")));
+		ps.setString(7, json.getString("batchSequenceNumber"));
+		ps.setString(8, json.getString("microStart"));
+		ps.setString(9, json.getString("microEnd"));
+		ps.setString(10, json.getString("microType"));
+		ps.setString(11, json.getString("groupNumber"));
+		ps.setString(12, json.getString("providerNumber"));
+		ps.setInt(13, json.getInt("numberOfClaims"));
+		ps.setInt(14, json.getInt("numberOfRecords"));
+		ps.setDate(15, java.sql.Date.valueOf(json.getString("batchProcessDate").replace("/", "-")));
+		ps.setString(16, json.getString("editMessage"));
+		ps.setString(17, json.getString("reservedForMOH"));
+		ps.setInt(18, ohip_mro_tx_history_id);
+		return ps;
 	}
 	public static String getSqlOfAutoIncrementId()
 	{
@@ -236,7 +268,7 @@ public class BEHB1Bean implements Serializable
 				+ ", operatorNumber=" + operatorNumber + ", batchCreateDate=" + batchCreateDate + ", batchSequenceNumber="
 				+ batchSequenceNumber + ", microStart=" + microStart + ", microEnd=" + microEnd + ", microType="
 				+ microType + ", groupNumber=" + groupNumber + ", providerNumber=" + providerNumber
-				+ ", numberOfClaims=" + numberOfClaims + ", numberofRecords=" + numberofRecords + ", batchProcessDate="
+				+ ", numberOfClaims=" + numberOfClaims + ", numberOfRecords=" + numberOfRecords + ", batchProcessDate="
 				+ batchProcessDate + ", editMessage=" + editMessage + ", reservedForMOH=" + reservedForMOH + "]";
 	}
 	//Occurs Once in every file - always the first record
@@ -274,7 +306,7 @@ public class BEHB1Bean implements Serializable
 				groupNumber = line.substring(52, 52+4).trim();
 				providerNumber = line.substring(56, 56+6).trim();
 				numberOfClaims = Integer.parseInt(line.substring(62, 62+5));
-				numberofRecords = Integer.parseInt(line.substring(67, 67+6));
+				numberOfRecords = Integer.parseInt(line.substring(67, 67+6));
 				temp = line.substring(73, 73+8).trim();
 				if (temp.length() == 8)
 					batchProcessDate = new SimpleDateFormat("yyyy/MM/dd").parse(line.substring(73, 73+4)+"/"+line.substring(77, 77+2)+"/"+line.substring(79, 79+2));

@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import com.beans.MusicTracksBean;
 import com.exceptions.DAOException;
+import com.ohip.payments.beans.BEHB1Bean;
 import com.ohip.payments.beans.CEHX1Bean;
 import com.ohip.payments.beans.CEHX8Bean;
 import com.ohip.payments.beans.CEHX9Bean;
@@ -294,6 +295,82 @@ public class OHIPReportDao
 			closeStatement(s);
 			closeConnection(c);
 			log.info("Ending for insertClaimErrorData(...)");
+		}
+		return true;
+	}
+	@SuppressWarnings(
+		"resource"
+	)
+	public boolean insertBatchEditData(JSONArray jsonData, FileInfoBean fb, JSONObject token) throws DAOException
+	{
+		Connection c = null;
+		Statement s=null;
+		ResultSet rs=null;
+		try
+		{
+			c = _ds.getConnection();
+			c.setAutoCommit(false);
+			
+			s = c.createStatement();
+			String sqlCmd = "";
+			
+			// ********** GET AUTH_USER_ACCOUNT_ID **********
+			if (token.getString("sub").equals("internalLogin"))
+				sqlCmd = "select id from auth_user_account where auth_user_details_internal_id=" +
+						    "(select id from auth_user_details_internal where email='" + token.getString("jti") + "');";
+			else if (token.getString("sub").equals("externalLogin"))
+				sqlCmd = "select auth_user_account_id from auth_user_external_login where email='" + token.getString("jti") + "';";
+			else
+				throw new DAOException("Unknown subject of token out of expecting 'internalLogin' or 'externalLogin'");
+
+			rs = s.executeQuery(sqlCmd);
+			if (rs.next()) token.put("authUserAccountId", rs.getInt(1));
+			else throw new DAOException("Oops DB corrupted, please logout and login. -- Do it again!");
+			rs = s.executeQuery(fb.getSqlIfArecordExists(token.getInt("authUserAccountId")));
+			if (rs.next())
+			{
+				//There is already file info in the tables so update it, do it later for updating hr1 to hr8 and ohip_mro_tx_history
+			}
+			else
+			{
+				int ohipMroTxHistoryId = -1;
+
+				s.executeUpdate(fb.getInsertStmtTo_ohip_mro_tx_history(token.getInt("authUserAccountId")));
+				rs = s.executeQuery(fb.getSqlOfAutoIncrementId()); //to have ohip_mro_tx_history_id into the ohip_mro_hr1 as a fk.
+				
+				if (rs.next()) ohipMroTxHistoryId = rs.getInt(1);
+				for (int i=0, size=jsonData.length(); i < size; i++)
+				{
+					JSONObject jo = jsonData.getJSONObject(i);
+					//s.executeUpdate(BEHB1Bean.getInsertStmtTo_ohip_mro_hb1(jo, ohipMroTxHistoryId));
+					int count = BEHB1Bean.getInsertStmtTo_ohip_mro_hb1(c, jo, ohipMroTxHistoryId).executeUpdate();
+					//System.err.println("count="+count);
+				}
+			}
+
+			//c.rollback();
+			c.commit();
+		}
+		catch (Exception e)
+		{
+			log.severe("[Exception thrown in insertBatchEditData(..)]: " + e.getMessage());
+			e.printStackTrace();
+			try
+			{
+				c.rollback();
+			}
+			catch(Exception rbe)
+			{
+				log.severe("Rollback failed: " + rbe.getMessage());
+			}
+			throw new DAOException(e);
+		}
+		finally
+		{
+			closeResultSet(rs);
+			closeStatement(s);
+			closeConnection(c);
+			log.info("Ending for insertBatchEditData(...)");
 		}
 		return true;
 	}

@@ -173,7 +173,6 @@ public class UploadServlet extends HttpServlet
 		String line = reader.readLine();
 		for (int i=0; line != null; i++)
 		{
-			//System.err.println("[LINE:" + i + " ], " + line);
 			if (line.startsWith("HB1"))
 			{
 				BEHB1Bean bean = new BEHB1Bean(line);
@@ -193,8 +192,8 @@ public class UploadServlet extends HttpServlet
 		{
 			//Check if the user allows data insertion in terms of auth_user_matrix_with_settings
 			//Insert into db
-			//OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
-			//reportDao.insertClaimErrorData(claminErrorJson, fb, decodedToken);
+			OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
+			reportDao.insertBatchEditData(batchEditJson, fb, decodedToken);
 		
 		}
 
