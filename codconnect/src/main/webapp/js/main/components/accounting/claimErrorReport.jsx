@@ -50,7 +50,7 @@ class ClaimErrorReport extends React.Component
 			csvData_2: generateRA2(props.data.report, currency)
 			*/
 		}
-		this.sequenceCount = 0;
+		//this.sequenceCount = 0;
 	}
 	componentDidMount()
 	{
@@ -79,16 +79,16 @@ class ClaimErrorReport extends React.Component
 					</Grid>
 					<Grid item xs={12}>&nbsp;</Grid>
 					<Grid item xs={6}>
-					    <span><strong>OPERATOR NUMBER:</strong>&nbsp;{hx1.operatorNumber}</span>
+					    <span><strong>OPERATOR NUMBER:</strong>&nbsp;{hx1.operatorNumber == "000000" ? "" : hx1.operatorNumber}</span>
 			        </Grid>
 					<Grid item xs={6}>
 			           <span><strong>PROVIDER NUMBER:</strong>&nbsp;{hx1.providerNumber}</span>
 			        </Grid>
 					<Grid item xs={6}>
-					    <span><strong>STATION NUMBER:</strong>&nbsp;{hx1.stationNumber == "000000" ? "N/A": hx1.stationNumber}</span>
+					    <span><strong>STATION NUMBER:</strong>&nbsp;{hx1.stationNumber == "000000" ? "": hx1.stationNumber}</span>
 			        </Grid>
 					<Grid item xs={6}>
-			           <span><strong>GROUP NUMBER:</strong>&nbsp;{hx1.groupNumber == "0000" ? "N/A": hx1.groupNumber}</span>
+			           <span><strong>GROUP NUMBER:</strong>&nbsp;{hx1.groupNumber == "0000" ? "": hx1.groupNumber}</span>
 			        </Grid>
 					<Grid item xs={6}>
 					    <span><strong>SPCIALITY CODE:</strong>&nbsp;{hx1.speciality}</span>
@@ -116,7 +116,7 @@ class ClaimErrorReport extends React.Component
 			           <span><strong>VERSION CODE:</strong>&nbsp;{obj.versionCode}</span>
 			        </Grid>
 					<Grid item xs={6}>
-					    <span><strong>PATIENT BIRTHDATE:</strong>&nbsp;{obj.patientBirthdate}</span>
+					    <span><strong>PATIENT BIRTHDATE:</strong>&nbsp;{obj.patientBirthdate == "1111/11/11" ? "": obj.patientBirthdate}</span>
 			        </Grid>
 					<Grid item xs={6}>
 			           <span><strong>ACCOUNTING NUMBER:</strong>&nbsp;{obj.accountingNumber}</span>
@@ -134,7 +134,7 @@ class ClaimErrorReport extends React.Component
 			           <span><strong>MASTER NUMBER:</strong>&nbsp;{obj.masterNumber}</span>
 			        </Grid>
 					<Grid item xs={6}>
-					    <span><strong>PAYTIENT ADMISSION DATE:</strong>&nbsp;{obj.patientAdmissionDate}</span>
+					    <span><strong>PAYTIENT ADMISSION DATE:</strong>&nbsp;{obj.patientAdmissionDate == "1111/11/11" ? "": obj.patientAdmissionDate}</span>
 			        </Grid>
 					<Grid item xs={6}>
 			           <span><strong>REFERRING LAB LICENCE:</strong>&nbsp;{obj.referringLabLicence}</span>
@@ -323,7 +323,7 @@ class ClaimErrorReport extends React.Component
 				)
 			}
 				<Grid item xs={12}>
-					<span style={{fontSize: "12px", color: "grey"}}>{"The report is generated from "}{this.props.data.fileInfo.fileName}{"."}</span>
+					<span style={{paddingLeft: "20px", fontSize: "12px", color: "grey"}}>{"The report is generated from "}{this.props.data.fileInfo.fileName}{"."}</span>
 				</Grid>
 			</Grid>
 			   )

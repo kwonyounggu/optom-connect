@@ -22,6 +22,7 @@ import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
 
 import RAReport from "./raReport.jsx";
 import ClaimErrorReport from "./claimErrorReport.jsx";
+import BatchEditReport from "./batchEditReport.jsx";
 
 const styles = (theme) =>
 ({
@@ -119,14 +120,6 @@ class ConvertMROtoCSV extends React.Component
 		//if (this.props.rootReducer.convertFetched && this.props.rootReducer.data.isItValid) this.props.resetMROData();
 
 	}
-	/*static getDerivedStateFromProps(nextProps, prevState) 
-	{
-		if (nextProps.rootReducer.convertFetched && nextProps.rootReducer.data.isItValid)
-	 	{
-			console.log("[INFO getDerivedStateFromProps of convertMROtoCSV.jsx] called. DATA RECEIVED NOW !!");
-		}
-		return{};
-	}*/
 	componentDidUpdate(prevProps, prevState)
 	{
 		console.log("[INFO componentDidUpdate(...) of convertMROtoCSV.jsx] nextProps.rootReducer: " , prevProps.rootReducer);
@@ -176,7 +169,10 @@ class ConvertMROtoCSV extends React.Component
 						  pageHeader = "Claim Error Report";
 						  break;
 				case "B":
+						  report = <BatchEditReport ref={(el) => (this.reportRef = el)} data={rootReducer.data} resetMROData={this.props.resetMROData}/>;
+						  pageHeader = "Batch Edit Report";
 						  break;
+				case "X": break;
 				default: break;
 			}
 		return (  
