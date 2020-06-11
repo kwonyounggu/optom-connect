@@ -7,6 +7,7 @@ import {convertMroToCSV, resetMROData} from "../actions/rootActions.jsx";
 import {addAlertMessage} from "../actions/alertMessageActions.jsx";
 
 const ConvertMROtoCSV = React.lazy( () => import("../components/accounting/convertMROtoCSV.jsx") );
+const OHIPBilling = React.lazy( () => import("../components/accounting/ohipBilling.jsx") );
 /*
  * flex-direction: row | row-reverse | column | column-reverse;
  * backgroundColor: 'white',
@@ -61,7 +62,20 @@ class Accounting extends React.Component
                     <Switch>
 						<Route exact path="/accounting"  ><h3>show avaliable links for accouting sections</h3></Route>
 						<Route exact path="/accounting/ohip"  ><h3>provide what ohip section is providing</h3></Route>
-						<Route path="/accounting/ohip/billing"  ><h3>provide ohip billing component</h3></Route>
+						<Route path="/accounting/ohip/billing"
+							component=
+							   { 
+									(props) => 
+									
+									<OHIPBilling {...props} 
+										auth={this.props.auth} 
+										rootReducer={this.props.rootReducer} 
+										convertMroToCSV={this.props.convertMroToCSV} 
+										addAlertMessage={this.props.addAlertMessage}
+										resetMROData={this.props.resetMROData}
+									/> 
+								} 
+						/>
 						<Route path="/accounting/ohip/convert"  
 							   component=
 							   { 

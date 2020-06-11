@@ -142,6 +142,9 @@ class ConvertMROtoCSV extends React.Component
 			}
 		);
 	}
+	/*
+		Note that you can use the 'Backdrop' component in order to show a progressing.
+	*/
 	onConvertButtonClick = () =>
 	{
 		this.setState({converting: true});
