@@ -8,8 +8,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import AlbumIcon from '@material-ui/icons/Album';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
@@ -18,9 +16,7 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import SvgIcon from '@material-ui/core/SvgIcon';
 
-import { green } from '@material-ui/core/colors';
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import { ListItemIcon } from '@material-ui/core';
 

@@ -7,6 +7,8 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import DescriptionIcon from '@material-ui/icons/Description';
+import LanguageIcon from '@material-ui/icons/Language';
 
 import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
 import {menuLinks} from "../common/menuLinks.jsx";
@@ -17,7 +19,11 @@ const styles = (theme) =>
 			root: 
 			{
 		    	flexGrow: 1
-		  	}
+		  	},
+			activeItem:
+		  {
+			color: "blue"
+		  }
 	}
 );
 
@@ -52,6 +58,7 @@ class OHIPBilling extends React.Component
 		//console.log("INFO constructor() of OHIPBilling.jsx: ", props);
 		this.state = 
 		{
+			index: 0
 		}
 	}
 	componentDidMount()
@@ -79,17 +86,27 @@ class OHIPBilling extends React.Component
 		const {classes, rootReducer, location} = this.props;
 
 		return ( <React.Fragment>
-				   <Paper square className={classes.root}>
-				      <Tabs
+				   
+				      <Tabs 
 				        value={location.pathname}
 					    variant="fullWidth"
 				        indicatorColor="primary"
 				        textColor="primary"
 				      >
-				        <Tab label="BY CLAIM FILE" value={menuLinks[4]} component={Link} to={menuLinks[4]}/>
-				        <Tab label="BY WEBSERVICE" value={menuLinks[4]+"/wsdl"} component={Link} to={menuLinks[4]+"/wsdl"}/>
+				        <Tab style={
+										(location.pathname == menuLinks[4]) ? 
+										{border: '1px solid grey', borderRadius: '6px 6px 0px 0px'} :
+										{borderBottom: '1px solid grey'}
+									}
+								    label={<span><DescriptionIcon fontSize="inherit"/>	&nbsp;&nbsp;BY CLAIM FILE</span>} value={menuLinks[4]} component={Link} to={menuLinks[4]}/>
+				        <Tab style={
+										(location.pathname == menuLinks[11]) ? 
+										{border: '1px solid grey', borderRadius: '6px 6px 0px 0px'} :
+										{borderBottom: '1px solid grey'}
+									}
+									label={<span><DescriptionIcon fontSize="inherit"/>	&nbsp;&nbsp;BY WEBSERVICE</span>} value={menuLinks[4]+"/wsdl"} component={Link} to={menuLinks[4]+"/wsdl"}/>
 				      </Tabs>
-				   </Paper>
+				   
 					
 					{
 						(location.pathname == menuLinks[4]) && <div>here one</div>
