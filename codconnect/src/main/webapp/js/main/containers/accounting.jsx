@@ -47,16 +47,17 @@ class Accounting extends React.Component
 	render()
 	{
 		console.log("INFO: Accounting.render() is called, this.props: ", this.props);
-		let pathname = this.props.location.pathname.toLowerCase();
+		/*let pathname = this.props.location.pathname.toLowerCase();
 		
 		switch(pathname)
 		{
 			case "/accounting":
 			case "/accounting/bill":
+			case "/accounting/bill/wsdl":
 			case "/accounting/nonohip": break;
-			default: { pathname = "/accounting"; break;}
+			//default: { pathname = "/accounting"; break;}
 		}
-		
+		*/
 		return(	
 				<div >
                     <Switch>

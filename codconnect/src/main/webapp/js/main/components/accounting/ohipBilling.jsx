@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -8,7 +9,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
-
+import {menuLinks} from "../common/menuLinks.jsx";
 
 const styles = (theme) =>
 (
@@ -51,7 +52,6 @@ class OHIPBilling extends React.Component
 		//console.log("INFO constructor() of OHIPBilling.jsx: ", props);
 		this.state = 
 		{
-			tabSelected: 0
 		}
 	}
 	componentDidMount()
@@ -76,28 +76,28 @@ class OHIPBilling extends React.Component
 	render()
 	{
 		console.log("INFO:OHIPBilling.jsx.render() is called, this.props: ", this.props);
-		const {classes, rootReducer} = this.props;
+		const {classes, rootReducer, location} = this.props;
 
 		return ( <React.Fragment>
-				   <Paper square>
+				   <Paper square className={classes.root}>
 				      <Tabs
-				        value={this.state.tabSelected}
+				        value={location.pathname}
+					    variant="fullWidth"
 				        indicatorColor="primary"
 				        textColor="primary"
-				        onChange={(e, v)=>this.setState({tabSelected: v})}
-				        aria-label="disabled tabs example"
 				      >
-				        <Tab label="Generate a billing file" value={0} />
-				        <Tab label="Billing through WebService" value={1} />
+				        <Tab label="BY CLAIM FILE" value={menuLinks[4]} component={Link} to={menuLinks[4]}/>
+				        <Tab label="BY WEBSERVICE" value={menuLinks[4]+"/wsdl"} component={Link} to={menuLinks[4]+"/wsdl"}/>
 				      </Tabs>
 				   </Paper>
 					
 					{
-						this.state.tabSelected == 0 && <div>here one</div>
+						(location.pathname == menuLinks[4]) && <div>here one</div>
 					}
 					{
-						this.state.tabSelected == 1 && <div>here two</div>
+						(location.pathname == menuLinks[11]) && <div>here two</div>
 					}
+
 				</React.Fragment>
 				);
 	}

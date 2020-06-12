@@ -10,5 +10,6 @@ export const menuLinks =
 	"/accounting/non-ohip/billing", //[7]
 	"/accounting/non-ohip/myrecord", //[8]
 	"/referrals", //[9]
-	"/about"  //[10]
+	"/about",  //[10]
+	"/accounting/ohip/billing/wsdl", //[11]
 ];

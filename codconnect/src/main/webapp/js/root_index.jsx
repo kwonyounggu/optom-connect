@@ -56,7 +56,7 @@ const styles =
 	gridPanel: 
 	{
 		padding: 8,
-		border: '1px solid red',
+		border: '0px solid red',
 		borderRadius: '8px'
 	}
 };
