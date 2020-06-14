@@ -12,6 +12,7 @@ import LanguageIcon from '@material-ui/icons/Language';
 
 import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
 import {menuLinks} from "../common/menuLinks.jsx";
+import FileClaimBilling from "./fileClaimBilling.jsx";
 
 const styles = (theme) =>
 (
@@ -20,10 +21,10 @@ const styles = (theme) =>
 			{
 		    	flexGrow: 1
 		  	},
-			activeItem:
-		  {
-			color: "blue"
-		  }
+			indicator: 
+			{
+			    backgroundColor: 'transparent'
+		    }
 	}
 );
 
@@ -58,7 +59,6 @@ class OHIPBilling extends React.Component
 		//console.log("INFO constructor() of OHIPBilling.jsx: ", props);
 		this.state = 
 		{
-			index: 0
 		}
 	}
 	componentDidMount()
@@ -77,7 +77,7 @@ class OHIPBilling extends React.Component
 	}
 	componentDidUpdate(prevProps, prevState)
 	{
-		console.log("[INFO componentDidUpdate(...) of convertMROtoCSV.jsx] nextProps.rootReducer: " , prevProps.rootReducer);
+		console.log("[INFO componentDidUpdate(...) of OHIPBilling.jsx] nextProps.rootReducer: " , prevProps.rootReducer);
 	}
 
 	render()
@@ -90,26 +90,29 @@ class OHIPBilling extends React.Component
 				      <Tabs 
 				        value={location.pathname}
 					    variant="fullWidth"
-				        indicatorColor="primary"
 				        textColor="primary"
+						classes={{indicator: classes.indicator}}
 				      >
 				        <Tab style={
 										(location.pathname == menuLinks[4]) ? 
-										{border: '1px solid grey', borderRadius: '6px 6px 0px 0px'} :
+										{borderLeft: '1px solid grey', borderTop: '1px solid grey', borderRight: '1px solid grey', borderRadius: '6px 6px 0px 0px'} :
 										{borderBottom: '1px solid grey'}
 									}
-								    label={<span><DescriptionIcon fontSize="inherit"/>	&nbsp;&nbsp;BY CLAIM FILE</span>} value={menuLinks[4]} component={Link} to={menuLinks[4]}/>
+								    label={<span><DescriptionIcon fontSize="inherit"/>	&nbsp;&nbsp;BY FILE CLAIM</span>} value={menuLinks[4]} component={Link} to={menuLinks[4]}/>
 				        <Tab style={
 										(location.pathname == menuLinks[11]) ? 
-										{border: '1px solid grey', borderRadius: '6px 6px 0px 0px'} :
+										{borderLeft: '1px solid grey', borderTop: '1px solid grey', borderRight: '1px solid grey', borderRadius: '6px 6px 0px 0px'} :
 										{borderBottom: '1px solid grey'}
 									}
-									label={<span><DescriptionIcon fontSize="inherit"/>	&nbsp;&nbsp;BY WEBSERVICE</span>} value={menuLinks[4]+"/wsdl"} component={Link} to={menuLinks[4]+"/wsdl"}/>
+									label={<span><LanguageIcon fontSize="inherit"/>	&nbsp;&nbsp;BY WEBSERVICE</span>} value={menuLinks[4]+"/wsdl"} component={Link} to={menuLinks[4]+"/wsdl"}/>
 				      </Tabs>
 				   
 					
 					{
-						(location.pathname == menuLinks[4]) && <div>here one</div>
+						(location.pathname == menuLinks[4]) && 
+						<div style={{borderLeft: '1px solid grey', borderRight: '1px solid grey', borderBottom: '1px solid grey', padding: '20px'}}> 
+							<FileClaimBilling />
+						</div>
 					}
 					{
 						(location.pathname == menuLinks[11]) && <div>here two</div>
