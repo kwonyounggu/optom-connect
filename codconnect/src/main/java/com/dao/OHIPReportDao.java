@@ -374,6 +374,65 @@ public class OHIPReportDao
 		}
 		return true;
 	}
+	@SuppressWarnings(
+		"resource"
+	)
+	public JSONObject getBillingCodes() throws Exception
+	{
+		log.info("Begining for getBillingCodes()");
+		
+		Connection c = null;
+		Statement s = null;
+		ResultSet rs = null;
+		JSONObject retObj = new JSONObject();
+		retObj.put("serviceCodes", new JSONArray());
+		retObj.put("diagnoticCodes", new JSONArray());
+		
+		try
+		{
+			c = _ds.getConnection();
+			s = c.createStatement();
+
+			rs = s.executeQuery("select * from ohip_service_codes");
+			JSONArray serviceCodes = retObj.getJSONArray("serviceCodes");
+			
+			while (rs.next())
+			{
+				JSONObject jObj = new JSONObject();
+				jObj.put("code", rs.getString(1));
+				jObj.put("description", rs.getString(2));
+				jObj.put("fee", rs.getFloat(3));
+
+				serviceCodes.put(jObj);
+			}	
+			
+			rs = s.executeQuery("select * from ohip_diagnostic_codes");
+			JSONArray diagnosticCodes = retObj.getJSONArray("diagnoticCodes");
+			
+			while (rs.next())
+			{
+				JSONObject jObj = new JSONObject();
+				jObj.put("code", rs.getString(1));
+				jObj.put("description", rs.getString(2));
+
+				diagnosticCodes.put(jObj);
+			}
+			
+		}
+		catch (SQLException e)
+		{
+			log.severe(e.getMessage());
+			throw new DAOException(e);
+		}
+		finally
+		{
+			closeResultSet(rs);
+			closeStatement(s);
+			closeConnection(c);
+			log.info("Ending for getBillingCodes()");
+		}
+		return retObj;
+	}
 	public Object queryObject(String sql) throws DAOException
 	{
 			log.info("Begining for queryObject("+sql+")");

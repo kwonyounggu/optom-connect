@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {Route, Switch} from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import {connect} from "react-redux";
-import {convertMroToCSV, resetMROData} from "../actions/rootActions.jsx";
+import {convertMroToCSV, resetMROData, getBillingCodes} from "../actions/rootActions.jsx";
 import {addAlertMessage} from "../actions/alertMessageActions.jsx";
 
 const ConvertMROtoCSV = React.lazy( () => import("../components/accounting/convertMROtoCSV.jsx") );
@@ -71,9 +71,8 @@ class Accounting extends React.Component
 									<OHIPBilling {...props} 
 										auth={this.props.auth} 
 										rootReducer={this.props.rootReducer} 
-										convertMroToCSV={this.props.convertMroToCSV} 
+										getBillingCodes={this.props.getBillingCodes} 
 										addAlertMessage={this.props.addAlertMessage}
-										resetMROData={this.props.resetMROData}
 									/> 
 								} 
 						/>
@@ -113,10 +112,11 @@ Accounting.propTypes =
 	classes: PropTypes.object.isRequired,
 	convertMroToCSV: PropTypes.func.isRequired,
 	resetMROData: PropTypes.func.isRequired,
+	getBillingCodes: PropTypes.func.isRequired,
 	addAlertMessage: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {convertMroToCSV, addAlertMessage, resetMROData}) (withStyles(styles) (Accounting));
+export default connect(mapStateToProps, {convertMroToCSV, addAlertMessage, resetMROData, getBillingCodes}) (withStyles(styles) (Accounting));
 /************************** Hope this works:
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ComponentName))
 **********************************/

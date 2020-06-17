@@ -63,16 +63,7 @@ class OHIPBilling extends React.Component
 	}
 	componentDidMount()
 	{
-		/*
-		fetch(accountingText)
-      .then((res) => res.json())
-      .then((data) => console.log("[TEST]: ", data.fileNameError));
-	  */
-		
-		//console.info('[REGEX]: ', EXPECTED_FILE_NAME.test("EL990000.123"));
-		
-		//When you are here, check if any previous data is allocated and nullify before choosing a file for conversion
-		//if (this.props.rootReducer.convertFetched && this.props.rootReducer.data.isItValid) this.props.resetMROData();
+		if (this.props.rootReducer.billingCodes == null) this.props.getBillingCodes();
 
 	}
 	componentDidUpdate(prevProps, prevState)

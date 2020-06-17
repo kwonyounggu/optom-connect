@@ -3,7 +3,8 @@ import ActionTypes from '../actions/actionTypes.jsx';
 function rootReducer
 (   state=
     {
-		lang: "kr"
+		lang: "kr",
+		billingCodes: null
     },
     action
  )
@@ -36,6 +37,11 @@ function rootReducer
 			state={...state, convertFetching: false, convertFetched: false, data: null};
 			break;	
 		}
+		case ActionTypes.GET_BILLING_CODES_FULFILLED: //for both Promise and Thunk
+    	{   		
+    		state={...state, billingCodes: action.payload.data};
+            break;
+    	}
         default: 
         {
             break;

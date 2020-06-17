@@ -28,3 +28,10 @@ export function resetMROData()
 {
 	return { type: ActionTypes.RESET_MRO_DATA};
 }
+export function getBillingCodes() 
+{
+	  return { 
+		  		type: ActionTypes.GET_BILLING_CODES,
+		  		payload: axios.post("jsp/api/ohip/getBillingCodes.jsp", {})
+	  		 };
+}
