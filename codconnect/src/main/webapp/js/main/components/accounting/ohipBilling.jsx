@@ -74,7 +74,7 @@ class OHIPBilling extends React.Component
 	render()
 	{
 		console.log("INFO:OHIPBilling.jsx.render() is called, this.props: ", this.props);
-		const {classes, rootReducer, location} = this.props;
+		const {classes, location} = this.props;
 
 		return ( <React.Fragment>
 				   
@@ -102,7 +102,7 @@ class OHIPBilling extends React.Component
 					{
 						(location.pathname == menuLinks[4]) && 
 						<div style={{borderLeft: '1px solid grey', borderRight: '1px solid grey', borderBottom: '1px solid grey', padding: '20px'}}> 
-							<FileClaimBilling />
+							<FileClaimBilling auth={this.props.auth} rootReducer={this.props.rootReducer} location={location}/>
 						</div>
 					}
 					{

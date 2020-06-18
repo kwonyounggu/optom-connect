@@ -1,6 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
-import { withStyles } from "@material-ui/core/styles";
+import {withStyles} from "@material-ui/core/styles";
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 
@@ -21,8 +20,10 @@ const styles = (theme) =>
 			 }
 	}
 );
-const ohipMask = ["9999 - 999 - 999"];
+
 const EXPECTED_FILE_NAME = /(^[BEFPX]{1})+([ABCDEFGHIJKL]{1})+([0-9]{4,6})+(.\d{3})$/;
+const currency = new Intl.NumberFormat('en-CA', {style: 'currency', currency: 'CAD'});
+const today = new Date();
 class FileClaimBilling extends React.Component
 {
 	constructor(props)
@@ -34,7 +35,9 @@ class FileClaimBilling extends React.Component
 			ohipNumber: "",
 			patientDob: "",
 			accountingNumber: "",
-			careProviderNumber: ""
+			careProviderNumber: "",
+			serviceCode: "",
+			diagnosticCode: ""
 		}
 		this.onChange = (e) =>
 		{
@@ -61,7 +64,7 @@ class FileClaimBilling extends React.Component
 	render()
 	{
 		console.log("INFO:fileClaimBilling.jsx.render() is called, this.props: ", this.props);
-		const {classes, rootReducer, location} = this.props;
+		const {classes, rootReducer} = this.props;
 
 		return (
 				<Grid container>
@@ -102,14 +105,41 @@ class FileClaimBilling extends React.Component
 									  variant="outlined"
 				                />
 							}
-				          </InputMask>
-				        <TextField id="standard-disabled" label="Service Code" defaultValue="V406C" variant="outlined"/>
-				        <TextField
-				          id="standard-password-input"
-				          label="Diagnostic Code"
-						  defaultValue="939"
-							variant="outlined"
-				        />
+				        </InputMask>
+				        <TextField id="serviceCode" 
+								   label="Service Code" 
+								   variant="outlined" 
+								   value={this.state.serviceCode}
+				            	   onChange={this.onChange}
+					  			   SelectProps={{native: true}} select required>
+							{   
+								rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
+								(
+									(element, index) =>
+									(<option key={index} value={element.code} title={"Fee: " + currency.format(element.fee) + ", " + element.description}>{element.code}</option>)
+								)
+							}
+							{
+								!rootReducer.billingCodes && <option></option>
+							}
+						</TextField>
+						<TextField id="diagnosticCode" 
+								   label="Diagnostic Code" 
+								   variant="outlined" 
+								   value={this.state.diagnosticCode}
+				            	   onChange={this.onChange}
+					  			   SelectProps={{native: true}} select required>
+							{   
+								rootReducer.billingCodes && rootReducer.billingCodes.diagnosticCodes.map
+								(
+									(element, index) =>
+									(<option key={index} value={element.code} title={element.description}>{element.code}</option>)
+								)
+							}
+							{
+								!rootReducer.billingCodes && <option></option>
+							}
+						</TextField>
 				        <TextField
 				          id="standard-read-only-input"
 				          label="Service Location"
@@ -119,20 +149,26 @@ class FileClaimBilling extends React.Component
 				            readOnly: true,
 				          }}
 				        />
+						
 				        <TextField
-				          id="standard-number"
+				          id="numberOfServices"
 				          label="Number Of Services"
 				          type="number"
+						  defaultValue={1}
 							variant="outlined"
-				          InputLabelProps={{
-				            shrink: true,
-				          }}
+				          InputProps={{inputProps: {min: 1, max: 10}}}
+						  required
 				        />
 				        <TextField
-				          id="standard-helperText"
+				          id="serviceDate"
 				          label="Service Date"
-							variant="outlined"
+						  variant="outlined"
+						  type="date"
+						  InputLabelProps={{shrink: true}}
+						  defaultValue={today.toLocaleDateString()}
+						  required
 				        />
+
 						 <InputMask
 				            mask="9999 - 999 - 999 - aa"
 				            value={this.state.ohipNumber}
@@ -141,28 +177,22 @@ class FileClaimBilling extends React.Component
 				          >
 				            {() => 
 								<TextField
-						              id={"ohipNmber"}
-						              label={"OHIP Card Number"}
+						              id="ohipNumber"
+						              label="OHIP Card Number"
 						              helperText="eg, 1234 - 123 - 123 - AB"
 									  variant="outlined"
 				                />
 							}
 				        </InputMask>
-				        <InputMask
-				            mask="9999 - 99 - 99"
-				            value={this.state.patientDob}
-				            onChange={this.onChange}
-							beforeMaskedValueChange={this.beforeMaskedValueChange}
-				          >
-				            {() => 
-								<TextField
-						              id={"patientDob"}
-						              label={"Patient DOB"}
-						              helperText="eg, 1966 - 11 - 11"
-									  variant="outlined"
-				                />
-							}
-				          </InputMask>
+				        <TextField
+				          id="patientDob"
+				          label="Patient DOB"
+						  variant="outlined"
+						  type="date"
+						  InputLabelProps={{shrink: true}}
+						  defaultValue={today.toLocaleDateString()}
+						  required
+				        />
 				      </div>
 					</Grid>
 

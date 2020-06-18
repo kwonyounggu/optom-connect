@@ -386,7 +386,7 @@ public class OHIPReportDao
 		ResultSet rs = null;
 		JSONObject retObj = new JSONObject();
 		retObj.put("serviceCodes", new JSONArray());
-		retObj.put("diagnoticCodes", new JSONArray());
+		retObj.put("diagnosticCodes", new JSONArray());
 		
 		try
 		{
@@ -407,7 +407,7 @@ public class OHIPReportDao
 			}	
 			
 			rs = s.executeQuery("select * from ohip_diagnostic_codes");
-			JSONArray diagnosticCodes = retObj.getJSONArray("diagnoticCodes");
+			JSONArray diagnosticCodes = retObj.getJSONArray("diagnosticCodes");
 			
 			while (rs.next())
 			{
