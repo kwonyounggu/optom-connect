@@ -128,33 +128,6 @@ class RAReport extends React.Component
 	}
 	handleSorting = (cellId) =>
 	{
-		/*
-		this.state.hr45.sort
-		(
-			(a, b) =>
-			{
-				switch(cellId)
-				{
-					case "serviceDate": 
-					{
-						let dateA = a.serviceDate.split("/");
-						let dateB = b.serviceDate.split("/");
-						console.log("[INFO sorting]", dateA[0], dateA[1], dateA[2], " | ", dateB[0], dateB[1], dateB[2]);
-						return (new Date(dateA[0], dateA[1], dateA[2]) - new Date(dateB[0], dateB[1], dateB[2])).reverse();
-					}
-					case "accountingNumber":
-					{
-						return (parseInt(a.accountingNumber) - parseInt(b.accountingNumber));
-					}
-					case "amountPaid":
-					{
-						return (a.amountPaid - b.amountPaid);
-					}
-					default: return;
-				}
-			}
-		).reverse();
-		*/
 		this.setState((prevState) => ({hr45: orderBy(prevState.hr45, [cellId], [(prevState.order === 'asc') ? 'desc' : 'asc']), orderby: cellId, order: ((prevState.order === 'asc') ? 'desc' : 'asc')}));	
 	}
 	onSortClick = (cellId) => (event) =>

@@ -4,7 +4,18 @@ function rootReducer
 (   state=
     {
 		lang: "kr",
-		billingCodes: null
+		billingCodes: null,
+		fileClaimBilling:
+		{
+			ohipNumber: "",
+			patientDob: null,
+			accountingNumber: "",
+			careProviderNumber: "",
+			serviceCode: "",
+			diagnosticCode: "",
+			numberOfServices: 1,
+			serviceDate: null
+		}
     },
     action
  )
