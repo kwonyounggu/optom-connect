@@ -14,12 +14,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Select from '@material-ui/core/Select';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker
-} from '@material-ui/pickers';
-
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
 
 const styles = (theme) =>
 (
@@ -114,46 +111,49 @@ class FileClaimBilling extends React.Component
 					    </Typography>
 						
 					</Grid>
+					<Grid item xs={12}>
+						&nbsp;
+					</Grid>
+					<Grid item xs={2} style={{textAlign: 'center'}} color="primary">
+						<span><strong>Provider Number</strong></span>
+					</Grid>
+					<Grid item xs={4}>
+						<InputMask
+				            mask="999999"
+							id="careProviderNumber"
+				            value={this.state.careProviderNumber}
+				            onChange={this.onChange}
+							placeholder="eg:123456"
+							style={{width: '80px'}}
+				          />
+					</Grid>
+					<Grid item xs={6}>
+						RHS Create a submission file
+					</Grid>
+					<Grid item xs={12}>
+						&nbsp;
+					</Grid>
 					<Grid item xs={12} className={classes.root}>
+					<Paper>
 					<TableContainer>
 					<Table size="small" aria-label="claimFileTable">
-					    <TableHead >
+						<TableHead >
 					      <TableRow>
-							{
-								this.headCells.map
-								(
-									(cell, index) =>
-									(
-										<TableCell key={index}>{cell.label}</TableCell>
-									)
-								)
-							}
-					      </TableRow>
-					    </TableHead>
+							<TableCell colSpan={this.headCells.length} >
+								<Button
+							        variant="contained"
+							        color="primary"
+							        className={classes.button}
+							        endIcon={<Icon>add</Icon>}
+							      >
+							        Add Claim
+							      </Button>
+							</TableCell>
+						  </TableRow>
+						</TableHead>
 					    <TableBody>
-					    	<TableRow>
-								<TableCell><span><strong>Provider Number</strong></span></TableCell>
-								{
-									this.headCells.map
-									(
-										(cell, index) =>
-										{
-											if (index) return (<TableCell key={index}>
-												<InputMask
-										            mask="999999"
-													id="careProviderNumber"
-										            value={this.state.careProviderNumber}
-										            onChange={this.onChange}
-													placeholder="123456"
-										          />
-											</TableCell>)
-											else return;
-										}
-									)
-								}
-							</TableRow>
 							<TableRow>
-								<TableCell><span><strong>Accounting Number</strong></span></TableCell>
+								<TableCell><span>Accounting Number</span></TableCell>
 								{
 									this.headCells.map
 									(
@@ -174,7 +174,7 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span><strong>Service Code</strong></span></TableCell>
+								<TableCell><span>Service Code</span></TableCell>
 								{
 									this.headCells.map
 									(
@@ -206,7 +206,7 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span><strong>Diagnostic Code</strong></span></TableCell>
+								<TableCell><span>Diagnostic Code</span></TableCell>
 								{
 									this.headCells.map
 									(
@@ -237,7 +237,7 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span><strong>Number Of Services</strong></span></TableCell>
+								<TableCell><span>Number Of Services</span></TableCell>
 								{
 									this.headCells.map
 									(
@@ -267,7 +267,7 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span><strong>Service Date</strong></span></TableCell>
+								<TableCell><span>Service Date</span></TableCell>
 								{
 									this.headCells.map
 									(
@@ -283,7 +283,7 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span><strong>OHIP Card Number</strong></span></TableCell>
+								<TableCell><span>OHIP Card Number</span></TableCell>
 								{
 									this.headCells.map
 									(
@@ -305,7 +305,7 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span><strong>Patient DOB</strong></span></TableCell>
+								<TableCell><span>Patient DOB</span></TableCell>
 								{
 									this.headCells.map
 									(
@@ -323,6 +323,7 @@ class FileClaimBilling extends React.Component
 					    </TableBody>
 					  </Table>
 					</TableContainer>
+					</Paper>
 					</Grid>
 
 				 </Grid>
