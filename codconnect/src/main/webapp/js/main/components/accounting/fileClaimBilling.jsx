@@ -14,9 +14,14 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Select from '@material-ui/core/Select';
-import Paper from '@material-ui/core/Paper';
+
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
+import IconButton from '@material-ui/core/IconButton';
+
 
 const styles = (theme) =>
 (
@@ -31,7 +36,12 @@ const styles = (theme) =>
 		 },
 		 select:
 		 {
-			minWidth: '120px'
+			minWidth: '120px',
+			borderRadius: '0px'
+		 },
+		 selectInput: 
+		 {
+		    padding: "2px 5px"
 		 }
 	}
 );
@@ -54,7 +64,8 @@ class FileClaimBilling extends React.Component
 			serviceCode: props.rootReducer.fileClaimBilling.serviceCode,
 			diagnosticCode: props.rootReducer.fileClaimBilling.diagnosticCode,
 			numberOfServices: props.rootReducer.fileClaimBilling.numberOfServices,
-			serviceDate: new Date()
+			serviceDate: new Date(),
+			claimLength: 1
 		}
 		this.onChange = (e) =>
 		{
@@ -76,8 +87,9 @@ class FileClaimBilling extends React.Component
 		];
 		this.addHeadCells = () =>
 		{
-			let length = this.headCells.length;
-			this.headCells.push({id: 'inputField'+length, label: 'CLAIM #'+lenght});
+			let length = this.headCells.length; console.log("[before] col len: "+length);
+			this.headCells.push({id: 'inputField'+length, label: 'CLAIM #'+length});
+			console.log("col len: "+length);
 		}
 	}
 	componentDidMount()
@@ -102,7 +114,7 @@ class FileClaimBilling extends React.Component
 	{
 		console.log("INFO:fileClaimBilling.jsx.render() is called, this.props: ", this.props);
 		const {classes, rootReducer} = this.props;
-
+		const {claimLength} = this.state;
 		return (
 				<Grid container>
 					<Grid item xs={12}>
@@ -114,78 +126,127 @@ class FileClaimBilling extends React.Component
 					<Grid item xs={12}>
 						&nbsp;
 					</Grid>
-					<Grid item xs={2} style={{textAlign: 'center'}} color="primary">
-						<span><strong>Provider Number</strong></span>
-					</Grid>
-					<Grid item xs={4}>
-						<InputMask
-				            mask="999999"
-							id="careProviderNumber"
-				            value={this.state.careProviderNumber}
-				            onChange={this.onChange}
-							placeholder="eg:123456"
-							style={{width: '80px'}}
-				          />
-					</Grid>
-					<Grid item xs={6}>
-						RHS Create a submission file
-					</Grid>
+					
 					<Grid item xs={12}>
 						&nbsp;
 					</Grid>
-					<Grid item xs={12} className={classes.root}>
-					<Paper>
+					<Grid item xs={12}>
+					
 					<TableContainer>
 					<Table size="small" aria-label="claimFileTable">
 						<TableHead >
-					      <TableRow>
-							<TableCell colSpan={this.headCells.length} >
-								<Button
-							        variant="contained"
+					      <TableRow >
+							<TableCell style={{textAlign: 'left'}}>
+								<span>
+									<strong>Provider Number</strong>&nbsp;
+									<InputMask
+							            mask="999999"
+										id="careProviderNumber"
+							            value={this.state.careProviderNumber}
+							            onChange={this.onChange}
+										placeholder=" 123456"
+										style={{width: '80px'}}
+							          />
+								</span>
+							</TableCell>
+							<TableCell colSpan={this.state.claimLength} style={{textAlign: 'right'}}>
+								<IconButton
 							        color="primary"
-							        className={classes.button}
-							        endIcon={<Icon>add</Icon>}
+								    onClick={()=>this.setState({claimLength: ++this.state.claimLength})}
+									title="Add one more claim"
 							      >
-							        Add Claim
+							        <AddBoxIcon fontSize="large"/>
+							      </IconButton>
+								  <IconButton
+							        color="primary"
+								    onClick={()=>this.setState({claimLength: --this.state.claimLength})}
+									title="Subtract the last claim"
+							      >
+							        <IndeterminateCheckBoxIcon fontSize="large"/>
+							      </IconButton>&nbsp;
+								  <Button
+							        variant="outlined" color="primary"
+							        className={classes.button}
+							        endIcon={<Icon>create</Icon>}
+									title="Create a submission claim file"
+							      >
+							        Create Claim
 							      </Button>
 							</TableCell>
 						  </TableRow>
 						</TableHead>
 					    <TableBody>
-							<TableRow>
-								<TableCell><span>Accounting Number</span></TableCell>
+							<TableRow style={{backgroundColor: '#f0f0f0'}}>
+								<TableCell><span>OHIP Card Number</span></TableCell>
 								{
-									this.headCells.map
+									[...Array(this.state.claimLength)].map
 									(
 										(cell, index) =>
 										{
-											if (index) return (<TableCell key={index}>
+											return (<TableCell key={index}>
 												<InputMask
-										            mask="********"
-													id="accountingNumber"
-										            value={this.state.accountingNumber}
+										            mask="9999 - 999 - 999 - aa"
+										            value={this.state.ohipNumber}
 										            onChange={this.onChange}
-													placeholder="12345678"
+													id="ohipNumber"
+													placeholder=" 1234 - 123 - 123 - AB"
 										          />
-											</TableCell>)
-											else return;
+											</TableCell>
+											)
 										}
 									)
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span>Service Code</span></TableCell>
+								<TableCell><span>Patient DOB</span></TableCell>
 								{
-									this.headCells.map
+									[...Array(this.state.claimLength)].map
 									(
 										(cell, index) =>
 										{
-											if (index) return (<TableCell key={index}>
+											return (<TableCell key={index}>
+												<input type="date" id="patientDob" />
+											</TableCell>
+											)
+										}
+									)
+								}
+							</TableRow>			
+							<TableRow>
+								<TableCell><span>Accounting Number</span></TableCell>
+								{
+									[...Array(this.state.claimLength)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+												<InputMask
+										            mask="********"
+													id="accountingNumber"
+										            value={this.state.accountingNumber}
+										            onChange={this.onChange}
+													placeholder=" 12345678"
+										          />
+											</TableCell>)
+										}
+									)
+								}
+							</TableRow>
+							<TableRow style={{backgroundColor: '#f0f0f0'}}>
+								<TableCell><span>Service Code</span></TableCell>
+								{
+									[...Array(this.state.claimLength)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
 												<Select id="serviceCode" 
-														   value={this.state.serviceCode}
-										            	   onChange={this.onChange}
+														value={this.state.serviceCode}
+										            	onChange={this.onChange}
 														native
 														className={classes.select}
+														variant="outlined"
+														input={<OutlinedInput classes={{ input: classes.selectInput}} />}
 											  	>
 													{   
 														rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
@@ -200,7 +261,52 @@ class FileClaimBilling extends React.Component
 												</Select>
 											</TableCell>
 											)
-											else return;
+										}
+									)
+								}
+							</TableRow>
+							<TableRow>
+								<TableCell><span>Number Of Services</span></TableCell>
+								{
+									[...Array(this.state.claimLength)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+													<Select id="numberOfServices" 
+														   value={this.state.numberOfServices}
+										            	   onChange={this.onChange}
+														   className={classes.select}
+														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														   variant="outlined"
+											  			   native>
+														{
+															numberOfServices.map
+															(
+																(element,  index) =>
+																(
+																	<option key={index} value={element}>{element}</option>
+																)
+															)
+														}
+													</Select>		
+											</TableCell>
+											)
+										}
+									)
+								}
+							</TableRow>
+							<TableRow>
+								<TableCell><span>Service Date</span></TableCell>
+								{
+									[...Array(this.state.claimLength)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+												<input type="date" id="serviceDate" />
+											</TableCell>
+											)
 										}
 									)
 								}
@@ -208,15 +314,17 @@ class FileClaimBilling extends React.Component
 							<TableRow>
 								<TableCell><span>Diagnostic Code</span></TableCell>
 								{
-									this.headCells.map
+									[...Array(this.state.claimLength)].map
 									(
 										(cell, index) =>
 										{
-											if (index) return (<TableCell key={index}>
+											return (<TableCell key={index}>
 												<Select id="diagnosticCode" 
 														   value={this.state.diagnosticCode}
 										            	   onChange={this.onChange}
 														   className={classes.select}
+														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														   variant="outlined"
 											  			   native>
 													{   
 														rootReducer.billingCodes && rootReducer.billingCodes.diagnosticCodes.map
@@ -231,7 +339,39 @@ class FileClaimBilling extends React.Component
 												</Select>
 											</TableCell>
 											)
-											else return;
+										}
+									)
+								}
+							</TableRow>
+							<TableRow style={{backgroundColor: '#f0f0f0'}}>
+								<TableCell><span>Service Code</span></TableCell>
+								{
+									[...Array(this.state.claimLength)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+												<Select id="serviceCode" 
+														value={this.state.serviceCode}
+										            	onChange={this.onChange}
+														native
+														className={classes.select}
+														input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														variant="outlined"
+											  	>
+													{   
+														rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
+														(
+															(element, index) =>
+															(<option key={index} value={element.code} title={"Fee: " + currency.format(element.fee) + ", " + element.description}>{element.code}</option>)
+														)
+													}
+													{
+														!rootReducer.billingCodes && <option></option>
+													}
+												</Select>
+											</TableCell>
+											)
 										}
 									)
 								}
@@ -239,15 +379,17 @@ class FileClaimBilling extends React.Component
 							<TableRow>
 								<TableCell><span>Number Of Services</span></TableCell>
 								{
-									this.headCells.map
+									[...Array(this.state.claimLength)].map
 									(
 										(cell, index) =>
 										{
-											if (index) return (<TableCell key={index}>
+											return (<TableCell key={index}>
 													<Select id="numberOfServices" 
 														   value={this.state.numberOfServices}
 										            	   onChange={this.onChange}
 														   className={classes.select}
+														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														   variant="outlined"
 											  			   native>
 														{
 															numberOfServices.map
@@ -261,7 +403,6 @@ class FileClaimBilling extends React.Component
 													</Select>		
 											</TableCell>
 											)
-											else return;
 										}
 									)
 								}
@@ -269,61 +410,54 @@ class FileClaimBilling extends React.Component
 							<TableRow>
 								<TableCell><span>Service Date</span></TableCell>
 								{
-									this.headCells.map
+									[...Array(this.state.claimLength)].map
 									(
 										(cell, index) =>
 										{
-											if (index) return (<TableCell key={index}>
+											return (<TableCell key={index}>
 												<input type="date" id="serviceDate" />
 											</TableCell>
 											)
-											else return;
 										}
 									)
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span>OHIP Card Number</span></TableCell>
+								<TableCell><span>Diagnostic Code</span></TableCell>
 								{
-									this.headCells.map
+									[...Array(this.state.claimLength)].map
 									(
 										(cell, index) =>
 										{
-											if (index) return (<TableCell key={index}>
-												<InputMask
-										            mask="9999 - 999 - 999 - aa"
-										            value={this.state.ohipNumber}
-										            onChange={this.onChange}
-													id="ohipNumber"
-													placeholder="eg, 1234 - 123 - 123 - AB"
-										          />
+											return (<TableCell key={index}>
+												<Select id="diagnosticCode" 
+														   value={this.state.diagnosticCode}
+										            	   onChange={this.onChange}
+														   className={classes.select}
+														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														   variant="outlined"
+											  			   native>
+													{   
+														rootReducer.billingCodes && rootReducer.billingCodes.diagnosticCodes.map
+														(
+															(element, index) =>
+															(<option key={index} value={element.code} title={element.description}>{element.code}</option>)
+														)
+													}
+													{
+														!rootReducer.billingCodes && <option></option>
+													}
+												</Select>
 											</TableCell>
 											)
-											else return;
 										}
 									)
 								}
-							</TableRow>
-							<TableRow>
-								<TableCell><span>Patient DOB</span></TableCell>
-								{
-									this.headCells.map
-									(
-										(cell, index) =>
-										{
-											if (index) return (<TableCell key={index}>
-												<input type="date" id="patientDob" />
-											</TableCell>
-											)
-											else return;
-										}
-									)
-								}
-							</TableRow>					
+							</TableRow>		
 					    </TableBody>
 					  </Table>
 					</TableContainer>
-					</Paper>
+					
 					</Grid>
 
 				 </Grid>

@@ -57,7 +57,8 @@ const styles =
 	{
 		padding: 8,
 		border: '0px solid red',
-		borderRadius: '8px'
+		borderRadius: '8px',
+		backgroundColor: 'inherit'
 	}
 };
 
