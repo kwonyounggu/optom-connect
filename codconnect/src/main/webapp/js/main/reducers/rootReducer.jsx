@@ -15,7 +15,8 @@ function rootReducer
 			diagnosticCode: "",
 			numberOfServices: 1,
 			serviceDate: null
-		}
+		},
+		ohipClaimList: [{}]
     },
     action
  )
