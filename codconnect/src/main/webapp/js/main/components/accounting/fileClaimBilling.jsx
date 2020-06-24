@@ -107,18 +107,7 @@ class FileClaimBilling extends React.Component
 		{
 			this.setState({ohipClaimList: this.state.ohipClaimList.concat({})});
 		}
-		/*
-		this.addClaim = () =>
-		{
-			this.setState({claimLength: ++this.state.claimLength, ohipClaimList: this.state.ohipClaimList.push({})})
-		}*/
 	}
-	/*
-	onChange = (e) =>
-	{
-		this.setState({...this.stateid: e.target.value});
-	}
-	*/
 	componentDidMount()
 	{
 	}
