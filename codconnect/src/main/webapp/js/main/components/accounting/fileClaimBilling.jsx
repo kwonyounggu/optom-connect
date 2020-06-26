@@ -57,37 +57,37 @@ class FileClaimBilling extends React.Component
 		//console.log("INFO constructor() of fileClaimBilling.jsx: ", props);
 		this.state = 
 		{
-			fileClaimBilling: props.rootReducer.fileClaimBilling,
-			ohipNumber: props.rootReducer.fileClaimBilling.ohipNumber,
+			
 			patientDob: new Date(),
-			accountingNumber: props.rootReducer.fileClaimBilling.accountingNumber,
-			careProviderNumber: props.rootReducer.fileClaimBilling.careProviderNumber,
-			serviceCode: props.rootReducer.fileClaimBilling.serviceCode,
-			diagnosticCode: props.rootReducer.fileClaimBilling.diagnosticCode,
-			numberOfServices: props.rootReducer.fileClaimBilling.numberOfServices,
+			
+			careProviderNumber: '',
 			serviceDate: new Date(),
 
-			claimLength: props.rootReducer.ohipClaimList.length,
 			ohipClaimList: props.rootReducer.ohipClaimList
 		}
 		this.onChange = (e) =>
 		{
+			console.log("[INFO in onChange(e.target)]: ", e.target);
 
 			e.persist(); //put this because ohipClaimItems initally empty or nulled
 			let colcount = e.target.getAttribute('colcount');
-			if (this.state.ohipClaimList.length == this.state.claimLength)
-			{
-				this.setState
-				(
-					(prevState) =>
-					{
-						prevState.ohipClaimList[colcount][e.target.id] = e.target.value;
-						return {
-									prevState
-							   }
-					}
-				)
-			}
+			
+			console.log("[INFO in onChange(e.target.id)]: ", e.target.id, "| e.target.value: ", e.target.value, '| colcount: ', colcount);
+			
+			this.setState
+			(
+				(prevState) =>
+				{
+					prevState.ohipClaimList[colcount][e.target.id] = e.target.value;
+					return {
+								prevState
+						   }
+				}
+			);
+		}
+		this.onChangeProvider = (e) =>
+		{
+			
 		}
 		//Validate if a lower case version code of ohip number is entered
 		this.beforeMaskedValueChange = (newState, oldState, userInput) => 
@@ -124,9 +124,7 @@ class FileClaimBilling extends React.Component
 		console.log("INFO:fileClaimBilling.jsx.render() is called, [this.props]: ", this.props);
 		console.log("INFO:fileClaimBilling.jsx.render() is called, [this.state]: ", this.state);
 		const {classes, rootReducer} = this.props;
-		const {claimLength} = this.state;
-		
-		console.log("[CLAIMLENGTH]: ", claimLength);
+
 		return (
 				<Grid container>
 					<Grid item xs={12}>
@@ -152,18 +150,18 @@ class FileClaimBilling extends React.Component
 					      <TableRow >
 							<TableCell style={{textAlign: 'left'}}>
 								<span>
-									<strong>Provider Number</strong>&nbsp;
+									<strong>Provider Number *</strong>&nbsp;
 									<InputMask
 							            mask="999999"
 										id="careProviderNumber"
-							            value={this.state.careProviderNumber}
-							            onChange={this.onChange}
+							            value={this.state.ohipClaimList.careProviderNumber || ''}
+							            onChange={(e)=>this.setState({...this.state.ohipClaimList, this.state.ohipClaimList.careProvider: e.target.value})}
 										placeholder=" 123456"
 										style={{width: '80px'}}
 							          />
 								</span>
 							</TableCell>
-							<TableCell colSpan={this.state.claimLength} style={{textAlign: 'right'}}>
+							<TableCell colSpan={this.state.ohipClaimList.length} style={{textAlign: 'right'}}>
 								<IconButton
 							        color="primary"
 								    onClick={this.addClaim}
@@ -192,8 +190,8 @@ class FileClaimBilling extends React.Component
 						  </TableRow>
 						</TableHead>
 					    <TableBody>
-							<TableRow style={{backgroundColor: '#f0f0f0'}}>
-								<TableCell><span>OHIP Card Number</span></TableCell>
+							<TableRow style={{backgroundColor: '#e6e6e6'}}>
+								<TableCell><span>OHIP Card Number *</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
@@ -202,7 +200,7 @@ class FileClaimBilling extends React.Component
 											return (<TableCell key={index}>
 												<InputMask
 										            mask="9999 - 999 - 999 - aa"
-										            value={this.state.ohipClaimList[index].ohipNumber}
+										            value={this.state.ohipClaimList[index].ohipNumber || ''}
 										            onChange={this.onChange}
 													id="ohipNumber"
 													colcount={index}
@@ -215,14 +213,14 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span>Patient DOB</span></TableCell>
+								<TableCell><span>Patient DOB *</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
 										(cell, index) =>
 										{
 											return (<TableCell key={index}>
-												<input type="date" id="patientDob" />
+												<input type="date" id="patientDob" onChange={this.onChange} value={this.state.ohipClaimList[index].patientDob || ''} colcount={index}/>
 											</TableCell>
 											)
 										}
@@ -240,7 +238,7 @@ class FileClaimBilling extends React.Component
 												<InputMask
 										            mask="********"
 													id="accountingNumber"
-													value={this.state.ohipClaimList[index].accountingNumber}
+													value={this.state.ohipClaimList[index].accountingNumber || ''}
 										            onChange={this.onChange}
 													placeholder=" 12345678"
 													colcount={index}
@@ -251,21 +249,24 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow style={{backgroundColor: '#f0f0f0'}}>
-								<TableCell><span>Service Code</span></TableCell>
+								<TableCell><span>Service Code #1 *</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
 										(cell, index) =>
 										{
 											return (<TableCell key={index}>
-												<Select id="serviceCode" 
-														value={this.state.serviceCode}
+												<Select id="serviceCode1" 
+														value={this.state.ohipClaimList[index].serviceCode1 || ''}
 										            	onChange={this.onChange}
+
 														native
 														className={classes.select}
 														variant="outlined"
 														input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														inputProps = {{colcount: index}}
 											  	>
+													<option value='' disabled></option>
 													{   
 														rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
 														(
@@ -284,20 +285,23 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span>Number Of Services</span></TableCell>
+								<TableCell><span>Number Of Services *</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
 										(cell, index) =>
 										{
 											return (<TableCell key={index}>
-													<Select id="numberOfServices" 
-														   value={this.state.numberOfServices}
+													<Select id="numberOfServices1" 
+														   value={this.state.ohipClaimList[index].numberOfServices1 || ''}
 										            	   onChange={this.onChange}
 														   className={classes.select}
 														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														   inputProps = {{colcount: index}}
 														   variant="outlined"
+
 											  			   native>
+														<option value='' disabled></option>
 														{
 															numberOfServices.map
 															(
@@ -315,14 +319,14 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span>Service Date</span></TableCell>
+								<TableCell><span>Service Date *</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
 										(cell, index) =>
 										{
 											return (<TableCell key={index}>
-												<input type="date" id="serviceDate" />
+												<input type="date" id="serviceDate1" onChange={this.onChange} value={this.state.ohipClaimList[index].serviceDate1 || ''} colcount={index}/>
 											</TableCell>
 											)
 										}
@@ -330,20 +334,22 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span>Diagnostic Code</span></TableCell>
+								<TableCell><span>Diagnostic Code *</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
 										(cell, index) =>
 										{
 											return (<TableCell key={index}>
-												<Select id="diagnosticCode" 
-														   value={this.state.diagnosticCode}
+												<Select id="diagnosticCode1" 
+														   value={this.state.ohipClaimList[index].diagnosticCode1 || ''}
 										            	   onChange={this.onChange}
 														   className={classes.select}
 														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														   inputProps = {{colcount: index}}
 														   variant="outlined"
 											  			   native>
+													<option value='' disabled></option>
 													{   
 														rootReducer.billingCodes && rootReducer.billingCodes.diagnosticCodes.map
 														(
@@ -362,21 +368,23 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow style={{backgroundColor: '#f0f0f0'}}>
-								<TableCell><span>Service Code</span></TableCell>
+								<TableCell><span>Service Code #2</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
 										(cell, index) =>
 										{
 											return (<TableCell key={index}>
-												<Select id="serviceCode" 
-														value={this.state.serviceCode}
+												<Select id="serviceCode2" 
+														value={this.state.ohipClaimList[index].serviceCode2 || ''}
 										            	onChange={this.onChange}
 														native
 														className={classes.select}
 														input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														inputProps = {{colcount: index}}
 														variant="outlined"
 											  	>
+													<option value=''></option>
 													{   
 														rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
 														(
@@ -402,13 +410,15 @@ class FileClaimBilling extends React.Component
 										(cell, index) =>
 										{
 											return (<TableCell key={index}>
-													<Select id="numberOfServices" 
-														   value={this.state.numberOfServices}
+													<Select id="numberOfServices2" 
+														   value={this.state.ohipClaimList[index].numberOfServices2 || ''}
 										            	   onChange={this.onChange}
 														   className={classes.select}
 														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														   inputProps = {{colcount: index}}
 														   variant="outlined"
 											  			   native>
+														<option value=''></option>
 														{
 															numberOfServices.map
 															(
@@ -433,7 +443,7 @@ class FileClaimBilling extends React.Component
 										(cell, index) =>
 										{
 											return (<TableCell key={index}>
-												<input type="date" id="serviceDate" />
+												<input type="date" id="serviceDate2" onChange={this.onChange} value={this.state.ohipClaimList[index].serviceDate2 || ''} colcount={index}/>
 											</TableCell>
 											)
 										}
@@ -448,13 +458,15 @@ class FileClaimBilling extends React.Component
 										(cell, index) =>
 										{
 											return (<TableCell key={index}>
-												<Select id="diagnosticCode" 
-														   value={this.state.diagnosticCode}
+												<Select id="diagnosticCode2" 
+														   value={this.state.ohipClaimList[index].diagnosticCode2 || ''}
 										            	   onChange={this.onChange}
 														   className={classes.select}
 														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														   inputProps = {{colcount: index}}
 														   variant="outlined"
 											  			   native>
+													<option value=''></option>
 													{   
 														rootReducer.billingCodes && rootReducer.billingCodes.diagnosticCodes.map
 														(

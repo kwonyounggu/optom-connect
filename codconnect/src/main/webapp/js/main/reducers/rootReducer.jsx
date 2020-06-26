@@ -5,17 +5,6 @@ function rootReducer
     {
 		lang: "kr",
 		billingCodes: null,
-		fileClaimBilling:
-		{
-			ohipNumber: "",
-			patientDob: null,
-			accountingNumber: "",
-			careProviderNumber: "",
-			serviceCode: "",
-			diagnosticCode: "",
-			numberOfServices: 1,
-			serviceDate: null
-		},
 		ohipClaimList: [{}]
     },
     action
