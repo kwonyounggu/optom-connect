@@ -5,7 +5,8 @@ function rootReducer
     {
 		lang: "kr",
 		billingCodes: null,
-		ohipClaimList: [{}]
+		ohipClaimList: [{}],
+		careProviderNumber: ''
     },
     action
  )

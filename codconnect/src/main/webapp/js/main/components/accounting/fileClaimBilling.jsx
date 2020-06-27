@@ -21,7 +21,7 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import IconButton from '@material-ui/core/IconButton';
-
+import Alert from '@material-ui/lab/Alert';
 
 const styles = (theme) =>
 (
@@ -56,15 +56,32 @@ class FileClaimBilling extends React.Component
 		super(props);
 		//console.log("INFO constructor() of fileClaimBilling.jsx: ", props);
 		this.state = 
-		{
-			
-			patientDob: new Date(),
-			
-			careProviderNumber: '',
-			serviceDate: new Date(),
-
+		{			
+			careProviderNumber: props.rootReducer.careProviderNumber,
 			ohipClaimList: props.rootReducer.ohipClaimList
 		}
+		
+		this.onChange = (e) =>
+		{
+			console.log("[INFO in onChange(e.target)]: ", e.target);
+
+			e.persist(); //put this because ohipClaimItems initally empty or nulled
+			let colcount = e.target.getAttribute('colcount');
+			
+			console.log("[INFO in onChange(e.target.name)]: ", e.target.name, "| e.target.value: ", e.target.value, '| colcount: ', colcount);
+			
+			this.setState
+			(
+				(prevState) =>
+				{
+					prevState.ohipClaimList[colcount][e.target.name] = e.target.value;
+					return {
+								prevState
+						   }
+				}
+			);
+		}
+		/*
 		this.onChange = (e) =>
 		{
 			console.log("[INFO in onChange(e.target)]: ", e.target);
@@ -84,11 +101,7 @@ class FileClaimBilling extends React.Component
 						   }
 				}
 			);
-		}
-		this.onChangeProvider = (e) =>
-		{
-			
-		}
+		}*/
 		//Validate if a lower case version code of ohip number is entered
 		this.beforeMaskedValueChange = (newState, oldState, userInput) => 
 		{
@@ -107,6 +120,71 @@ class FileClaimBilling extends React.Component
 		{
 			this.setState({ohipClaimList: this.state.ohipClaimList.concat({})});
 		}
+		this.displayErrorBox = (isValid, id) =>
+		{
+			if (isValid) document.getElementById(id).style.border = 'inherit';
+			else document.getElementById(id).style.border = '3px solid red';
+		}
+		this.createClaimFile = () =>
+		{
+			//1. validate
+			//2. call the server to create a file
+			//3. store in claim history if logged in 
+			//4. display and ready to download the file in local
+			console.log("validate");
+			console.log("careProviderNumber: ", document.getElementById("careProviderNumber"));
+			console.log("careProviderNumber: ", /^\d{6}/.test(this.state.careProviderNumber));
+			if (/^\d{6}/.test(this.state.careProviderNumber))
+				document.getElementById("careProviderNumber").style.border = 'inherit';
+			else 
+				document.getElementById("careProviderNumber").style.border = '3px solid red';
+			let colCount = this.state.ohipClaimList.length;
+			for (let i=0; i<colCount; i++)
+			{
+				let colObj = this.state.ohipClaimList[i];  
+				console.log(i+" : ", colObj);
+				//console.log("[ohip check]:", /^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?[A-Z]{2}/.test(colObj.ohipNumber));
+				let isValid = true;
+				if (colObj.ohipNumber) 
+				{
+					if (/^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?[A-Z]{2}/.test(colObj.ohipNumber))
+					{
+						//collect ohip number and version code respectively
+						console.log("ohip number and 2 char version code");
+					}
+					else if (/^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?[A-Z]{1}/.test(colObj.ohipNumber))
+					{
+						//collect ohip number and version code respectively
+						console.log("ohip number and 1 char version code");
+					}
+					else if (/^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?/.test(colObj.ohipNumber))
+					{
+						console.log("no version code but only ohip number");
+						//collect ohip number but no version code
+					}
+					else
+					{
+						//error
+						isValid = false;
+					}
+					//console.log("[ohip check]:", /^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?[A-Z]{2}/.test(colObj.ohipNumber));
+				}
+				else
+				{
+					//error
+					isValid = false;
+				}
+				this.displayErrorBox(isValid, "ohipNumber_"+i);
+				
+				/*
+				if (isOK)
+					document.getElementById("ohipNumber_"+i).style.border = 'inherit';
+				else
+					document.getElementById("ohipNumber_"+i).style.border = '3px solid red';
+				console.log("[ohipNumber_"+i+"]: ", document.getElementById("ohipNumber_"+i), ", value: " + colObj.ohipNumber);
+				*/
+			}
+		}
 	}
 	componentDidMount()
 	{
@@ -118,6 +196,7 @@ class FileClaimBilling extends React.Component
 	componentWillUnmount()
 	{
 		this.props.rootReducer.ohipClaimList = this.state.ohipClaimList;
+		this.props.rootReducer.careProviderNumber = this.state.careProviderNumber;
 	}
 	render()
 	{
@@ -131,16 +210,14 @@ class FileClaimBilling extends React.Component
 						<Typography variant="h6">
 					          For Solo Health Care Provider
 					    </Typography>
-						<Typography variant="body2" gutterBottom>
-					        Each time, creating a claim submission file is limited upto ten patients.
-					    </Typography>
 					</Grid>
 					<Grid item xs={12}>
 						&nbsp;
 					</Grid>
 					
-					<Grid item xs={12}>
-						&nbsp;
+					<Grid item xs={12} >
+						<Alert severity="info" style={{paddingTop: 0, paddingBottom: 0}}><span style={{color: 'red'}}>*</span>&nbsp;Required</Alert>
+						<Alert severity="info" style={{paddingTop: 0, paddingBottom: 0}}>Each time, creating a claim submission file is limited upto ten patients.</Alert>
 					</Grid>
 					<Grid item xs={12}>
 					
@@ -150,14 +227,16 @@ class FileClaimBilling extends React.Component
 					      <TableRow >
 							<TableCell style={{textAlign: 'left'}}>
 								<span>
-									<strong>Provider Number *</strong>&nbsp;
+									<strong>Provider Number</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;
 									<InputMask
 							            mask="999999"
 										id="careProviderNumber"
-							            value={this.state.ohipClaimList.careProviderNumber || ''}
-							            onChange={(e)=>this.setState({...this.state.ohipClaimList, this.state.ohipClaimList.careProvider: e.target.value})}
+										name="careProviderNumber"
+							            value={this.state.careProviderNumber || ''}
+							            onChange={(e)=>this.setState({careProviderNumber: e.target.value})}
 										placeholder=" 123456"
 										style={{width: '80px'}}
+										title="Six digits required"
 							          />
 								</span>
 							</TableCell>
@@ -180,6 +259,7 @@ class FileClaimBilling extends React.Component
 							      </IconButton>&nbsp;
 								  <Button
 							        variant="outlined" color="primary"
+									onClick={this.createClaimFile}
 							        className={classes.button}
 							        endIcon={<Icon>create</Icon>}
 									title="Create a submission claim file"
@@ -191,7 +271,7 @@ class FileClaimBilling extends React.Component
 						</TableHead>
 					    <TableBody>
 							<TableRow style={{backgroundColor: '#e6e6e6'}}>
-								<TableCell><span>OHIP Card Number *</span></TableCell>
+								<TableCell>OHIP Card Number&nbsp;<span style={{color: 'red'}}>*</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
@@ -200,11 +280,14 @@ class FileClaimBilling extends React.Component
 											return (<TableCell key={index}>
 												<InputMask
 										            mask="9999 - 999 - 999 - aa"
+													formatChars={{'9': '[0-9]', 'a': '[A-Z]', '*': '[A-Za-z0-9]'}}
 										            value={this.state.ohipClaimList[index].ohipNumber || ''}
 										            onChange={this.onChange}
-													id="ohipNumber"
+													name="ohipNumber"
+													id={"ohipNumber_"+index}
 													colcount={index}
 													placeholder=" 1234 - 123 - 123 - AB"
+													title="10 digits number and version code from the OHIP card are required"
 										          />
 											</TableCell>
 											)
@@ -213,7 +296,390 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span>Patient DOB *</span></TableCell>
+								<TableCell>Patient DOB&nbsp;<span style={{color: 'red'}}>*</span></TableCell>
+								{
+									[...Array(this.state.ohipClaimList.length)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+												<input type="date" id={"patientDob_"+index} name="patientDob" onChange={this.onChange} value={this.state.ohipClaimList[index].patientDob || ''} colcount={index}/>
+											</TableCell>
+											)
+										}
+									)
+								}
+							</TableRow>			
+							<TableRow>
+								<TableCell><span>Accounting Number</span></TableCell>
+								{
+									[...Array(this.state.ohipClaimList.length)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+												<InputMask
+										            mask="********"
+													id={"accountingNumber_"+index}
+													name="accountingNumber"
+													value={this.state.ohipClaimList[index].accountingNumber || ''}
+										            onChange={this.onChange}
+													placeholder=" 12345678"
+													colcount={index}
+										          />
+											</TableCell>)
+										}
+									)
+								}
+							</TableRow>
+							<TableRow style={{backgroundColor: '#f0f0f0'}}>
+								<TableCell>Service Code #1&nbsp;<span style={{color: 'red'}}>*</span></TableCell>
+								{
+									[...Array(this.state.ohipClaimList.length)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+												<Select id={"serviceCode1_"+index} 
+														name="serviceCode1" 
+														value={this.state.ohipClaimList[index].serviceCode1 || ''}
+										            	onChange={this.onChange}
+
+														native
+														className={classes.select}
+														variant="outlined"
+														input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														inputProps = {{colcount: index}}
+											  	>
+													<option value='' disabled></option>
+													{   
+														rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
+														(
+															(element, index) =>
+															(<option key={index} value={element.code} title={"Fee: " + currency.format(element.fee) + ", " + element.description}>{element.code}</option>)
+														)
+													}
+													{
+														!rootReducer.billingCodes && <option></option>
+													}
+												</Select>
+											</TableCell>
+											)
+										}
+									)
+								}
+							</TableRow>
+							<TableRow>
+								<TableCell>Number Of Services&nbsp;<span style={{color: 'red'}}>*</span></TableCell>
+								{
+									[...Array(this.state.ohipClaimList.length)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+													<Select id={"numberOfServices1_"+index}
+															name="numberOfServices1" 
+														   value={this.state.ohipClaimList[index].numberOfServices1 || ''}
+										            	   onChange={this.onChange}
+														   className={classes.select}
+														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														   inputProps = {{colcount: index}}
+														   variant="outlined"
+
+											  			   native>
+														<option value='' disabled></option>
+														{
+															numberOfServices.map
+															(
+																(element,  index) =>
+																(
+																	<option key={index} value={element}>{element}</option>
+																)
+															)
+														}
+													</Select>		
+											</TableCell>
+											)
+										}
+									)
+								}
+							</TableRow>
+							<TableRow>
+								<TableCell>Service Date&nbsp;<span style={{color: 'red'}}>*</span></TableCell>
+								{
+									[...Array(this.state.ohipClaimList.length)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+												<input type="date" id={"serviceDate1_"+index} name="serviceDate1" onChange={this.onChange} value={this.state.ohipClaimList[index].serviceDate1 || ''} colcount={index}/>
+											</TableCell>
+											)
+										}
+									)
+								}
+							</TableRow>
+							<TableRow>
+								<TableCell>Diagnostic Code&nbsp;<span style={{color: 'red'}}>*</span></TableCell>
+								{
+									[...Array(this.state.ohipClaimList.length)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+												<Select id={"diagnosticCode1_"+index}
+														name="diagnosticCode1" 
+														   value={this.state.ohipClaimList[index].diagnosticCode1 || ''}
+										            	   onChange={this.onChange}
+														   className={classes.select}
+														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														   inputProps = {{colcount: index}}
+														   variant="outlined"
+											  			   native>
+													<option value='' disabled></option>
+													{   
+														rootReducer.billingCodes && rootReducer.billingCodes.diagnosticCodes.map
+														(
+															(element, index) =>
+															(<option key={index} value={element.code} title={element.description}>{element.code}</option>)
+														)
+													}
+													{
+														!rootReducer.billingCodes && <option></option>
+													}
+												</Select>
+											</TableCell>
+											)
+										}
+									)
+								}
+							</TableRow>
+							<TableRow style={{backgroundColor: '#f0f0f0'}}>
+								<TableCell><span>Service Code #2</span></TableCell>
+								{
+									[...Array(this.state.ohipClaimList.length)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+												<Select id={"serviceCode2_"+index}
+														name="serviceCode2" 
+														value={this.state.ohipClaimList[index].serviceCode2 || ''}
+										            	onChange={this.onChange}
+														native
+														className={classes.select}
+														input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														inputProps = {{colcount: index}}
+														variant="outlined"
+											  	>
+													<option value=''></option>
+													{   
+														rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
+														(
+															(element, index) =>
+															(<option key={index} value={element.code} title={"Fee: " + currency.format(element.fee) + ", " + element.description}>{element.code}</option>)
+														)
+													}
+													{
+														!rootReducer.billingCodes && <option></option>
+													}
+												</Select>
+											</TableCell>
+											)
+										}
+									)
+								}
+							</TableRow>
+							<TableRow>
+								<TableCell><span>Number Of Services</span></TableCell>
+								{
+									[...Array(this.state.ohipClaimList.length)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+													<Select id={"numberOfServices2_"+index}
+															name="numberOfServices2" 
+														   value={this.state.ohipClaimList[index].numberOfServices2 || ''}
+										            	   onChange={this.onChange}
+														   className={classes.select}
+														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														   inputProps = {{colcount: index}}
+														   variant="outlined"
+											  			   native>
+														<option value=''></option>
+														{
+															numberOfServices.map
+															(
+																(element,  index) =>
+																(
+																	<option key={index} value={element}>{element}</option>
+																)
+															)
+														}
+													</Select>		
+											</TableCell>
+											)
+										}
+									)
+								}
+							</TableRow>
+							<TableRow>
+								<TableCell><span>Service Date</span></TableCell>
+								{
+									[...Array(this.state.ohipClaimList.length)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+												<input type="date" id={"serviceDate2_"+index} name="serviceDate2" onChange={this.onChange} value={this.state.ohipClaimList[index].serviceDate2 || ''} colcount={index}/>
+											</TableCell>
+											)
+										}
+									)
+								}
+							</TableRow>
+							<TableRow>
+								<TableCell><span>Diagnostic Code</span></TableCell>
+								{
+									[...Array(this.state.ohipClaimList.length)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+												<Select id={"diagnosticCode2_"+index}
+														name="diagnosticCode2" 
+														   value={this.state.ohipClaimList[index].diagnosticCode2 || ''}
+										            	   onChange={this.onChange}
+														   className={classes.select}
+														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+														   inputProps = {{colcount: index}}
+														   variant="outlined"
+											  			   native>
+													<option value=''></option>
+													{   
+														rootReducer.billingCodes && rootReducer.billingCodes.diagnosticCodes.map
+														(
+															(element, index) =>
+															(<option key={index} value={element.code} title={element.description}>{element.code}</option>)
+														)
+													}
+													{
+														!rootReducer.billingCodes && <option></option>
+													}
+												</Select>
+											</TableCell>
+											)
+										}
+									)
+								}
+							</TableRow>		
+					    </TableBody>
+					  </Table>
+					</TableContainer>
+					
+					</Grid>
+
+				 </Grid>
+				);
+	}
+	renderBeforeValidation()
+	{
+		console.log("INFO:fileClaimBilling.jsx.render() is called, [this.props]: ", this.props);
+		console.log("INFO:fileClaimBilling.jsx.render() is called, [this.state]: ", this.state);
+		const {classes, rootReducer} = this.props;
+
+		return (
+				<Grid container>
+					<Grid item xs={12}>
+						<Typography variant="h6">
+					          For Solo Health Care Provider
+					    </Typography>
+					</Grid>
+					<Grid item xs={12}>
+						&nbsp;
+					</Grid>
+					
+					<Grid item xs={12} >
+						<Alert severity="info" style={{paddingTop: 0, paddingBottom: 0}}><span style={{color: 'red'}}>*</span>&nbsp;Required</Alert>
+						<Alert severity="info" style={{paddingTop: 0, paddingBottom: 0}}>Each time, creating a claim submission file is limited upto ten patients.</Alert>
+					</Grid>
+					<Grid item xs={12}>
+					
+					<TableContainer>
+					<Table size="small" aria-label="claimFileTable">
+						<TableHead >
+					      <TableRow >
+							<TableCell style={{textAlign: 'left'}}>
+								<span>
+									<strong>Provider Number</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;
+									<InputMask
+							            mask="999999"
+										id="careProviderNumber"
+							            value={this.state.careProviderNumber || ''}
+							            onChange={(e)=>this.setState({careProviderNumber: e.target.value})}
+										placeholder=" 123456"
+										style={{width: '80px'}}
+										title="Six digits required"
+							          />
+								</span>
+							</TableCell>
+							<TableCell colSpan={this.state.ohipClaimList.length} style={{textAlign: 'right'}}>
+								<IconButton
+							        color="primary"
+								    onClick={this.addClaim}
+									title="Add more claims upto ten patients for the file"
+									disabled={this.state.ohipClaimList.length==10}
+							      >
+							        <AddBoxIcon fontSize="large"/>
+							      </IconButton>
+								  <IconButton
+							        color="primary"
+								    onClick={this.subtractClaim}
+									title="Subtract the last claim"
+									disabled={this.state.ohipClaimList.length==1}
+							      >
+							        <IndeterminateCheckBoxIcon fontSize="large"/>
+							      </IconButton>&nbsp;
+								  <Button
+							        variant="outlined" color="primary"
+									onClick={this.createClaimFile}
+							        className={classes.button}
+							        endIcon={<Icon>create</Icon>}
+									title="Create a submission claim file"
+							      >
+							        Create Claim
+							      </Button>
+							</TableCell>
+						  </TableRow>
+						</TableHead>
+					    <TableBody>
+							<TableRow style={{backgroundColor: '#e6e6e6'}}>
+								<TableCell>OHIP Card Number&nbsp;<span style={{color: 'red'}}>*</span></TableCell>
+								{
+									[...Array(this.state.ohipClaimList.length)].map
+									(
+										(cell, index) =>
+										{
+											return (<TableCell key={index}>
+												<InputMask
+										            mask="9999 - 999 - 999 - aa"
+													formatChars={{'9': '[0-9]', 'a': '[A-Z]', '*': '[A-Za-z0-9]'}}
+										            value={this.state.ohipClaimList[index].ohipNumber || ''}
+										            onChange={this.onChange}
+													id="ohipNumber"
+													colcount={index}
+													placeholder=" 1234 - 123 - 123 - AB"
+													title="10 digits number and version code from the OHIP card are required"
+										          />
+											</TableCell>
+											)
+										}
+									)
+								}
+							</TableRow>
+							<TableRow>
+								<TableCell>Patient DOB&nbsp;<span style={{color: 'red'}}>*</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
@@ -249,7 +715,7 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow style={{backgroundColor: '#f0f0f0'}}>
-								<TableCell><span>Service Code #1 *</span></TableCell>
+								<TableCell>Service Code #1&nbsp;<span style={{color: 'red'}}>*</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
@@ -285,7 +751,7 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span>Number Of Services *</span></TableCell>
+								<TableCell>Number Of Services&nbsp;<span style={{color: 'red'}}>*</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
@@ -319,7 +785,7 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span>Service Date *</span></TableCell>
+								<TableCell>Service Date&nbsp;<span style={{color: 'red'}}>*</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
@@ -334,7 +800,7 @@ class FileClaimBilling extends React.Component
 								}
 							</TableRow>
 							<TableRow>
-								<TableCell><span>Diagnostic Code *</span></TableCell>
+								<TableCell>Diagnostic Code&nbsp;<span style={{color: 'red'}}>*</span></TableCell>
 								{
 									[...Array(this.state.ohipClaimList.length)].map
 									(
@@ -488,497 +954,6 @@ class FileClaimBilling extends React.Component
 					  </Table>
 					</TableContainer>
 					
-					</Grid>
-
-				 </Grid>
-				);
-	}
-	renderAddSubtract()
-	{
-		console.log("INFO:fileClaimBilling.jsx.render() is called, this.props: ", this.props);
-		console.log("INFO:fileClaimBilling.jsx.render() is called, this.state: ", this.state);
-		const {classes, rootReducer} = this.props;
-		const {claimLength} = this.state;
-		return (
-				<Grid container>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-					          For Solo Health Care Provider
-					    </Typography>
-						<Typography variant="body2" gutterBottom>
-					        Each time, creating a claim submission file is limited upto ten patients.
-					    </Typography>
-					</Grid>
-					<Grid item xs={12}>
-						&nbsp;
-					</Grid>
-					
-					<Grid item xs={12}>
-						&nbsp;
-					</Grid>
-					<Grid item xs={12}>
-					
-					<TableContainer>
-					<Table size="small" aria-label="claimFileTable">
-						<TableHead >
-					      <TableRow >
-							<TableCell style={{textAlign: 'left'}}>
-								<span>
-									<strong>Provider Number</strong>&nbsp;
-									<InputMask
-							            mask="999999"
-										id="careProviderNumber"
-							            value={this.state.careProviderNumber}
-							            onChange={this.onChange}
-										placeholder=" 123456"
-										style={{width: '80px'}}
-							          />
-								</span>
-							</TableCell>
-							<TableCell colSpan={this.state.claimLength} style={{textAlign: 'right'}}>
-								<IconButton
-							        color="primary"
-								    onClick={()=>this.setState({claimLength: ++this.state.claimLength})}
-									title="Add more claims upto ten patients for the file"
-									disabled={this.state.claimLength==10}
-							      >
-							        <AddBoxIcon fontSize="large"/>
-							      </IconButton>
-								  <IconButton
-							        color="primary"
-								    onClick={()=>this.setState({claimLength: --this.state.claimLength})}
-									title="Subtract the last claim"
-									disabled={this.state.claimLength==1}
-							      >
-							        <IndeterminateCheckBoxIcon fontSize="large"/>
-							      </IconButton>&nbsp;
-								  <Button
-							        variant="outlined" color="primary"
-							        className={classes.button}
-							        endIcon={<Icon>create</Icon>}
-									title="Create a submission claim file"
-							      >
-							        Create Claim
-							      </Button>
-							</TableCell>
-						  </TableRow>
-						</TableHead>
-					    <TableBody>
-							<TableRow style={{backgroundColor: '#f0f0f0'}}>
-								<TableCell><span>OHIP Card Number</span></TableCell>
-								{
-									[...Array(this.state.claimLength)].map
-									(
-										(cell, index) =>
-										{
-											return (<TableCell key={index}>
-												<InputMask
-										            mask="9999 - 999 - 999 - aa"
-										            value={this.state.ohipNumber}
-										            onChange={this.onChange}
-													id="ohipNumber"
-													placeholder=" 1234 - 123 - 123 - AB"
-										          />
-											</TableCell>
-											)
-										}
-									)
-								}
-							</TableRow>
-							<TableRow>
-								<TableCell><span>Patient DOB</span></TableCell>
-								{
-									[...Array(this.state.claimLength)].map
-									(
-										(cell, index) =>
-										{
-											return (<TableCell key={index}>
-												<input type="date" id="patientDob" />
-											</TableCell>
-											)
-										}
-									)
-								}
-							</TableRow>			
-							<TableRow>
-								<TableCell><span>Accounting Number</span></TableCell>
-								{
-									[...Array(this.state.claimLength)].map
-									(
-										(cell, index) =>
-										{
-											return (<TableCell key={index}>
-												<InputMask
-										            mask="********"
-													id="accountingNumber"
-										            value={this.state.accountingNumber}
-										            onChange={this.onChange}
-													placeholder=" 12345678"
-										          />
-											</TableCell>)
-										}
-									)
-								}
-							</TableRow>
-							<TableRow style={{backgroundColor: '#f0f0f0'}}>
-								<TableCell><span>Service Code</span></TableCell>
-								{
-									[...Array(this.state.claimLength)].map
-									(
-										(cell, index) =>
-										{
-											return (<TableCell key={index}>
-												<Select id="serviceCode" 
-														value={this.state.serviceCode}
-										            	onChange={this.onChange}
-														native
-														className={classes.select}
-														variant="outlined"
-														input={<OutlinedInput classes={{ input: classes.selectInput}} />}
-											  	>
-													{   
-														rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
-														(
-															(element, index) =>
-															(<option key={index} value={element.code} title={"Fee: " + currency.format(element.fee) + ", " + element.description}>{element.code}</option>)
-														)
-													}
-													{
-														!rootReducer.billingCodes && <option></option>
-													}
-												</Select>
-											</TableCell>
-											)
-										}
-									)
-								}
-							</TableRow>
-							<TableRow>
-								<TableCell><span>Number Of Services</span></TableCell>
-								{
-									[...Array(this.state.claimLength)].map
-									(
-										(cell, index) =>
-										{
-											return (<TableCell key={index}>
-													<Select id="numberOfServices" 
-														   value={this.state.numberOfServices}
-										            	   onChange={this.onChange}
-														   className={classes.select}
-														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
-														   variant="outlined"
-											  			   native>
-														{
-															numberOfServices.map
-															(
-																(element,  index) =>
-																(
-																	<option key={index} value={element}>{element}</option>
-																)
-															)
-														}
-													</Select>		
-											</TableCell>
-											)
-										}
-									)
-								}
-							</TableRow>
-							<TableRow>
-								<TableCell><span>Service Date</span></TableCell>
-								{
-									[...Array(this.state.claimLength)].map
-									(
-										(cell, index) =>
-										{
-											return (<TableCell key={index}>
-												<input type="date" id="serviceDate" />
-											</TableCell>
-											)
-										}
-									)
-								}
-							</TableRow>
-							<TableRow>
-								<TableCell><span>Diagnostic Code</span></TableCell>
-								{
-									[...Array(this.state.claimLength)].map
-									(
-										(cell, index) =>
-										{
-											return (<TableCell key={index}>
-												<Select id="diagnosticCode" 
-														   value={this.state.diagnosticCode}
-										            	   onChange={this.onChange}
-														   className={classes.select}
-														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
-														   variant="outlined"
-											  			   native>
-													{   
-														rootReducer.billingCodes && rootReducer.billingCodes.diagnosticCodes.map
-														(
-															(element, index) =>
-															(<option key={index} value={element.code} title={element.description}>{element.code}</option>)
-														)
-													}
-													{
-														!rootReducer.billingCodes && <option></option>
-													}
-												</Select>
-											</TableCell>
-											)
-										}
-									)
-								}
-							</TableRow>
-							<TableRow style={{backgroundColor: '#f0f0f0'}}>
-								<TableCell><span>Service Code</span></TableCell>
-								{
-									[...Array(this.state.claimLength)].map
-									(
-										(cell, index) =>
-										{
-											return (<TableCell key={index}>
-												<Select id="serviceCode" 
-														value={this.state.serviceCode}
-										            	onChange={this.onChange}
-														native
-														className={classes.select}
-														input={<OutlinedInput classes={{ input: classes.selectInput}} />}
-														variant="outlined"
-											  	>
-													{   
-														rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
-														(
-															(element, index) =>
-															(<option key={index} value={element.code} title={"Fee: " + currency.format(element.fee) + ", " + element.description}>{element.code}</option>)
-														)
-													}
-													{
-														!rootReducer.billingCodes && <option></option>
-													}
-												</Select>
-											</TableCell>
-											)
-										}
-									)
-								}
-							</TableRow>
-							<TableRow>
-								<TableCell><span>Number Of Services</span></TableCell>
-								{
-									[...Array(this.state.claimLength)].map
-									(
-										(cell, index) =>
-										{
-											return (<TableCell key={index}>
-													<Select id="numberOfServices" 
-														   value={this.state.numberOfServices}
-										            	   onChange={this.onChange}
-														   className={classes.select}
-														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
-														   variant="outlined"
-											  			   native>
-														{
-															numberOfServices.map
-															(
-																(element,  index) =>
-																(
-																	<option key={index} value={element}>{element}</option>
-																)
-															)
-														}
-													</Select>		
-											</TableCell>
-											)
-										}
-									)
-								}
-							</TableRow>
-							<TableRow>
-								<TableCell><span>Service Date</span></TableCell>
-								{
-									[...Array(this.state.claimLength)].map
-									(
-										(cell, index) =>
-										{
-											return (<TableCell key={index}>
-												<input type="date" id="serviceDate" />
-											</TableCell>
-											)
-										}
-									)
-								}
-							</TableRow>
-							<TableRow>
-								<TableCell><span>Diagnostic Code</span></TableCell>
-								{
-									[...Array(this.state.claimLength)].map
-									(
-										(cell, index) =>
-										{
-											return (<TableCell key={index}>
-												<Select id="diagnosticCode" 
-														   value={this.state.diagnosticCode}
-										            	   onChange={this.onChange}
-														   className={classes.select}
-														   input={<OutlinedInput classes={{ input: classes.selectInput}} />}
-														   variant="outlined"
-											  			   native>
-													{   
-														rootReducer.billingCodes && rootReducer.billingCodes.diagnosticCodes.map
-														(
-															(element, index) =>
-															(<option key={index} value={element.code} title={element.description}>{element.code}</option>)
-														)
-													}
-													{
-														!rootReducer.billingCodes && <option></option>
-													}
-												</Select>
-											</TableCell>
-											)
-										}
-									)
-								}
-							</TableRow>		
-					    </TableBody>
-					  </Table>
-					</TableContainer>
-					
-					</Grid>
-
-				 </Grid>
-				);
-	}
-	renderTextField()
-	{
-		console.log("INFO:fileClaimBilling.jsx.render() is called, this.props: ", this.props);
-		const {classes, rootReducer} = this.props;
-
-		return (
-				<Grid container>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-					          For Solo Health Care Provider
-					    </Typography>
-						
-					</Grid>
-					<Grid item xs={12} className={classes.root}>
-				      <div>
-						<InputMask
-				            mask="999999"
-				            value={this.state.careProviderNumber}
-				            onChange={this.onChange}
-
-				          >
-				            {() => 
-								<TextField
-								      required
-						              id="careProviderNumber"
-						              label="Care Provider Number"
-						              helperText="eg, 123456"
-									  placeholder="123456"
-									  variant="outlined"
-				                />
-							}
-				          </InputMask>
-						<InputMask
-				            mask="********"
-				            value={this.state.accountingNumber}
-				            onChange={this.onChange}
-				          >
-				            {() => 
-								<TextField
-						              id="accountingNumber"
-						              label="Accounting Number"
-						              helperText="eg, 00001234"
-									  variant="outlined"
-				                />
-							}
-				        </InputMask>
-				        <TextField id="serviceCode" 
-								   label="Service Code" 
-								   variant="outlined" 
-								   value={this.state.serviceCode}
-				            	   onChange={this.onChange}
-					  			   SelectProps={{native: true}} select required>
-							{   
-								rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
-								(
-									(element, index) =>
-									(<option key={index} value={element.code} title={"Fee: " + currency.format(element.fee) + ", " + element.description}>{element.code}</option>)
-								)
-							}
-							{
-								!rootReducer.billingCodes && <option></option>
-							}
-						</TextField>
-						<TextField id="diagnosticCode" 
-								   label="Diagnostic Code" 
-								   variant="outlined" 
-								   value={this.state.diagnosticCode}
-				            	   onChange={this.onChange}
-					  			   SelectProps={{native: true}} select required>
-							{   
-								rootReducer.billingCodes && rootReducer.billingCodes.diagnosticCodes.map
-								(
-									(element, index) =>
-									(<option key={index} value={element.code} title={element.description}>{element.code}</option>)
-								)
-							}
-							{
-								!rootReducer.billingCodes && <option></option>
-							}
-						</TextField>
-				        <TextField
-				          id="numberOfServices"
-				          label="Number Of Services"
-				          type="number"
-						  value={this.state.numberOfServices}
-						  onChange={this.onChange}
-							variant="outlined"
-				          InputProps={{inputProps: {min: 1, max: 10}}}
-						  required
-				        />
-				        <TextField
-				          id="serviceDate"
-				          label="Service Date"
-						  variant="outlined"
-						  type="date"
-						  value={this.state.serviceDate}
-						  InputLabelProps={{shrink: true}}
-						  onChange={this.onChange}
-						  required
-				        />
-
-						 <InputMask
-				            mask="9999 - 999 - 999 - aa"
-				            value={this.state.ohipNumber}
-				            onChange={this.onChange}
-							beforeMaskedValueChange={this.beforeMaskedValueChange}
-				          >
-				            {() => 
-								<TextField
-						              id="ohipNumber"
-						              label="OHIP Card Number"
-						              helperText="eg, 1234 - 123 - 123 - AB"
-									  variant="outlined"
-				                />
-							}
-				        </InputMask>
-				        <TextField
-				          id="patientDob"
-				          label="Patient DOB"
-						  variant="outlined"
-						  type="date"
-						  value={this.state.patientDob}
-						  onChange={this.onChange}
-						  InputLabelProps={{shrink: true}}
-						  required
-				        />
-						
-				      </div>
 					</Grid>
 
 				 </Grid>
