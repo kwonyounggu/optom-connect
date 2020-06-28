@@ -1,0 +1,2 @@
+1. Error: Request failed with status code 500 which it happened in 'by file claim'
+2. type: "GET_BILLING_CODES_REJECTED", payload: Error: Request failed with status code 404, which it happened in 'by file claim'

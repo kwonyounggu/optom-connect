@@ -58,7 +58,8 @@ class FileClaimBilling extends React.Component
 		this.state = 
 		{			
 			careProviderNumber: props.rootReducer.careProviderNumber,
-			ohipClaimList: props.rootReducer.ohipClaimList
+			ohipClaimList: props.rootReducer.ohipClaimList,
+			isFormValid: true
 		}
 		
 		this.onChange = (e) =>
@@ -81,35 +82,6 @@ class FileClaimBilling extends React.Component
 				}
 			);
 		}
-		/*
-		this.onChange = (e) =>
-		{
-			console.log("[INFO in onChange(e.target)]: ", e.target);
-
-			e.persist(); //put this because ohipClaimItems initally empty or nulled
-			let colcount = e.target.getAttribute('colcount');
-			
-			console.log("[INFO in onChange(e.target.id)]: ", e.target.id, "| e.target.value: ", e.target.value, '| colcount: ', colcount);
-			
-			this.setState
-			(
-				(prevState) =>
-				{
-					prevState.ohipClaimList[colcount][e.target.id] = e.target.value;
-					return {
-								prevState
-						   }
-				}
-			);
-		}*/
-		//Validate if a lower case version code of ohip number is entered
-		this.beforeMaskedValueChange = (newState, oldState, userInput) => 
-		{
-			console.log("beforeMaskedValueChange: ", newState);
-			  let { value, selection } = newState;
-			  if (value.length && selection && selection.start >= 20) value = value.toUpperCase();
-			  return {value, selection};
-		}
 
 		this.subtractClaim = () =>
 		{
@@ -122,68 +94,170 @@ class FileClaimBilling extends React.Component
 		}
 		this.displayErrorBox = (isValid, id) =>
 		{
-			if (isValid) document.getElementById(id).style.border = 'inherit';
+			if (isValid) document.getElementById(id).style.border = '1px solid darkgrey';
 			else document.getElementById(id).style.border = '3px solid red';
 		}
 		this.createClaimFile = () =>
 		{
-			//1. validate
-			//2. call the server to create a file
-			//3. store in claim history if logged in 
-			//4. display and ready to download the file in local
-			console.log("validate");
-			console.log("careProviderNumber: ", document.getElementById("careProviderNumber"));
-			console.log("careProviderNumber: ", /^\d{6}/.test(this.state.careProviderNumber));
-			if (/^\d{6}/.test(this.state.careProviderNumber))
-				document.getElementById("careProviderNumber").style.border = 'inherit';
-			else 
-				document.getElementById("careProviderNumber").style.border = '3px solid red';
-			let colCount = this.state.ohipClaimList.length;
+			let isValid = true;
+			let isAllValid = true;
+			
+			
+			if (/^\d{6}/.test(this.state.careProviderNumber) == false) isValid = false;
+			this.displayErrorBox(isValid, "careProviderNumber");
+
+			isAllValid = isValid ? isAllValid : false;
+				
+			let colCount = this.state.ohipClaimList.length;			
 			for (let i=0; i<colCount; i++)
 			{
 				let colObj = this.state.ohipClaimList[i];  
 				console.log(i+" : ", colObj);
-				//console.log("[ohip check]:", /^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?[A-Z]{2}/.test(colObj.ohipNumber));
-				let isValid = true;
-				if (colObj.ohipNumber) 
-				{
-					if (/^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?[A-Z]{2}/.test(colObj.ohipNumber))
-					{
-						//collect ohip number and version code respectively
-						console.log("ohip number and 2 char version code");
-					}
-					else if (/^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?[A-Z]{1}/.test(colObj.ohipNumber))
-					{
-						//collect ohip number and version code respectively
-						console.log("ohip number and 1 char version code");
-					}
-					else if (/^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?/.test(colObj.ohipNumber))
-					{
-						console.log("no version code but only ohip number");
-						//collect ohip number but no version code
-					}
-					else
-					{
-						//error
-						isValid = false;
-					}
-					//console.log("[ohip check]:", /^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?[A-Z]{2}/.test(colObj.ohipNumber));
-				}
-				else
-				{
-					//error
-					isValid = false;
-				}
+				isValid = true;
+				if (colObj.ohipNumber &&
+				    (/^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?[A-Z]{2}/.test(colObj.ohipNumber) || 
+					    /^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?[A-Z]{1}/.test(colObj.ohipNumber) ||
+						/^\d{4}\s?-\s?\d{3}\s?-\s?\d{3}\s?-\s?/.test(colObj.ohipNumber)
+					)
+				   ) { console.log("[INFO: ] valid in ohipNumber");} //OK
+				else isValid = false;
+
 				this.displayErrorBox(isValid, "ohipNumber_"+i);
+				isAllValid = isValid ? isAllValid : false;
 				
-				/*
-				if (isOK)
-					document.getElementById("ohipNumber_"+i).style.border = 'inherit';
+				isValid = true;
+				console.log("PatientDOB["+i+"]: ", colObj.patientDob);
+				if (colObj.patientDob && /^\d{4}-\d{2}-\d{2}/.test(colObj.patientDob))
+				{ console.log("Store patient dob", i); }
+				else isValid = false;
+				
+				this.displayErrorBox(isValid, "patientDob_"+i);
+				isAllValid = isValid ? isAllValid : false;
+				
+				isValid = true;
+				console.log("AccountingNumber["+i+"]: ", colObj.accountingNumber);
+				if (colObj.accountingNumber)
+					if (colObj.accountingNumber.length && /^[A-Za-z0-9]{8}/.test(colObj.accountingNumber))
+					{
+						console.log("Store accounting number", i);
+					}
+					else isValid = false;
+				else 
+				{
+					//store accounting number with empty string
+					console.log("Store empty accounting number", i);
+				}
+				
+				this.displayErrorBox(isValid, "accountingNumber_"+i);
+				isAllValid = isValid ? isAllValid : false;
+				
+				
+				isValid = true;
+				console.log("ServiceCode1_["+i+"]: ", colObj.serviceCode1);
+				if (colObj.serviceCode1 && /^[A-Z0-9]{5}/.test(colObj.serviceCode1))
+				{
+					console.log("Store Service Code 1 ", i);
+				}
+				else isValid = false;
+				
+				this.displayErrorBox(isValid, "serviceCode1_"+i);
+				isAllValid = isValid ? isAllValid : false;
+				
+				isValid = true;
+				console.log("numberOfServices1_["+i+"]: ", colObj.numberOfServices1);
+				if (colObj.numberOfServices1 && /^\d{1}/.test(colObj.numberOfServices1))
+				{
+					console.log("Store numberOfServices1 ", i);
+				}
+				else isValid = false;
+				
+				this.displayErrorBox(isValid, "numberOfServices1_"+i);
+				isAllValid = isValid ? isAllValid : false;
+				
+				isValid = true;
+				console.log("Service Date 1["+i+"]: ", colObj.serviceDate1);
+				if (colObj.serviceDate1 && /^\d{4}-\d{2}-\d{2}/.test(colObj.serviceDate1))
+				{
+					console.log("Store service date 1_", i);
+				}
+				else isValid = false;
+				
+				this.displayErrorBox(isValid, "serviceDate1_"+i);
+				isAllValid = isValid ? isAllValid : false;
+				
+				isValid = true;
+				console.log("Diagnostic code 1["+i+"]: ", colObj.diagnosticCode1);
+				if (colObj.diagnosticCode1 && /^\d{3,4}/.test(colObj.diagnosticCode1))
+				{
+					console.log("Store Diagnostic code 1_", i);
+				}
+				else isValid = false;
+				
+				this.displayErrorBox(isValid, "diagnosticCode1_"+i);
+				isAllValid = isValid ? isAllValid : false;
+				
+				if (colObj.serviceCode2 || colObj.numberOfServices2 || colObj.serviceDate2 || colObj.diagnosticCode2)
+				{
+					isValid = true;
+					console.log("ServiceCode2_["+i+"]: ", colObj.serviceCode2);
+					if (colObj.serviceCode2 && /^[A-Z0-9]{5}/.test(colObj.serviceCode2))
+					{
+						console.log("Store Service Code 2 ", i);
+					}
+					else isValid = false;
+					
+					this.displayErrorBox(isValid, "serviceCode2_"+i);
+					isAllValid = isValid ? isAllValid : false;
+					
+					isValid = true;
+					console.log("numberOfServices2_["+i+"]: ", colObj.numberOfServices2);
+					if (colObj.numberOfServices2 && /^\d{1}/.test(colObj.numberOfServices2))
+					{
+						console.log("Store numberOfServices2_ ", i);
+					}
+					else isValid = false;
+					
+					this.displayErrorBox(isValid, "numberOfServices2_"+i);
+					isAllValid = isValid ? isAllValid : false;
+					
+					isValid = true;
+					console.log("Service Date 2["+i+"]: ", colObj.serviceDate2);
+					if (colObj.serviceDate2 && /^\d{4}-\d{2}-\d{2}/.test(colObj.serviceDate2))
+					{
+						console.log("Store service date 2_", i);
+					}
+					else isValid = false;
+					
+					this.displayErrorBox(isValid, "serviceDate2_"+i);
+					isAllValid = isValid ? isAllValid : false;
+					
+					isValid = true;
+					console.log("Diagnostic code 2_["+i+"]: ", colObj.diagnosticCode2);
+					if (colObj.diagnosticCode2 && /^\d{3,4}/.test(colObj.diagnosticCode2))
+					{
+						console.log("Store Diagnostic code 2_", i);
+					}
+					else isValid = false;
+					
+					this.displayErrorBox(isValid, "diagnosticCode2_"+i);
+					isAllValid = isValid ? isAllValid : false;
+				}
 				else
-					document.getElementById("ohipNumber_"+i).style.border = '3px solid red';
-				console.log("[ohipNumber_"+i+"]: ", document.getElementById("ohipNumber_"+i), ", value: " + colObj.ohipNumber);
-				*/
+				{
+					this.displayErrorBox(true, "serviceCode2_"+i);
+					this.displayErrorBox(true, "numberOfServices2_"+i);
+					this.displayErrorBox(true, "serviceDate2_"+i);
+					this.displayErrorBox(true, "diagnosticCode2_"+i);
+				}
+			} //end of for-loop
+			
+			if (isAllValid)
+			{
+				//call server for the claim file
+				console.log("[INFO, No errors in all columns]: ", isAllValid);
+				//let dataToServer = {careProviderNumber: this.state.careProviderNumber, patientServiceList: this.state.ohipClaimList};
 			}
+			this.setState({isFormValid: isAllValid});
 		}
 	}
 	componentDidMount()
@@ -216,6 +290,7 @@ class FileClaimBilling extends React.Component
 					</Grid>
 					
 					<Grid item xs={12} >
+						{!this.state.isFormValid && <Alert severity="error" style={{paddingTop: 0, paddingBottom: 0}}>The form is not completely filled - check it out and try again!</Alert>}
 						<Alert severity="info" style={{paddingTop: 0, paddingBottom: 0}}><span style={{color: 'red'}}>*</span>&nbsp;Required</Alert>
 						<Alert severity="info" style={{paddingTop: 0, paddingBottom: 0}}>Each time, creating a claim submission file is limited upto ten patients.</Alert>
 					</Grid>
