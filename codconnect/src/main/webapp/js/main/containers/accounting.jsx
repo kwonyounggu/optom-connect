@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {Route, Switch} from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import {connect} from "react-redux";
-import {convertMroToCSV, resetMROData, getBillingCodes} from "../actions/rootActions.jsx";
+import {convertMroToCSV, resetMROData, getBillingCodes, getClaimFile} from "../actions/rootActions.jsx";
 import {addAlertMessage} from "../actions/alertMessageActions.jsx";
 
 const ConvertMROtoCSV = React.lazy( () => import("../components/accounting/convertMROtoCSV.jsx") );
@@ -73,6 +73,7 @@ class Accounting extends React.Component
 										rootReducer={this.props.rootReducer} 
 										getBillingCodes={this.props.getBillingCodes} 
 										addAlertMessage={this.props.addAlertMessage}
+										getClaimFile={this.props.getClaimFile}
 									/> 
 								} 
 						/>
@@ -113,10 +114,11 @@ Accounting.propTypes =
 	convertMroToCSV: PropTypes.func.isRequired,
 	resetMROData: PropTypes.func.isRequired,
 	getBillingCodes: PropTypes.func.isRequired,
+	getClaimFile: PropTypes.func.isRequired,
 	addAlertMessage: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {convertMroToCSV, addAlertMessage, resetMROData, getBillingCodes}) (withStyles(styles) (Accounting));
+export default connect(mapStateToProps, {convertMroToCSV, addAlertMessage, resetMROData, getBillingCodes, getClaimFile}) (withStyles(styles) (Accounting));
 /************************** Hope this works:
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ComponentName))
 **********************************/

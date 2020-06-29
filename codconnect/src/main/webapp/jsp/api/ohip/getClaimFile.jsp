@@ -5,6 +5,7 @@
 <%@ page import = "java.util.Map" %>
 <%@ page import = "java.util.stream.Collectors" %>
 <%@ page import = "java.util.List" %>
+<%@ page import = "java.util.Enumeration" %>
 <%@ page import = "org.json.JSONObject" %>
 <%@ page import = "com.utilities.*" %>
 <%@ page import = "com.beans.AuthUserDetailsInternalBean" %>
@@ -14,64 +15,66 @@
 
 <%
 	response.setContentType("application/json");
-	
-	
-	/*
-		See https://stackoverflow.com/questions/8100634/get-the-post-request-body-from-httpservletrequest
-		Warning: once you call request.getReader(), the stream of its data will be empty.
-		The following statement has produced 10 in size but only one json object is filled in the 1st array element.
-			- List<Object> paramList = request.getReader().lines().collect(Collectors.toList());
-	*/
+	System.out.println("getClaimFile.jsp is called");
 	
 	if(request.getMethod().equals("POST"))
 	{
+		
 		String payloadString = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 		JSONObject jsonObj = new JSONObject(payloadString);
-		AuthUserDetailsInternalBean ab = null;
+		//AuthUserDetailsInternalBean ab = null;
 		try
 		{
-			//JsonUtils.printJsonObject(jsonObj);
+			
+			JsonUtils.printJsonObject(jsonObj);
+			
+	        String token = request.getHeader("Authorization");
+			JSONObject decodedToken = null; 
+
+			if (token != null && token.startsWith("Bearer ")) //Signed In
+			{
+				token = token.replace("Bearer ", "");
+				
+				TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
+				decodedToken = tokenUtil.verifyToken(token);
+				
+				//Note you need to validate if the user is still in the database whose id is still valid/enabled
+			}
+			jsonObj.put("decodedToken", decodedToken);//remove later
+			
 			//Validate One more time in the server side
-			JsonUtils.validateSignup(jsonObj);
+			/*JsonUtils.validateSignup(jsonObj);
 			
 			//Go ahead for table-insertion if valid
 			if(!jsonObj.getBoolean("invalid"))
 			{
-				//System.out.println("---insert values in the table ---");
-				/*1. insert into auth_user_details_internal
-				  2. insert into auth_user_account --TO DO Nov-10-2017
-				  3. then provide the login token from jwt, see Lec#16
-				  */
-				  
-				//BasicDataSource _ds = (BasicDataSource)request.getServletContext().getAttribute("osClusterDs");	
+					
 				ab = new AuthUserDetailsInternalBean(jsonObj);
 				new AuthDao(DatasourceUtil.getDataSource()).signUpRegistration(ab);
 				
 				MyEmail.emailSignupConfirmation(ab);
 			}
-		}
-		catch(Exception e)
-		{
-			System.err.println("ERROR (signup.jsp): "+ e);
-			jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
-			jsonObj.put("invalid", true);
-					
-			/*
-			Note that if insertion of a record is done then remove it from the table
 			*/
-			if(ab != null && ab.getId() > 0)
-	    	 {
-	    		 new AuthDao(DatasourceUtil.getDataSource()).deleteRecords(ab);
-	    	 }
+			jsonObj.put("isItValid", true);
+			//throw new Exception("testing an error");
+		}
+		catch(Exception | Error e)
+		{
+			System.err.println("ERROR (getBillingCodes.jsp): "+ e);
+			jsonObj = new JSONObject();
+			jsonObj.put("isItValid", false);
+			jsonObj.put("errorMessage", e.getMessage().trim().isEmpty() ? 
+					                      (e.getCause()+ "There is an unknown error. -- Try it later!") : e.getMessage());
 		}
 		
+		/*
 		//Clean unnecessary properties from the jsonObj
 		jsonObj.remove("fullName");
 		jsonObj.remove("email");
 		jsonObj.remove("password");
 		jsonObj.remove("passwordConfirmation");
 		jsonObj.remove("timezone");
-					
+					*/
 		out.print(jsonObj);
 		
 	}

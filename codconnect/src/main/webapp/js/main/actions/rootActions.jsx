@@ -35,3 +35,10 @@ export function getBillingCodes()
 		  		payload: axios.post("jsp/api/ohip/getBillingCodes.jsp", {})
 	  		 };
 }
+export function getClaimFile(data) 
+{
+	  return { 
+		  		type: ActionTypes.GET_CLAIM_FILE,
+		  		payload: axios.post("jsp/api/ohip/getClaimFile.jsp", data)
+	  		 };
+}

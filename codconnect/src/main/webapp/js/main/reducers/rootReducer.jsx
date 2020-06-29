@@ -6,7 +6,8 @@ function rootReducer
 		lang: "kr",
 		billingCodes: null,
 		ohipClaimList: [{}],
-		careProviderNumber: ''
+		careProviderNumber: '',
+		claimFile: null
     },
     action
  )
@@ -42,6 +43,11 @@ function rootReducer
 		case ActionTypes.GET_BILLING_CODES_FULFILLED: //for both Promise and Thunk
     	{   		
     		state={...state, billingCodes: action.payload.data};
+            break;
+    	}
+		case ActionTypes.GET_CLAIM_FILE_FULFILLED: //for both Promise and Thunk
+    	{   		
+    		state={...state, claimFile: action.payload.data};
             break;
     	}
         default: 
