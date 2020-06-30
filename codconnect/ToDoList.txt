@@ -1,2 +1,15 @@
 1. Error: Request failed with status code 500 which it happened in 'by file claim'
 2. type: "GET_BILLING_CODES_REJECTED", payload: Error: Request failed with status code 404, which it happened in 'by file claim'
+
+key: careProviderNumber, value: 123456
+12:21:48,054 INFO  [null] (default task-12) key: ohipClaimList, value: 
+[
+{"ohipNumber":"1111 - 111 - 111 - __","patientDob":"2020-06-05","serviceCode1":"V402A","serviceCode2":"V406A","numberOfServices2":"1","diagnosticCode1":"378","accountingNumber":"11111111","numberOfServices1":"1","serviceDate2":"2020-06-17","serviceDate1":"2020-06-01","diagnosticCode2":"371"},{"ohipNumber":"2222 - 222 - 222 - A_","patientDob":"2020-06-06","serviceCode1":"V404A","diagnosticCode1":"377","accountingNumber":"22222222","numberOfServices1":"1","serviceDate1":"2020-06-02"},{"ohipNumber":"3333 - 333 - 333 - AA","patientDob":"2020-06-07","serviceCode1":"V406A","diagnosticCode1":"375","numberOfServices1":"1","serviceDate1":"2020-06-03"}]
+12:21:48,059 INFO  [stdout] (default task-12) JWT Header : {"alg":"HS256"}
+12:21:48,059 INFO  [stdout] (default task-12) JWT Body : {"jti":"kwon.younggu@gmail.com","iat":1590027597,"sub":"internalLogin","iss":"권영구","exp":1621563597}
+12:21:48,060 INFO  [null] (default task-12) >>> Printing the given jsonObject ... <<<
+12:21:48,060 INFO  [null] (default task-12) key: sub, value: internalLogin
+12:21:48,060 INFO  [null] (default task-12) key: iss, value: 권영구
+12:21:48,060 INFO  [null] (default task-12) key: exp, value: 1621563597
+12:21:48,060 INFO  [null] (default task-12) key: iat, value: 1590027597
+12:21:48,061 INFO  [null] (default task-12) key: jti, value: kwon.younggu@gmail.com

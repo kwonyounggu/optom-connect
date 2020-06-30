@@ -24,7 +24,7 @@ public class HEBBean implements Serializable
 	private Logger log = Logger.getLogger(this.getClass().getName());
 	
 	private String transactionIdentifier = "HE"; 
-	private char recordIdentifier = 'B'; 
+	private String recordIdentifier = "B"; 
 	private String techSpecReleaseIdentifier = "V03";
 	private String MOHOfficeCode = " ";
 	private String batchIdentification = "111101010001";//creation data 'YYYYMMDD0001'
@@ -33,12 +33,20 @@ public class HEBBean implements Serializable
 	private String careProviderNumber = "000000";
 	private String speciality = "56";
 	private char[] reservedForMOH = new char[42];//42 spaces
+	private int sequentialNumber = 0;
 
 	private SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd");
 
 	public HEBBean()
 	{
 		// TODO Auto-generated constructor stub
+		setReservedForMOH();
+	}
+	public HEBBean(int sequentialNumber, String careProviderNumber) //which is 3-4 digits
+	{
+		this.sequentialNumber = sequentialNumber;
+		this.careProviderNumber = careProviderNumber;
+		setReservedForMOH();
 	}
 	public HEBBean(String line) throws Exception
 	{
@@ -53,7 +61,7 @@ public class HEBBean implements Serializable
 	}
 	public String getBatchIdentification()
 	{
-		return new SimpleDateFormat("yyyyMMdd0SSS").format(new Date());
+		return new SimpleDateFormat("yyyyMMdd").format(new Date()) + String.format("%04d", sequentialNumber);
 	}
 
 	public String getCareProviderNumber()
@@ -67,7 +75,22 @@ public class HEBBean implements Serializable
 	@Override
 	public String toString()
 	{
-		return "HEBBean [batchIdentification=" + batchIdentification + "]";
+		return transactionIdentifier + recordIdentifier + techSpecReleaseIdentifier +
+			   MOHOfficeCode + getBatchIdentification() + operatorNumber + groupNumber +
+			   careProviderNumber + speciality + getReservedForMOH();
+	}
+	public void printIt()
+	{
+		System.out.println("[Transaction Identifier("+transactionIdentifier.length()+"): [" + transactionIdentifier +"]");
+		System.out.println("[Record Identifiation("+recordIdentifier.length()+"): [" + recordIdentifier +"]");
+		System.out.println("[Tech Spec Identifier("+techSpecReleaseIdentifier.length()+"): [" + techSpecReleaseIdentifier +"]");
+		System.out.println("[MOH Office Code("+MOHOfficeCode.length()+"): [" + MOHOfficeCode +"]");
+		System.out.println("[Batch Identification("+getBatchIdentification().length()+"): [" + getBatchIdentification() +"]");
+		System.out.println("[Operator Number("+operatorNumber.length()+"): [" + operatorNumber +"]");
+		System.out.println("[Group Number("+groupNumber.length()+"): [" + groupNumber +"]");
+		System.out.println("[Care Provider Number("+careProviderNumber.length()+"): [" + careProviderNumber +"]");
+		System.out.println("[Speciality("+speciality.length()+"): [" + speciality +"]");
+		System.out.println("[Reserved for MOH Use("+getReservedForMOH().length()+"): [" + getReservedForMOH() +"]");
 	}
 	
 }
