@@ -33,16 +33,22 @@ public class MRITest
        hebBean.printIt();
        System.out.println("[" + hebBean.toString().length() + "]:" + hebBean.toString());
        claimList = claimData.getJSONArray("ohipClaimList");
+       
+       //JSONArray claimListForRaw = new JSONArray();
        for (int i=0;i <claimList.length(); i++)
        {
     	   JSONObject jsonObj = claimList.getJSONObject(i);
     	   if (jsonObj.has("ohipNumber") && jsonObj.has("patientDob") && jsonObj.has("accountingNumber"))
     	   {
     		   HEHBean hehBean = new HEHBean(jsonObj.getString("ohipNumber"), jsonObj.getString("patientDob"), jsonObj.getString("accountingNumber"));
+    		   hehBean.printIt();
+    		   System.out.println("[" + hehBean.toString().length() + "]:" + hehBean.toString());
     	   }
     	   else if (jsonObj.has("ohipNumber") && jsonObj.has("patientDob"))
     	   {
     		   HEHBean hehBean = new HEHBean(jsonObj.getString("ohipNumber"), jsonObj.getString("patientDob"));
+    		   hehBean.printIt();
+    		   System.out.println("[" + hehBean.toString().length() + "]:" + hehBean.toString());
     	   }
        }
 
