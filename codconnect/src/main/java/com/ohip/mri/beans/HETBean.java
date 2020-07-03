@@ -8,6 +8,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -26,19 +27,19 @@ public class HETBean implements Serializable
 	private String recordIdentifier = "T"; 
 	private String serviceCode1 = "12345";
 	private String reservedForMOH1_1 = "  ";
-	private String feeSubmitted1 = "123400";
+	private String feeSubmitted1 = "000000";
 	private String numberOfServices1 = "00";
 	private String serviceDate1 = "        ";
 	private String diagnosticCode1 = "123 ";
 	private String reservedForOOC1 = "          ";
 	private String reservedForMOH1_2 = " ";
 	
-	private String serviceCode2 = "12345";
+	private String serviceCode2 = "     ";
 	private String reservedForMOH2_1 = "  ";
-	private String feeSubmitted2 = "123400";
+	private String feeSubmitted2 = "000000";
 	private String numberOfServices2 = "00";
 	private String serviceDate2 = "        ";
-	private String diagnosticCode2 = "123 ";
+	private String diagnosticCode2 = "    ";
 	private String reservedForOOC2 = "          ";
 	private String reservedForMOH2_2 = " ";
 	
@@ -49,38 +50,70 @@ public class HETBean implements Serializable
 	}
 	public HETBean(JSONObject jsonObj) throws Exception
 	{
-		
-	}
-
-	private void setParameters(String healthNumberVersionCode, String patientDob, String accountingNumber) throws Exception
-	{
-		/*
-		this.accountingNumber = accountingNumber;
-		this.patientDob = patientDob.replace("-", "");
-		String[] healthNumberPieces = healthNumberVersionCode.split(" - ");
-		if (healthNumberPieces.length < 4) throw new Exception("Heath Card Number is invalid. -- Check it out!");
-		for(int i=0; i<healthNumberPieces.length; i++)
+		//to do here
+		for(Object key: jsonObj.keySet())
 		{
-			//System.out.println(healthNumberPieces[i]);
-			switch(i)
+			String keyStr = (String)key;
+			
+			switch(keyStr)
 			{
-				case 0: //System.out.println(healthNumberPieces[i].matches("\\d{4}"));
-						if (healthNumberPieces[i].matches("\\d{4}")) this.healthNumber = healthNumberPieces[i];
-						else throw new Exception("Heath Card Number is invalid. -- Check it out!");
-						break;
-				case 1: //System.out.println(healthNumberPieces[i].matches("\\d{3}")); break;
-				case 2: if (healthNumberPieces[i].matches("\\d{3}")) this.healthNumber += healthNumberPieces[i];
-						else throw new Exception("Heath Card Number is invalid. -- Check it out!");
-						break;
-				case 3: this.versionCode = healthNumberPieces[i].replace("_", " "); 
-						//System.out.println(this.versionCode.matches("[A-Z]{2}")); 
-						//System.out.println(this.versionCode);
-						break;
+				case "serviceCode1": 
+				{
+					this.serviceCode1 = jsonObj.getString(keyStr);
+					break;
+				}
+				case "serviceCode2": 
+				{
+					this.serviceCode2 = jsonObj.getString(keyStr).length() != 5 ? "     " : jsonObj.getString(keyStr);
+					break;
+				}
+				case "feeSubmitted1": 
+				{
+					this.feeSubmitted1 = "00" + jsonObj.getString(keyStr).replaceAll("(\\$|\\.)", "");
+					break;
+				}
+				case "feeSubmitted2": 
+				{
+					if (jsonObj.getString(keyStr).length() == 5)
+						this.feeSubmitted2 = "00" + jsonObj.getString(keyStr).replaceAll("(\\$|\\.)", "");
+					break;
+				}
+				case "numberOfServices1": 
+				{
+					this.numberOfServices1 = "0" + jsonObj.getString(keyStr);
+					break;
+				}
+				case "numberOfServices2": 
+				{
+					if (jsonObj.getString(keyStr).length() == 1)
+						this.numberOfServices2 = "0" + jsonObj.getString(keyStr);
+					break;
+				}
+				case "serviceDate1": 
+				{
+					this.serviceDate1 = jsonObj.getString(keyStr).replaceAll("-", "");
+					break;
+				}
+				case "serviceDate2": 
+				{
+					if (jsonObj.getString(keyStr).length() == 10)
+						this.serviceDate2 = jsonObj.getString(keyStr).replaceAll("-", "");
+					break;
+				}
+				case "diagnosticCode1": 
+				{
+					this.diagnosticCode1 = jsonObj.getString(keyStr) + " ";
+					break;
+				}
+				case "diagnosticCode2": 
+				{
+					if (jsonObj.getString(keyStr).length() == 3)
+						this.diagnosticCode2 = jsonObj.getString(keyStr) + " ";
+					break;
+				}
 				default: break;
 			}
-			
 		}
-		*/
 	}
 
 	@Override
@@ -91,24 +124,24 @@ public class HETBean implements Serializable
 	}
 	public void printIt()
 	{
-		/*
 		System.out.println("[Transaction Identifier("+transactionIdentifier.length()+"): [" + transactionIdentifier +"]");
-		System.out.println("[Record Identifiation("+recordIdentifier.length()+"): [" + recordIdentifier +"]");
-		System.out.println("[Health Number("+healthNumber.length()+"): [" + healthNumber +"]");
-		System.out.println("[Version Code("+versionCode.length()+"): [" + versionCode +"]");
-		System.out.println("[Patient DOB("+patientDob.length()+"): [" + patientDob +"]");
-		System.out.println("[Accounting Number("+accountingNumber.length()+"): [" + accountingNumber +"]");
-		System.out.println("[Payment Program("+paymentProgram.length()+"): [" + paymentProgram +"]");
-		System.out.println("[Payee("+payee.length()+"): [" + payee +"]");
-		System.out.println("[Referring Care Provider("+referringCareProviderNumber.length()+"): [" + referringCareProviderNumber +"]");
-		System.out.println("[Master Number("+masterNumber.length()+"): [" + masterNumber +"]");
-		System.out.println("[In-Patient Admission Date("+inPatientAdmissionDate.length()+"): [" + inPatientAdmissionDate +"]");
-		System.out.println("[Referring Lab Licence("+referringLabLicence.length()+"): [" + referringLabLicence +"]");
-		System.out.println("[Manual Review Indicator("+manualReviewIndicator.length()+"): [" + manualReviewIndicator +"]");
-		System.out.println("[Service Location Indicator("+serviceLocationIndicator.length()+"): [" + serviceLocationIndicator +"]");
-		System.out.println("[Reserved For OOC("+reservedForOOC.length()+"): [" + reservedForOOC +"]");
-		System.out.println("[Reserved for MOH Use("+reservedForMOH.length()+"): [" + reservedForMOH +"]");
-		*/
+		System.out.println("[Record Identification("+recordIdentifier.length()+"): [" + recordIdentifier +"]");
+		System.out.println("[Service Code#1("+serviceCode1.length()+"): [" + serviceCode1 +"]");
+		System.out.println("[Reserved for MOH("+reservedForMOH1_1.length()+"): [" + reservedForMOH1_1 +"]");
+		System.out.println("[Fee Submitted("+feeSubmitted1.length()+"): [" + feeSubmitted1 +"]");
+		System.out.println("[Number of Services("+numberOfServices1.length()+"): [" + numberOfServices1 +"]");
+		System.out.println("[Service Date("+serviceDate1.length()+"): [" + serviceDate1 +"]");
+		System.out.println("[Diagnostic Code("+diagnosticCode1.length()+"): [" + diagnosticCode1 +"]");
+		System.out.println("[Reserved for OOC("+reservedForOOC1.length()+"): [" + reservedForOOC1 +"]");
+		System.out.println("[Reserved for MOH("+reservedForMOH1_2.length()+"): [" + reservedForMOH1_2 +"]");
+		System.out.println("[Service Code#1("+serviceCode2.length()+"): [" + serviceCode2 +"]");
+		System.out.println("[Reserved for MOH("+reservedForMOH2_1.length()+"): [" + reservedForMOH2_1 +"]");
+		System.out.println("[Fee Submitted("+feeSubmitted2.length()+"): [" + feeSubmitted2 +"]");
+		System.out.println("[Number of Services("+numberOfServices2.length()+"): [" + numberOfServices2 +"]");
+		System.out.println("[Service Date("+serviceDate2.length()+"): [" + serviceDate2 +"]");
+		System.out.println("[Diagnostic Code("+diagnosticCode2.length()+"): [" + diagnosticCode2 +"]");
+		System.out.println("[Reserved for OOC("+reservedForOOC2.length()+"): [" + reservedForOOC2 +"]");
+		System.out.println("[Reserved for MOH("+reservedForMOH2_2.length()+"): [" + reservedForMOH2_2 +"]");
 	}
 
 }

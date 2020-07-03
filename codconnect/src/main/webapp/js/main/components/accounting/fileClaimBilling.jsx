@@ -48,7 +48,7 @@ const styles = (theme) =>
 
 const EXPECTED_FILE_NAME = /(^[BEFPX]{1})+([ABCDEFGHIJKL]{1})+([0-9]{4,6})+(.\d{3})$/;
 const currency = new Intl.NumberFormat('en-CA', {style: 'currency', currency: 'CAD'});
-const numberOfServices = [1, 2, 3, 4, 5];
+const numberOfServices = [1];
 class FileClaimBilling extends React.Component
 {
 	constructor(props)
@@ -76,6 +76,10 @@ class FileClaimBilling extends React.Component
 				(prevState) =>
 				{
 					prevState.ohipClaimList[colcount][e.target.name] = e.target.value;
+					if (e.target.name == "serviceCode1")
+						prevState.ohipClaimList[colcount]["feeSubmitted1"] = e.target.options[e.target.selectedIndex].getAttribute("fee");
+					else if (e.target.name == "serviceCode2")
+						prevState.ohipClaimList[colcount]["feeSubmitted2"] = e.target.options[e.target.selectedIndex].getAttribute("fee");
 					return {
 								prevState
 						   }
@@ -432,7 +436,7 @@ class FileClaimBilling extends React.Component
 														rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
 														(
 															(element, index) =>
-															(<option key={index} value={element.code} title={"Fee: " + currency.format(element.fee) + ", " + element.description}>{element.code}</option>)
+															(<option key={index} value={element.code} fee={currency.format(element.fee)} title={"Fee: " + currency.format(element.fee) + ", " + element.description}>{element.code}</option>)
 														)
 													}
 													{
@@ -553,7 +557,7 @@ class FileClaimBilling extends React.Component
 														rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
 														(
 															(element, index) =>
-															(<option key={index} value={element.code} title={"Fee: " + currency.format(element.fee) + ", " + element.description}>{element.code}</option>)
+															(<option key={index} value={element.code} fee={currency.format(element.fee)} title={"Fee: " + currency.format(element.fee) + ", " + element.description}>{element.code}</option>)
 														)
 													}
 													{

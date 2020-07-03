@@ -59,7 +59,7 @@ public class HEHBean implements Serializable
 	private void setParameters(String healthNumberVersionCode, String patientDob, String accountingNumber) throws Exception
 	{
 		this.accountingNumber = accountingNumber;
-		this.patientDob = patientDob.replace("-", "");
+		this.patientDob = patientDob.replaceAll("-", "");
 		String[] healthNumberPieces = healthNumberVersionCode.split(" - ");
 		if (healthNumberPieces.length < 4) throw new Exception("Heath Card Number is invalid. -- Check it out!");
 		for(int i=0; i<healthNumberPieces.length; i++)
@@ -75,7 +75,7 @@ public class HEHBean implements Serializable
 				case 2: if (healthNumberPieces[i].matches("\\d{3}")) this.healthNumber += healthNumberPieces[i];
 						else throw new Exception("Heath Card Number is invalid. -- Check it out!");
 						break;
-				case 3: this.versionCode = healthNumberPieces[i].replace("_", " "); 
+				case 3: this.versionCode = healthNumberPieces[i].replaceAll("_", " "); 
 						//System.out.println(this.versionCode.matches("[A-Z]{2}")); 
 						//System.out.println(this.versionCode);
 						break;
