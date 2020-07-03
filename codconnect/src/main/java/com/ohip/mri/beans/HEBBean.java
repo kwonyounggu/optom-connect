@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 public class HEBBean implements Serializable
@@ -32,32 +33,22 @@ public class HEBBean implements Serializable
 	private String groupNumber = "0000";
 	private String careProviderNumber = "000000";
 	private String speciality = "56";
-	private char[] reservedForMOH = new char[42];//42 spaces
+	//private char[] reservedForMOH = new char[42];//42 spaces
+	private String reservedForMOH = StringUtils.leftPad("", 42);
 	private int sequentialNumber = 0;
 
 	private SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd");
 
 	public HEBBean()
 	{
-		// TODO Auto-generated constructor stub
-		setReservedForMOH();
 	}
 	public HEBBean(int sequentialNumber, String careProviderNumber) //which is 3-4 digits
 	{
 		this.sequentialNumber = sequentialNumber;
 		this.careProviderNumber = careProviderNumber;
-		setReservedForMOH();
 	}
 	public HEBBean(String line) throws Exception
 	{
-	}
-	public String getReservedForMOH()
-	{
-		return String.copyValueOf(reservedForMOH);
-	}
-	public void setReservedForMOH()
-	{
-		Arrays.fill(reservedForMOH, ' ');
 	}
 	public String getBatchIdentification()
 	{
@@ -77,7 +68,13 @@ public class HEBBean implements Serializable
 	{
 		return transactionIdentifier + recordIdentifier + techSpecReleaseIdentifier +
 			   MOHOfficeCode + getBatchIdentification() + operatorNumber + groupNumber +
-			   careProviderNumber + speciality + getReservedForMOH();
+			   careProviderNumber + speciality + reservedForMOH;
+	}
+	public JSONObject getRawLine()
+	{
+		JSONObject json = new JSONObject();
+		json.put("heb", this.toString());
+		return json;
 	}
 	public void printIt()
 	{
@@ -90,7 +87,7 @@ public class HEBBean implements Serializable
 		System.out.println("[Group Number("+groupNumber.length()+"): [" + groupNumber +"]");
 		System.out.println("[Care Provider Number("+careProviderNumber.length()+"): [" + careProviderNumber +"]");
 		System.out.println("[Speciality("+speciality.length()+"): [" + speciality +"]");
-		System.out.println("[Reserved for MOH Use("+getReservedForMOH().length()+"): [" + getReservedForMOH() +"]");
+		System.out.println("[Reserved for MOH Use("+reservedForMOH.length()+"): [" + reservedForMOH +"]");
 	}
 	
 }

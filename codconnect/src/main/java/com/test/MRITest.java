@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.ohip.mri.beans.HEBBean;
+import com.ohip.mri.beans.HEEBean;
 import com.ohip.mri.beans.HEHBean;
 import com.ohip.mri.beans.HETBean;
 
@@ -35,32 +36,36 @@ public class MRITest
        System.out.println(claimData.toString());
        
        HEBBean hebBean = new HEBBean(1, claimData.getString("careProviderNumber"));
-       hebBean.printIt();
+       //hebBean.printIt();
        System.out.println("[" + hebBean.toString().length() + "]:" + hebBean.toString());
        claimList = claimData.getJSONArray("ohipClaimList");
        
-       //JSONArray claimListForRaw = new JSONArray();
+       JSONArray claimListForRaw = new JSONArray();
+       claimListForRaw.put(hebBean.getRawLine());
        for (int i=0;i <claimList.length(); i++)
        {
     	   JSONObject jsonObj = claimList.getJSONObject(i);
-    	   if (jsonObj.has("ohipNumber") && jsonObj.has("patientDob") && jsonObj.has("accountingNumber"))
-    	   {
-    		   HEHBean hehBean = new HEHBean(jsonObj.getString("ohipNumber"), jsonObj.getString("patientDob"), jsonObj.getString("accountingNumber"));
-    		   //hehBean.printIt();
-    		   System.out.println("[" + hehBean.toString().length() + "]:" + hehBean.toString());
-    		   
-    		   HETBean hetBean = new HETBean(jsonObj);
-    		   hetBean.printIt();
-    	   }
-    	   else if (jsonObj.has("ohipNumber") && jsonObj.has("patientDob"))
-    	   {
-    		   HEHBean hehBean = new HEHBean(jsonObj.getString("ohipNumber"), jsonObj.getString("patientDob"));
-    		   //hehBean.printIt();
-    		   System.out.println("[" + hehBean.toString().length() + "]:" + hehBean.toString());
-    		   
-    		   HETBean hetBean = new HETBean(jsonObj);
-    		   hetBean.printIt();
-    	   }
+    	   HEHBean hehBean = new HEHBean(jsonObj); 
+    	   //System.out.println("[" + hehBean.toString().length() + "]:" + hehBean.toString());
+    	   claimListForRaw.put(hehBean.getRawLine());
+    	   HETBean hetBean = new HETBean(jsonObj);
+    	   //hetBean.printIt();
+    	   claimListForRaw.put(hetBean.getRawLine());  
+       }
+       HEEBean heeBean = new HEEBean(claimList.length(), 0);
+       heeBean.printIt();
+       claimListForRaw.put(heeBean.getRawLine());
+       for (int i=0; i<claimListForRaw.length(); i++)
+       {
+    	   JSONObject json = claimListForRaw.getJSONObject(i);
+    	   if (json.has("heb"))
+    		   System.out.println("["+i+"]: [HEB]["+json.getString("heb").length()+"] ["+json.getString("heb")+"]");
+    	   else if (json.has("heh"))
+    		   System.out.println("["+i+"]: [HEH]["+json.getString("heh").length()+"] ["+json.getString("heh")+"]");
+    	   else if (json.has("het"))
+    		   System.out.println("["+i+"]: [HET]["+json.getString("het").length()+"] ["+json.getString("het")+"]");
+    	   else if (json.has("hee"))
+    		   System.out.println("["+i+"]: [HEE]["+json.getString("hee").length()+"] ["+json.getString("hee")+"]");
        }
 
 	}

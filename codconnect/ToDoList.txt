@@ -16,3 +16,12 @@ key: careProviderNumber, value: 123456
 12:21:48,060 INFO  [null] (default task-12) key: exp, value: 1621563597
 12:21:48,060 INFO  [null] (default task-12) key: iat, value: 1590027597
 12:21:48,061 INFO  [null] (default task-12) key: jti, value: kwon.younggu@gmail.com
+
+claimFileData: Array(6)
+0: {heb: "HEBV03 202007030001000000000077777756                                          "}
+1: {heh: "HEH1234123123ZZ2020070188888888HCPP                                            "}
+2: {het: "HETV402A  0025150120200709378            V404A  0042500120200730377            "}
+3: {heh: "HEH4321321321AA20200701        HCPP                                            "}
+4: {het: "HETV406A  0047000120200716361                                                  "}
+5: {hee: "HEE0002000000002                                                               "}
+length: 6

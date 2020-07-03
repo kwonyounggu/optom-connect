@@ -36,8 +36,8 @@ public class HETBean implements Serializable
 	
 	private String serviceCode2 = "     ";
 	private String reservedForMOH2_1 = "  ";
-	private String feeSubmitted2 = "000000";
-	private String numberOfServices2 = "00";
+	private String feeSubmitted2 = "      ";
+	private String numberOfServices2 = "  ";
 	private String serviceDate2 = "        ";
 	private String diagnosticCode2 = "    ";
 	private String reservedForOOC2 = "          ";
@@ -74,7 +74,7 @@ public class HETBean implements Serializable
 				}
 				case "feeSubmitted2": 
 				{
-					if (jsonObj.getString(keyStr).length() == 5)
+					if (jsonObj.getString(keyStr).length() == 6)
 						this.feeSubmitted2 = "00" + jsonObj.getString(keyStr).replaceAll("(\\$|\\.)", "");
 					break;
 				}
@@ -119,8 +119,16 @@ public class HETBean implements Serializable
 	@Override
 	public String toString()
 	{
-		return   
-				"";
+		return transactionIdentifier + recordIdentifier + serviceCode1 + reservedForMOH1_1 +
+				feeSubmitted1 + numberOfServices1 + serviceDate1 + diagnosticCode1 + reservedForOOC1 + reservedForMOH1_2 +
+				serviceCode2 + reservedForMOH2_1 +
+				feeSubmitted2 + numberOfServices2 + serviceDate2 + diagnosticCode2 + reservedForOOC2 + reservedForMOH2_2;
+	}
+	public JSONObject getRawLine()
+	{
+		JSONObject json = new JSONObject();
+		json.put("het", this.toString());
+		return json;
 	}
 	public void printIt()
 	{
@@ -134,7 +142,7 @@ public class HETBean implements Serializable
 		System.out.println("[Diagnostic Code("+diagnosticCode1.length()+"): [" + diagnosticCode1 +"]");
 		System.out.println("[Reserved for OOC("+reservedForOOC1.length()+"): [" + reservedForOOC1 +"]");
 		System.out.println("[Reserved for MOH("+reservedForMOH1_2.length()+"): [" + reservedForMOH1_2 +"]");
-		System.out.println("[Service Code#1("+serviceCode2.length()+"): [" + serviceCode2 +"]");
+		System.out.println("[Service Code#2("+serviceCode2.length()+"): [" + serviceCode2 +"]");
 		System.out.println("[Reserved for MOH("+reservedForMOH2_1.length()+"): [" + reservedForMOH2_1 +"]");
 		System.out.println("[Fee Submitted("+feeSubmitted2.length()+"): [" + feeSubmitted2 +"]");
 		System.out.println("[Number of Services("+numberOfServices2.length()+"): [" + numberOfServices2 +"]");

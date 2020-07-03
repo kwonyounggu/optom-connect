@@ -45,43 +45,57 @@ public class HEHBean implements Serializable
 	public HEHBean()
 	{
 	}
-	public HEHBean(String healthNumberVersionCode, String patientDob) throws Exception
+	public HEHBean(JSONObject jsonObj) throws Exception
 	{
-		setParameters(healthNumberVersionCode, patientDob, this.accountingNumber);
-	}
-	public HEHBean(String healthNumberVersionCode, String patientDob, String accountingNumber) throws Exception
-	{
-		setParameters(healthNumberVersionCode, patientDob, accountingNumber);
-	}
-	public HEHBean(String line) throws Exception
-	{
-	}
-	private void setParameters(String healthNumberVersionCode, String patientDob, String accountingNumber) throws Exception
-	{
-		this.accountingNumber = accountingNumber;
-		this.patientDob = patientDob.replaceAll("-", "");
-		String[] healthNumberPieces = healthNumberVersionCode.split(" - ");
-		if (healthNumberPieces.length < 4) throw new Exception("Heath Card Number is invalid. -- Check it out!");
-		for(int i=0; i<healthNumberPieces.length; i++)
+		for(Object key: jsonObj.keySet())
 		{
-			//System.out.println(healthNumberPieces[i]);
-			switch(i)
+			String keyStr = (String)key;
+			
+			switch(keyStr)
 			{
-				case 0: //System.out.println(healthNumberPieces[i].matches("\\d{4}"));
-						if (healthNumberPieces[i].matches("\\d{4}")) this.healthNumber = healthNumberPieces[i];
-						else throw new Exception("Heath Card Number is invalid. -- Check it out!");
-						break;
-				case 1: //System.out.println(healthNumberPieces[i].matches("\\d{3}")); break;
-				case 2: if (healthNumberPieces[i].matches("\\d{3}")) this.healthNumber += healthNumberPieces[i];
-						else throw new Exception("Heath Card Number is invalid. -- Check it out!");
-						break;
-				case 3: this.versionCode = healthNumberPieces[i].replaceAll("_", " "); 
-						//System.out.println(this.versionCode.matches("[A-Z]{2}")); 
-						//System.out.println(this.versionCode);
-						break;
+				case "ohipNumber":
+				{
+					String[] healthNumberPieces = jsonObj.getString(keyStr).split(" - ");
+					if (healthNumberPieces.length < 4) throw new Exception("Heath Card Number is invalid. -- Check it out!");
+					for(int i=0; i<healthNumberPieces.length; i++)
+					{
+						switch(i)
+						{
+							case 0: 
+							{
+									if (healthNumberPieces[i].matches("\\d{4}")) this.healthNumber = healthNumberPieces[i];
+									else throw new Exception("Heath Card Number is invalid. -- Check it out!");
+									break;
+							}
+							case 1: 
+							case 2: 
+							{
+								if (healthNumberPieces[i].matches("\\d{3}")) this.healthNumber += healthNumberPieces[i];
+								else throw new Exception("Heath Card Number is invalid. -- Check it out!");
+								break;
+							}
+							case 3: 
+							{
+								this.versionCode = healthNumberPieces[i].replaceAll("_", " "); 
+								break;
+							}
+							default: break;
+						}
+						
+					}
+				}
+				case "patientDob":
+				{
+					this.patientDob = jsonObj.getString(keyStr).replaceAll("-", "");
+					break;
+				}
+				case "accountingNumber":
+				{
+					this.accountingNumber = jsonObj.getString(keyStr);
+					break;
+				}
 				default: break;
 			}
-			
 		}
 	}
 
@@ -92,6 +106,12 @@ public class HEHBean implements Serializable
 				patientDob + accountingNumber + paymentProgram + payee +
 				referringCareProviderNumber + masterNumber + inPatientAdmissionDate + referringLabLicence + 
 				manualReviewIndicator + serviceLocationIndicator + reservedForOOC + reservedForMOH;
+	}
+	public JSONObject getRawLine()
+	{
+		JSONObject json = new JSONObject();
+		json.put("heh", this.toString());
+		return json;
 	}
 	public void printIt()
 	{

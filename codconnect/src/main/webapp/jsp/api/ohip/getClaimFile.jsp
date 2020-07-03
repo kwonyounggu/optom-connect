@@ -6,9 +6,10 @@
 <%@ page import = "java.util.stream.Collectors" %>
 <%@ page import = "java.util.List" %>
 <%@ page import = "java.util.Enumeration" %>
-<%@ page import = "org.json.JSONObject" %>
+<%@ page import = "org.json.*" %>
 <%@ page import = "com.utilities.*" %>
 <%@ page import = "com.beans.AuthUserDetailsInternalBean" %>
+<%@ page import = "com.ohip.mri.beans.*" %>
 <%@ page import = "com.dao.AuthDao" %>
 <%@ page import = "org.apache.commons.dbcp2.BasicDataSource" %>
 <%@ page import = "javax.mail.Session" %>
@@ -42,39 +43,37 @@
 			}
 			jsonObj.put("decodedToken", decodedToken);//remove later
 			
-			//Validate One more time in the server side
-			/*JsonUtils.validateSignup(jsonObj);
+			/************************************************************************/
+			JSONArray claimListForRaw = new JSONArray();
+			HEBBean hebBean = new HEBBean(1, jsonObj.getString("careProviderNumber"));
+			claimListForRaw.put(hebBean.getRawLine());
 			
-			//Go ahead for table-insertion if valid
-			if(!jsonObj.getBoolean("invalid"))
-			{
-					
-				ab = new AuthUserDetailsInternalBean(jsonObj);
-				new AuthDao(DatasourceUtil.getDataSource()).signUpRegistration(ab);
-				
-				MyEmail.emailSignupConfirmation(ab);
-			}
-			*/
+			JSONArray claimList = jsonObj.getJSONArray("ohipClaimList");   
+	        for (int i=0;i <claimList.length(); i++)
+	        {
+	    	   JSONObject jsonO = claimList.getJSONObject(i);
+	    	   HEHBean hehBean = new HEHBean(jsonO); 
+	    	   claimListForRaw.put(hehBean.getRawLine());
+	    	   HETBean hetBean = new HETBean(jsonO);
+	    	   claimListForRaw.put(hetBean.getRawLine());  
+	        }
+		    HEEBean heeBean = new HEEBean(claimList.length(), 0);
+		    claimListForRaw.put(heeBean.getRawLine());
+		       
+			jsonObj.put("claimFileData", claimListForRaw);
+			/************************************************************************/
+			
 			jsonObj.put("isItValid", true);
-			//throw new Exception("testing an error");
 		}
 		catch(Exception | Error e)
 		{
-			System.err.println("ERROR (getBillingCodes.jsp): "+ e);
+			System.err.println("ERROR (getClaimFile.jsp): "+ e);
 			jsonObj = new JSONObject();
 			jsonObj.put("isItValid", false);
 			jsonObj.put("errorMessage", e.getMessage().trim().isEmpty() ? 
 					                      (e.getCause()+ "There is an unknown error. -- Try it later!") : e.getMessage());
 		}
-		
-		/*
-		//Clean unnecessary properties from the jsonObj
-		jsonObj.remove("fullName");
-		jsonObj.remove("email");
-		jsonObj.remove("password");
-		jsonObj.remove("passwordConfirmation");
-		jsonObj.remove("timezone");
-					*/
+
 		out.print(jsonObj);
 		
 	}
