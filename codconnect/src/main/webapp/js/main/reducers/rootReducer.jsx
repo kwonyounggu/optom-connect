@@ -47,7 +47,12 @@ function rootReducer
     	}
 		case ActionTypes.GET_CLAIM_FILE_FULFILLED: //for both Promise and Thunk
     	{   		
-    		state={...state, claimFile: action.payload.data};
+    		state={...state, ohipClaimList: (action.payload.data.isItValid ? [{}] : state.ohipClaimList), claimFile: action.payload.data};
+            break;
+    	}
+		case ActionTypes.RESET_CLAIM_FILE_DATA: //for both Promise and Thunk
+    	{   		
+    		state={...state, claimFile: null};
             break;
     	}
         default: 

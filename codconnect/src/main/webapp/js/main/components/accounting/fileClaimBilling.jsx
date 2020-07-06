@@ -21,7 +21,7 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import IconButton from '@material-ui/core/IconButton';
-import Alert from '@material-ui/lab/Alert';
+import {Alert, AlertTitle} from '@material-ui/lab';
 
 const styles = (theme) =>
 (
@@ -54,11 +54,12 @@ class FileClaimBilling extends React.Component
 	constructor(props)
 	{
 		super(props);
-		//console.log("INFO constructor() of fileClaimBilling.jsx: ", props);
+		console.log("--- INFO constructor() of fileClaimBilling.jsx: ", props);
 		this.state = 
 		{			
 			careProviderNumber: props.rootReducer.careProviderNumber,
 			ohipClaimList: props.rootReducer.ohipClaimList,
+			claimFile: props.rootReducer.claimFile,
 			isFormValid: true
 		}
 		
@@ -103,6 +104,8 @@ class FileClaimBilling extends React.Component
 		}
 		this.createClaimFile = () =>
 		{
+			if (this.props.rootReducer.claimFile) this.props.resetClaimFileData();
+			
 			let isValid = true;
 			let isAllValid = true;
 			
@@ -268,6 +271,18 @@ class FileClaimBilling extends React.Component
 	componentDidMount()
 	{
 	}
+	/*
+	static getDerivedStateFromProps(nextProps, prevState) 
+	{	console.log("-------------getDerivedStateFromProps: ", nextProps, "|", prevState.claimFile);
+		if (nextProps.rootReducer.claimFile != prevState.claimFile)
+		{	console.log("******* getDerivedStateFromProps: ");
+			nextProps.rootReducer.ohipClaimList = [{}];
+			 return {
+					  claimFile: nextProps.rootReducer.claimFile
+					};
+		}
+		return null;
+	}*/
 	componentDidUpdate(prevProps, prevState)
 	{
 		console.log("[INFO componentDidUpdate(...) of fileClaimBilling.jsx] nextProps.rootReducer: " , prevProps.rootReducer);
@@ -293,7 +308,31 @@ class FileClaimBilling extends React.Component
 					<Grid item xs={12}>
 						&nbsp;
 					</Grid>
-					
+					{
+						this.props.rootReducer.claimFile &&
+						<React.Fragment>
+							<Grid item xs={12}>
+								<Alert severity="success" 
+									   action=
+									   {
+											<React.Fragment>
+											    <Button color="inherit" size="small" variant="outlined" endIcon={<Icon>cancel</Icon>}>
+											      Cancel
+											    </Button>&nbsp;
+												<Button color="inherit" size="small" variant="outlined" endIcon={<Icon>download</Icon>}>
+											      Download
+											    </Button>
+											</React.Fragment>
+									   }
+								>
+								  <AlertTitle>Success in creating a claim file to download!</AlertTitle>
+								</Alert>
+							</Grid>
+							<Grid item xs={12}>
+								&nbsp;
+							</Grid>
+						</React.Fragment>
+					}
 					<Grid item xs={12} >
 						{!this.state.isFormValid && <Alert severity="error" style={{paddingTop: 0, paddingBottom: 0}}>The form is not completely filled - check it out and try again!</Alert>}
 						<Alert severity="info" style={{paddingTop: 0, paddingBottom: 0}}><span style={{color: 'red'}}>*</span>&nbsp;Required</Alert>

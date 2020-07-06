@@ -28,6 +28,10 @@ export function resetMROData()
 {
 	return { type: ActionTypes.RESET_MRO_DATA};
 }
+export function resetClaimFileData()
+{
+	return { type: ActionTypes.RESET_CLAIM_FILE_DATA};
+}
 export function getBillingCodes() 
 {
 	  return { 

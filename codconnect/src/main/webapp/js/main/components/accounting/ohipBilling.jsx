@@ -102,7 +102,7 @@ class OHIPBilling extends React.Component
 					{
 						(location.pathname == menuLinks[4]) && 
 						<div style={{borderLeft: '1px solid grey', borderRight: '1px solid grey', borderBottom: '1px solid grey', padding: '20px'}}> 
-							<FileClaimBilling auth={this.props.auth} getClaimFile={this.props.getClaimFile} rootReducer={this.props.rootReducer} location={location}/>
+							<FileClaimBilling auth={this.props.auth} resetClaimFileData={this.props.resetClaimFileData} getClaimFile={this.props.getClaimFile} rootReducer={this.props.rootReducer} location={location}/>
 						</div>
 					}
 					{
