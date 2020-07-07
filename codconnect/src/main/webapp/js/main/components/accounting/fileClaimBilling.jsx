@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
 import InputMask from "react-input-mask";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -45,7 +45,15 @@ const styles = (theme) =>
 		 }
 	}
 );
-
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: '100%',
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 const EXPECTED_FILE_NAME = /(^[BEFPX]{1})+([ABCDEFGHIJKL]{1})+([0-9]{4,6})+(.\d{3})$/;
 const currency = new Intl.NumberFormat('en-CA', {style: 'currency', currency: 'CAD'});
 const numberOfServices = [1];
@@ -262,8 +270,9 @@ class FileClaimBilling extends React.Component
 			{
 				//call server for the claim file
 				console.log("[INFO, No errors in all columns]: ", isAllValid);
-				//let dataToServer = {careProviderNumber: this.state.careProviderNumber, patientServiceList: this.state.ohipClaimList};
-				this.props.getClaimFile({careProviderNumber: this.state.careProviderNumber, ohipClaimList: this.state.ohipClaimList});
+				let dataToServer = {careProviderNumber: this.state.careProviderNumber, ohipClaimList: this.state.ohipClaimList};
+				this.props.getClaimFile(dataToServer);
+				localStorage.setItem("claimFileData", JSON.stringify(dataToServer));
 			}
 			this.setState({isFormValid: isAllValid});
 		}
@@ -271,18 +280,6 @@ class FileClaimBilling extends React.Component
 	componentDidMount()
 	{
 	}
-	/*
-	static getDerivedStateFromProps(nextProps, prevState) 
-	{	console.log("-------------getDerivedStateFromProps: ", nextProps, "|", prevState.claimFile);
-		if (nextProps.rootReducer.claimFile != prevState.claimFile)
-		{	console.log("******* getDerivedStateFromProps: ");
-			nextProps.rootReducer.ohipClaimList = [{}];
-			 return {
-					  claimFile: nextProps.rootReducer.claimFile
-					};
-		}
-		return null;
-	}*/
 	componentDidUpdate(prevProps, prevState)
 	{
 		console.log("[INFO componentDidUpdate(...) of fileClaimBilling.jsx] nextProps.rootReducer: " , prevProps.rootReducer);
@@ -291,6 +288,30 @@ class FileClaimBilling extends React.Component
 	{
 		this.props.rootReducer.ohipClaimList = this.state.ohipClaimList;
 		this.props.rootReducer.careProviderNumber = this.state.careProviderNumber;
+	}
+
+	downloadTooltips = () =>
+	{
+		let claimFileData = JSON.parse(localStorage.getItem("claimFileData"));
+		console.log("claimFileData from localStorage: ", claimFileData);
+		let toolTips = 
+				(<HtmlTooltip
+			        title={
+					          <React.Fragment>
+					            <Typography color="inherit" align="center">===================================================Inside of claim file for provider: {claimFileData.careProviderNumber}</Typography>
+								<ul>
+					            <li>---</li>
+					            <li>---</li>
+								<li>----</li>
+								<li>----</li>
+								<li>-----9</li>
+								</ul>
+					          </React.Fragment>
+			        	  }
+			      >
+					<Button color="inherit" size="small" variant="outlined" endIcon={<Icon>cloud_download</Icon>}>Download</Button>
+      			</HtmlTooltip>);		
+		return toolTips;
 	}
 	render()
 	{
@@ -316,12 +337,10 @@ class FileClaimBilling extends React.Component
 									   action=
 									   {
 											<React.Fragment>
-											    <Button color="inherit" size="small" variant="outlined" endIcon={<Icon>cancel</Icon>}>
+											    <Button color="inherit" size="small" onClick={()=>this.props.resetClaimFileData()} variant="outlined" endIcon={<Icon>cancel</Icon>}>
 											      Cancel
 											    </Button>&nbsp;
-												<Button color="inherit" size="small" variant="outlined" endIcon={<Icon>download</Icon>}>
-											      Download
-											    </Button>
+												{this.downloadTooltips()}
 											</React.Fragment>
 									   }
 								>
