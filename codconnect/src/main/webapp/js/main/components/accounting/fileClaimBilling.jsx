@@ -45,14 +45,16 @@ const styles = (theme) =>
 		 }
 	}
 );
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
+const HtmlTooltip = withStyles((theme) => 
+({
+  tooltip: 
+  {
     backgroundColor: '#f5f5f9',
     color: 'rgba(0, 0, 0, 0.87)',
     maxWidth: '100%',
     fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9',
-  },
+    border: '1px solid #dadde9'
+  }
 }))(Tooltip);
 const EXPECTED_FILE_NAME = /(^[BEFPX]{1})+([ABCDEFGHIJKL]{1})+([0-9]{4,6})+(.\d{3})$/;
 const currency = new Intl.NumberFormat('en-CA', {style: 'currency', currency: 'CAD'});
@@ -290,26 +292,64 @@ class FileClaimBilling extends React.Component
 		this.props.rootReducer.careProviderNumber = this.state.careProviderNumber;
 	}
 
+	onClickDownload = () =>
+	{
+		console.log("onClickDownload() is called");
+		
+		//make a file to download, see the example page, https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react/44661948
+		//finally call, this.props.resetClaimFileData()
+		
+		const element = document.createElement("a");
+		const rawData = this.props.rootReducer.claimFile.claimFileData.map
+					    (
+							(item, key) =>
+							{
+								if (item.heb) return item.heb;
+								else if (item.heh) return item.heh;
+								else if (item.het) return item.het;
+								else if (item.hee) return item.hee;
+							}
+					    ).join('\x0D');
+
+    	const file = new Blob([rawData], {type: 'text/plain'});
+	    element.href = URL.createObjectURL(file);
+	    element.download = "myFile.txt";
+	    document.body.appendChild(element); // Required for this to work in FireFox
+	    element.click();
+	}	
 	downloadTooltips = () =>
 	{
 		let claimFileData = JSON.parse(localStorage.getItem("claimFileData"));
 		console.log("claimFileData from localStorage: ", claimFileData);
+		let claimList = claimFileData.ohipClaimList.map
+						(
+							(item, key) =>
+							(
+								<ul key={key}>
+									<li>OHIP Number: {item.ohipNumber}</li>
+									<li>Patient Dob: {item.patientDob}</li>
+									{item.accountingNumber && <li>Accounting Number: {item.accountingNumber}</li>}
+									<li>Service Code #1: {item.serviceCode1}</li>
+									<li>Number Of Services: {item.numberOfServices1}</li>
+									<li>Service Date: {item.serviceDate1}</li>
+									<li>Diagnostic Code: {item.diagnosticCode1}</li>
+									{item.serviceCode2 && <li>Service Code #2: {item.serviceCode2}</li>}
+									{item.numberOfServices2 && <li>Number Of Services: {item.numberOfServices2}</li>}
+									{item.serviceDate2 && <li>Service Date: {item.serviceDate2}</li>}
+									{item.diagnosticCode2 && <li>Diagnostic Code: {item.diagnosticCode2}</li>}
+								</ul>
+							)
+						);
 		let toolTips = 
 				(<HtmlTooltip
 			        title={
 					          <React.Fragment>
-					            <Typography color="inherit" align="center">===================================================Inside of claim file for provider: {claimFileData.careProviderNumber}</Typography>
-								<ul>
-					            <li>---</li>
-					            <li>---</li>
-								<li>----</li>
-								<li>----</li>
-								<li>-----9</li>
-								</ul>
+					            <Typography color="inherit" align="center">Inside of claim file for provider: {claimFileData.careProviderNumber}</Typography>
+								{claimList}
 					          </React.Fragment>
 			        	  }
 			      >
-					<Button color="inherit" size="small" variant="outlined" endIcon={<Icon>cloud_download</Icon>}>Download</Button>
+					<Button color="inherit" size="small" variant="outlined" onClick={this.onClickDownload} endIcon={<Icon>cloud_download</Icon>}>Download</Button>
       			</HtmlTooltip>);		
 		return toolTips;
 	}
@@ -318,7 +358,7 @@ class FileClaimBilling extends React.Component
 		console.log("INFO:fileClaimBilling.jsx.render() is called, [this.props]: ", this.props);
 		console.log("INFO:fileClaimBilling.jsx.render() is called, [this.state]: ", this.state);
 		const {classes, rootReducer} = this.props;
-
+		const showInputTable =  this.props.rootReducer.claimFile ? {display: 'none'} : {};
 		return (
 				<Grid container>
 					<Grid item xs={12}>
@@ -337,7 +377,7 @@ class FileClaimBilling extends React.Component
 									   action=
 									   {
 											<React.Fragment>
-											    <Button color="inherit" size="small" onClick={()=>this.props.resetClaimFileData()} variant="outlined" endIcon={<Icon>cancel</Icon>}>
+											    <Button color="inherit" size="small" onClick={this.props.resetClaimFileData} variant="outlined" endIcon={<Icon>cancel</Icon>}>
 											      Cancel
 											    </Button>&nbsp;
 												{this.downloadTooltips()}
@@ -352,12 +392,12 @@ class FileClaimBilling extends React.Component
 							</Grid>
 						</React.Fragment>
 					}
-					<Grid item xs={12} >
+					<Grid item xs={12} style={showInputTable}>
 						{!this.state.isFormValid && <Alert severity="error" style={{paddingTop: 0, paddingBottom: 0}}>The form is not completely filled - check it out and try again!</Alert>}
 						<Alert severity="info" style={{paddingTop: 0, paddingBottom: 0}}><span style={{color: 'red'}}>*</span>&nbsp;Required</Alert>
 						<Alert severity="info" style={{paddingTop: 0, paddingBottom: 0}}>Each time, creating a claim submission file is limited upto ten patients.</Alert>
 					</Grid>
-					<Grid item xs={12}>
+					<Grid item xs={12} style={showInputTable}>
 					
 					<TableContainer>
 					<Table size="small" aria-label="claimFileTable">
