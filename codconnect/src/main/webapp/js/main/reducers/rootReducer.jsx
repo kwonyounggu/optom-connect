@@ -4,7 +4,7 @@ function rootReducer
 (   state=
     {
 		lang: "kr",
-		billingCodes: null,
+		billingCodes: (localStorage.getItem("billingCodes") ? JSON.parse(localStorage.getItem("billingCodes")) : null),
 		ohipClaimList: [{}],
 		careProviderNumber: '',
 		claimFile: null
@@ -42,13 +42,28 @@ function rootReducer
 		}
 		case ActionTypes.GET_BILLING_CODES_FULFILLED: //for both Promise and Thunk
     	{   		
-    		state={...state, billingCodes: action.payload.data};
+			if (action.payload.data.isItValid)
+    		{
+				localStorage.setItem("billingCodes", JSON.stringify(action.payload.data));
+				state={...state, billingCodes: action.payload.data};
+			}
+			else
+			{
+				let billingCodes = localStorage.getItem("billingCodes");
+ 				state={...state, billingCodes: (billingCodes ? JSON.parse(billingCodes) : null)};
+			}
             break;
     	}
 		case ActionTypes.GET_CLAIM_FILE_FULFILLED: //for both Promise and Thunk
     	{   		
-    		state={...state, ohipClaimList: (action.payload.data.isItValid ? [{}] : state.ohipClaimList), claimFile: action.payload.data};
-            break;
+			if (action.payload.data.isItValid)
+    			state={...state, ohipClaimList: [{}], careProviderNumber: '', claimFile: action.payload.data};
+		    else
+			{
+				let prevClaimData = JSON.parse(localStorage.getItem("claimFileData"));
+				state={...state, ohipClaimList: prevClaimData.ohipClaimList, careProviderNumber: prevClaimData.careProviderNumber, claimFile: action.payload.data};
+            }
+			break;
     	}
 		case ActionTypes.RESET_CLAIM_FILE_DATA: //for both Promise and Thunk
     	{   		

@@ -62,7 +62,7 @@
 		       
 			jsonObj.put("claimFileData", claimListForRaw);
 			/************************************************************************/
-			
+		
 			jsonObj.put("isItValid", true);
 		}
 		catch(Exception | Error e)
@@ -72,6 +72,12 @@
 			jsonObj.put("isItValid", false);
 			jsonObj.put("errorMessage", e.getMessage().trim().isEmpty() ? 
 					                      (e.getCause()+ "There is an unknown error. -- Try it later!") : e.getMessage());
+		}
+		finally
+		{
+			jsonObj.remove("careProviderNumber");
+			jsonObj.remove("ohipClaimList");
+			jsonObj.remove("decodedToken");
 		}
 
 		out.print(jsonObj);

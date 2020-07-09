@@ -114,7 +114,7 @@ class FileClaimBilling extends React.Component
 		}
 		this.createClaimFile = () =>
 		{
-			if (this.props.rootReducer.claimFile) this.props.resetClaimFileData();
+			if (this.props.rootReducer.claimFile && this.props.rootReducer.claimFile.isItValid) this.props.resetClaimFileData();
 			
 			let isValid = true;
 			let isAllValid = true;
@@ -300,7 +300,7 @@ class FileClaimBilling extends React.Component
 		//finally call, this.props.resetClaimFileData()
 		
 		const element = document.createElement("a");
-		const rawData = this.props.rootReducer.claimFile.claimFileData.map
+		let rawData = this.props.rootReducer.claimFile.claimFileData.map
 					    (
 							(item, key) =>
 							{
@@ -310,7 +310,8 @@ class FileClaimBilling extends React.Component
 								else if (item.hee) return item.hee;
 							}
 					    ).join('\x0D');
-
+		rawData += '\x0D\x1A';
+		//https://stackoverflow.com/questions/7590838/how-to-find-eof-in-a-string-in-java
     	const file = new Blob([rawData], {type: 'text/plain'});
 	    element.href = URL.createObjectURL(file);
 	    element.download = "myFile.txt";
@@ -358,7 +359,7 @@ class FileClaimBilling extends React.Component
 		console.log("INFO:fileClaimBilling.jsx.render() is called, [this.props]: ", this.props);
 		console.log("INFO:fileClaimBilling.jsx.render() is called, [this.state]: ", this.state);
 		const {classes, rootReducer} = this.props;
-		const showInputTable =  this.props.rootReducer.claimFile ? {display: 'none'} : {};
+		const showInputTable =  (this.props.rootReducer.claimFile && this.props.rootReducer.claimFile.isItValid) ? {display: 'none'} : {};
 		return (
 				<Grid container>
 					<Grid item xs={12}>
@@ -370,7 +371,7 @@ class FileClaimBilling extends React.Component
 						&nbsp;
 					</Grid>
 					{
-						this.props.rootReducer.claimFile &&
+						this.props.rootReducer.claimFile && this.props.rootReducer.claimFile.isItValid &&
 						<React.Fragment>
 							<Grid item xs={12}>
 								<Alert severity="success" 
@@ -529,7 +530,7 @@ class FileClaimBilling extends React.Component
 														input={<OutlinedInput classes={{ input: classes.selectInput}} />}
 														inputProps = {{colcount: index}}
 											  	>
-													<option value='' disabled></option>
+													<option value='' fee='' disabled></option>
 													{   
 														rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
 														(
@@ -650,7 +651,7 @@ class FileClaimBilling extends React.Component
 														inputProps = {{colcount: index}}
 														variant="outlined"
 											  	>
-													<option value=''></option>
+													<option value='' fee=''></option>
 													{   
 														rootReducer.billingCodes && rootReducer.billingCodes.serviceCodes.map
 														(
