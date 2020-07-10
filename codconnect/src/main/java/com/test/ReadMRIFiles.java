@@ -26,7 +26,6 @@ public class ReadMRIFiles
 		BufferedReader reader = null;
 		try
 		{
-			boolean valid = true;
 			HEBBean heb = new HEBBean();
 			HEHBean heh = new HEHBean();
 			HETBean het = new HETBean();
@@ -35,49 +34,31 @@ public class ReadMRIFiles
 			reader = new BufferedReader(new FileReader(fileName));
 			String line = reader.readLine();
 			
-			for (int i=0; line != null; i++)
+			for (int i=0; line != null && line.charAt(0) != (char)0x1A; i++)
 			{
-				/*
-				switch(i)
+				
+				if (line.startsWith("HEB"))
 				{
-					case 0: if (!(valid = firstRecordBean.firstRecord(line))) break;
-							firstRecordBean.printFirstRecord();
-							//System.err.println(firstRecordBean.toString());
-							break;
-					case 1: if (!(valid = secondRecordBean.secondRecord(line))) break;
-							secondRecordBean.printSecondRecord();
-							//System.out.println(secondRecordBean.toString());
-							break;
-					case 2: if (!(valid = thirdRecordBean.thirdRecord(line))) break;
-							thirdRecordBean.printThirdRecord();
-							//System.out.println(thirdRecordBean.toString());
-							break;
-					default:
-							if (i == 3)
-								System.out.println("\"Accounting No\", \"Claim No\", \"Tx Type\", \"Reg No\", \"Vsn Code\", \"Claim No\", \"Tx Type\", \"No Svc\", \"Svc Code\", \"Svc Date\", \"Amt Submit\", \"Amt Paid\"");
-							if (line.startsWith("HR4"))
-							{
-								ClaimHR4RecordBean hr4Bean = new ClaimHR4RecordBean(line);
-								hr4RecordList.add(hr4Bean);
-								//System.out.println(hr4Bean.toString());
-								hr4Bean.printHR4Record();
-							}
-							else if (line.startsWith("HR5"))
-							{
-								ClaimHR5RecordBean hr5Bean = new ClaimHR5RecordBean(line);
-								hr5RecordList.add(hr5Bean);
-								//System.out.println(hr5Bean.toString());
-								hr5Bean.printHR5Record();
-							}
-							else if (line.startsWith("HR7"))
-							{
-								AccountingTxRecordHR7Bean hr7Bean = new AccountingTxRecordHR7Bean(line);
-								hr7Bean.printAccountingTxRecord();
-							}
-							break;
-				}*/
-				if (!valid) break;
-				System.out.println("["+i+"]: ["+line+"]");
+					//System.out.println("HEB");
+					heb.parseLine(line);
+				}
+				else if (line.startsWith("HEH"))
+				{
+					//System.out.println("HEH");
+					heh.parseLine(line);
+				}
+				else if (line.startsWith("HET"))
+				{
+					System.out.println("HET");
+					//het.parseLine(line);
+				}
+				else if (line.startsWith("HEE"))
+				{
+					System.out.println("HEE");
+					//hee.parseLine(line);
+				}
+
+				//System.out.println("["+i+"]: ["+line+"]");
 				line = reader.readLine();
 			}
 			reader.close();
@@ -93,6 +74,7 @@ public class ReadMRIFiles
 		finally
 		{
 			//close all if any exceptions
+			try{reader.close();}catch(Exception e) {e.printStackTrace();}
 		}
 	}
 	public static void main(String[] args)
@@ -108,6 +90,7 @@ public class ReadMRIFiles
 			try
 			{
 				is = new FileReader(ReadMRIFiles.filePath[i]);
+				/*
 				for (int j=0, c=is.read(); c != -1; j++)
 				{
 					System.out.print("["+j+"] c in HEX=["+Integer.toHexString(c)+"] c=["+(char)c+"]");
@@ -115,7 +98,7 @@ public class ReadMRIFiles
 					c=is.read();
 					//if (c == -1) System.out.println("["+j+"] c=["+Integer.toHexString(c)+"]");
 				}
-
+				*/
 			}
 			catch(Exception e)
 			{

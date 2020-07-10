@@ -29,3 +29,20 @@ length: 6
 10:56:31,406 INFO  [null] (default task-12) >>> Printing the given jsonObject ... <<<
 10:56:31,407 INFO  [null] (default task-12) key: careProviderNumber, value: 277312
 10:56:31,407 INFO  [null] (default task-12) key: ohipClaimList, value: [{"serviceCode1":"V402A","feeSubmitted2":"$42.50","feeSubmitted1":"$25.15","numberOfServices2":"1","diagnosticCode1":"376","numberOfServices1":"1","diagnosticCode2":"373","ohipNumber":"1111 - 111 - 111 - AA","patientDob":"2020-07-01","serviceCode2":"V404A","accountingNumber":"11111111","serviceDate2":"2020-07-24","serviceDate1":"2020-07-05"},{"serviceCode1":"V402A","feeSubmitted2":"$42.50","feeSubmitted1":"$25.15","numberOfServices2":"1","diagnosticCode1":"377","numberOfServices1":"1","diagnosticCode2":"377","ohipNumber":"2222 - 222 - 222 - BB","patientDob":"2020-07-02","serviceCode2":"V404A","accountingNumber":"22222222","serviceDate2":"2020-07-09","serviceDate1":"2020-07-05"},{"serviceCode1":"V402A","feeSubmitted2":"$42.50","feeSubmitted1":"$25.15","numberOfServices2":"1","diagnosticCode1":"376","numberOfServices1":"1","diagnosticCode2":"376","ohipNumber":"3333 - 333 - 333 - CC","patientDob":"2020-07-02","serviceCode2":"V404A","accountingNumber":"33333333","serviceDate2":"2020-07-29","serviceDate1":"2020-07-05"},{"ohipNumber":"4444 - 444 - 444 - D_","patientDob":"2020-07-05","serviceCode1":"V402A","feeSubmitted2":null,"feeSubmitted1":"$25.15","serviceCode2":"","numberOfServices2":"","diagnosticCode1":"377","numberOfServices1":"1","serviceDate1":"2020-07-05"}]
+
+ANALYSIS REQUIRED
+---------------------
+12:37:46,574 INFO  [null] (default task-54) key: careProviderNumber, value: 277312
+12:37:46,574 INFO  [null] (default task-54) key: ohipClaimList, value: [{"serviceCode1":"V402A","feeSubmitted2":"$25.15","feeSubmitted1":"$25.15","numberOfServices2":"1","diagnosticCode1":"376","numberOfServices1":"1","diagnosticCode2":"375","ohipNumber":"1111 - 111 - 111 - AA","patientDob":"2020-07-01","serviceCode2":"V402A","accountingNumber":"11111111","serviceDate2":"2020-07-31","serviceDate1":"2020-07-02"},{"ohipNumber":"2222 - 222 - 222 - __","patientDob":"2020-07-02","serviceCode1":"V402A","feeSubmitted2":"","feeSubmitted1":"$25.15","serviceCode2":"","diagnosticCode1":"376","numberOfServices1":"1","serviceDate1":"2020-07-03"},{"ohipNumber":"3333 - 333 - 333 - __","patientDob":"2020-07-02","serviceCode1":"V402A","feeSubmitted2":"","feeSubmitted1":"$25.15","serviceCode2":"","diagnosticCode1":"375","numberOfServices1":"1","serviceDate1":"2020-07-03"},{"serviceCode1":"V402A","feeSubmitted2":"$25.15","feeSubmitted1":"$25.15","numberOfServices2":"1","diagnosticCode1":"375","numberOfServices1":"1","diagnosticCode2":"375","ohipNumber":"4444 - 444 - 444 - DD","patientDob":"2020-07-03","serviceCode2":"V402A","accountingNumber":"44444444","serviceDate2":"2020-07-29","serviceDate1":"2020-07-03"}]
+----------------------
+[0]: [HEBV03 202007090001000000000027731256                                          ]
+[1]: [HEH1111111111AA2020070111111111HCPP                                            ]
+[2]: [HETV402A  0025150120200702376            V402A  0025150120200731375            ]
+[3]: [HEH2222222222  20200702        HCPP                                            ]
+[4]: [HETV402A  0025150120200703376                                                  ]
+[5]: [HEH3333333333  20200702        HCPP                                            ]
+[6]: [HETV402A  0025150120200703375                                                  ]
+[7]: [HEH4444444444DD2020070344444444HCPP                                            ]
+[8]: [HETV402A  0025150120200703375            V402A  0025150120200729375            ]
+[9]: [HEE0004000000004                                                               ]
+[10]: []

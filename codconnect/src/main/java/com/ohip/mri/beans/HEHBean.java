@@ -134,5 +134,44 @@ public class HEHBean implements Serializable
 		System.out.println("[Reserved for MOH Use("+reservedForMOH.length()+"): [" + reservedForMOH +"]");
 		
 	}
+	public boolean parseLine(String line) throws Exception
+	{
+		boolean valid = true;
+		if (line.length() != 79)
+		{
+			log.severe("ERROR: this record (HEH) length, " + line.length() +", is not 79!!!");
+			valid = false;
+		}
+		else
+		{
+			try
+			{
+				System.out.println("Tx ID: [" + line.substring(0, 0+2) +"] len=[" + line.substring(0, 0+2).length() +"]");
+				System.out.println("Record ID: [" + line.substring(2, 2+1) +"] len=[" + line.substring(2, 2+1).length() +"]");
+				System.out.println("Health Number: [" + line.substring(3, 3+10) +"] len=[" + line.substring(3, 3+10).length() +"]");
+				System.out.println("Version Code: [" + line.substring(13, 13+2) +"] len=[" + line.substring(13, 13+2).length() +"]");
+				System.out.println("Patient Dob: [" + line.substring(15, 15+8) +"] len=[" + line.substring(15, 15+8).length() +"]");
+				System.out.println("Accounting Number: [" + line.substring(23, 23+8) +"] len=[" + line.substring(23, 23+8).length() +"]");
+				System.out.println("Payment Program: [" + line.substring(31, 31+3) +"] len=[" + line.substring(31, 31+3).length() +"]");
+				System.out.println("Payee: [" + line.substring(34, 34+1) +"] len=[" + line.substring(34, 34+1).length() +"]");
+				System.out.println("Referring H Care Provider Number: [" + line.substring(35, 35+6) +"] len=[" + line.substring(35, 35+6).length() +"]");
+				System.out.println("Master Number: [" + line.substring(41, 41+4) +"] len=[" + line.substring(41, 41+4).length() +"]");
+				System.out.println("In-Patient Admission Date: [" + line.substring(45, 45+8) +"] len=[" + line.substring(45, 45+8).length() +"]");
+				System.out.println("Referring Lab Lic Number: [" + line.substring(53, 53+4) +"] len=[" + line.substring(53, 53+4).length() +"]");
+				System.out.println("Manual Review Indicator: [" + line.substring(57, 57+1) +"] len=[" + line.substring(57, 57+1).length() +"]");
+				System.out.println("Svc Loc Indicator: [" + line.substring(58, 58+4) +"] len=[" + line.substring(58, 58+4).length() +"]");
+				System.out.println("Reserved for OOC: [" + line.substring(62, 62+11) +"] len=[" + line.substring(62, 62+11).length() +"]");
+				System.out.println("Reserved for MOH: [" + line.substring(73, 73+6) +"] len=[" + line.substring(73, 73+6).length() +"]");
+			}
+
+			catch(Exception e)
+			{
+				log.severe("Caused by " + e.getCause() + ", " + e.getMessage());
+				throw new Exception(e);
+				//valid = false;
+			}
+		}
+		return valid;
+	}
 	
 }
