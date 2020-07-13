@@ -47,7 +47,7 @@
 			JSONArray claimListForRaw = new JSONArray();
 			HEBBean hebBean = new HEBBean(1, jsonObj.getString("careProviderNumber"));
 			claimListForRaw.put(hebBean.getRawLine());
-			
+
 			JSONArray claimList = jsonObj.getJSONArray("ohipClaimList");   
 	        for (int i=0;i <claimList.length(); i++)
 	        {
@@ -66,7 +66,8 @@
 			jsonObj.put("isItValid", true);
 		}
 		catch(Exception | Error e)
-		{
+		{   
+			e.printStackTrace();
 			System.err.println("ERROR (getClaimFile.jsp): "+ e);
 			jsonObj = new JSONObject();
 			jsonObj.put("isItValid", false);

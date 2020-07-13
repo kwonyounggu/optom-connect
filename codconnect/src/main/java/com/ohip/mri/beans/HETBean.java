@@ -26,21 +26,21 @@ public class HETBean implements Serializable
 	private String transactionIdentifier = "HE"; 
 	private String recordIdentifier = "T"; 
 	private String serviceCode1 = "12345";
-	private String reservedForMOH1_1 = "  ";
+	private String reservedForMOH1_1 = "  ";//len=2
 	private String feeSubmitted1 = "000000";
 	private String numberOfServices1 = "00";
-	private String serviceDate1 = "        ";
+	private String serviceDate1 = String.format("%08d", 0).replace('0', ' ');
 	private String diagnosticCode1 = "123 ";
-	private String reservedForOOC1 = "          ";
+	private String reservedForOOC1 = String.format("%010d", 0).replace('0', ' ');
 	private String reservedForMOH1_2 = " ";
 	
-	private String serviceCode2 = "     ";
+	private String serviceCode2 = String.format("%05d", 0).replace('0', ' ');
 	private String reservedForMOH2_1 = "  ";
-	private String feeSubmitted2 = "      ";
+	private String feeSubmitted2 = String.format("%06d", 0).replace('0', ' ');
 	private String numberOfServices2 = "  ";
-	private String serviceDate2 = "        ";
-	private String diagnosticCode2 = "    ";
-	private String reservedForOOC2 = "          ";
+	private String serviceDate2 = String.format("%08d", 0).replace('0', ' ');
+	private String diagnosticCode2 = String.format("%04d", 0).replace('0', ' ');
+	private String reservedForOOC2 = String.format("%010d", 0).replace('0', ' ');
 	private String reservedForMOH2_2 = " ";
 	
 	private SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd");
@@ -64,7 +64,7 @@ public class HETBean implements Serializable
 				}
 				case "serviceCode2": 
 				{
-					this.serviceCode2 = jsonObj.getString(keyStr).length() != 5 ? "     " : jsonObj.getString(keyStr);
+					this.serviceCode2 = jsonObj.getString(keyStr).length() != 5 ? this.serviceCode2 : jsonObj.getString(keyStr);
 					break;
 				}
 				case "feeSubmitted1": 

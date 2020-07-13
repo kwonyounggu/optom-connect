@@ -28,17 +28,17 @@ public class HEHBean implements Serializable
 	private String healthNumber = "1234567890";
 	private String versionCode = "zz"; //can be [A ], [ A], [AA]
 	private String patientDob = "11110101";//creation data 'YYYYMMDD0001'
-	private String accountingNumber = "        ";
+	private String accountingNumber = String.format("%08d", 0).replace('0', ' ');
 	private String paymentProgram = "HCP";
 	private String payee = "P";
-	private String referringCareProviderNumber = "      ";
-	private String masterNumber = "    ";
-	private String inPatientAdmissionDate = "        ";
-	private String referringLabLicence = "    ";
+	private String referringCareProviderNumber = String.format("%06d", 0).replace('0', ' ');
+	private String masterNumber = String.format("%04d", 0).replace('0', ' ');
+	private String inPatientAdmissionDate = String.format("%08d", 0).replace('0', ' ');
+	private String referringLabLicence = String.format("%04d", 0).replace('0', ' ');
 	private String manualReviewIndicator = " ";
-	private String serviceLocationIndicator = "    ";
-	private String reservedForOOC = "           ";
-	private String reservedForMOH = "      ";
+	private String serviceLocationIndicator = String.format("%04d", 0).replace('0', ' ');
+	private String reservedForOOC = String.format("%011d", 0).replace('0', ' ');
+	private String reservedForMOH = String.format("%06d", 0).replace('0', ' ');
 
 	private SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd");
 
@@ -92,6 +92,7 @@ public class HEHBean implements Serializable
 				case "accountingNumber":
 				{
 					this.accountingNumber = jsonObj.getString(keyStr);
+					if (this.accountingNumber.length() != 8) this.accountingNumber = String.format("%08d", 0).replace('0', ' ');
 					break;
 				}
 				default: break;
@@ -102,6 +103,7 @@ public class HEHBean implements Serializable
 	@Override
 	public String toString()
 	{
+		//Check length throw exception, make a static function to throw an exception based on length check.
 		return transactionIdentifier + recordIdentifier + healthNumber + versionCode +
 				patientDob + accountingNumber + paymentProgram + payee +
 				referringCareProviderNumber + masterNumber + inPatientAdmissionDate + referringLabLicence + 

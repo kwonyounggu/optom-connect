@@ -12,7 +12,7 @@ public class ReadMRIFiles
 	public static final String[] filePath =
 		{
 			  	
-			  	"/home/younggu/Downloads/myFile.txt"
+			  	"/home/younggu/Downloads/mriTesting.005"
 		};
 
 
@@ -81,6 +81,9 @@ public class ReadMRIFiles
 	{
 		// TODO Auto-generated method stub
 
+		//String a = "";
+		//String.format("%06d", 0).replace('0', ' ');
+		//System.out.println("String.format(\"%06d\", 0): [" + String.format("%06d", 0) + "], String.format(\"%06d\", 0).replace('0', ' '): [" + String.format("%06d", 0).replace('0', ' ') + "]");
 		ReadMRIFiles obj = new ReadMRIFiles();
 		
 		for (int i=0; i<ReadMRIFiles.filePath.length; i++)

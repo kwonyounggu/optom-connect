@@ -46,3 +46,6 @@ ANALYSIS REQUIRED
 [8]: [HETV402A  0025150120200703375            V402A  0025150120200729375            ]
 [9]: [HEE0004000000004                                                               ]
 [10]: []
+
+Error in heh
+11:49:37,030 INFO  [null] (default task-24) key: ohipClaimList, value: [{"ohipNumber":"2222 - 222 - 222 - __","patientDob":"2020-07-03","serviceCode1":"V402A","feeSubmitted2":"","feeSubmitted1":"$25.15","serviceCode2":"","diagnosticCode1":"374","accountingNumber":"","numberOfServices1":"1","serviceDate1":"2020-07-03"}]
