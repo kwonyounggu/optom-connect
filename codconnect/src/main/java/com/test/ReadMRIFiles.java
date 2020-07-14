@@ -41,16 +41,19 @@ public class ReadMRIFiles
 				{
 					//System.out.println("HEB");
 					heb.parseLine(line);
+					System.out.println();
 				}
 				else if (line.startsWith("HEH"))
 				{
 					//System.out.println("HEH");
 					heh.parseLine(line);
+					System.out.println();
 				}
 				else if (line.startsWith("HET"))
 				{
-					System.out.println("HET");
-					//het.parseLine(line);
+					//System.out.println("HET");
+					het.parseLine(line);
+					System.out.println();
 				}
 				else if (line.startsWith("HEE"))
 				{

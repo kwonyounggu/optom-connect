@@ -151,7 +151,7 @@ public class HETBean implements Serializable
 		System.out.println("[Reserved for OOC("+reservedForOOC2.length()+"): [" + reservedForOOC2 +"]");
 		System.out.println("[Reserved for MOH("+reservedForMOH2_2.length()+"): [" + reservedForMOH2_2 +"]");
 	}
-		public boolean parseLine(String line) throws Exception
+	public boolean parseLine(String line) throws Exception
 	{
 		boolean valid = true;
 		if (line.length() != 79)
@@ -165,14 +165,22 @@ public class HETBean implements Serializable
 			{
 				System.out.println("Tx ID: [" + line.substring(0, 0+2) +"] len=[" + line.substring(0, 0+2).length() +"]");
 				System.out.println("Record ID: [" + line.substring(2, 2+1) +"] len=[" + line.substring(2, 2+1).length() +"]");
-				System.out.println("Tech Spec ID: [" + line.substring(3, 3+3) +"] len=[" + line.substring(3, 3+3).length() +"]");
-				System.out.println("MOH Office Code: [" + line.substring(6, 6+1) +"] len=[" + line.substring(6, 6+1).length() +"]");
-				System.out.println("Batch ID: [" + line.substring(7, 7+12) +"] len=[" + line.substring(7, 7+12).length() +"]");
-				System.out.println("Operator Number: [" + line.substring(19, 19+6) +"] len=[" + line.substring(19, 19+6).length() +"]");
-				System.out.println("Group Number: [" + line.substring(25, 25+4) +"] len=[" + line.substring(25, 25+4).length() +"]");
-				System.out.println("Care Provider Number: [" + line.substring(29, 29+6) +"] len=[" + line.substring(29, 29+6).length() +"]");
-				System.out.println("Speciality: [" + line.substring(35, 35+2) +"] len=[" + line.substring(35, 35+2).length() +"]");
-				System.out.println("Reserved for MOH: [" + line.substring(37, 37+42) +"] len=[" + line.substring(37, 37+42).length() +"]");
+				System.out.println("Service Code #1: [" + line.substring(3, 3+5) +"] len=[" + line.substring(3, 3+5).length() +"]");
+				System.out.println("Reserved for MOH: [" + line.substring(8, 8+2) +"] len=[" + line.substring(8, 8+2).length() +"]");
+				System.out.println("Fee Submitted: [" + line.substring(10, 10+6) +"] len=[" + line.substring(10, 10+6).length() +"]");
+				System.out.println("Number of Services: [" + line.substring(16, 16+2) +"] len=[" + line.substring(16, 16+2).length() +"]");
+				System.out.println("Service Date: [" + line.substring(18, 18+8) +"] len=[" + line.substring(18, 18+8).length() +"]");
+				System.out.println("Diagnostic Code: [" + line.substring(26, 26+4) +"] len=[" + line.substring(26, 26+4).length() +"]");
+				System.out.println("Reserved for OOC: [" + line.substring(30, 30+10) +"] len=[" + line.substring(30, 30+10).length() +"]");
+				System.out.println("Reserved for MOH: [" + line.substring(40, 40+1) +"] len=[" + line.substring(40, 40+1).length() +"]");
+				System.out.println("Service Code #2: [" + line.substring(41, 41+5) +"] len=[" + line.substring(41, 41+5).length() +"]");
+				System.out.println("Reserved for MOH: [" + line.substring(46, 46+2) +"] len=[" + line.substring(46, 46+2).length() +"]");
+				System.out.println("Fee Submitted: [" + line.substring(48, 48+6) +"] len=[" + line.substring(48, 48+6).length() +"]");
+				System.out.println("Number of Services: [" + line.substring(54, 54+2) +"] len=[" + line.substring(54, 54+2).length() +"]");
+				System.out.println("Service Date: [" + line.substring(56, 56+8) +"] len=[" + line.substring(56, 56+8).length() +"]");
+				System.out.println("Diagnostic Code: [" + line.substring(64, 64+4) +"] len=[" + line.substring(64, 64+4).length() +"]");
+				System.out.println("Reserved for OOC: [" + line.substring(68, 68+10) +"] len=[" + line.substring(68, 68+10).length() +"]");
+				System.out.println("Reserved for MOH: [" + line.substring(78, 78+1) +"] len=[" + line.substring(78, 78+1).length() +"]");
 			}
 			catch (NumberFormatException e)
 			{
