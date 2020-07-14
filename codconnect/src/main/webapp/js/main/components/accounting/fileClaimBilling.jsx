@@ -23,6 +23,8 @@ import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox'
 import IconButton from '@material-ui/core/IconButton';
 import {Alert, AlertTitle} from '@material-ui/lab';
 
+import FileClaimBillingSummary from './fileClaimBillingSummary.jsx';
+
 const styles = (theme) =>
 (
 	{
@@ -390,6 +392,9 @@ class FileClaimBilling extends React.Component
 							</Grid>
 							<Grid item xs={12}>
 								&nbsp;
+							</Grid>
+							<Grid item xs={12}>
+								<FileClaimBillingSummary />
 							</Grid>
 						</React.Fragment>
 					}

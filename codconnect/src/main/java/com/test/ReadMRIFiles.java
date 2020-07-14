@@ -12,7 +12,7 @@ public class ReadMRIFiles
 	public static final String[] filePath =
 		{
 			  	
-			  	"/home/younggu/Downloads/mriTesting.005"
+			  	"/home/younggu/Downloads/mriTesting_4items.006"
 		};
 
 
@@ -57,8 +57,8 @@ public class ReadMRIFiles
 				}
 				else if (line.startsWith("HEE"))
 				{
-					System.out.println("HEE");
-					//hee.parseLine(line);
+					//System.out.println("HEE");
+					hee.parseLine(line);
 				}
 
 				//System.out.println("["+i+"]: ["+line+"]");

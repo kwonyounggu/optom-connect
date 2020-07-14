@@ -74,14 +74,10 @@ public class HEEBean implements Serializable
 			{
 				System.out.println("Tx ID: [" + line.substring(0, 0+2) +"] len=[" + line.substring(0, 0+2).length() +"]");
 				System.out.println("Record ID: [" + line.substring(2, 2+1) +"] len=[" + line.substring(2, 2+1).length() +"]");
-				System.out.println("Tech Spec ID: [" + line.substring(3, 3+3) +"] len=[" + line.substring(3, 3+3).length() +"]");
-				System.out.println("MOH Office Code: [" + line.substring(6, 6+1) +"] len=[" + line.substring(6, 6+1).length() +"]");
-				System.out.println("Batch ID: [" + line.substring(7, 7+12) +"] len=[" + line.substring(7, 7+12).length() +"]");
-				System.out.println("Operator Number: [" + line.substring(19, 19+6) +"] len=[" + line.substring(19, 19+6).length() +"]");
-				System.out.println("Group Number: [" + line.substring(25, 25+4) +"] len=[" + line.substring(25, 25+4).length() +"]");
-				System.out.println("Care Provider Number: [" + line.substring(29, 29+6) +"] len=[" + line.substring(29, 29+6).length() +"]");
-				System.out.println("Speciality: [" + line.substring(35, 35+2) +"] len=[" + line.substring(35, 35+2).length() +"]");
-				System.out.println("Reserved for MOH: [" + line.substring(37, 37+42) +"] len=[" + line.substring(37, 37+42).length() +"]");
+				System.out.println("H Count: [" + line.substring(3, 3+4) +"] len=[" + line.substring(3, 3+4).length() +"]");
+				System.out.println("R Count: [" + line.substring(7, 7+4) +"] len=[" + line.substring(7, 7+4).length() +"]");
+				System.out.println("T Count: [" + line.substring(11, 11+5) +"] len=[" + line.substring(11, 11+5).length() +"]");
+				System.out.println("Reserved for MOH: [" + line.substring(16, 16+63) +"] len=[" + line.substring(16, 16+63).length() +"]");
 			}
 			catch (NumberFormatException e)
 			{
