@@ -2,6 +2,7 @@
 
 <%@ page import="javax.sql.*" %>
 <%@ page isELIgnored ="false" %>
+<%@ page import = "java.io.*" %>
 <%@ page import = "java.util.Map" %>
 <%@ page import = "java.util.stream.Collectors" %>
 <%@ page import = "java.util.List" %>
@@ -18,6 +19,35 @@
 	response.setContentType("application/json");
 	System.out.println("getClaimFile.jsp is called");
 	
+	
+	System.out.println("getRealPath('/'): [" + request.getServletContext().getRealPath("/") +"]");
+	System.out.println("System.getProperty('jboss.server.data.dir'): " + System.getProperty("jboss.server.data.dir"));
+	
+	File path = new File(System.getProperty("jboss.server.data.dir") + "/mri_claims");
+	
+	if(!path.exists()||!path.isDirectory()) System.out.println("path.mkdirs(): " + path.mkdirs());
+	ClaimFileManagement cf = new ClaimFileManagement(DatasourceUtil.getDataSource());
+	String fileName = cf.createFileName("123458");
+	String filePath = path + "/" + fileName + ".json";
+	System.out.println("fileName: " + filePath);
+			
+			
+	try (FileWriter file = new FileWriter(filePath)) 
+	{
+		 
+        //file.write(employeeList.toJSONString());
+        file.flush();
+
+    } 
+	catch (IOException e) 
+	{
+        e.printStackTrace();
+    }
+	catch (Exception e) 
+	{
+        e.printStackTrace();
+    }
+		
 	if(request.getMethod().equals("POST"))
 	{
 		
@@ -42,6 +72,25 @@
 				//Note you need to validate if the user is still in the database whose id is still valid/enabled
 			}
 			jsonObj.put("decodedToken", decodedToken);//remove later
+			/*** WRITE INTO A DIRECTORY AND UPDATE OHIP_MRI_HISTORY TABLE ***/
+			
+			/*
+			File path = new File(System.getProperty("jboss.server.data.dir") + "/mri_claims");
+	
+			if(!path.exists()||!path.isDirectory()) path.mkdirs();
+			
+			try (FileWriter file = new FileWriter("employees.json")) 
+			{
+				 
+		        //file.write(employeeList.toJSONString());
+		        //file.flush();
+		
+		    } 
+			catch (IOException e) 
+			{
+		        e.printStackTrace();
+		    }
+			*/
 			
 			/************************************************************************/
 			JSONArray claimListForRaw = new JSONArray();
@@ -63,6 +112,8 @@
 			jsonObj.put("claimFileData", claimListForRaw);
 			/************************************************************************/
 		
+			
+	
 			jsonObj.put("isItValid", true);
 		}
 		catch(Exception | Error e)

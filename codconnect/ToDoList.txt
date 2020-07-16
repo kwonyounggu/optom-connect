@@ -49,3 +49,4 @@ ANALYSIS REQUIRED
 
 Error in heh
 11:49:37,030 INFO  [null] (default task-24) key: ohipClaimList, value: [{"ohipNumber":"2222 - 222 - 222 - __","patientDob":"2020-07-03","serviceCode1":"V402A","feeSubmitted2":"","feeSubmitted1":"$25.15","serviceCode2":"","diagnosticCode1":"374","accountingNumber":"","numberOfServices1":"1","serviceDate1":"2020-07-03"}]
+insert into ohip_mri_creation_history values(default, 'HG123456.001', '123456', '0001', 'standalone/data/mri_claims/HG123456.001.json', NULL, default);
