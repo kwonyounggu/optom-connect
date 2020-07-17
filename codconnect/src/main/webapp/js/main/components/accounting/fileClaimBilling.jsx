@@ -316,7 +316,7 @@ class FileClaimBilling extends React.Component
 		//https://stackoverflow.com/questions/7590838/how-to-find-eof-in-a-string-in-java
     	const file = new Blob([rawData], {type: 'text/plain'});
 	    element.href = URL.createObjectURL(file);
-	    element.download = "myFile.txt";
+	    element.download = this.props.rootReducer.claimFile.claimFileName;
 	    document.body.appendChild(element); // Required for this to work in FireFox
 	    element.click();
 	}	

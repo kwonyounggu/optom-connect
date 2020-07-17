@@ -18,36 +18,7 @@
 <%
 	response.setContentType("application/json");
 	System.out.println("getClaimFile.jsp is called");
-	
-	
-	System.out.println("getRealPath('/'): [" + request.getServletContext().getRealPath("/") +"]");
-	System.out.println("System.getProperty('jboss.server.data.dir'): " + System.getProperty("jboss.server.data.dir"));
-	
-	File path = new File(System.getProperty("jboss.server.data.dir") + "/mri_claims");
-	
-	if(!path.exists()||!path.isDirectory()) System.out.println("path.mkdirs(): " + path.mkdirs());
-	ClaimFileManagement cf = new ClaimFileManagement(DatasourceUtil.getDataSource());
-	String fileName = cf.createFileName("123458");
-	String filePath = path + "/" + fileName + ".json";
-	System.out.println("fileName: " + filePath);
-			
-			
-	try (FileWriter file = new FileWriter(filePath)) 
-	{
-		 
-        //file.write(employeeList.toJSONString());
-        file.flush();
 
-    } 
-	catch (IOException e) 
-	{
-        e.printStackTrace();
-    }
-	catch (Exception e) 
-	{
-        e.printStackTrace();
-    }
-		
 	if(request.getMethod().equals("POST"))
 	{
 		
@@ -74,27 +45,13 @@
 			jsonObj.put("decodedToken", decodedToken);//remove later
 			/*** WRITE INTO A DIRECTORY AND UPDATE OHIP_MRI_HISTORY TABLE ***/
 			
-			/*
-			File path = new File(System.getProperty("jboss.server.data.dir") + "/mri_claims");
-	
-			if(!path.exists()||!path.isDirectory()) path.mkdirs();
-			
-			try (FileWriter file = new FileWriter("employees.json")) 
-			{
-				 
-		        //file.write(employeeList.toJSONString());
-		        //file.flush();
-		
-		    } 
-			catch (IOException e) 
-			{
-		        e.printStackTrace();
-		    }
-			*/
+			ClaimFileManagement cf = new ClaimFileManagement(DatasourceUtil.getDataSource());
+			String fileNameAndSequenceNo = cf.writeJsonAndTable(jsonObj, -1);
+			jsonObj.put("claimFileName", fileNameAndSequenceNo.split(":")[0]);
 			
 			/************************************************************************/
 			JSONArray claimListForRaw = new JSONArray();
-			HEBBean hebBean = new HEBBean(1, jsonObj.getString("careProviderNumber"));
+			HEBBean hebBean = new HEBBean(Integer.parseInt(fileNameAndSequenceNo.split(":")[1]), jsonObj.getString("careProviderNumber"));
 			claimListForRaw.put(hebBean.getRawLine());
 
 			JSONArray claimList = jsonObj.getJSONArray("ohipClaimList");   

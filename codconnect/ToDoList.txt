@@ -50,3 +50,6 @@ ANALYSIS REQUIRED
 Error in heh
 11:49:37,030 INFO  [null] (default task-24) key: ohipClaimList, value: [{"ohipNumber":"2222 - 222 - 222 - __","patientDob":"2020-07-03","serviceCode1":"V402A","feeSubmitted2":"","feeSubmitted1":"$25.15","serviceCode2":"","diagnosticCode1":"374","accountingNumber":"","numberOfServices1":"1","serviceDate1":"2020-07-03"}]
 insert into ohip_mri_creation_history values(default, 'HG123456.001', '123456', '0001', 'standalone/data/mri_claims/HG123456.001.json', NULL, default);
+
+//select concat(claim_file_name, ':', date(date_creation)) as file_name_date from ohip_mri_creation_history where date_creation = 
+//				     (select max(date_creation) from ohip_mri_creation_history where care_provider_number='123456');

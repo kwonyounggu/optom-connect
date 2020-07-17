@@ -20,32 +20,60 @@ public class ClaimFileManagement
 		this._ds = ds;
 	}
 	//Write a claim file under standalone/data/mri_claims in wildfly server
-	public boolean writeJsonFile(JSONObject claimData) throws Exception
+	//see https://howtodoinjava.com/library/json-simple-read-write-json-examples/
+	public String writeJsonAndTable(JSONObject claimData, int authUserAccountId) throws Exception
 	{
 		File path = new File(System.getProperty("jboss.server.data.dir") + "/mri_claims");
 		
 		if(!path.exists()||!path.isDirectory()) path.mkdirs();
+		String fileName = createFileName(claimData.getString("careProviderNumber"));
+		String filePath = path + "/" + fileName + ".json";
+		//System.out.println("fileName: " + filePath);
 		
-		try (FileWriter file = new FileWriter("employees.json")) 
+		FileWriter file = null;
+		String batchSequenceNumber = "0000";
+		try
 		{
-			 
-	        //file.write(employeeList.toJSONString());
-	        //file.flush();
-	
+			file = new FileWriter(filePath);
+	        file.write(claimData.toString());
+	        
+	        batchSequenceNumber = writeToTable(fileName, filePath, claimData.getString("careProviderNumber"), authUserAccountId);
 	    } 
 		catch (IOException e) 
 		{
 	        e.printStackTrace();
 	        throw new Exception(e.getMessage());
 	    }
-		return true;
+		finally
+		{
+			if (file != null) 
+			{
+				file.flush();
+				file.close();
+			}
+		}
+		return fileName + ":" + batchSequenceNumber;
 	}
 	//write to the db table, ohip_mri_history, return batch sequence number
-	public String writeToTable() throws Exception
+	private String writeToTable(String fileName, String filePath, String careProviderNumber, int authUserAccountId) throws Exception
 	{
-		return "0001";
+		String sql = "select batch_sequence_number from ohip_mri_creation_history where care_provider_number='" + careProviderNumber + "' order by date_creation desc limit 1;";
+		OHIPReportDao dao = new OHIPReportDao(_ds);
+		
+		Object o = dao.queryObject(sql);
+		String batchSequenceNumber = (o == null ? "0001" : String.format("%04d", (Integer.parseInt(o.toString()) + 1)));
+		
+		sql = "insert into ohip_mri_creation_history values(default, '" + fileName + "', '" +
+																		  careProviderNumber + "', '" +
+																		  batchSequenceNumber + "', '" +
+																		  filePath + "', " + (authUserAccountId == -1 ? "NULL" :  authUserAccountId) + ", default)";
+		System.out.println("[INFO] SQL: " + sql);
+		
+		dao.updateTable(sql);
+
+		return batchSequenceNumber;
 	}
-	public String createFileName(String careProviderNumber) throws Exception
+	private String createFileName(String careProviderNumber) throws Exception
 	{
 		String sql = "select concat(claim_file_name, ':', date(date_creation)) as file_name_date from ohip_mri_creation_history where date_creation = " + 
 				     "(select max(date_creation) from ohip_mri_creation_history where care_provider_number='" + careProviderNumber +"');";
