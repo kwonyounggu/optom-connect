@@ -106,7 +106,10 @@ class OHIPBilling extends React.Component
 						</div>
 					}
 					{
-						(location.pathname == menuLinks[11]) && <div>here two</div>
+						(location.pathname == menuLinks[11]) &&
+						<div style={{borderLeft: '1px solid grey', borderRight: '1px solid grey', borderBottom: '1px solid grey', padding: '20px'}}> 
+							<strong>This page is under construction !!!</strong>
+						</div>
 					}
 
 				</React.Fragment>

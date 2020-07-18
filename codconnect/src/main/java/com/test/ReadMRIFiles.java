@@ -12,7 +12,7 @@ public class ReadMRIFiles
 	public static final String[] filePath =
 		{
 			  	
-			  	"/home/younggu/Downloads/mriTesting_4items.006"
+			  	"/home/younggu/Downloads/HG123458.001"
 		};
 
 

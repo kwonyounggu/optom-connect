@@ -80,13 +80,13 @@ public class UploadServlet extends HttpServlet
 				FileInfoBean fb = new FileInfoBean();
 				//find file information in detail
 				for (int i=0; line != null; i++)
-				{log.info(line);
+				{//log.info(line);
 					if (line.startsWith("Content-Disposition:"))
 					{						
 						String[] dispInfo = extractDispositionInfo(line);
 						fb.setName(dispInfo[1]);
 						fb.setFileName(dispInfo[2].toUpperCase());
-						log.info(fb.toString());
+						//log.info(fb.toString());
 						
 						returnJson.put("fileInfo", fb.getJson());
 						

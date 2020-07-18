@@ -47,6 +47,7 @@ const styles = (theme) =>
 		 }
 	}
 );
+/*
 const HtmlTooltip = withStyles((theme) => 
 ({
   tooltip: 
@@ -58,6 +59,7 @@ const HtmlTooltip = withStyles((theme) =>
     border: '1px solid #dadde9'
   }
 }))(Tooltip);
+*/
 const EXPECTED_FILE_NAME = /(^[BEFPX]{1})+([ABCDEFGHIJKL]{1})+([0-9]{4,6})+(.\d{3})$/;
 const currency = new Intl.NumberFormat('en-CA', {style: 'currency', currency: 'CAD'});
 const numberOfServices = [1];
@@ -320,6 +322,7 @@ class FileClaimBilling extends React.Component
 	    document.body.appendChild(element); // Required for this to work in FireFox
 	    element.click();
 	}	
+	/*** The following function can be used by {this.downloadTooptips} ***
 	downloadTooltips = () =>
 	{
 		let claimFileData = JSON.parse(localStorage.getItem("claimFileData"));
@@ -356,6 +359,7 @@ class FileClaimBilling extends React.Component
       			</HtmlTooltip>);		
 		return toolTips;
 	}
+	*/
 	render()
 	{
 		console.log("INFO:fileClaimBilling.jsx.render() is called, [this.props]: ", this.props);
@@ -381,9 +385,9 @@ class FileClaimBilling extends React.Component
 									   {
 											<React.Fragment>
 											    <Button color="inherit" size="small" onClick={this.props.resetClaimFileData} variant="outlined" endIcon={<Icon>cancel</Icon>}>
-											      Cancel
+											      Another
 											    </Button>&nbsp;
-												{this.downloadTooltips()}
+												<Button color="inherit" size="small" variant="outlined" onClick={this.onClickDownload} endIcon={<Icon>cloud_download</Icon>}>Download</Button>
 											</React.Fragment>
 									   }
 								>

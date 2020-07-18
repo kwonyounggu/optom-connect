@@ -42,14 +42,14 @@
 				
 				//Note you need to validate if the user is still in the database whose id is still valid/enabled
 			}
-			jsonObj.put("decodedToken", decodedToken);//remove later
-			/*** WRITE INTO A DIRECTORY AND UPDATE OHIP_MRI_HISTORY TABLE ***/
+
+			/*** Write a json file under standalone/mri_claims  and insert into ohip_mri_history table ***/
 			
 			ClaimFileManagement cf = new ClaimFileManagement(DatasourceUtil.getDataSource());
-			String fileNameAndSequenceNo = cf.writeJsonAndTable(jsonObj, -1);
+			String fileNameAndSequenceNo = cf.writeJsonAndTable(jsonObj, decodedToken);
 			jsonObj.put("claimFileName", fileNameAndSequenceNo.split(":")[0]);
 			
-			/************************************************************************/
+			/*** Create raw records for a MRI file ***/
 			JSONArray claimListForRaw = new JSONArray();
 			HEBBean hebBean = new HEBBean(Integer.parseInt(fileNameAndSequenceNo.split(":")[1]), jsonObj.getString("careProviderNumber"));
 			claimListForRaw.put(hebBean.getRawLine());

@@ -10,6 +10,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.json.JSONObject;
 
 import com.dao.OHIPReportDao;
+import com.exceptions.DAOException;
 
 public class ClaimFileManagement
 {
@@ -19,9 +20,10 @@ public class ClaimFileManagement
 	{
 		this._ds = ds;
 	}
+	
 	//Write a claim file under standalone/data/mri_claims in wildfly server
 	//see https://howtodoinjava.com/library/json-simple-read-write-json-examples/
-	public String writeJsonAndTable(JSONObject claimData, int authUserAccountId) throws Exception
+	public String writeJsonAndTable(JSONObject claimData, JSONObject token) throws Exception
 	{
 		File path = new File(System.getProperty("jboss.server.data.dir") + "/mri_claims");
 		
@@ -37,7 +39,7 @@ public class ClaimFileManagement
 			file = new FileWriter(filePath);
 	        file.write(claimData.toString());
 	        
-	        batchSequenceNumber = writeToTable(fileName, filePath, claimData.getString("careProviderNumber"), authUserAccountId);
+	        batchSequenceNumber = writeToTable(fileName, filePath, claimData.getString("careProviderNumber"), token);
 	    } 
 		catch (IOException e) 
 		{
@@ -55,11 +57,26 @@ public class ClaimFileManagement
 		return fileName + ":" + batchSequenceNumber;
 	}
 	//write to the db table, ohip_mri_history, return batch sequence number
-	private String writeToTable(String fileName, String filePath, String careProviderNumber, int authUserAccountId) throws Exception
+	private String writeToTable(String fileName, String filePath, String careProviderNumber, JSONObject token) throws Exception
 	{
-		String sql = "select batch_sequence_number from ohip_mri_creation_history where care_provider_number='" + careProviderNumber + "' order by date_creation desc limit 1;";
-		OHIPReportDao dao = new OHIPReportDao(_ds);
+				OHIPReportDao dao = new OHIPReportDao(_ds);
 		
+		int authUserAccountId = -1;
+				
+		if (token != null)
+		{
+			String sqlCmd = "";
+			if (token.getString("sub").equals("internalLogin"))
+				sqlCmd = "select id from auth_user_account where auth_user_details_internal_id=" +
+						    "(select id from auth_user_details_internal where email='" + token.getString("jti") + "');";
+			else 
+				sqlCmd = "select auth_user_account_id from auth_user_external_login where email='" + token.getString("jti") + "';";
+			
+			Object o = dao.queryObject(sqlCmd);
+			authUserAccountId = (o == null ? -1 : Integer.parseInt(o.toString()));
+		}
+		
+		String sql = "select batch_sequence_number from ohip_mri_creation_history where care_provider_number='" + careProviderNumber + "' order by date_creation desc limit 1;";
 		Object o = dao.queryObject(sql);
 		String batchSequenceNumber = (o == null ? "0001" : String.format("%04d", (Integer.parseInt(o.toString()) + 1)));
 		

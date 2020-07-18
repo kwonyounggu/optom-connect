@@ -92,10 +92,17 @@ class Accounting extends React.Component
 									/> 
 								} 
 						/>
-						<Route path="/accounting/ohip/myrecord"  ><h3>provide ohip my record component</h3></Route>
-						<Route exact path="/accounting/nonohip"  ><h3>provide what non-ohip section is doing</h3></Route>
-						<Route path="/accounting/non-ohip/billing"  ><h3>provide non-ohip billing component</h3></Route>
-						<Route path="/accounting/non-ohip/myrecord"  ><h3>provide non-ohip my record component</h3></Route>
+						<Route path="/accounting/ohip/myrecord"  ><h3>This section is under construction!!!</h3></Route>
+						<Route exact path="/accounting/nonohip"  ><h3>This section is under construction!!!</h3></Route>
+						<Route path="/accounting/non-ohip/billing"  ><h3>This section is under construction!!!</h3></Route>
+						<Route path="/accounting/non-ohip/myrecord"  
+							component=
+							   { 
+									(props) => 
+									
+									<div>This section is under construction!!!</div>
+								} 
+						/>
 					</Switch>
 				</div>
 			  );
