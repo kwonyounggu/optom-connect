@@ -92,15 +92,37 @@ class Accounting extends React.Component
 									/> 
 								} 
 						/>
-						<Route path="/accounting/ohip/myrecord"  ><h3>This section is under construction!!!</h3></Route>
-						<Route exact path="/accounting/nonohip"  ><h3>This section is under construction!!!</h3></Route>
-						<Route path="/accounting/non-ohip/billing"  ><h3>This section is under construction!!!</h3></Route>
+						<Route path="/accounting/ohip/myrecord"  >
+							<div style={{width: '100%', height: '100%', margin: '20% auto'}}>
+								<h1  >
+									<p>This page is under construction. Please come back soon!</p>
+								</h1>
+							</div>
+						</Route>
+						<Route exact path="/accounting/nonohip"  >
+									<div style={{width: '100%', height: '100%', margin: '20% auto'}}>
+										<h1  >
+											<p>This page is under construction. Please come back soon!</p>
+										</h1>
+									</div>
+						</Route>
+						<Route path="/accounting/non-ohip/billing"  >
+									<div style={{width: '100%', height: '100%', margin: '20% auto'}}>
+										<h1  >
+											<p>This page is under construction. Please come back soon!</p>
+										</h1>
+									</div>
+						</Route>
 						<Route path="/accounting/non-ohip/myrecord"  
 							component=
 							   { 
 									(props) => 
 									
-									<div>This section is under construction!!!</div>
+									<div style={{width: '100%', height: '100%', margin: '20% auto'}}>
+										<h1  >
+											<p>This page is under construction. Please come back soon!</p>
+										</h1>
+									</div>
 								} 
 						/>
 					</Switch>
