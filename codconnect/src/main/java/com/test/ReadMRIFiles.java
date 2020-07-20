@@ -12,7 +12,7 @@ public class ReadMRIFiles
 	public static final String[] filePath =
 		{
 			  	
-			  	"/home/younggu/Downloads/HG123458.001"
+			  	"/home/younggu/Downloads/HG801989.001"
 		};
 
 

@@ -6,14 +6,14 @@ import { makeStyles, withStyles, useTheme, fade } from '@material-ui/core/styles
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import AppBar from '@material-ui/core/AppBar';
 import Badge from '@material-ui/core/Badge';
-import CloseIcon from '@material-ui/icons/Close';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import Menubar from "./common/menubar.jsx";
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -225,24 +225,42 @@ const NavRootMenuBar = (props) =>
           </div>
 		  <div className={classes.flexGrow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-			<Tooltip title="SignIn SignUp SignOut" arrow>
-			  <IconButton aria-label="SignIn"  color="inherit" onClick={onLogout}>
-			    <LockOutlinedIcon/>
-			  </IconButton>
+			<Tooltip title="Newly uploaded blogs (COMING SOON)" arrow>
+	            <IconButton aria-label="show 17 new notifications" color="inherit">
+	              <Badge badgeContent={0} color="secondary">
+	                <NotificationsIcon />
+	              </Badge>
+	            </IconButton>
 			</Tooltip>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+			{
+				props.auth.isAuthenticated ?
+				(
+					<Tooltip title="Click to logout" arrow>
+					  <IconButton aria-label="Logout"  color="inherit" onClick={onLogout}>
+					     <ExitToAppIcon />
+					  </IconButton>
+					</Tooltip>
+				):
+				(
+					<Tooltip title="Click to login" arrow>
+					  <IconButton aria-label="Login"  color="inherit" onClick={onLogout}>
+					     <SvgIcon>
+					      <path d="M11,7L9.6,8.4l2.6,2.6H2v2h10.2l-2.6,2.6L11,17l5-5L11,7z M20,19h-8v2h8c1.1,0,2-0.9,2-2V5c0-1.1-0.9-2-2-2h-8v2h8V19z"/>
+					    </SvgIcon>
+					  </IconButton>
+					</Tooltip>
+				)
+			}
+			<Tooltip title="My Account (COMING SOON)" arrow>
+	            <IconButton
+	              edge="end"
+	              aria-label="account of current user"
+	              aria-haspopup="true"
+	              color="inherit"
+	            >
+	              <AccountCircle />
+	            </IconButton>
+			</Tooltip>
           </div>
           <div className={classes.sectionMobile}>
             <IconButton

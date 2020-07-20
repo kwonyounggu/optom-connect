@@ -107,8 +107,8 @@ class OHIPBilling extends React.Component
 					}
 					{
 						(location.pathname == menuLinks[11]) &&
-						<div style={{borderLeft: '1px solid grey', borderRight: '1px solid grey', borderBottom: '1px solid grey', padding: '20px'}}> 
-							<strong>This page is under construction !!!</strong>
+						<div style={{borderLeft: '1px dotted grey', borderRight: '1px dotted grey', borderBottom: '0px solid grey', padding: '20px'}}> 
+							<p stype={{padding: '10%'}}><strong>This page is under construction !!!</strong></p>
 						</div>
 					}
 
