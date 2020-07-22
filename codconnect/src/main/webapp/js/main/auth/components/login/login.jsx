@@ -1,5 +1,6 @@
 import React from "react";
-import {Container, Row, Col, Alert} from "react-bootstrap";
+import Grid from '@material-ui/core/Grid';
+import {Alert, AlertTitle} from '@material-ui/lab';
 import LoginForm from "./loginForm.jsx";
 import {connect} from "react-redux";
 import {PropTypes} from "prop-types";
@@ -19,15 +20,14 @@ class Login extends React.Component
 		console.log("----INFO (render() of login.jsx) is called------");
 		
 		return (
-				<Container>
-					<Row>
-						<Col md={4} mdOffset={4} >
+				<Grid container>
+					<Grid item xs={12}>
 				
 						{
 					    	this.props.auth.isAuthenticated ?
 					    			
-					    	<Alert bsStyle="danger" >
-								<h4>Ooops! You forgot to logout first, please try again after.</h4>
+					    	<Alert severity="warning" >
+								<AlertTitle>Ooops! You forgot to logout first, please try again after.</AlertTitle>
 							</Alert>
 								:
 							<LoginForm 
@@ -41,9 +41,8 @@ class Login extends React.Component
 				
 				
 							
-						</Col>
-					</Row>
-				</Container>
+					</Grid>
+				</Grid>
 			   );
 
 	}

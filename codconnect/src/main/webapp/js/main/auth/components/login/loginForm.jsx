@@ -1,6 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {Form, FormGroup, ControlLabel, FormControl, HelpBlock, Button, Alert} from "react-bootstrap";
+//import {Alert, AlertTitle} from '@material-ui/lab';
 import validateLoginForm from "./validateLoginForm.jsx";
 
 import {setAuthorizationToken} from "../../utils/utils.jsx";
@@ -35,7 +36,7 @@ class LoginForm extends React.Component
 	{
 		super(props);
 		const params = queryString.parse(props.search);
-
+		
 		this.state =
 		{
 			email: params.email ? params.email : "",
@@ -52,7 +53,7 @@ class LoginForm extends React.Component
 		this.facebookResponse = this.facebookResponse.bind(this);
 		this.facebookClick = this.facebookClick.bind(this);
 		
-		console.log("[INFO] in main/auth/components/login/loginForm.jsx -> constructor(..), this.props: ", this.props);
+		console.log("[INFO] in main/auth/components/login/loginForm.jsx -> constructor(..), this.props: ", this.props, "| params: ", params);
 	}
 		
 	facebookResponse(response)
@@ -180,13 +181,13 @@ class LoginForm extends React.Component
 								setAuthorizationToken(response.data.token);
 								
 								this.props.setCurrentUser(jwtDecode(response.data.token));
-								this.props.addAlertMessage
+								/*this.props.addAlertMessage
 								(
 									{
 										type: "success",
 										text: "You logged in successfully. Welcome!"
 									}
-								);
+								);*/
 								this.props.from ? this.context.router.history.push(this.props.from.pathname):
 												  this.context.router.history.push("/");
 							}

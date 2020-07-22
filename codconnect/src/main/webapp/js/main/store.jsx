@@ -73,9 +73,13 @@ axios.interceptors.response.use
 		{
 			if (typeof response.data === "object")
 			{
-				if (!response.data.isItValid)
+				if (response.data.hasOwnProperty('isItValid') && !response.data.isItValid)
 				{
 					store.dispatch(addAlertMessage({turnOn: true, type: "error", level: 2, text: response.data.errorMessage}));
+				}
+				else if (response.data.hasOwnProperty('invalid') && response.data.invalid)
+				{
+					store.dispatch(addAlertMessage({turnOn: true, type: "error", level: 2, text: response.data.errors}));
 				}
 				else //result data comes here
 				{

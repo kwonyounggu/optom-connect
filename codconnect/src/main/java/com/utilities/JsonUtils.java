@@ -143,12 +143,12 @@ public class JsonUtils
 		return jsonObj;
 	}
 	public static JSONObject validateLogin(JSONObject jsonObj)
-	{
+	{jsonObj.put("email", "kwon.younggu@gmail");	
 		jsonObj.getJSONObject("errors").keySet().clear();//reset all errors if any
 		for(Object key: jsonObj.keySet())
 		{
 			String keyStr = (String)key;
-
+			
 			switch(keyStr)
 			{
 				case "email":
