@@ -178,7 +178,7 @@ const NavRootMenuBar = (props) =>
 {
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = React.useState(props.isLargeScreen);  
-  
+  const loginLink = props.location.pathname.includes("login") ? "/login" : ("/login?prevPath=" + props.location.pathname);
   //This will be called whenever any props value changed or UI events updated such as a GUI clicks
   React.useEffect(() => 
   { 
@@ -237,13 +237,15 @@ const NavRootMenuBar = (props) =>
 				(
 					<Tooltip title="Click to logout" arrow>
 					  <IconButton aria-label="Logout"  color="inherit" onClick={onLogout}>
+						<span style={{fontSize: '12pt'}}>Logout</span>
 					     <ExitToAppIcon />
 					  </IconButton>
 					</Tooltip>
 				):
 				(
 					<Tooltip title="Click to login" arrow>
-					  <IconButton aria-label="Login"  color="inherit" component={Link} to={"/login?prevPath=" + props.location.pathname}>
+					  <IconButton aria-label="Login"  color="inherit" component={Link} to={loginLink}>
+						 <span style={{fontSize: '12pt'}}>Login</span>
 					     <SvgIcon>
 					      <path d="M11,7L9.6,8.4l2.6,2.6H2v2h10.2l-2.6,2.6L11,17l5-5L11,7z M20,19h-8v2h8c1.1,0,2-0.9,2-2V5c0-1.1-0.9-2-2-2h-8v2h8V19z"/>
 					    </SvgIcon>

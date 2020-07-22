@@ -79,13 +79,16 @@ axios.interceptors.response.use
 				}
 				else if (response.data.hasOwnProperty('invalid') && response.data.invalid)
 				{
-					store.dispatch(addAlertMessage({turnOn: true, type: "error", level: 2, text: response.data.errors}));
+					let errorMsg = "There exists an error in that ", count = 0;
+					for (const [key, value] of Object.entries(response.data.errors)) 
+					{
+						count++;
+					    errorMsg += "("+count+") " + `${key}: ${value}` + " ";
+					}
+					store.dispatch(addAlertMessage({turnOn: true, type: "error", level: 2, text: errorMsg}));
 				}
 				else //result data comes here
 				{
-					//----
-					//dispatch only if trunOn is true and level==2
-					//store.getState
 					store.dispatch(addAlertMessage({turnOn: false, type: "success", level: 2, text: ""}));
 				}
 			}

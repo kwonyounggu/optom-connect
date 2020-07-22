@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {Form, FormGroup, ControlLabel, FormControl, HelpBlock, Button, Alert} from "react-bootstrap";
+import {Form, FormGroup, ControlLabel, FormControl, HelpBlock, Alert} from "react-bootstrap";
 //import {Alert, AlertTitle} from '@material-ui/lab';
 import validateLoginForm from "./validateLoginForm.jsx";
 
@@ -12,6 +12,14 @@ import jwtDecode from "jwt-decode";
 import queryString from "query-string";
 
 import FacebookLogin from "react-facebook-login";
+
+import Grid from '@material-ui/core/Grid';
+import Tooltip from '@material-ui/core/Tooltip';
+import InputMask from "react-input-mask";
+
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
 
 /**
  * import {GoogleLogin} from "react-google-login-component";
@@ -174,7 +182,7 @@ class LoginForm extends React.Component
 							console.log("successful, the response object=",response);
 							if(response.data.invalid)
 							{ 
-								this.setState({errors: response.data.errors, isLoading: false});
+								//this.setState({errors: response.data.errors, isLoading: false});
 							}
 							else
 							{
@@ -188,8 +196,8 @@ class LoginForm extends React.Component
 										text: "You logged in successfully. Welcome!"
 									}
 								);*/
-								this.props.from ? this.context.router.history.push(this.props.from.pathname):
-												  this.context.router.history.push("/");
+								//this.props.from ? this.context.router.history.push(this.props.from.pathname):
+								//				  this.context.router.history.push("/");
 							}
 						}
 					).
@@ -199,7 +207,7 @@ class LoginForm extends React.Component
 						{
 							/*show this error in a page or a top of the current page - Oct-19-2017*/
 							/*this error consists of an html page cotents*/
-							console.log("ERROR: ", error);
+							console.log("ERROR: >>>>>>>>>>>>>>>>", error);
 							this.setState({isLoading: false, errors: {serverAPI: error+":::"}});
 						}
 					);
@@ -207,8 +215,7 @@ class LoginForm extends React.Component
 			);
 		}
 	}
-	
-	render()
+	renderOld()
 	{	
 		return(
 				<div>
@@ -267,6 +274,119 @@ class LoginForm extends React.Component
 				</div>
 			  );
 	}
+	render()
+	{	
+		return(
+				<Grid container>
+					<Grid item xs={12} style={{textAlign: 'center'}}>
+						<Typography variant="h6">
+					          Login with your email address
+					    </Typography>
+					</Grid>
+					<Grid item xs={12}>
+						&nbsp;
+					</Grid>
+					<Grid item xs={3} style={{textAlign: 'right'}}>
+						<strong>Email</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+					</Grid>
+					<Grid item xs={9} style={{textAlign: 'left'}}>
+						<input type="email" placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>		
+					</Grid>
+					<Grid item xs={12}>
+						&nbsp;
+					</Grid>
+					<Grid item xs={3}  style={{textAlign: 'right'}}>
+						<strong>Password</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+					</Grid>
+					<Grid item xs={9}>
+						<input type="password" placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>
+					</Grid>
+					<Grid item xs={12}>
+						&nbsp;
+					</Grid>
+					<Grid item xs={3}>
+						&nbsp;
+					</Grid>
+					<Grid item xs={9}  style={{textAlign: 'left'}}>
+						<Checkbox defaultChecked color="primary"/>&nbsp;<span>Keep me logged in</span>
+					</Grid>
+					<Grid item xs={12}>&nbsp;</Grid>
+					<Grid item xs={3}>
+						&nbsp;
+					</Grid>
+					<Grid item xs={9}  style={{textAlign: 'left'}}>
+						<Button variant="outlined" color="primary">Log In</Button>
+					</Grid>
+					<Grid item xs={12}>&nbsp;</Grid>
+					<Grid item xs={3}>
+						&nbsp;
+					</Grid>
+					<Grid item xs={9}  style={{textAlign: 'left'}}>
+						<Button size="small" color="primary">Reset Password</Button>
+					</Grid>
+					<Grid item xs={12}>&nbsp;</Grid>
+					<Grid item xs={3}>
+						&nbsp;
+					</Grid>
+					<Grid item xs={9}  style={{textAlign: 'left'}}>
+						<Button size="small" color="primary"> Simple Sign Up </Button>
+					</Grid>
+				    <Grid item xs={12}>
+					<Form onSubmit={this.onSubmit}>
+						<h1>Login</h1>
+						{this.state.errors.serverAPI && 
+							<Alert bsStyle="danger" >
+								<h4>{this.state.errors.serverAPI.split(":::")[0]}</h4>
+								<h6>{this.state.errors.serverAPI.split(":::")[1]}</h6>
+							</Alert>
+						}
+						<h4>Login with your social media account or email address</h4>
+						
+						<FieldGroup
+							id="email"
+						 	type="email"
+						    label="Email"
+							value={this.state.email}
+							name="email"
+						    placeholder="example@example.com"
+							onChange={this.onChange}
+							help={this.state.errors.email}
+						/>
+						<FieldGroup
+							id="password"
+						 	type="password"
+						    label="Password"
+							value={this.state.password}
+							name="password"
+						    placeholder="Enter your password"
+							onChange={this.onChange}
+							help={this.state.errors.password}
+					    />
+						<FormGroup >
+							<Button disabled={this.state.isLoading} type="submit">Login</Button>
+						</FormGroup>
+						<FormGroup >
+							<Link to="/signup">Signup Now</Link>
+							{" | "}
+							<Link to="/forgotPassword">Forgot password?</Link>
+						</FormGroup>
+					</Form>
+					<div>
+						<FacebookLogin
+							appId="1320010824683214"
+							autoLoad={false}
+							reAuthenticate={false}
+							textButton="Login With Facebook"		
+							fields="name,email,picture"
+							callback={this.facebookResponse}
+							onClick={this.facebookClick}
+							icon="fa-facebook"
+						/>
+					</div>
+					</Grid>
+				</Grid>
+			  );
+	}
 }
 LoginForm.propTypes =
 {
@@ -275,8 +395,9 @@ LoginForm.propTypes =
 		setCurrentUser: PropTypes.func.isRequired
 };
 //This allows to use this.context.router...
-LoginForm.contextTypes =
+/*LoginForm.contextTypes =
 {
 		router: PropTypes.object.isRequired
 };
+*/
 export default LoginForm;
