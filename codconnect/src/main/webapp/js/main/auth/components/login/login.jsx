@@ -34,7 +34,7 @@ class Login extends React.Component
 								loginRequest={this.props.loginRequest}
 								addAlertMessage={this.props.addAlertMessage}
 								setCurrentUser={this.props.setCurrentUser}
-								{...this.props.location}
+								{...this.props}
 							/>
 					    }
 				

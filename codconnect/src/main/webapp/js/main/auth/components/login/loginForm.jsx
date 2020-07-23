@@ -1,12 +1,10 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {Form, FormGroup, ControlLabel, FormControl, HelpBlock, Alert} from "react-bootstrap";
-//import {Alert, AlertTitle} from '@material-ui/lab';
+import { withStyles } from "@material-ui/core/styles";
 import validateLoginForm from "./validateLoginForm.jsx";
 
 import {setAuthorizationToken} from "../../utils/utils.jsx";
 import {PropTypes} from "prop-types";
-import FieldGroup from "../../../components/common/fieldGroup.jsx";
 
 import jwtDecode from "jwt-decode";
 import queryString from "query-string";
@@ -20,30 +18,60 @@ import InputMask from "react-input-mask";
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import Paper from '@material-ui/core/Paper';
+import {Alert, AlertTitle} from '@material-ui/lab';
+import Collapse from '@material-ui/core/Collapse';
+import { green } from '@material-ui/core/colors';
 
-/**
- * import {GoogleLogin} from "react-google-login-component";
- * You can try after you have a domain name being used and change Javascript origin to http://www.webmonster.ca.
- * <div>
-									
-		<GoogleLogin
-			socialId="869020433257-fqniiehh44o63gisnbe1dchnopfnfeop.apps.googleusercontent.com"
-			buttonText="Login With Google"
-			responseHandler={this.googleResponse}
-			scope="profile"
-			fetchBasicProfile={false}
-			className="google-login"
-		/>
-						
-	</div>
- */
+import HomeIcon from '@material-ui/icons/Home';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import {StyledBreadcrumb} from "../../../components/common/styledBreadcrumb.jsx";
+
+const styles = (theme) =>
+({
+	paper:
+	{
+		backgroundColor: '#fcfaf5',
+		padding: '10px 25px 10px 25px'
+	},
+	buttonProgress: 
+	{
+	    color: green[500],
+	    position: 'absolute',
+	    top: '50%',
+	    left: '50%',
+	    marginTop: -12,
+	    marginLeft: -12,
+	}
+});
+
+const MyBreadcrumbs = (props) => 
+{
+	console.info("MyBreadscrumbs: props, ", props.location.pathname);
+	let path = props.location.pathname.split("\/");
+    return (
+		    <Breadcrumbs aria-label="breadcrumb" maxItems={2}>
+				{
+					path.map
+					(
+						(item, i) =>
+						(
+						   (i == 0) ? 
+								<StyledBreadcrumb key={i} component="a" href="/" label="Home" icon={<HomeIcon fontSize="small" />}/> : 
+								<StyledBreadcrumb key={i} component="a" href={props.location.pathname.substring(0, props.location.pathname.indexOf(item)+item.length)} label={item}/>
+						)
+					)
+				}
+		    </Breadcrumbs>
+		  );
+}
 
 class LoginForm extends React.Component
 {
 	constructor(props)
 	{
 		super(props);
-		const params = queryString.parse(props.search);
+		const params = queryString.parse(props.location.search);
 		
 		this.state =
 		{
@@ -57,94 +85,10 @@ class LoginForm extends React.Component
 		this.onChange = this.onChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 		this.isValid = this.isValid.bind(this);
-		
-		this.facebookResponse = this.facebookResponse.bind(this);
-		this.facebookClick = this.facebookClick.bind(this);
-		
+	
 		console.log("[INFO] in main/auth/components/login/loginForm.jsx -> constructor(..), this.props: ", this.props, "| params: ", params);
 	}
-		
-	facebookResponse(response)
-	{
-		console.log("[INFO] in main/auth/components/login/loginForm.jsx -> facebookResponse(", response, ") provided by facebook");
-		console.log("[INFO] in main/auth/components/login/loginForm.jsx -> facebookResponse(..), this.props: ", this.props);
-		/* reverse andongkorea
-		 * accessToken: "EAASwivhODs4BACb6A3F7i54yQXLyDoOpHU1W0ni1MRdesYCrWPziv2ecGhWT76fWL5UyddAOPwRRdaCTKP3Sz5ugPKpPNlFqVCzyqdoTaGUqvAhudjh7R5ED70hhIAPgZCBoMS8VbNvxA8WEaLnFTmvONhNS088YtViiOeBa1MICPKvy5VNB5A7H1cPp34KmrcnrMPwZDZD"
-		 * email: "kwon_younggu@yahoo.ca"
-		 * expiresIn: 5857
-		 * id: "1786579271352860"
-		 * name: "Younggu Kwon"
-		 * picture:
-		 * 		data:
-		 * 			heigth: 50
-		 * 			width: 50
-		 * 			ur;: ""
-		 * 		signedRequest: ""
-		 * 		userId: "same id as in id above"
-		 * status: not_authorized if not continued
-		 * */
-		
-		if(response.email !=null && response.id != null && response.name != null)
-		{
-			let snsUser = {
-								snsProvider: "FACEBOOK",
-								snsId: response.id,
-								name: response.name,
-								email: response.email,
-								errors: {}
-						   };
-			this.props.loginRequest(snsUser).then
-			(
-				(response) =>
-				{
-					console.log("successful SNS Login, the response object=",response);
-					
-					if(response.data.invalid)
-					{
-						this.setState({errors: response.data.errors, isLoading: false});
-					}
-					else
-					{
-						setAuthorizationToken(response.data.token);
-						
-						this.props.setCurrentUser(jwtDecode(response.data.token));
-						this.props.addAlertMessage
-						(
-							{
-								type: "success",
-								text: "You logged in successfully. Welcome!"
-							}
-						);
-						//this.context.router.history.push("/");
-						this.props.from ? this.context.router.history.push(this.props.from.pathname):
-							  			  this.context.router.history.push("/");
-					}					
-				}
-			).
-			catch
-			(
-				(error) =>			
-				{
-					/*show this error in a page or a top of the current page - Oct-19-2017*/
-					/*this error consists of an html page cotents*/
-					console.log("ERROR: ", error);
-					this.setState({isLoading: false, errors: {serverAPI: error+":::"}});
-				}
-			);
-		}
-		else
-		{
-			this.setState({isLoading: false});
-		}
-	}
 
-	facebookClick(e)
-	{
-		console.log("facebookClick: ",e);
-		this.setState({errors: {}, isLoading: true});
-	}
-	
-	
 	onChange(e)
 	{
 		this.setState({[e.target.name]: e.target.value});
@@ -276,114 +220,74 @@ class LoginForm extends React.Component
 	}
 	render()
 	{	
+		const {classes} = this.props;
 		return(
-				<Grid container>
-					<Grid item xs={12} style={{textAlign: 'center'}}>
-						<Typography variant="h6">
-					          Login with your email address
-					    </Typography>
-					</Grid>
-					<Grid item xs={12}>
-						&nbsp;
-					</Grid>
-					<Grid item xs={3} style={{textAlign: 'right'}}>
-						<strong>Email</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
-					</Grid>
-					<Grid item xs={9} style={{textAlign: 'left'}}>
-						<input type="email" placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>		
-					</Grid>
-					<Grid item xs={12}>
-						&nbsp;
-					</Grid>
-					<Grid item xs={3}  style={{textAlign: 'right'}}>
-						<strong>Password</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
-					</Grid>
-					<Grid item xs={9}>
-						<input type="password" placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>
-					</Grid>
-					<Grid item xs={12}>
-						&nbsp;
-					</Grid>
-					<Grid item xs={3}>
-						&nbsp;
-					</Grid>
-					<Grid item xs={9}  style={{textAlign: 'left'}}>
-						<Checkbox defaultChecked color="primary"/>&nbsp;<span>Keep me logged in</span>
-					</Grid>
-					<Grid item xs={12}>&nbsp;</Grid>
-					<Grid item xs={3}>
-						&nbsp;
-					</Grid>
-					<Grid item xs={9}  style={{textAlign: 'left'}}>
-						<Button variant="outlined" color="primary">Log In</Button>
-					</Grid>
-					<Grid item xs={12}>&nbsp;</Grid>
-					<Grid item xs={3}>
-						&nbsp;
-					</Grid>
-					<Grid item xs={9}  style={{textAlign: 'left'}}>
-						<Button size="small" color="primary">Reset Password</Button>
-					</Grid>
-					<Grid item xs={12}>&nbsp;</Grid>
-					<Grid item xs={3}>
-						&nbsp;
-					</Grid>
-					<Grid item xs={9}  style={{textAlign: 'left'}}>
-						<Button size="small" color="primary"> Simple Sign Up </Button>
-					</Grid>
-				    <Grid item xs={12}>
-					<Form onSubmit={this.onSubmit}>
-						<h1>Login</h1>
-						{this.state.errors.serverAPI && 
-							<Alert bsStyle="danger" >
-								<h4>{this.state.errors.serverAPI.split(":::")[0]}</h4>
-								<h6>{this.state.errors.serverAPI.split(":::")[1]}</h6>
-							</Alert>
-						}
-						<h4>Login with your social media account or email address</h4>
-						
-						<FieldGroup
-							id="email"
-						 	type="email"
-						    label="Email"
-							value={this.state.email}
-							name="email"
-						    placeholder="example@example.com"
-							onChange={this.onChange}
-							help={this.state.errors.email}
-						/>
-						<FieldGroup
-							id="password"
-						 	type="password"
-						    label="Password"
-							value={this.state.password}
-							name="password"
-						    placeholder="Enter your password"
-							onChange={this.onChange}
-							help={this.state.errors.password}
-					    />
-						<FormGroup >
-							<Button disabled={this.state.isLoading} type="submit">Login</Button>
-						</FormGroup>
-						<FormGroup >
-							<Link to="/signup">Signup Now</Link>
-							{" | "}
-							<Link to="/forgotPassword">Forgot password?</Link>
-						</FormGroup>
-					</Form>
-					<div>
-						<FacebookLogin
-							appId="1320010824683214"
-							autoLoad={false}
-							reAuthenticate={false}
-							textButton="Login With Facebook"		
-							fields="name,email,picture"
-							callback={this.facebookResponse}
-							onClick={this.facebookClick}
-							icon="fa-facebook"
-						/>
-					</div>
-					</Grid>
+				<Grid container spacing={1}>
+			      <Grid item xs={12}>
+			        <Typography variant="h6">
+			          LOGIN
+			        </Typography>
+			      </Grid>
+				  <Grid item xs={10}>
+			        <MyBreadcrumbs {...this.props} />
+			      </Grid>
+				  <Grid item xs={12}>
+			       	<hr />
+			      </Grid>
+				  <Grid item xs={12}>
+					<Collapse in={!this.state.isFileNameValid && this.state.isFileChosen}>
+						<Alert severity="error">The email address is invalid — check it out!</Alert>
+				    </Collapse>
+					<Collapse in={!this.state.isFileSizeValid && this.state.isFileChosen}>
+				        <Alert severity="error">The password is invalid — check it out!</Alert>
+				    </Collapse>
+				  </Grid>
+				  <Grid item xs={12}>
+			       	<Paper variant="outlined" className={classes.paper}>
+					  <Grid container>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={12} style={{textAlign: 'center'}}>
+							<Typography variant="h6">
+						          Login with your email address
+						    </Typography>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3} style={{textAlign: 'right'}}>
+							<strong>Email</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+						</Grid>
+						<Grid item xs={9} style={{textAlign: 'left'}}>
+							<input id="email" type="email" value={this.state.email} onChange={this.onChange} placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>		
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}  style={{textAlign: 'right'}}>
+							<strong>Password</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+						</Grid>
+						<Grid item xs={9}>
+							<input id="password" type="password" value={this.state.password} onChange={this.onChange} placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Checkbox defaultChecked color="primary"/>&nbsp;<span>Keep me logged in</span>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Button variant="outlined" color="primary">Log In</Button>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Button size="small" color="primary" component={Link} to="/resetPassword">Reset Password</Button>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Button size="small" color="primary" component={Link} to="/signup"> Simple Sign Up </Button>
+						</Grid>
+						</Grid>
+					</Paper> 
+				  </Grid>
 				</Grid>
 			  );
 	}
@@ -400,4 +304,4 @@ LoginForm.propTypes =
 		router: PropTypes.object.isRequired
 };
 */
-export default LoginForm;
+export default withStyles(styles)(LoginForm);
