@@ -9,12 +9,6 @@ import {PropTypes} from "prop-types";
 import jwtDecode from "jwt-decode";
 import queryString from "query-string";
 
-import FacebookLogin from "react-facebook-login";
-
-import Grid from '@material-ui/core/Grid';
-import Tooltip from '@material-ui/core/Tooltip';
-import InputMask from "react-input-mask";
-
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -47,7 +41,7 @@ const styles = (theme) =>
 
 const MyBreadcrumbs = (props) => 
 {
-	console.info("MyBreadscrumbs: props, ", props.location.pathname);
+	//console.info("MyBreadscrumbs: props, ", props.location.pathname);
 	let path = props.location.pathname.split("\/");
     return (
 		    <Breadcrumbs aria-label="breadcrumb" maxItems={2}>
@@ -71,11 +65,10 @@ class LoginForm extends React.Component
 	constructor(props)
 	{
 		super(props);
-		const params = queryString.parse(props.location.search);
 		
 		this.state =
 		{
-			email: params.email ? params.email : "",
+			email: "",
 		    password: "",
 		    errors: {},
 		    isLoading: false,
@@ -86,7 +79,7 @@ class LoginForm extends React.Component
 		this.onSubmit = this.onSubmit.bind(this);
 		this.isValid = this.isValid.bind(this);
 	
-		console.log("[INFO] in main/auth/components/login/loginForm.jsx -> constructor(..), this.props: ", this.props, "| params: ", params);
+		console.log("[INFO] in main/auth/components/login/loginForm.jsx -> constructor(..), this.props: ", this.props);
 	}
 
 	onChange(e)
@@ -124,11 +117,7 @@ class LoginForm extends React.Component
 						(response) =>
 						{
 							console.log("successful, the response object=",response);
-							if(response.data.invalid)
-							{ 
-								//this.setState({errors: response.data.errors, isLoading: false});
-							}
-							else
+							if(!response.data.invalid)
 							{
 								setAuthorizationToken(response.data.token);
 								
@@ -142,6 +131,8 @@ class LoginForm extends React.Component
 								);*/
 								//this.props.from ? this.context.router.history.push(this.props.from.pathname):
 								//				  this.context.router.history.push("/");
+								const params = queryString.parse(this.props.location.search);
+								params.prevPath ? this.props.history.push(params.prevPath) : this.props.history.push("/");
 							}
 						}
 					).
@@ -151,7 +142,7 @@ class LoginForm extends React.Component
 						{
 							/*show this error in a page or a top of the current page - Oct-19-2017*/
 							/*this error consists of an html page cotents*/
-							console.log("ERROR: >>>>>>>>>>>>>>>>", error);
+							console.log("[ERROR in loginForm.jsx:] ", error);
 							this.setState({isLoading: false, errors: {serverAPI: error+":::"}});
 						}
 					);
@@ -159,65 +150,7 @@ class LoginForm extends React.Component
 			);
 		}
 	}
-	renderOld()
-	{	
-		return(
-				<div>
-					<Form onSubmit={this.onSubmit}>
-						<h1>Login</h1>
-						{this.state.errors.serverAPI && 
-							<Alert bsStyle="danger" >
-								<h4>{this.state.errors.serverAPI.split(":::")[0]}</h4>
-								<h6>{this.state.errors.serverAPI.split(":::")[1]}</h6>
-							</Alert>
-						}
-						<h4>Login with your social media account or email address</h4>
-						
-						<FieldGroup
-							id="email"
-						 	type="email"
-						    label="Email"
-							value={this.state.email}
-							name="email"
-						    placeholder="example@example.com"
-							onChange={this.onChange}
-							help={this.state.errors.email}
-						/>
-						<FieldGroup
-							id="password"
-						 	type="password"
-						    label="Password"
-							value={this.state.password}
-							name="password"
-						    placeholder="Enter your password"
-							onChange={this.onChange}
-							help={this.state.errors.password}
-					    />
-						<FormGroup >
-							<Button disabled={this.state.isLoading} type="submit">Login</Button>
-						</FormGroup>
-						<FormGroup >
-							<Link to="/signup">Signup Now</Link>
-							{" | "}
-							<Link to="/forgotPassword">Forgot password?</Link>
-						</FormGroup>
-					</Form>
-					<div>
-						<FacebookLogin
-							appId="1320010824683214"
-							autoLoad={false}
-							reAuthenticate={false}
-							textButton="Login With Facebook"		
-							fields="name,email,picture"
-							callback={this.facebookResponse}
-							onClick={this.facebookClick}
-							icon="fa-facebook"
-						/>
-					</div>
-					
-				</div>
-			  );
-	}
+
 	render()
 	{	
 		const {classes} = this.props;
@@ -235,14 +168,6 @@ class LoginForm extends React.Component
 			       	<hr />
 			      </Grid>
 				  <Grid item xs={12}>
-					<Collapse in={!this.state.isFileNameValid && this.state.isFileChosen}>
-						<Alert severity="error">The email address is invalid — check it out!</Alert>
-				    </Collapse>
-					<Collapse in={!this.state.isFileSizeValid && this.state.isFileChosen}>
-				        <Alert severity="error">The password is invalid — check it out!</Alert>
-				    </Collapse>
-				  </Grid>
-				  <Grid item xs={12}>
 			       	<Paper variant="outlined" className={classes.paper}>
 					  <Grid container>
 						<Grid item xs={12}>&nbsp;</Grid>
@@ -256,16 +181,26 @@ class LoginForm extends React.Component
 							<strong>Email</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
 						</Grid>
 						<Grid item xs={9} style={{textAlign: 'left'}}>
-							<input id="email" type="email" value={this.state.email} onChange={this.onChange} placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>		
+							<input name="email" type="email" value={this.state.email} onChange={this.onChange} placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>		
 						</Grid>
-						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('email')}>
+								<Alert severity="error" style={{width: '70%'}}>{this.state.errors.email} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
 						<Grid item xs={3}  style={{textAlign: 'right'}}>
 							<strong>Password</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
 						</Grid>
 						<Grid item xs={9}>
-							<input id="password" type="password" value={this.state.password} onChange={this.onChange} placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>
+							<input name="password" type="password" value={this.state.password} onChange={this.onChange} placeholder="Requires at least six in length" style={{padding: '5px', width: '70%'}}/>
 						</Grid>
-						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('password')}>
+						        <Alert severity="error" style={{width: '70%'}}>{this.state.errors.password} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
 							<Checkbox defaultChecked color="primary"/>&nbsp;<span>Keep me logged in</span>
@@ -273,7 +208,7 @@ class LoginForm extends React.Component
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Button variant="outlined" color="primary">Log In</Button>
+							<Button variant="outlined" color="primary" onClick={this.onSubmit}>Log In</Button>
 						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>

@@ -112,8 +112,7 @@
 					else //Incorrect password or email id
 					{
 						jsonObj.put("invalid", true);
-						jsonObj.getJSONObject("errors").put("password", "Your email or password is incorrect. Please try again.");
-						jsonObj.getJSONObject("errors").put("email", "Your email or password is incorrect. Please try again.");
+						jsonObj.getJSONObject("errors").put("email/password", "Your email or password is incorrect. Please try again.");
 					}
 				}	
 				

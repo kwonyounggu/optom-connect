@@ -143,7 +143,7 @@ public class JsonUtils
 		return jsonObj;
 	}
 	public static JSONObject validateLogin(JSONObject jsonObj)
-	{jsonObj.put("email", "kwon.younggu@gmail");	
+	{
 		jsonObj.getJSONObject("errors").keySet().clear();//reset all errors if any
 		for(Object key: jsonObj.keySet())
 		{
@@ -165,9 +165,9 @@ public class JsonUtils
 					}
 					break;
 				case "password":
-					if(!isBetweenMinMax(jsonObj.getString(keyStr), 2, 30))
+					if(!isBetweenMinMax(jsonObj.getString(keyStr), 6, 30))
 					{
-						jsonObj.getJSONObject("errors").put(keyStr, "The field requires in size between 2 and 30.");
+						jsonObj.getJSONObject("errors").put(keyStr, "The field requires in size between 6 and 30.");
 					}
 					break;
 				default: break;
