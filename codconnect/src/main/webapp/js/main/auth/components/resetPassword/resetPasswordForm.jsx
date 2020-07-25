@@ -15,6 +15,27 @@ import isEmpty from "lodash/isEmpty";
 import {siteKey} from "../../../utils/utils.jsx";
 import Recaptcha from "react-recaptcha";
 
+import { withStyles } from "@material-ui/core/styles";
+import validateLoginForm from "./validateLoginForm.jsx";
+
+import {setAuthorizationToken} from "../../utils/utils.jsx";
+import {PropTypes} from "prop-types";
+
+import jwtDecode from "jwt-decode";
+import queryString from "query-string";
+
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import Paper from '@material-ui/core/Paper';
+import {Alert, AlertTitle} from '@material-ui/lab';
+import Collapse from '@material-ui/core/Collapse';
+import { green } from '@material-ui/core/colors';
+
+import {MyBreadcrumbs, StyledBreadcrumb} from "../../../components/common/styledBreadcrumb.jsx";
+
+
 /*
  * Thursday Jan-25-2018
  * Verify parameters if cheated
@@ -155,6 +176,81 @@ class ResetPasswordForm extends React.Component
     render()
 	{
 		return (<div>reset form</div>);
+	}
+	renderB()
+	{	
+		const {classes} = this.props;
+		return(
+				<Grid container spacing={1}>
+			      <Grid item xs={12}>
+			        <Typography variant="h6">
+			          RESET PASSWORD
+			        </Typography>
+			      </Grid>
+				  <Grid item xs={10}>
+			        <MyBreadcrumbs {...this.props} />
+			      </Grid>
+				  <Grid item xs={12}>
+			       	<hr />
+			      </Grid>
+				  <Grid item xs={12}>
+			       	<Paper variant="outlined" className={classes.paper}>
+					  <Grid container>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={12} style={{textAlign: 'center'}}>
+							<Typography variant="h6">
+						          Login with your email address
+						    </Typography>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3} style={{textAlign: 'right'}}>
+							<strong>Email</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+						</Grid>
+						<Grid item xs={9} style={{textAlign: 'left'}}>
+							<input name="email" type="email" value={this.state.email} onChange={this.onChange} placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>		
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('email')}>
+								<Alert severity="error" style={{width: '70%'}}>{this.state.errors.email} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
+						<Grid item xs={3}  style={{textAlign: 'right'}}>
+							<strong>Password</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+						</Grid>
+						<Grid item xs={9}>
+							<input name="password" type="password" value={this.state.password} onChange={this.onChange} placeholder="Requires at least six in length" style={{padding: '5px', width: '70%'}}/>
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('password')}>
+						        <Alert severity="error" style={{width: '70%'}}>{this.state.errors.password} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Checkbox defaultChecked color="primary"/>&nbsp;<span>Keep me logged in</span>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Button variant="outlined" color="primary" onClick={this.onSubmit}>Log In</Button>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Button size="small" color="primary" component={Link} to="/myAccount/resetPassword">Reset Password</Button>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Button size="small" color="primary" component={Link} to="/myAccount/signup"> Simple Sign Up </Button>
+						</Grid>
+						</Grid>
+					</Paper> 
+				  </Grid>
+				</Grid>
+			  );
 	}
 	renderOrg()
 	{	

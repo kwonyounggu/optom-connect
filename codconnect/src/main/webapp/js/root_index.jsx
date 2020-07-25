@@ -21,6 +21,7 @@ import NavRoot from "./main/components/navRoot.jsx";
 import NavRootFooter from "./main/components/navRootFooter.jsx";
 import {DRAWER_WIDTH} from "./main/components/navRoot.jsx";
 
+const MyAccount = React.lazy( () => import("./main/auth/containers/myAccount.jsx") );
 const Signup = React.lazy( () => import("./main/auth/components/signup/signup.jsx") );
 const Activation = React.lazy( () => import("./main/auth/components/signup/activation.jsx") );
 const Login = React.lazy( () => import("./main/auth/components/login/login.jsx") );
@@ -126,6 +127,8 @@ class MainApp extends React.Component
 									<Route path="/accounting"    component={ (props) => <Accounting {...props} /> } /> 
 									<Route path="/referrals"    component={ (props) => <Referrals {...props} /> } /> 
 									<Route exact path="/about"    component={ (props) => <About {...props} /> } /> 
+									<Route path="/myAccount"    component={ (props) => <MyAccount {...props} /> } /> 
+									
 			                        <Route path="/signup"    component={ (props) => <Signup {...props} /> } /> 
 			                        <Route path="/login"     component={ (props) => <Login {...props} /> } /> 
 			                        <Route path="/forgotPassword" component={ (props) => <ForgotPassword {...props} /> } /> 

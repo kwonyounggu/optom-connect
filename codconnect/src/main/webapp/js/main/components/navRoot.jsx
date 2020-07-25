@@ -142,17 +142,7 @@ const useStyles = makeStyles((theme) =>
 const NavRoot=(props)=>
 {
 	console.log("In NavRoot, ",props);
-	/*
-	const location = useLocation();
-	React.useEffect
-	(
-		() =>
-		{
-			console.log("=================>LOCATION CHANGE: ", location.pathname);
-		},
-		[location]
-	);
-	*/
+
 	let currentMenu = null;
 	let pathname = props.location.pathname.toLowerCase();
 	if (menuLinks.includes(pathname)) currentMenu=<NavRootMenuBar {...props} />;
@@ -161,7 +151,8 @@ const NavRoot=(props)=>
 		case (pathname.match(/^\/about[\/]?/i) || {}).input: { currentMenu=<Redirect to='/about' />; break;}
 		case (pathname.match(/^\/referrals[\/]?/i) || {}).input: { currentMenu=<Redirect to='/referrals' />; break;}
 		case (pathname.match(/^\/accounting[\/]?/i) || {}).input: { currentMenu=<Redirect to='/accounting' />; break;}
-		case (pathname.match(/^\/login[\/]?/i) || {}).input: {currentMenu=<NavRootMenuBar {...props} />; break;}
+		//case (pathname.match(/^\/login[\/]?/i) || {}).input: {currentMenu=<NavRootMenuBar {...props} />; break;}
+		case (pathname.match(/^\/myaccount[\/]?/i) || {}).input: {currentMenu=<NavRootMenuBar {...props} />; break;}
 		/*case (pathname.match(/^\/login[\/]?/i) || {}).input: { pathname = "/login"; break;}
 		case (pathname.match(/^\/signup[\/]?/i) || {}).input: { pathname = "/signup"; break;}
 		case (pathname.match(/^\/forgotPassword[\/]?/i) || {}).input: { pathname = "/forgotPassword"; break;}
@@ -176,9 +167,11 @@ const NavRoot=(props)=>
 
 const NavRootMenuBar = (props) => 
 {
+	console.log("[NavRootMenuBar] props: ", props);
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = React.useState(props.isLargeScreen);  
-  const loginLink = props.location.pathname.includes("login") ? "/login" : ("/login?prevPath=" + props.location.pathname);
+  //const loginLink = props.location.pathname.includes("login") ? "/login" : ("/login?prevPath=" + props.location.pathname);
+  const loginLink = props.location.pathname.includes("login") ? "/myAccount/login" : ({pathname: "/myAccount/login", search: "?prevPath=" + props.location.pathname, state: {fromDashboard: true}});
   //This will be called whenever any props value changed or UI events updated such as a GUI clicks
   React.useEffect(() => 
   { 

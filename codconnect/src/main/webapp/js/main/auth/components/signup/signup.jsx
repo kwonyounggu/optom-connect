@@ -1,5 +1,9 @@
 import React from "react";
-import {Container, Row, Col, Alert} from "react-bootstrap";
+import Grid from '@material-ui/core/Grid';
+import {Alert, AlertTitle} from '@material-ui/lab';
+
+//import {Container, Row, Col, Alert} from "react-bootstrap";
+
 import SignupForm from "./signupForm.jsx";
 import {connect} from "react-redux";
 import {PropTypes} from "prop-types";
@@ -14,8 +18,39 @@ class Signup extends React.Component
 		super(props);
 		console.log("INFO (constructor() of signup.jsx");
 	}
-	
 	render()
+	{
+		console.log("----INFO (render() of signup.jsx) is called, authenticated: ", this.props.auth.isAuthenticated, "------");
+		
+		return (
+				<Grid container>
+					<Grid item xs={12}>
+				
+						{
+					    	this.props.auth.isAuthenticated ?
+					    			
+					    	<Alert severity="warning" >
+								<AlertTitle>Ooops! You forgot to logout first, please try again after.</AlertTitle>
+							</Alert>
+								:
+							<SignupForm 
+								isUserExists={this.props.isUserExists}
+								userSignupRequest={this.props.userSignupRequest}
+								addAlertMessage={this.props.addAlertMessage}
+								setCurrentUser={this.props.setCurrentUser}
+								{...this.props}
+							/>
+					    }
+				
+				
+				
+							
+					</Grid>
+				</Grid>
+			   );
+
+	}
+	renderOld()
 	{
 		console.log("----INFO (render() of signup.jsx) is called, authenticated: ", this.props.auth.isAuthenticated, "------");
 		

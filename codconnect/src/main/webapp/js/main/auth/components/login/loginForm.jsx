@@ -9,6 +9,7 @@ import {PropTypes} from "prop-types";
 import jwtDecode from "jwt-decode";
 import queryString from "query-string";
 
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -213,12 +214,12 @@ class LoginForm extends React.Component
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Button size="small" color="primary" component={Link} to="/resetPassword">Reset Password</Button>
+							<Button size="small" color="primary" component={Link} to="/myAccount/resetPassword">Reset Password</Button>
 						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Button size="small" color="primary" component={Link} to="/signup"> Simple Sign Up </Button>
+							<Button size="small" color="primary" component={Link} to="/myAccount/signup"> Simple Sign Up </Button>
 						</Grid>
 						</Grid>
 					</Paper> 
@@ -229,14 +230,10 @@ class LoginForm extends React.Component
 }
 LoginForm.propTypes =
 {
-		loginRequest: PropTypes.func.isRequired,
-		addAlertMessage: PropTypes.func.isRequired,
-		setCurrentUser: PropTypes.func.isRequired
+	classes: PropTypes.object.isRequired,
+	loginRequest: PropTypes.func.isRequired,
+	addAlertMessage: PropTypes.func.isRequired,
+	setCurrentUser: PropTypes.func.isRequired
 };
-//This allows to use this.context.router...
-/*LoginForm.contextTypes =
-{
-		router: PropTypes.object.isRequired
-};
-*/
+
 export default withStyles(styles)(LoginForm);

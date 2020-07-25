@@ -20,8 +20,8 @@ export function getLang()
 /***************************************************************************************/
 export var EngKorNameRegex = /^[a-zA-Z\u3131-\uD79D]{1,100}$/;
 export var FullNameKoreanPlaceholder = "홍길동 or Abraham Lincoln";
-//Got Recaptcha siteKey from webmonster.ca email
-export const siteKey="6Lc--T0UAAAAAICcpz5L__QZoNxxnUoFhU1SbNar";
+//Got Recaptcha siteKey for domain: webmonster.ca, email: kwon.younggu@gmail.com, label: Optom Connect
+export const siteKey="6Ld7JLYZAAAAAO_-4oa94JbgLHKBOIDeUZG3LYAI";
 
 /***************************************************************************************/
 //Alternatively either using local wildfly server or openshift server

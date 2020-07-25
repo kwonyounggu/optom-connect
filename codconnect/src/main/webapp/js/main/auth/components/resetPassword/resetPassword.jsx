@@ -1,6 +1,6 @@
 import React from "react";
 import {Container, Row, Col} from "react-bootstrap";
-import ResetPasswordForm from "./resetPasswordForm.jsx";
+//import ResetPasswordForm from "./resetPasswordForm.jsx";
 import {connect} from "react-redux";
 import {PropTypes} from "prop-types";
 import queryString from "query-string";
@@ -16,7 +16,7 @@ class ResetPassword extends React.Component
 		super(props);
 		console.log("INFO (constructor() of resetPassword.jsx");
 	}
-	
+
 	render()
 	{
 		console.log("----INFO (render() of resetPassword.jsx) is called------");
@@ -29,14 +29,14 @@ class ResetPassword extends React.Component
 					<Container>
 						<Row>
 							<Col md={4} mdOffset={4} >
-								<ResetPasswordForm 
+								{/*<ResetPasswordForm 
 									email={params.email}
 									name={params.name}
 									token={params.token}
 									resetPasswordRequest={this.props.resetPasswordRequest}
 									addAlertMessage={this.props.addAlertMessage}
 									{...this.props.location}
-								/>
+								/>*/}
 							</Col>
 						</Row>
 					</Container>

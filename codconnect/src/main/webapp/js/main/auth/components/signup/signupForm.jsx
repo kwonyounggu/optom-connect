@@ -1,6 +1,8 @@
 import React from "react";
-import {Form, FormGroup,  FormControl, HelpBlock, Button, Alert} from "react-bootstrap";
+//import {Form, FormGroup,  FormControl, HelpBlock, Button, Alert} from "react-bootstrap";
 
+import {Link} from "react-router-dom";
+import { withStyles } from "@material-ui/core/styles";
 import timezones from "../../data/timezones.jsx";
 import {PropTypes} from "prop-types";
 import map from "lodash/map";
@@ -14,6 +16,71 @@ import {FullNameKoreanPlaceholder, siteKey} from "../../../utils/utils.jsx";
 import jwtDecode from "jwt-decode";
 
 import Recaptcha from "react-recaptcha";
+
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import Select from '@material-ui/core/Select';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import Paper from '@material-ui/core/Paper';
+import {Alert, AlertTitle} from '@material-ui/lab';
+import Collapse from '@material-ui/core/Collapse';
+import { green } from '@material-ui/core/colors';
+
+import HomeIcon from '@material-ui/icons/Home';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import {StyledBreadcrumb} from "../../../components/common/styledBreadcrumb.jsx";
+
+const styles = (theme) =>
+({
+	paper:
+	{
+		backgroundColor: '#fcfaf5',
+		padding: '10px 25px 10px 25px'
+	},
+	buttonProgress: 
+	{
+	    color: green[500],
+	    position: 'absolute',
+	    top: '50%',
+	    left: '50%',
+	    marginTop: -12,
+	    marginLeft: -12,
+	},
+	select:
+	{
+		borderRadius: '0px',
+		paddingTop: '2px',
+		paddingBottom: '2px',
+		width: '40%'
+	},
+	selectInput: 
+	{
+	    padding: "2px 5px"
+	}
+});
+
+export const MyBreadcrumbs = (props) => 
+{
+	//console.info("MyBreadscrumbs: props, ", props.location.pathname);
+	let path = props.location.pathname.split("\/");
+    return (
+		    <Breadcrumbs aria-label="breadcrumb" maxItems={2}>
+				{
+					path.map
+					(
+						(item, i) =>
+						(
+						   (i == 0) ? 
+								<StyledBreadcrumb key={i} component="a" href="/" label="Home" icon={<HomeIcon fontSize="small" />}/> : 
+								<StyledBreadcrumb key={i} component="a" href={props.location.pathname.substring(0, props.location.pathname.indexOf(item)+item.length)} label={item}/>
+						)
+					)
+				}
+		    </Breadcrumbs>
+		  );
+}
 
 class SignupForm extends React.Component
 {
@@ -197,8 +264,144 @@ class SignupForm extends React.Component
 	}
 
     render()
-	{
-		return (<div>signup form</div>);
+	{	
+		console.log("[render() of signupForm.jsx] this.props: ", this.props);
+		const {classes} = this.props;
+		return(
+				<Grid container spacing={1}>
+			      <Grid item xs={12}>
+			        <Typography variant="h6">
+			          SIGNUP
+			        </Typography>
+			      </Grid>
+				  <Grid item xs={10}>
+			        <MyBreadcrumbs {...this.props} />
+			      </Grid>
+				  <Grid item xs={12}>
+			       	<hr />
+			      </Grid>
+				  <Grid item xs={12}>
+			       	<Paper variant="outlined" className={classes.paper}>
+					  <Grid container>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={12} style={{textAlign: 'center'}}>
+							<Typography variant="h6">
+						          Create your account using your email and health care provider number given from your province
+						    </Typography>
+							<Typography variant="caption" align={"center"} gutterBottom color={"textSecondary"}>
+					          This is only allowed for the Doctors of Ophometry (OD) in Canada
+					        </Typography>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3} style={{textAlign: 'right'}}>
+							<strong>Email</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+						</Grid>
+						<Grid item xs={9} style={{textAlign: 'left'}}>
+							<input name="email" type="email" value={this.state.email} onChange={this.onChange} placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>		
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('email')}>
+								<Alert severity="error" style={{width: '70%'}}>{this.state.errors.email} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
+						<Grid item xs={3}  style={{textAlign: 'right'}}>
+							<strong>Password</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+						</Grid>
+						<Grid item xs={9}>
+							<input name="password" type="password" value={this.state.password} onChange={this.onChange} placeholder="Requires at least six in length" style={{padding: '5px', width: '70%'}}/>
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('password')}>
+						        <Alert severity="error" style={{width: '70%'}}>{this.state.errors.password} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
+						<Grid item xs={3}  style={{textAlign: 'right'}}>
+							<strong>Confirm Password</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+						</Grid>
+						<Grid item xs={9}>
+							<input name="confirmPassword" type="password" value={this.state.confirmPassword} onChange={this.onChange} placeholder="Requires the same password as above" style={{padding: '5px', width: '70%'}}/>
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('confirmPpassword')}>
+						        <Alert severity="error" style={{width: '70%'}}>{this.state.errors.confirmPassword} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3} style={{textAlign: 'right'}}>
+							<strong>Health Care Provider Number</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+						</Grid>
+						<Grid item xs={9} style={{textAlign: 'left'}}>
+							<input name="providerNumber" type="text" value={this.state.providerNumber} onChange={this.onChange} placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>		
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('providerNumber')}>
+								<Alert severity="error" style={{width: '70%'}}>{this.state.errors.providerNumber} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
+						<Grid item xs={3}  style={{textAlign: 'right'}}>
+							<strong>Province</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+						</Grid>
+						<Grid item xs={9}>
+							<Select 
+									name="province" 
+									value={this.state.province || ''}
+					            	onChange={this.onChange}
+
+									native
+									className={classes.select}
+									variant="outlined"
+									input={<OutlinedInput classes={{ input: classes.selectInput}} />}
+						  	>
+								<option value='1'></option>
+								<option value='2'></option>
+							</Select>
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('province')}>
+						        <Alert severity="error" style={{width: '40%'}}>{this.state.errors.province} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Checkbox color="primary"/>&nbsp;<span>I agree to the </span><Button color="primary">Terms and Conditions</Button>
+						</Grid>
+						<Grid item xs={12}>
+							<Collapse in={this.state.showTerms}>
+								<span>html text file</span>
+						    </Collapse>
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Button variant="outlined" color="primary" onClick={this.onSubmit}>Log In</Button>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							{/* https://www.google.com/recaptcha/admin/site/431367291/settings used domain with 192.168.1.81 */}
+							<Recaptcha    	
+								sitekey={"6Ld7JLYZAAAAAO_-4oa94JbgLHKBOIDeUZG3LYAI"}
+								render="explicit"
+								verifyCallback={this.verifyCallbackBot}
+								onloadCallback={this.callbackBot}
+								expiredCallback={this.expiredCallbackBot}
+								size="compact"
+							   />
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Button size="small" color="primary" component={Link} to="/myAccount/signup"> Simple Sign Up </Button>
+						</Grid>
+						</Grid>
+					</Paper> 
+				  </Grid>
+				</Grid>
+			  );
 	}
 	renderOrg()
 	{
@@ -288,14 +491,10 @@ class SignupForm extends React.Component
 }
 SignupForm.propTypes =
 {
-		userSignupRequest: PropTypes.func.isRequired,
-		addAlertMessage: PropTypes.func.isRequired,
-		isUserExists: PropTypes.func.isRequired,
-		setCurrentUser: PropTypes.func.isRequired
+	classes: PropTypes.object.isRequired,
+	userSignupRequest: PropTypes.func.isRequired,
+	addAlertMessage: PropTypes.func.isRequired,
+	isUserExists: PropTypes.func.isRequired,
+	setCurrentUser: PropTypes.func.isRequired
 };
-//This allows to use this.context.router...
-SignupForm.contextTypes =
-{
-		router: PropTypes.object.isRequired
-};
-export default SignupForm;
+export default withStyles(styles)(SignupForm);
