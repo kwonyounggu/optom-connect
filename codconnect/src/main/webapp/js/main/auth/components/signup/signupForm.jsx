@@ -29,8 +29,12 @@ import Collapse from '@material-ui/core/Collapse';
 import { green } from '@material-ui/core/colors';
 
 import HomeIcon from '@material-ui/icons/Home';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import {StyledBreadcrumb} from "../../../components/common/styledBreadcrumb.jsx";
+
+import TermsCondition from "../../../data/termsfeed-privacy-policy-html-english.html";
 
 const styles = (theme) =>
 ({
@@ -89,16 +93,17 @@ class SignupForm extends React.Component
 		super(props);
 		this.state =
 		{
-			fullName: "",
+			province: "",
+			careProviderNumber: "",
 			email: "",
 			password: "",
 			passwordConfirmation: "",
-			timezone: "",
 			errors: {},
 			isLoading: false,
 			invalid: false,
 			isHuman: false,
-			showModal: false
+			showTermsCondition: false,
+			agreeTermsCondition: false
 		};
 		
 		this.onChange = this.onChange.bind(this);
@@ -109,10 +114,6 @@ class SignupForm extends React.Component
 		this.callbackBot = this.callbackBot.bind(this);
 		this.verifyCallbackBot = this.verifyCallbackBot.bind(this);
 		this.expiredCallbackBot = this.expiredCallbackBot.bind(this);
-		
-		this.onOpenModal = this.onOpenModal.bind(this);
-		this.onCloseModal = this.onCloseModal.bind(this);
-		this.onTermsFocus = this.onTermsFocus.bind(this);
 	}
 	/*
 	 * Google Bot
@@ -129,32 +130,7 @@ class SignupForm extends React.Component
 	{
 		this.setState({isHuman: false});
 	}
-	/*
-	 * Modal to open or close Terms and Conditions
-	 */
-	onOpenModal(e)
-	{
-		e.preventDefault();
-		this.setState({showModal: true});
-	}
-	onCloseModal(e)
-	{
-		e.preventDefault();
-		this.setState({showModal: false});
-	}
-	/**
-	 * Automatically defocus it so that there will be no square box of the focus.
-	 * Ref: jamesknelson.com/react-js-by-example-interacting-with-the-dom
-	 */
-	onTermsFocus(e)
-	{
-		e.preventDefault();
-		this.refs.terms.blur();
-	}
-	/*
-	 * 
-	 * Main functions to implement core actions of this component
-	 */
+	
 	onChange(e)
 	{
 		this.setState({[e.target.name]: e.target.value});
@@ -288,8 +264,11 @@ class SignupForm extends React.Component
 							<Typography variant="h6">
 						          Create your account using your email and health care provider number given from your province
 						    </Typography>
-							<Typography variant="caption" align={"center"} gutterBottom color={"textSecondary"}>
+							<Typography variant="caption" align={"center"} color={"textSecondary"}>
 					          This is only allowed for the Doctors of Ophometry (OD) in Canada
+					        </Typography><br />
+							<Typography variant="caption" align={"center"} color={"textSecondary"}>
+					          <span style={{color: 'red'}}>*</span>&nbsp;This field is required
 					        </Typography>
 						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
@@ -368,17 +347,22 @@ class SignupForm extends React.Component
 						</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Checkbox color="primary"/>&nbsp;<span>I agree to the </span><Button color="primary">Terms and Conditions</Button>
+							<Checkbox color="primary" checked={this.state.agreeTermsCondition}
+									  onChange={()=>this.setState((prevState)=>({agreeTermsCondition: !prevState.agreeTermsCondition}))}
+							/>&nbsp;<span>I agree to the</span>
+							<Button color="primary"
+									onClick={()=>this.setState((prevState)=>({showTermsCondition: !prevState.showTermsCondition}))}
+									endIcon={this.state.showTermsCondition ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+							>
+								Terms and Conditions
+							</Button>
 						</Grid>
-						<Grid item xs={12}>
-							<Collapse in={this.state.showTerms}>
-								<span>html text file</span>
+						<Grid item xs={12} style={{paddingLeft: '10%', paddingRight: '10%'}}>
+							<Collapse in={this.state.showTermsCondition}>
+								<div dangerouslySetInnerHTML={ {__html: TermsCondition} } style={{paddingLeft: '5px', paddingRight: '5px', border: '1px solid grey'}}/>
 						    </Collapse>
 						</Grid>
-						<Grid item xs={3}>&nbsp;</Grid>
-						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Button variant="outlined" color="primary" onClick={this.onSubmit}>Log In</Button>
-						</Grid>
+						
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
@@ -395,7 +379,11 @@ class SignupForm extends React.Component
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Button size="small" color="primary" component={Link} to="/myAccount/signup"> Simple Sign Up </Button>
+							<Button variant="outlined" color="primary" onClick={this.onSubmit}>Sign Up</Button>
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Button size="small" color="primary" component={Link} to="/myAccount/login">Already have an account? Login here</Button>
 						</Grid>
 						</Grid>
 					</Paper> 

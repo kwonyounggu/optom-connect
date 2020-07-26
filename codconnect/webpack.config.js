@@ -55,6 +55,10 @@ module.exports=
 				  ]
 				},
 				{
+			        test: /\.html$/i,
+			        loader: 'html-loader',
+			    },
+				{
 					//https://github.com/webpack-contrib/file-loader/issues/259
 			        test: /\.json$/,
 			        loader: "file-loader",
