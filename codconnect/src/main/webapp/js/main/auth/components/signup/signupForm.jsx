@@ -55,9 +55,10 @@ const styles = (theme) =>
 	select:
 	{
 		borderRadius: '0px',
-		paddingTop: '2px',
-		paddingBottom: '2px',
-		width: '40%'
+		paddingTop: '3px',
+		paddingBottom: '3px',
+		width: '40%',
+		fontSize: '13px'
 	},
 	selectInput: 
 	{
@@ -85,7 +86,12 @@ export const MyBreadcrumbs = (props) =>
 		    </Breadcrumbs>
 		  );
 }
-
+//msp: https://www.dr-bill.ca/knowledgebase/what-is-a-msp-billing-number-versus-a-msp-payee-number
+const provinceInfo =
+[
+	{value: 'BC', label: 'British Columbia', providerDesc: 'MSP Practitioner/Billing Number', placeholder: "Five digits required"},
+	{value: 'ON', label: 'Ontario', providerDesc: 'OHIP Provider/Billing Number', placeholder: "Six digits required"}
+];
 class SignupForm extends React.Component
 {
 	constructor(props)
@@ -93,8 +99,10 @@ class SignupForm extends React.Component
 		super(props);
 		this.state =
 		{
-			province: "",
+			province: "ON",
 			careProviderNumber: "",
+			careProviderNumberLabel: provinceInfo[1].providerDesc,
+			careProviderNumberPlaceholder: provinceInfo[1].placeholder,
 			email: "",
 			password: "",
 			passwordConfirmation: "",
@@ -133,7 +141,15 @@ class SignupForm extends React.Component
 	
 	onChange(e)
 	{
-		this.setState({[e.target.name]: e.target.value});
+		if (e.target.name === "province")
+			this.setState({
+							[e.target.name]: e.target.value, 
+							careProviderNumberLabel: e.target.options[e.target.selectedIndex].getAttribute('providerdesc'),
+							careProviderNumberPlaceholder: e.target.options[e.target.selectedIndex].getAttribute('placeholder')
+						 });
+		else
+			this.setState({[e.target.name]: e.target.value});
+		
 	}
 	
 	isValid()
@@ -264,10 +280,10 @@ class SignupForm extends React.Component
 							<Typography variant="h6">
 						          Create your account using your email and health care provider number given from your province
 						    </Typography>
-							<Typography variant="caption" align={"center"} color={"textSecondary"}>
+							<Typography variant="subtitle2" align={"center"} color={"primary"}>
 					          This is only allowed for the Doctors of Ophometry (OD) in Canada
 					        </Typography><br />
-							<Typography variant="caption" align={"center"} color={"textSecondary"}>
+							<Typography variant="subtitle2" align={"center"} color={"textSecondary"}>
 					          <span style={{color: 'red'}}>*</span>&nbsp;This field is required
 					        </Typography>
 						</Grid>
@@ -309,18 +325,7 @@ class SignupForm extends React.Component
 						    </Collapse>
 						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
-						<Grid item xs={3} style={{textAlign: 'right'}}>
-							<strong>Health Care Provider Number</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
-						</Grid>
-						<Grid item xs={9} style={{textAlign: 'left'}}>
-							<input name="providerNumber" type="text" value={this.state.providerNumber} onChange={this.onChange} placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>		
-						</Grid>
-						<Grid item xs={3}>&nbsp;</Grid>
-						<Grid item xs={9}>
-							<Collapse in={this.state.errors.hasOwnProperty('providerNumber')}>
-								<Alert severity="error" style={{width: '70%'}}>{this.state.errors.providerNumber} — check it out!</Alert>
-						    </Collapse>
-						</Grid>
+
 						<Grid item xs={3}  style={{textAlign: 'right'}}>
 							<strong>Province</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
 						</Grid>
@@ -335,14 +340,33 @@ class SignupForm extends React.Component
 									variant="outlined"
 									input={<OutlinedInput classes={{ input: classes.selectInput}} />}
 						  	>
-								<option value='1'></option>
-								<option value='2'></option>
+							{
+								provinceInfo.map
+								(
+									(element,  index) =>
+									(
+										<option key={index} value={element.value} providerdesc={element.providerDesc} placeholder={element.placeholder}>{element.label}</option>
+									)
+								)
+							}
 							</Select>
 						</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}>
 							<Collapse in={this.state.errors.hasOwnProperty('province')}>
 						        <Alert severity="error" style={{width: '40%'}}>{this.state.errors.province} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
+						<Grid item xs={3} style={{textAlign: 'right'}}>
+							<strong>{this.state.careProviderNumberLabel}</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+						</Grid>
+						<Grid item xs={9} style={{textAlign: 'left'}}>
+							<input name="providerNumber" type="text" value={this.state.providerNumber} onChange={this.onChange} placeholder={this.state.careProviderNumberPlaceholder} style={{padding: '5px', width: '70%'}}/>		
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('providerNumber')}>
+								<Alert severity="error" style={{width: '70%'}}>{this.state.errors.providerNumber} — check it out!</Alert>
 						    </Collapse>
 						</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
