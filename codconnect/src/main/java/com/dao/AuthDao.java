@@ -81,7 +81,7 @@ public class AuthDao
 			c = _ds.getConnection();
 			c.setAutoCommit(false);
 			
-			String sQuery = "insert into auth_user_details_internal values(default,?,null,null,?,?,?,null,null,null,?,?,?,?,?,now())";
+			String sQuery = "insert into auth_user_details_internal values(default,?,null,null,?,?,?,null,null,null,?,?,?,?,?,now(),?,?)";
 			ps = c.prepareStatement(sQuery, Statement.RETURN_GENERATED_KEYS);
 			
 			ps.setString(1, ab.getFullName());
@@ -93,6 +93,8 @@ public class AuthDao
 			ps.setInt(7, ab.getAuthUserAuthorizationLevelId());
 			ps.setBoolean(8, ab.isAcceptTermsOfService());
 			ps.setString(9, ab.getTimezone());
+			ps.setString(10, ab.getProviderNumber());
+			ps.setString(11, ab.getProvince());
 			
 			log.info(ps.toString());
 			
@@ -148,7 +150,7 @@ public class AuthDao
 		try
 		{
 			c = _ds.getConnection();
-			String sQuery="insert into auth_user_details_internal values(default,?,null,null,?,?,?,null,null,null,null,?,?,?,?,current_timestamp)";
+			String sQuery="insert into auth_user_details_internal values(default,?,null,null,?,?,?,null,null,null,null,?,?,?,?,current_timestamp,?,?)";
 			ps = c.prepareStatement(sQuery);
 			
 			ps.setString(1, ab.getFullName());
@@ -159,6 +161,8 @@ public class AuthDao
 			ps.setInt(6, ab.getAuthUserAuthorizationLevelId());
 			ps.setBoolean(7, ab.isAcceptTermsOfService());
 			ps.setString(8, ab.getTimezone());
+			ps.setString(10, ab.getProviderNumber());
+			ps.setString(11, ab.getProvince());
 			
 			log.info(ps.toString());
 			
@@ -226,6 +230,8 @@ public class AuthDao
 					ab.setAcceptTermsOfService(rs.getBoolean(14));
 					ab.setTimezone(rs.getString(15));
 					ab.setRegistrationTime(rs.getTimestamp(16));
+					ab.setProviderNumber(rs.getString(17));
+					ab.setProvince(rs.getString(18));
 				}		
 				
 			}
@@ -278,6 +284,8 @@ public class AuthDao
 				ab.setAcceptTermsOfService(rs.getBoolean(14));
 				ab.setTimezone(rs.getString(15));
 				ab.setRegistrationTime(rs.getTimestamp(16));
+				ab.setProviderNumber(rs.getString(17));
+				ab.setProvince(rs.getString(18));
 
 				list.add(ab);
 			}

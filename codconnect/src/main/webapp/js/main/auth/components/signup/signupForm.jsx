@@ -36,6 +36,9 @@ import {StyledBreadcrumb} from "../../../components/common/styledBreadcrumb.jsx"
 
 import TermsCondition from "../../../data/termsfeed-privacy-policy-html-english.html";
 
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 const styles = (theme) =>
 ({
 	paper:
@@ -43,6 +46,10 @@ const styles = (theme) =>
 		backgroundColor: '#fcfaf5',
 		padding: '10px 25px 10px 25px'
 	},
+	backdrop: 
+	{
+	    zIndex: theme.zIndex.drawer + 1
+    },
 	buttonProgress: 
 	{
 	    color: green[500],
@@ -111,7 +118,8 @@ class SignupForm extends React.Component
 			invalid: false,
 			isHuman: false,
 			showTermsCondition: false,
-			agreeTermsCondition: false
+			agreeTermsCondition: false,
+			openBackdrop: false
 		};
 		
 		this.onChange = this.onChange.bind(this);
@@ -214,6 +222,7 @@ class SignupForm extends React.Component
 	
 	onSubmit(e)
 	{
+		this.setState({openBackdrop: true});
 		e.preventDefault();
 		console.log("---INFO (onSubmit() of signupForm.jsx) is called---, ",this.state);
 		if (this.state.showTermsCondition) this.setState({showTermsCondition: false}); //close if it is open
@@ -221,7 +230,16 @@ class SignupForm extends React.Component
 		if(this.isValid())
 		{
 			this.setState({errors: {}, isLoading: true});
-			this.props.userSignupRequest(this.state).then
+			this.props.userSignupRequest
+			(
+				{
+					email: this.state.email, 
+					password: this.state.password, 
+					providerNumber: this.state.providerNumber, 
+					province: this.state.province,
+					errors: {}
+				}
+			).then
 			(
 				(response) =>
 				{
@@ -232,6 +250,7 @@ class SignupForm extends React.Component
 					}
 					else
 					{
+						/*
 						this.props.addAlertMessage
 						(
 							{
@@ -239,7 +258,9 @@ class SignupForm extends React.Component
 								text: "Thanks for sining up. Please check your email for confirmation!!"
 							}
 						);
-						this.context.router.history.push("/");
+						*/
+						//"Thanks for sining up. Please check your email for confirmation!!"
+						//this.context.router.history.push("/");
 					}					
 				}
 			).
@@ -254,6 +275,7 @@ class SignupForm extends React.Component
 				}
 			);
 		}
+		this.setState({openBackdrop: false});
 	}
 
     render()
@@ -419,6 +441,11 @@ class SignupForm extends React.Component
 						</Grid>
 						</Grid>
 					</Paper> 
+				  </Grid>
+				  <Grid item xs={12}>
+					<Backdrop className={classes.backdrop} open={this.state.openBackdrop} invisible={true} onClick={()=>this.setState({openBackdrop: false})}>
+				        <CircularProgress color="primary" />
+				     </Backdrop>
 				  </Grid>
 				</Grid>
 			  );

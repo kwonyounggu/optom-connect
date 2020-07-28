@@ -123,26 +123,18 @@ class LoginForm extends React.Component
 								setAuthorizationToken(response.data.token);
 								
 								this.props.setCurrentUser(jwtDecode(response.data.token));
-								/*this.props.addAlertMessage
-								(
-									{
-										type: "success",
-										text: "You logged in successfully. Welcome!"
-									}
-								);*/
-								//this.props.from ? this.context.router.history.push(this.props.from.pathname):
-								//				  this.context.router.history.push("/");
+								
 								const params = queryString.parse(this.props.location.search);
 								params.prevPath ? this.props.history.push(params.prevPath) : this.props.history.push("/");
 							}
+							//else if (response.data.invalid), see stre.jsx for errrs {key: value}
 						}
 					).
 					catch /* Without returning a response object */
 					(
 						(error) =>			
 						{
-							/*show this error in a page or a top of the current page - Oct-19-2017*/
-							/*this error consists of an html page cotents*/
+							//Show this error just like email/password in the way making another <Collapse> tag -JULY 28
 							console.log("[ERROR in loginForm.jsx:] ", error);
 							this.setState({isLoading: false, errors: {serverAPI: error+":::"}});
 						}

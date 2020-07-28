@@ -32,6 +32,8 @@ public class AuthUserDetailsInternalBean implements Serializable
 	private boolean acceptTermsOfService = false;
 	private String timezone = "";
 	private Timestamp registrationTime = null;
+	private String providerNumber = "";
+	private String province = "";
 	
 	public AuthUserDetailsInternalBean()
 	{
@@ -39,7 +41,9 @@ public class AuthUserDetailsInternalBean implements Serializable
 	}
 	/*
 	 * See https://gist.github.com/craSH/5217757 for encryption and decryption
+	 * The following constructor is for the Original table before adding two fields; provider_number and province - July 28 2020
 	 * */
+	
 	public AuthUserDetailsInternalBean(JSONObject jsonObj)
 	{
 		fullName = jsonObj.getString("fullName").toLowerCase();
@@ -50,6 +54,24 @@ public class AuthUserDetailsInternalBean implements Serializable
 		authUserAccountStatusId = 2;//EMAIL NON CONFIRMED
 		authUserAuthorizationLevelId = 10;//STD USER
 		acceptTermsOfService = true;
+
+		//72 hours given for email-confirmation otherwise it will be deleted
+		emailConfirmationToken = new TokenUtil().getJWT(email, fullName, "signup", 72*60*60*1000);
+	}
+	
+	//The following constructor is with Optom Connect
+	public AuthUserDetailsInternalBean(JSONObject jsonObj, String remoteIp)
+	{
+		fullName = "NA";
+		email = jsonObj.getString("email").toLowerCase();
+		passwordSalt = BCrypt.gensalt(12);//default 10
+		passwordHash = BCrypt.hashpw(jsonObj.getString("password"), passwordSalt);
+		timezone = remoteIp;
+		authUserAccountStatusId = 2;//EMAIL NON CONFIRMED
+		authUserAuthorizationLevelId = 10;//STD USER
+		acceptTermsOfService = true;
+		providerNumber = jsonObj.getString("providerNumber");
+		province = jsonObj.getString("province");
 
 		//72 hours given for email-confirmation otherwise it will be deleted
 		emailConfirmationToken = new TokenUtil().getJWT(email, fullName, "signup", 72*60*60*1000);
@@ -182,6 +204,27 @@ public class AuthUserDetailsInternalBean implements Serializable
 	{
 		this.registrationTime = registrationTime;
 	}
+	
+	public String getProviderNumber()
+	{
+		return providerNumber;
+	}
+
+	public void setProviderNumber(String providerNumber)
+	{
+		this.providerNumber = providerNumber;
+	}
+
+	public String getProvince()
+	{
+		return province;
+	}
+
+	public void setProvince(String province)
+	{
+		this.province = province;
+	}
+
 	@Override
 	public String toString()
 	{
@@ -192,9 +235,9 @@ public class AuthUserDetailsInternalBean implements Serializable
 				+ ", emailConfirmationToken=" + emailConfirmationToken + ", authUserAccountStatusId="
 				+ authUserAccountStatusId + ", authUserAuthorizationLevelId=" + authUserAuthorizationLevelId
 				+ ", acceptTermsOfService=" + acceptTermsOfService + ", timezone=" + timezone + ", registrationTime="
-				+ registrationTime + "]";
+				+ registrationTime + ", providerNumber=" + providerNumber + ", province=" + province + "]";
 	}
-	
+
 	public static boolean isValidPassword(String passwordPlaintext, String passwordHashed) throws Exception
 	{
 		if(passwordHashed.isEmpty() || !passwordHashed.startsWith("$2a$"))

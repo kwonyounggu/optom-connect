@@ -195,7 +195,7 @@ public class JsonUtils
 						jsonObj.getJSONObject("errors").put(keyStr, "Full Name is invalid (use like " + KoreanLetters.fullNameValidExample + ").");
 					}
 					break;
-				case "email":
+				case "email":/*
 					try
 					{
 						if(!EmailValidator.getInstance().isValid(jsonObj.getString(keyStr)))
@@ -204,18 +204,19 @@ public class JsonUtils
 						}
 						else if(new AuthDao(DatasourceUtil.getDataSource()).isUserExists(jsonObj.getString(keyStr)))
 						{
-							jsonObj.getJSONObject("errors").put(keyStr, "There already exists the same user email.");
+							jsonObj.getJSONObject("errors").put(keyStr, "There already exists the same user email, reset password to login.");
 						}
 					}
 					catch(Exception e)
 					{
-						jsonObj.getJSONObject("errors").put(keyStr, e.getMessage());
-					}
+						//jsonObj.getJSONObject("errors").put(keyStr, e.getMessage());
+						jsonObj.getJSONObject("errors").put(keyStr, "The system found a problem while processing DB.");
+					}*/
 					break;
 				case "password":
-					if(!isBetweenMinMax(jsonObj.getString(keyStr), 2, 30))
+					if(!isBetweenMinMax(jsonObj.getString(keyStr), 6, 30))
 					{
-						jsonObj.getJSONObject("errors").put(keyStr, "The field requires in size between 2 and 30.");
+						jsonObj.getJSONObject("errors").put(keyStr, "The field requires in size between 6 and 30.");
 					}
 					break;
 				case "passwordConfirmation": 
@@ -229,6 +230,9 @@ public class JsonUtils
 					{
 						jsonObj.getJSONObject("errors").put(keyStr, "This field is reuqired.");
 					}
+					break;
+				case "providerNumber": 
+					jsonObj.getJSONObject("errors").put(keyStr, "The given provider/billing number is being used by someone else.");
 					break;
 				default: break;
 			}

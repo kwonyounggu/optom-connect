@@ -44,7 +44,7 @@
 				  */
 				  
 				//BasicDataSource _ds = (BasicDataSource)request.getServletContext().getAttribute("osClusterDs");	
-				ab = new AuthUserDetailsInternalBean(jsonObj);
+				ab = new AuthUserDetailsInternalBean(jsonObj, request.getRemoteAddr());
 				new AuthDao(DatasourceUtil.getDataSource()).signUpRegistration(ab);
 				
 				MyEmail.emailSignupConfirmation(ab);
@@ -71,6 +71,8 @@
 		jsonObj.remove("password");
 		jsonObj.remove("passwordConfirmation");
 		jsonObj.remove("timezone");
+		jsonObj.remove("providerNumber");
+		jsonObj.remove("province");
 					
 		out.print(jsonObj);
 		
