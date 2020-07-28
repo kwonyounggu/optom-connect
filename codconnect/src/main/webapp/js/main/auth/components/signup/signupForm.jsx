@@ -100,7 +100,7 @@ class SignupForm extends React.Component
 		this.state =
 		{
 			province: "ON",
-			careProviderNumber: "",
+			providerNumber: "",
 			careProviderNumberLabel: provinceInfo[1].providerDesc,
 			careProviderNumberPlaceholder: provinceInfo[1].placeholder,
 			email: "",
@@ -216,6 +216,7 @@ class SignupForm extends React.Component
 	{
 		e.preventDefault();
 		console.log("---INFO (onSubmit() of signupForm.jsx) is called---, ",this.state);
+		if (this.state.showTermsCondition) this.setState({showTermsCondition: false}); //close if it is open
 		
 		if(this.isValid())
 		{
@@ -278,10 +279,10 @@ class SignupForm extends React.Component
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={12} style={{textAlign: 'center'}}>
 							<Typography variant="h6">
-						          Create your account using your email and health care provider number given from your province
+						          Create your account using your email and provider/billing number given from your province
 						    </Typography>
 							<Typography variant="subtitle2" align={"center"} color={"primary"}>
-					          This is only allowed for the Doctors of Ophometry (OD) in Canada
+					          This is only allowed for the Doctors of Ophometry (OD) in Canada.
 					        </Typography><br />
 							<Typography variant="subtitle2" align={"center"} color={"textSecondary"}>
 					          <span style={{color: 'red'}}>*</span>&nbsp;This field is required
@@ -316,12 +317,12 @@ class SignupForm extends React.Component
 							<strong>Confirm Password</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
 						</Grid>
 						<Grid item xs={9}>
-							<input name="confirmPassword" type="password" value={this.state.confirmPassword} onChange={this.onChange} placeholder="Requires the same password as above" style={{padding: '5px', width: '70%'}}/>
+							<input name="passwordConfirmation" type="password" value={this.state.passwordConfirmation} onChange={this.onChange} placeholder="Requires the same password as above" style={{padding: '5px', width: '70%'}}/>
 						</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}>
-							<Collapse in={this.state.errors.hasOwnProperty('confirmPpassword')}>
-						        <Alert severity="error" style={{width: '70%'}}>{this.state.errors.confirmPassword} — check it out!</Alert>
+							<Collapse in={this.state.errors.hasOwnProperty('passwordConfirmation')}>
+						        <Alert severity="error" style={{width: '70%'}}>{this.state.errors.passwordConfirmation} — check it out!</Alert>
 						    </Collapse>
 						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
@@ -351,12 +352,7 @@ class SignupForm extends React.Component
 							}
 							</Select>
 						</Grid>
-						<Grid item xs={3}>&nbsp;</Grid>
-						<Grid item xs={9}>
-							<Collapse in={this.state.errors.hasOwnProperty('province')}>
-						        <Alert severity="error" style={{width: '40%'}}>{this.state.errors.province} — check it out!</Alert>
-						    </Collapse>
-						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3} style={{textAlign: 'right'}}>
 							<strong>{this.state.careProviderNumberLabel}</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
 						</Grid>
@@ -381,6 +377,12 @@ class SignupForm extends React.Component
 								Terms and Conditions
 							</Button>
 						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('agreeTermsCondition')}>
+								<Alert severity="error" style={{width: '70%'}}>{this.state.errors.agreeTermsCondition} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
 						<Grid item xs={12} style={{paddingLeft: '10%', paddingRight: '10%'}}>
 							<Collapse in={this.state.showTermsCondition}>
 								<div dangerouslySetInnerHTML={ {__html: TermsCondition} } style={{paddingLeft: '5px', paddingRight: '5px', border: '1px solid grey'}}/>
@@ -399,6 +401,12 @@ class SignupForm extends React.Component
 								expiredCallback={this.expiredCallbackBot}
 								size="compact"
 							   />
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('isHuman')}>
+								<Alert severity="error" style={{width: '70%'}}>{this.state.errors.isHuman} — check it out!</Alert>
+						    </Collapse>
 						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
