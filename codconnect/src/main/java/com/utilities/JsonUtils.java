@@ -195,14 +195,14 @@ public class JsonUtils
 						jsonObj.getJSONObject("errors").put(keyStr, "Full Name is invalid (use like " + KoreanLetters.fullNameValidExample + ").");
 					}
 					break;
-				case "email":/*
+				case "email":
 					try
 					{
 						if(!EmailValidator.getInstance().isValid(jsonObj.getString(keyStr)))
 						{
 							 jsonObj.getJSONObject("errors").put(keyStr, "The email field is invalid.");
 						}
-						else if(new AuthDao(DatasourceUtil.getDataSource()).isUserExists(jsonObj.getString(keyStr)))
+						else if(new AuthDao(DatasourceUtil.getDataSource()).isUserExists("email='" + jsonObj.getString(keyStr) + "'"))
 						{
 							jsonObj.getJSONObject("errors").put(keyStr, "There already exists the same user email, reset password to login.");
 						}
@@ -211,7 +211,7 @@ public class JsonUtils
 					{
 						//jsonObj.getJSONObject("errors").put(keyStr, e.getMessage());
 						jsonObj.getJSONObject("errors").put(keyStr, "The system found a problem while processing DB.");
-					}*/
+					}
 					break;
 				case "password":
 					if(!isBetweenMinMax(jsonObj.getString(keyStr), 6, 30))
@@ -232,7 +232,8 @@ public class JsonUtils
 					}
 					break;
 				case "providerNumber": 
-					jsonObj.getJSONObject("errors").put(keyStr, "The given provider/billing number is being used by someone else.");
+					if(new AuthDao(DatasourceUtil.getDataSource()).isUserExists("provider_number='" + jsonObj.getString(keyStr) + "'"))
+						jsonObj.getJSONObject("errors").put(keyStr, "The given provider/billing number is being used by someone else.");
 					break;
 				default: break;
 			}

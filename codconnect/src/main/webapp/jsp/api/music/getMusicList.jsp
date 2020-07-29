@@ -43,7 +43,7 @@ if(request.getMethod().equals("GET"))
 							  }
 							  else
 							  {
-									//jsonObj.put("isUserExists", new AuthDao(DatasourceUtil.getDataSource()).isUserExists(entry.getValue()[0]));
+									//jsonObj.put("isUserExists", new AuthDao(DatasourceUtil.getDataSource()).isUserExists("email='"+entry.getValue()[0]+"'"));
 							  }
 							  break;
 				case "genre": if(true)
@@ -52,7 +52,7 @@ if(request.getMethod().equals("GET"))
 							  }
 							  else
 							  {
-									//jsonObj.put("isUserExists", new AuthDao(DatasourceUtil.getDataSource()).isUserExists(entry.getValue()[0]));
+									//jsonObj.put("isUserExists", new AuthDao(DatasourceUtil.getDataSource()).isUserExists("email='"+entry.getValue()[0]+"'"));
 							  }
 							  break;
 				case "period": if(true)
@@ -61,7 +61,7 @@ if(request.getMethod().equals("GET"))
 							  }
 							  else
 							  {
-									//jsonObj.put("isUserExists", new AuthDao(DatasourceUtil.getDataSource()).isUserExists(entry.getValue()[0]));
+									//jsonObj.put("isUserExists", new AuthDao(DatasourceUtil.getDataSource()).isUserExists("email='"+entry.getValue()[0]+"'"));
 							  }
 							  break;
 				default: jsonObj.put("error", "Unknown parameter ("+entry.getKey()+"), it must be an hacking.");

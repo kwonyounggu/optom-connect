@@ -80,6 +80,8 @@ class LoginForm extends React.Component
 		this.onSubmit = this.onSubmit.bind(this);
 		this.isValid = this.isValid.bind(this);
 	
+		this.params = queryString.parse(props.location.search);
+			
 		console.log("[INFO] in main/auth/components/login/loginForm.jsx -> constructor(..), this.props: ", this.props);
 	}
 
@@ -124,8 +126,7 @@ class LoginForm extends React.Component
 								
 								this.props.setCurrentUser(jwtDecode(response.data.token));
 								
-								const params = queryString.parse(this.props.location.search);
-								params.prevPath ? this.props.history.push(params.prevPath) : this.props.history.push("/");
+								this.params.prevPath ? this.props.history.push(params.prevPath) : this.props.history.push("/");
 							}
 							//else if (response.data.invalid), see stre.jsx for errrs {key: value}
 						}

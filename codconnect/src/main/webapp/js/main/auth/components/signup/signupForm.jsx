@@ -250,17 +250,8 @@ class SignupForm extends React.Component
 					}
 					else
 					{
-						/*
-						this.props.addAlertMessage
-						(
-							{
-								type: "success",
-								text: "Thanks for sining up. Please check your email for confirmation!!"
-							}
-						);
-						*/
-						//"Thanks for sining up. Please check your email for confirmation!!"
-						//this.context.router.history.push("/");
+						this.props.addAlertMessage({turnOn: true, type: "success", level: 2, text: "Thanks for sining up. Please check your email for confirmation!!"});
+						this.props.history.push("/myAccount/login");
 					}					
 				}
 			).

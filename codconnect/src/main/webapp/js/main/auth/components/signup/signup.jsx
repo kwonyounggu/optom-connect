@@ -50,34 +50,6 @@ class Signup extends React.Component
 			   );
 
 	}
-	renderOld()
-	{
-		console.log("----INFO (render() of signup.jsx) is called, authenticated: ", this.props.auth.isAuthenticated, "------");
-		
-		return (
-				<Container>
-				<Row>
-					<Col md={4} mdOffset={4} >
-					    {
-					    	this.props.auth.isAuthenticated ?
-					    			
-					    	<Alert bsStyle="danger" >
-								<h4>Ooops! You forgot to logout first, please try again after.</h4>
-							</Alert>
-								:
-							<SignupForm 
-								isUserExists={this.props.isUserExists}
-								userSignupRequest={this.props.userSignupRequest}
-								addAlertMessage={this.props.addAlertMessage}
-								setCurrentUser={this.props.setCurrentUser}
-							/>
-					    }
-					</Col>
-				</Row>
-			</Container>
-			   );
-
-	}
 }
 
 

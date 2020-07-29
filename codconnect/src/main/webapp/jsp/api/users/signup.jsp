@@ -36,14 +36,7 @@
 			
 			//Go ahead for table-insertion if valid
 			if(!jsonObj.getBoolean("invalid"))
-			{
-				//System.out.println("---insert values in the table ---");
-				/*1. insert into auth_user_details_internal
-				  2. insert into auth_user_account --TO DO Nov-10-2017
-				  3. then provide the login token from jwt, see Lec#16
-				  */
-				  
-				//BasicDataSource _ds = (BasicDataSource)request.getServletContext().getAttribute("osClusterDs");	
+			{	
 				ab = new AuthUserDetailsInternalBean(jsonObj, request.getRemoteAddr());
 				new AuthDao(DatasourceUtil.getDataSource()).signUpRegistration(ab);
 				
@@ -57,14 +50,17 @@
 			jsonObj.put("invalid", true);
 					
 			/*
-			Note that if insertion of a record is done then remove it from the table
-			*/
+			Note that if insertion of a record is done then remove it from the table.
+			However as a result of checking, it is already rolledback so there is no record existing.
+			So the following if statement is not necessary.
 			if(ab != null && ab.getId() > 0)
 	    	 {
 	    		 new AuthDao(DatasourceUtil.getDataSource()).deleteRecords(ab);
 	    	 }
+			*/
 		}
 		
+		//try{Thread.sleep(5000);}catch(InterruptedException e){System.out.println(e);} 
 		//Clean unnecessary properties from the jsonObj
 		jsonObj.remove("fullName");
 		jsonObj.remove("email");

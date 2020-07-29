@@ -28,11 +28,11 @@ public class AuthDao
 	}
 	
 	//This is to check if the same user already is being existed before signing up
-	public boolean isUserExists(String email)
+	public boolean isUserExists(String whereStatement) throws DAOException
 	{
 		//Check using the table, auth_user_details_internal
 		
-		log.info("Begining for isUserExists("+email+")");
+		log.info("Begining for isUserExists("+whereStatement+")");
 		
 		Connection c = null;
 		Statement s=null;
@@ -42,7 +42,7 @@ public class AuthDao
 		{
 			c = _ds.getConnection();
 			s = c.createStatement();
-			String sql = "select count(*) from auth_user_details_internal where email='" + email.toLowerCase() + "'";
+			String sql = "select count(*) from auth_user_details_internal where " + whereStatement.toLowerCase();
 			rs = s.executeQuery(sql);
 						
 			if (rs.next())
@@ -63,7 +63,7 @@ public class AuthDao
 			closeResultSet(rs);
 			closeStatement(s);
 			closeConnection(c);
-			log.info("Ending for isUserExists("+email+")");
+			log.info("Ending for isUserExists("+whereStatement+")");
 		}
 		return bResult;
 	}

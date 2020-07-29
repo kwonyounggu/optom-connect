@@ -147,6 +147,8 @@ public class Email extends Authenticator implements Runnable
  	     }
  	     catch (Exception e) 
  	     {
+ 	    	 //https://support.google.com/mail/thread/13504988?hl=en
+ 	    	 //Note a cause of auth failure could be from https://myaccount.google.com/lesssecureapps?pli=1
  	    	 log.severe("Unable to email to "+toAddr+" in googleSSLSMTP() of Email.java");
  	    	 if(ab != null && ab.getId() > 0)
  	    	 {

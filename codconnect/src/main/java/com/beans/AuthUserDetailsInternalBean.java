@@ -62,7 +62,7 @@ public class AuthUserDetailsInternalBean implements Serializable
 	//The following constructor is with Optom Connect
 	public AuthUserDetailsInternalBean(JSONObject jsonObj, String remoteIp)
 	{
-		fullName = "NA";
+		fullName = "Eye Care Provider";
 		email = jsonObj.getString("email").toLowerCase();
 		passwordSalt = BCrypt.gensalt(12);//default 10
 		passwordHash = BCrypt.hashpw(jsonObj.getString("password"), passwordSalt);
