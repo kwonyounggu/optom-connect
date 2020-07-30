@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.logging.Logger;
 
 import com.beans.AuthUserDetailsInternalBean;
+import com.exceptions.EmailException;
 
 
 
@@ -12,7 +13,7 @@ public class MyEmail
 	private static Logger log = Logger.getLogger("Myemail.java");
 
 	/*
-	public static void emailSignupConfirmation(AuthUserDetailsInternalBean ab) throws Exception
+	public static void emailSignupConfirmation(AuthUserDetailsInternalBean ab) throws EmailException
 	{
 		String message =
 				   "<div>Dear " + ab.getFullName() + ",</div><br />" +
@@ -29,7 +30,7 @@ public class MyEmail
 		new Email(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Signup Confirmation", message, ab);
 	}*/
 	
-	public static void emailSignupConfirmation(AuthUserDetailsInternalBean ab) throws Exception
+	public static void emailSignupConfirmation(AuthUserDetailsInternalBean ab) throws EmailException
 	{
 		String message =
 				   "<div>Dear " + ab.getFullName() + ",</div><br />" +
@@ -42,10 +43,10 @@ public class MyEmail
 				   "<div>Thank you.</div>" +
 				   "<div><a href='https://www.optom-connect.ca'>www.optom-connect.ca</a></div>";
 		
-				log.info("key is "+Email.smtpAccessPwd+", "+Email.smtpAccessEmail);
-		new Email(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Optom-Connect Signup Confirmation", message, ab);
+				log.info("key is "+SynchroEmail.smtpAccessPwd+", "+SynchroEmail.smtpAccessEmail);
+		new SynchroEmail(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Optom-Connect Signup Confirmation", message, ab);
 	}
-	public static void emailResetPassword(AuthUserDetailsInternalBean ab) throws Exception
+	public static void emailResetPassword(AuthUserDetailsInternalBean ab) throws EmailException
 	{
 		String message =
 				   "<div>Dear " + ab.getFullName() + ",</div><br />" +
@@ -61,6 +62,6 @@ public class MyEmail
 				   "<div><a href='http://www.webmonster.ca'>www.webmonster.ca</a></div>";
 		
 				log.info("key is "+Email.smtpAccessPwd+", "+Email.smtpAccessEmail);
-		new Email(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Password Reset", message, ab);
+		new SynchroEmail(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Password Reset", message, ab);
 	}
 }

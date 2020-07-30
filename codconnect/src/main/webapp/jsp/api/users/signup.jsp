@@ -7,6 +7,7 @@
 <%@ page import = "java.util.List" %>
 <%@ page import = "org.json.JSONObject" %>
 <%@ page import = "com.utilities.*" %>
+<%@ page import = "com.exceptions.EmailException" %>
 <%@ page import = "com.beans.AuthUserDetailsInternalBean" %>
 <%@ page import = "com.dao.AuthDao" %>
 <%@ page import = "org.apache.commons.dbcp2.BasicDataSource" %>
@@ -43,21 +44,17 @@
 				MyEmail.emailSignupConfirmation(ab);
 			}
 		}
+		catch(EmailException e)
+		{
+			System.err.println("ERROR in emaling (signup.jsp): " + e);
+			jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Emailing is failed, please try again later.:::"+e.getMessage());
+			jsonObj.put("invalid", true);
+		}
 		catch(Exception e)
 		{
 			System.err.println("ERROR (signup.jsp): "+ e);
 			jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
 			jsonObj.put("invalid", true);
-					
-			/*
-			Note that if insertion of a record is done then remove it from the table.
-			However as a result of checking, it is already rolledback so there is no record existing.
-			So the following if statement is not necessary.
-			if(ab != null && ab.getId() > 0)
-	    	 {
-	    		 new AuthDao(DatasourceUtil.getDataSource()).deleteRecords(ab);
-	    	 }
-			*/
 		}
 		
 		//try{Thread.sleep(5000);}catch(InterruptedException e){System.out.println(e);} 
