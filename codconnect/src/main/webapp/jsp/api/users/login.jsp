@@ -91,6 +91,7 @@
 			}
 			else /* Internal Login */
 			{	//Validate One more time in the server side
+				//Note: here check if it is activated
 				JsonUtils.validateLogin(jsonObj);
 				
 				//Go ahead for table-insertion if valid

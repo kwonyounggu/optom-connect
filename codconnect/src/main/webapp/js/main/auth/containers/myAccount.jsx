@@ -52,7 +52,7 @@ class MyAccount extends React.Component
 						<Route path="/myAccount/login"  component={ (props) => <Login {...props} />} />
 						<Route path="/myAccount/resetPassword"  component={ (props) => <ResetPassword {...props} /> } /> 
 						<Route path="/myAccount/signup"    component={ (props) => <Signup {...props} /> } /> 
-						
+						<Route path="/myAccount/activation"     component={ (props) => <Activation {...props} /> } />
 					</Switch>
 				</div>
 			  );

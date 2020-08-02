@@ -32,18 +32,20 @@ public class MyEmail
 	
 	public static void emailSignupConfirmation(AuthUserDetailsInternalBean ab) throws EmailException
 	{
+		//https://support.aminoapps.com/hc/en-us/articles/115002381673-Signing-Up-and-Activation
+		//https://www.acepforprofessionals.com/users/activate-account.php
+		//https://mailchimp.com/help/i-signed-up-with-mailchimp-but-didnt-get-an-activation-email/
 		String message =
 				   "<div>Dear " + ab.getFullName() + ",</div><br />" +
 				   
 				   "<div>Thank you for joining us!" + "</div>" +
-				   "<div>Please complete your signup process by clicking/visiting the following link:" + "</div>" +
+				   "<div>(Activation time within a certain hour)Please complete your signup process by clicking/visiting the following link:" + "</div>" +
 		
 				   "<div><a href='"+Utils.MYHOST_DOMAIN + "/activate?op=signup&token=" +ab.getEmailConfirmationToken() + "'>Confirmation Link</a></div>" +
 				   "<div>" + Utils.MYHOST_DOMAIN + "/activate?op=signup&token=" +ab.getEmailConfirmationToken() + "</div><br />" +
 				   "<div>Thank you.</div>" +
 				   "<div><a href='https://www.optom-connect.ca'>www.optom-connect.ca</a></div>";
-		
-				log.info("key is "+SynchroEmail.smtpAccessPwd+", "+SynchroEmail.smtpAccessEmail);
+
 		new SynchroEmail(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Optom-Connect Signup Confirmation", message, ab);
 	}
 	public static void emailResetPassword(AuthUserDetailsInternalBean ab) throws EmailException

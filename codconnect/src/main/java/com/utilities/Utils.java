@@ -25,6 +25,11 @@ public class Utils
 	public static String COMPANY_EMAIL;
 	public static String SIGNUP_CRON;
 	public static int VALID_SIGNUP;
+			
+	public static String SMTP_HOST;
+	public static String SMPT_SENDER;
+	public static String SMPT_USERNAME;
+	public static String SMPT_PASSCODE;
 	static 
     {
         try 
@@ -36,6 +41,11 @@ public class Utils
             COMPANY_EMAIL = bundle.getString("company_email").toLowerCase();
             SIGNUP_CRON = bundle.getString("signup_cron");
             VALID_SIGNUP = Integer.parseInt(bundle.getString("valid_signup"));
+            
+            SMTP_HOST = bundle.getString("smtp_host");
+            SMPT_SENDER = bundle.getString("smtp_sender");
+            SMPT_USERNAME = bundle.getString("smtp_username");
+            SMPT_PASSCODE = bundle.getString("smtp_passcode");
         } 
         catch (Exception e) 
         {

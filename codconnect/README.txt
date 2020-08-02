@@ -73,3 +73,12 @@ wildfly10.x to access, type admin/277312
 			Files sent to you by the ministry will be available for download of up to 12
 			months from the date of creation. Files can be downloaded multiple times during
 			this period. 
+			
+			App passwords
+Here is your app password for optom.connect
+
+fuacxvrrtcpqwdxo
+How to use this app password
+Go to the settings section of your app
+Find the screen where you enter your Yahoo account username and password
+Copy the app password above and paste it into the password field

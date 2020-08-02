@@ -39,6 +39,10 @@ import TermsCondition from "../../../data/termsfeed-privacy-policy-html-english.
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+
 const styles = (theme) =>
 ({
 	paper:
@@ -99,6 +103,25 @@ const provinceInfo =
 	{value: 'BC', label: 'British Columbia', providerDesc: 'MSP Practitioner/Billing Number', placeholder: "Five digits required"},
 	{value: 'ON', label: 'Ontario', providerDesc: 'OHIP Provider/Billing Number', placeholder: "Six digits required"}
 ];
+
+const steps = ['SignUp', 'Activation/Confirmation by email', 'Login'];
+
+export const DisplaySteps = (props) =>
+{
+	return (
+			 <Stepper alternativeLabel nonLinear activeStep={props.activeStep}>
+		     {
+				steps.map
+				(
+					(label) => 
+					 <Step key={label}>
+				         <StepLabel>{label}</StepLabel>
+				     </Step>
+				)
+			 }
+	         </Stepper>
+		);
+}
 class SignupForm extends React.Component
 {
 	constructor(props)
@@ -125,7 +148,6 @@ class SignupForm extends React.Component
 		this.onChange = this.onChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 		this.isValid = this.isValid.bind(this);
-		this.checkUserExists = this.checkUserExists.bind(this);
 		
 		this.callbackBot = this.callbackBot.bind(this);
 		this.verifyCallbackBot = this.verifyCallbackBot.bind(this);
@@ -172,54 +194,7 @@ class SignupForm extends React.Component
 		return isValid;
 	}
 	
-	//Based on only email field
-	checkUserExists(e)
-	{
-		const field = e.target.name;
-		const val = e.target.value;
-		
-		
-		if(!validator.isEmpty(val) && validator.isEmail(val))
-		{
-			
-			this.props.isUserExists("email", val).then
-			(
-					(response) =>
-					{
-						console.log("successful, the response object=",response);
-						//Here, it is already justified if the user is in the list... why one more validation with if-statement?
-						let errors = this.state.errors;
-						let invalid;
-						if(response.data.error)
-						{
-							errors[field] = response.data.error;
-							//invalid = true;
-						}
-						else if(response.data.isUserExists)
-						{
-							errors[field] = "There already exists the same user email.";
-							//invalid = true;
-						}
-						else
-						{
-							errors[field] = "";
-							//invalid = false;
-						}
-						this.setState({errors});
-						
-					}
-			).
-			catch
-			(
-				(error) =>			
-				{
-					console.log("ERROR: ", error);
-					//do display AlertMessage on top of the page
-				}
-			);			
-		}
-	}
-	
+
 	onSubmit(e)
 	{
 		this.setState({openBackdrop: true});
@@ -301,6 +276,7 @@ class SignupForm extends React.Component
 					          <span style={{color: 'red'}}>*</span>&nbsp;This field is required
 					        </Typography>
 						</Grid>
+						<Grid item xs={12}><DisplaySteps activeStep={0}/></Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3} style={{textAlign: 'right'}}>
 							<strong>Email</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;

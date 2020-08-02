@@ -129,11 +129,13 @@ public class MainContextListener implements ServletContextListener
 			log.info("Number of tables in posgresql database of webmonster: " + totalRows);
 			
 			//Get Email PWD from the table in the 2nd record where id=2 in auth_user_details_internal
+			/*
 			AuthUserDetailsInternalBean ab = new AuthDao(osClusterDs).getRecord(Utils.COMPANY_EMAIL, "email");
 			Email.smtpAccessPwd = new String(Base64.getDecoder().decode(ab.getPasswordHash()), "utf-8");
 			Email.smtpAccessEmail = Utils.COMPANY_EMAIL;
 			SynchroEmail.smtpAccessEmail = Email.smtpAccessEmail;
 			SynchroEmail.smtpAccessPwd = Email.smtpAccessPwd;
+			*/
 			
 			ServletContext context=event.getServletContext();
 			context.setAttribute("osClusterDs", osClusterDs);

@@ -62,19 +62,19 @@ public class ActivateServlet extends HttpServlet
 						AuthUserDetailsInternalBean ab = authDao.getRecord(token, "email_confirmation_token");
 						if(ab.getId()>0)//there exists a record
 						{
-							if(ab.getAuthUserAccountStatusId()==2) //not confirmed yet
+							if(ab.getAuthUserAccountStatusId()==2) //2: not confirmed yet, 1: already  activated
 								authDao.updateTable("update auth_user_details_internal set auth_user_account_status_id=1 where id="+ab.getId());
 							/*
-							 * Note that status==1: Already confirmed, ->Login page, 'You have already activated'
-							 * 			 status==2: Newly confirmed, ->Login page, 'You hace successfully activated'
-							 * 			 status==3: No record,->Signup again because no record found (or expired).
+							 * queryString?status=1;//activation is already done
+							 * queryString?status=2;//activation is just done now
+							 * queryString?status=3;//No record avaiable, signup again due to a possible exipiration
 							 */
-							response.sendRedirect(request.getContextPath()+"/activation?status="+ab.getAuthUserAccountStatusId()+"&email="+ab.getEmail()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));						
+							response.sendRedirect(request.getContextPath()+"/myAccount/activation?status="+ab.getAuthUserAccountStatusId()+"&email="+ab.getEmail()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));						
 						}
 						else
 						{
 							//no record caused by incorrect token or token expired, you need to signup again
-							response.sendRedirect(request.getContextPath()+"/activation?status=3&email="+ab.getEmail()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));
+							response.sendRedirect(request.getContextPath()+"/myAccount/activation?status=3&email="+ab.getEmail()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));
 						}
 					}
 					break;
@@ -100,14 +100,14 @@ public class ActivateServlet extends HttpServlet
 							 * 		-nullify two fields
 							 * */
 							if(ab.getPasswordReminderExpire().after(new Timestamp(System.currentTimeMillis())))
-								response.sendRedirect(request.getContextPath()+"/resetPassword?status=1&email="+ab.getEmail()+"&token="+ab.getPasswordReminderToken()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));						
+								response.sendRedirect(request.getContextPath()+"/myAccount/resetPassword?status=1&email="+ab.getEmail()+"&token="+ab.getPasswordReminderToken()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));						
 							else
-								response.sendRedirect(request.getContextPath()+"/resetPassword?status=2&email="+ab.getEmail()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));						
+								response.sendRedirect(request.getContextPath()+"/myAccount/resetPassword?status=2&email="+ab.getEmail()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));						
 						}
 						else
 						{
 							//no record, say that you need to request again
-							response.sendRedirect(request.getContextPath()+"/resetPassword?status=3&email="+ab.getEmail()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));
+							response.sendRedirect(request.getContextPath()+"/myAccount/resetPassword?status=3&email="+ab.getEmail()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));
 						}
 					}
 					break;

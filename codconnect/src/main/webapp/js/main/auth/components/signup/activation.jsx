@@ -73,21 +73,17 @@ class Activation extends React.Component
 	}
 	render()
 	{
+		//url: https://192.168.1.81:8443/activation?status=2&email=kwon_younggu@yahoo.ca&name=Eye+Care+Provider
 		const params = queryString.parse(this.props.location.search);
 		if(params.status != null && parseInt(params.status) == 3)
 		{
-			this.props.addAlertMessage
-			(
-				{
-					type: "failure",
-					text: "Oops there is no record with the given! please signup again. "
-				}
-		    );
-			return (<div><Redirect to="/signup" /></div>);
+			
+			this.props.addAlertMessage({turnOn: true, type: "error", level: 2, text: "Oops there is no record with the given! please signup again."});
+			return (<div><Redirect to="/myAccount/signup" /></div>);
 		}
-		
+		//do it here with validateParameters
 		return (
-				<div>{this.validateParameters(params) ? <Redirect to={`/login?email=${params.email}`} /> : <Redirect to="/login" />}</div>
+				<div>{this.validateParameters(params) ? <Redirect to={`/myAccount/login?email=${params.email}`} /> : <Redirect to="/myAccount/login" />}</div>
 			   );
 
 	}

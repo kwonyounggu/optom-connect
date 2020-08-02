@@ -204,7 +204,7 @@ public class JsonUtils
 						}
 						else if(new AuthDao(DatasourceUtil.getDataSource()).isUserExists("email='" + jsonObj.getString(keyStr) + "'"))
 						{
-							jsonObj.getJSONObject("errors").put(keyStr, "There already exists the same user email, reset password to login.");
+							jsonObj.getJSONObject("errors").put(keyStr, "There already exists the same user email, reset password or do confirmation.");
 						}
 					}
 					catch(Exception e)
