@@ -98,22 +98,31 @@
 				if(!jsonObj.getBoolean("invalid"))
 				{
 					
-					BasicDataSource _ds = (BasicDataSource)request.getServletContext().getAttribute("osClusterDs");	
-					AuthUserDetailsInternalBean ab = new AuthDao(_ds).getRecord(jsonObj.getString("email"), "email");
+					//BasicDataSource _ds = (BasicDataSource)request.getServletContext().getAttribute("osClusterDs");	
+					AuthUserDetailsInternalBean ab = new AuthDao(DatasourceUtil.getDataSource()).getRecord(jsonObj.getString("email"), "email");
 					if( ab.getId() != -1 &&
 						ab.getPasswordHash() != null &&
 					   !ab.getEmail().isEmpty() &&
 					   AuthUserDetailsInternalBean.isValidPassword(jsonObj.getString("password"), ab.getPasswordHash())
 					  )
 					{
-						//TokenUtil tokenUtil = new TokenUtil();
-						TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
-						jsonObj.put("token", tokenUtil.getJWT(jsonObj.getString("email"), ab.getFullName(), "internalLogin", TokenUtil.expMinutes*60*1000));			
+						if (ab.getAuthUserAccountStatusId() == 1)//Normally confirmation done
+						{
+							//TokenUtil tokenUtil = new TokenUtil();
+							TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
+							jsonObj.put("token", tokenUtil.getJWT(jsonObj.getString("email"), ab.getFullName(), "internalLogin", TokenUtil.expMinutes*60*1000));
+						}
+						else //Activation or Confirmation is not done
+						{
+							jsonObj.put("invalid", true);
+							jsonObj.getJSONObject("errors").put("overall", "Signup confirmation through the email is required. Please try again.");
+						}
 					}
 					else //Incorrect password or email id
 					{
 						jsonObj.put("invalid", true);
-						jsonObj.getJSONObject("errors").put("email/password", "Your email or password is incorrect. Please try again.");
+						jsonObj.getJSONObject("errors").put("email", "Your email or password is incorrect. Please try again.");
+						jsonObj.getJSONObject("errors").put("password", "Your email or password is incorrect. Please try again.");
 					}
 				}	
 				
@@ -125,7 +134,7 @@
 		catch(Exception e)
 		{
 			System.err.println("ERROR (login.jsp): "+ e);
-			jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
+			jsonObj.getJSONObject("errors").put("overall", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
 			jsonObj.put("invalid", true);
 		}
 					

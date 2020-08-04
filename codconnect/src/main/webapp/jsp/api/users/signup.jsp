@@ -46,14 +46,14 @@
 		}
 		catch(EmailException e)
 		{
-			System.err.println("ERROR in emaling (signup.jsp): " + e);
-			jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Emailing is failed, please try again later.:::"+e.getMessage());
+			System.err.println("ERROR in emailexception (signup.jsp): " + e);
+			jsonObj.getJSONObject("errors").put("overall", "Oops! Emailing is failed, please try again later.:::"+e.getMessage());
 			jsonObj.put("invalid", true);
 		}
 		catch(Exception e)
 		{
-			System.err.println("ERROR (signup.jsp): "+ e);
-			jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
+			System.err.println("ERROR in exception (signup.jsp): "+ e);
+			jsonObj.getJSONObject("errors").put("overall", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
 			jsonObj.put("invalid", true);
 		}
 		

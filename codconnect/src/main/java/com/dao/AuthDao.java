@@ -206,7 +206,7 @@ public class AuthDao
 				c = _ds.getConnection();
 				s = c.createStatement();
 				
-				if(field.equals("email")) value = value.toLowerCase();
+				if(field.equals("value")) value = value.toLowerCase();
 				
 				String sql = "select * from auth_user_details_internal where "+field+"='" + value + "' limit 1";
 				

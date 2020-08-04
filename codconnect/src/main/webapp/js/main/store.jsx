@@ -77,7 +77,7 @@ axios.interceptors.response.use
 				{
 					store.dispatch(addAlertMessage({turnOn: true, type: "error", level: 2, text: response.data.errorMessage}));
 				}
-				else if (response.data.hasOwnProperty('invalid') && response.data.invalid)
+				else if (response.data.hasOwnProperty('invalid') && response.data.invalid && response.data.errors.hasOwnProperty('serverAPI'))
 				{
 					let errorMsg = "There exists an error in that ", count = 0;
 					for (const [key, value] of Object.entries(response.data.errors)) 
@@ -93,11 +93,12 @@ axios.interceptors.response.use
 				}
 			}
 		}
-		if (response.status < 200 || response.status > 300)
+		else if (response.status < 200 || response.status > 300)
 		{
 			//do something
 			//return Promise.reject("There is an error having a status such as ...")
 			console.log("[INFO 200>status>300] status: ", response.status);
+			store.dispatch(addAlertMessage({turnOn: true, type: "error", level: 2, text: "Communication response status is not normal due to the status code, " + response.status}));
 		}
 			
         return response;

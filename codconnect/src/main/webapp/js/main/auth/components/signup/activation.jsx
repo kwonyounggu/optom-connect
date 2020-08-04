@@ -15,75 +15,33 @@ class Activation extends React.Component
 	constructor(props)
 	{
 		super(props);
-		//this.validateParameters = this.validateParameters().bind(this);
 	}
-	validateParameters(data)
-	{
-		  let bResult = true;
-		  console.log("validateParameters(",data,")");
-		  
-		  if(data.status != null && (parseInt(data.status) == 1 || parseInt(data.status) == 2))
-		  {	
-			  let fullNameKor = xregexp("^[\\p{Hangul}\\p{Han}\\p{Hiragana}\\p{Katakana}]{2,10}$");
-				
-				
-			  if(data.name == null || validator.isEmpty(data.name)) bResult = false;  
-			  else
-			  {
-				 let fullNameList = data.name.split(/(\s+)/).filter((w)=>w.trim().length>0);
 	
-				 if(fullNameList.length > 2 || fullNameList.length < 1) bResult = false;
-				 else if(fullNameList.length > 1) //First and Last Name with a space
-				 {
-					 if(!(validator.isAlpha(fullNameList[0]) && 
-						  validator.isAlpha(fullNameList[1]) && 
-						  (fullNameList[0].length+fullNameList[1].length) <=70)) bResult = false;
-				 }
-				 else if(!fullNameKor.test(fullNameList[0])) bResult = false;
-			  }
-	
-			  if (data.email == null || validator.isEmpty(data.email) || !validator.isEmail(data.email)) bResult = false;
-			  console.log("bResult=", bResult);
-			  if(bResult)
-			  {
-				  if(parseInt(data.status) == 2)
-					  this.props.addAlertMessage
-					  (
-						{
-							type: "success",
-							text: "You have successfully activated your account on the system! "
-						}
-					  );
-				  else
-					  this.props.addAlertMessage
-					  (
-						{
-							type: "success",
-							text: "You have already activated your account on the system! "
-						}
-					  );
-				
-			  }
-		  }
-		  else
-		  {
-			  bResult = false;
-		  }
-		  return bResult;
-	}
 	render()
 	{
 		//url: https://192.168.1.81:8443/activation?status=2&email=kwon_younggu@yahoo.ca&name=Eye+Care+Provider
 		const params = queryString.parse(this.props.location.search);
-		if(params.status != null && parseInt(params.status) == 3)
-		{
-			
-			this.props.addAlertMessage({turnOn: true, type: "error", level: 2, text: "Oops there is no record with the given! please signup again."});
-			return (<div><Redirect to="/myAccount/signup" /></div>);
-		}
+		if(params.status != null)
+			if (parseInt(params.status) == 3)
+			{
+				this.props.addAlertMessage({turnOn: true, type: "error", level: 2, text: "Oops there is no record with the given! please signup again."});
+				return (<div><Redirect to="/myAccount/signup" /></div>);
+			}
+			else 
+			{
+				if(parseInt(params.status) == 2)
+					this.props.addAlertMessage({turnOn: true, type: "success", level: 2, text: "You have successfully activated your account on the system!"});
+				else if(parseInt(params.status) == 1)
+					this.props.addAlertMessage({turnOn: true, type: "success", level: 2, text: "You have already activated your account on the system!"});
+				else
+					this.props.addAlertMessage({turnOn: true, type: "error", level: 2, text: "Unkwown activation request attempted!!!"});
+			}
+		else
+			this.props.addAlertMessage({turnOn: true, type: "error", level: 2, text: "Unkwown activation request attempted!!!"});
+
 		//do it here with validateParameters
 		return (
-				<div>{this.validateParameters(params) ? <Redirect to={`/myAccount/login?email=${params.email}`} /> : <Redirect to="/myAccount/login" />}</div>
+				<div>{this.props.auth.isAuthenticated ? <Redirect to={"/"} /> : <Redirect to="/myAccount/login" />}</div>
 			   );
 
 	}
@@ -91,7 +49,13 @@ class Activation extends React.Component
 
 Activation.propTypes=
 {
-	addAlertMessage: PropTypes.func.isRequired
+	addAlertMessage: PropTypes.func.isRequired,
+	auth: PropTypes.object.isRequired
 }
-
-export default connect(null, {addAlertMessage})(Activation);
+function mapStateToProps(state) 
+{
+  return {
+		    auth: state.authReducer
+		 };
+}
+export default connect(mapStateToProps, {addAlertMessage})(Activation);

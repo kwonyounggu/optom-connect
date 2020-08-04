@@ -277,6 +277,11 @@ class SignupForm extends React.Component
 					        </Typography>
 						</Grid>
 						<Grid item xs={12}><DisplaySteps activeStep={0}/></Grid>
+						<Grid item xs={12} style={{paddingLeft: '10%', paddingRight: '10%'}}>
+							<Collapse in={this.state.errors.hasOwnProperty('overall')}>
+								<Alert severity="error">{this.state.errors.overall} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3} style={{textAlign: 'right'}}>
 							<strong>Email</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;

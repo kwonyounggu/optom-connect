@@ -22,6 +22,8 @@ import HomeIcon from '@material-ui/icons/Home';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import {StyledBreadcrumb} from "../../../components/common/styledBreadcrumb.jsx";
 
+import {DisplaySteps} from "../signup/signupForm.jsx";
+
 const styles = (theme) =>
 ({
 	paper:
@@ -128,7 +130,10 @@ class LoginForm extends React.Component
 								
 								this.params.prevPath ? this.props.history.push(params.prevPath) : this.props.history.push("/");
 							}
-							//else if (response.data.invalid), see stre.jsx for errrs {key: value}
+							else if (response.data.invalid)
+							{
+								this.setState({errors: response.data.errors, isLoading: false});
+							}
 						}
 					).
 					catch /* Without returning a response object */
@@ -137,7 +142,8 @@ class LoginForm extends React.Component
 						{
 							//Show this error just like email/password in the way making another <Collapse> tag -JULY 28
 							console.log("[ERROR in loginForm.jsx:] ", error);
-							this.setState({isLoading: false, errors: {serverAPI: error+":::"}});
+							this.setState({isLoading: false});
+							//this.setState({isLoading: false, errors: {serverAPI: error+":::"}});
 						}
 					);
 				}
@@ -168,7 +174,16 @@ class LoginForm extends React.Component
 						<Grid item xs={12} style={{textAlign: 'center'}}>
 							<Typography variant="h6">
 						          Login with your email address
-						    </Typography>
+						    </Typography><br />
+							<Typography variant="subtitle2" align={"center"} color={"textSecondary"}>
+					          <span style={{color: 'red'}}>*</span>&nbsp;This field is required
+					        </Typography>
+						</Grid>
+						<Grid item xs={12}><DisplaySteps activeStep={2}/></Grid>
+						<Grid item xs={12} style={{paddingLeft: '10%', paddingRight: '10%'}}>
+							<Collapse in={this.state.errors.hasOwnProperty('overall')}>
+								<Alert severity="error">{this.state.errors.overall} — check it out!</Alert>
+						    </Collapse>
 						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3} style={{textAlign: 'right'}}>
