@@ -3,6 +3,11 @@ import {connect} from "react-redux";
 import {PropTypes} from "prop-types";
 import Alert from '@material-ui/lab/Alert';
 import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
+import {addAlertMessage} from "../../actions/alertMessageActions.jsx";
+
 class GlobalAlert extends React.Component
 {
 	constructor(props)
@@ -13,7 +18,19 @@ class GlobalAlert extends React.Component
 	{
 				
 		return (<Collapse in={this.props.alertState.turnOn} >
-					<Alert severity={this.props.alertState.type}>{this.props.alertState.text}</Alert>
+					<Alert severity={this.props.alertState.type}
+						action={
+						            <IconButton aria-label="close" color="inherit" size="small"
+						              			onClick={
+															() => this.props.addAlertMessage({turnOn: false, type: this.props.alertState.type, level: 2, text: ""})
+														}
+						            >
+						              <CloseIcon fontSize="inherit" />
+						            </IconButton>
+					          }
+					>
+						{this.props.alertState.text}
+					</Alert>
 				</Collapse>
 			   );
 	}
@@ -21,6 +38,7 @@ class GlobalAlert extends React.Component
 
 GlobalAlert.propTypes =
 {
+	addAlertMessage: PropTypes.func.isRequired,
 	alertState: PropTypes.object.isRequired
 };
 
@@ -31,4 +49,4 @@ function mapStateToProps(state)
 	return {alertState: state.alertMessageReducer}
 }
 
-export default connect(mapStateToProps, null)(GlobalAlert);
+export default connect(mapStateToProps, {addAlertMessage})(GlobalAlert);

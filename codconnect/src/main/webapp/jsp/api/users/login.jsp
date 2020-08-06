@@ -17,6 +17,7 @@
 <%
 	response.setContentType("application/json");
     System.err.println("login.jsp is called");
+    //try{Thread.sleep(5000);}catch(InterruptedException e){}
 	if(request.getMethod().equals("POST"))
 	{
 		String payloadString = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));

@@ -17,6 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import {Alert, AlertTitle} from '@material-ui/lab';
 import Collapse from '@material-ui/core/Collapse';
 import { green } from '@material-ui/core/colors';
+import { trackPromise } from 'react-promise-tracker';
 
 import HomeIcon from '@material-ui/icons/Home';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -117,6 +118,7 @@ class LoginForm extends React.Component
 				{errors: {}, isLoading: true}, 
 				() => 
 				{
+					trackPromise(
 					this.props.loginRequest(this.state).then
 					(
 						(response) =>
@@ -128,7 +130,9 @@ class LoginForm extends React.Component
 								
 								this.props.setCurrentUser(jwtDecode(response.data.token));
 								
-								this.params.prevPath ? this.props.history.push(params.prevPath) : this.props.history.push("/");
+								this.params.prevPath ? 
+									(this.params.prevPath.toLowerCase().includes("myaccount") ? this.props.history.push("/") : this.props.history.push(this.params.prevPath)) : 
+									this.props.history.push("/");
 							}
 							else if (response.data.invalid)
 							{
@@ -145,7 +149,8 @@ class LoginForm extends React.Component
 							this.setState({isLoading: false});
 							//this.setState({isLoading: false, errors: {serverAPI: error+":::"}});
 						}
-					);
+					)    
+					); //trackPromise
 				}
 			);
 		}

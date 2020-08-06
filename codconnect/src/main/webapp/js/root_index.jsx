@@ -6,8 +6,11 @@ import ReactDOM from "react-dom";
 
 import {Provider} from "react-redux";
 import store from "./main/store.jsx";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Switch, MemoryRouter} from "react-router-dom";
+
 import {throttle} from "lodash";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker";
+import Loader from 'react-loader-spinner';
 
 import {addAlertMessage} from "./main/actions/alertMessageActions.jsx";
 
@@ -60,9 +63,28 @@ const styles =
 		border: '0px solid red',
 		borderRadius: '8px',
 		backgroundColor: 'inherit'
+	},
+	loadingIndicator:
+	{
+		position: "absolute",
+		width: "100%",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+		margin: 0
 	}
 };
 
+const LoadingIndicator = (props) => 
+{
+   const { promiseInProgress } = usePromiseTracker({delay: 0});
+
+   return promiseInProgress && 
+		  <div style={styles.loadingIndicator}>
+	      	<Loader type="ThreeDots" color="#2BAD60" height="100" width="100" />
+	      </div>  
+}
 class MainApp extends React.Component
 {
 	//This screen size can be changed based on the size of user's screen. May 10 2020'
@@ -116,11 +138,15 @@ class MainApp extends React.Component
 		
         return(
         		<Provider store={store}>
-		        	<BrowserRouter>
+		        	<MemoryRouter>
 						<Route component={(props) => <NavRoot {...props} isLargeScreen={this.state.isLargeScreen} changeBodyMargin={this.changeBodyMargin}/> } />
-        				<React.Suspense fallback={<div>Component being loaded ... </div>}>	
+        				<React.Suspense fallback={<div style={styles.loadingIndicator}><Loader type="ThreeDots" color="#2BAD60" height="100" width="100" /></div>}>	
+							<LoadingIndicator />
+							
 							<div ref={this.bodyContainer} style={this.state.isLargeScreen ? {marginLeft: DRAWER_WIDTH+'px', marginTop: '70px'} : {marginLeft: 0, marginTop: '70px'}}>
-							    <GlobalAlert />
+							    
+								<GlobalAlert />
+								
 								<div style={styles.gridPanel}> 
 			                    <Switch>
 			                        <Route exact path="/"    component={ (props) => <Home {...props} /> } /> 
@@ -143,7 +169,7 @@ class MainApp extends React.Component
 	        				</div>
         				</React.Suspense>
         					 
-		            </BrowserRouter>
+		            </MemoryRouter>
     			</Provider>
               );
     }
@@ -152,6 +178,6 @@ class MainApp extends React.Component
 
 ReactDOM.render
 (  
-    <MainApp />,
+	<MainApp />,
 	window.document.getElementById("app")
 );

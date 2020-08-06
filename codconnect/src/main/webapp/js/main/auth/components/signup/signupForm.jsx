@@ -43,6 +43,8 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 
+import { trackPromise } from 'react-promise-tracker';
+
 const styles = (theme) =>
 ({
 	paper:
@@ -193,7 +195,6 @@ class SignupForm extends React.Component
 		console.log(errors);
 		return isValid;
 	}
-	
 
 	onSubmit(e)
 	{
@@ -205,6 +206,7 @@ class SignupForm extends React.Component
 		if(this.isValid())
 		{
 			this.setState({errors: {}, isLoading: true});
+			trackPromise(
 			this.props.userSignupRequest
 			(
 				{
@@ -239,7 +241,8 @@ class SignupForm extends React.Component
 					console.log("ERROR: ", error);
 					this.setState({isLoading: false, errors: {serverAPI: error+":::"}});
 				}
-			);
+			)
+			);//trackPromise(
 		}
 		this.setState({openBackdrop: false});
 	}
@@ -422,91 +425,7 @@ class SignupForm extends React.Component
 				</Grid>
 			  );
 	}
-	renderOrg()
-	{
-		//const {errors} = this.state;
-		const options = map(timezones, (val, key) => <option key={val} value={val}>{key}</option>);
-		
-		return(
-				<Form onSubmit={this.onSubmit}>
-					<h1>Join our community!</h1>
-					{this.state.errors.serverAPI && 
-						<Alert bsStyle="danger" >
-							<h4>{this.state.errors.serverAPI.split(":::")[0]}</h4>
-							<h6>{this.state.errors.serverAPI.split(":::")[1]}</h6>
-						</Alert>
-					}
-					<FieldGroup
-						id="fullName"
-					 	type="text"
-					    label="Full Name"
-						value={this.state.fullName}
-						name="fullName"
-					    placeholder={FullNameKoreanPlaceholder}
-						onChange={this.onChange}
-						help={this.state.errors.fullName}
-				    />
-					<FieldGroup
-						id="email"
-					 	type="email"
-					    label="Email"
-						value={this.state.email}
-						checkUserExists={this.checkUserExists}
-						name="email"
-					    placeholder="example@example.com"
-						onChange={this.onChange}
-						help={this.state.errors.email}
-					/>
-					<FieldGroup
-						id="password"
-					 	type="password"
-					    label="Password"
-						value={this.state.password}
-						name="password"
-					    placeholder="Enter your password"
-						onChange={this.onChange}
-						help={this.state.errors.password}
-				    />
-					<FieldGroup
-						id="passwordConfirmation"
-					 	type="password"
-					    label="Password Confirmation"
-						value={this.state.passwordConfirmation}
-						name="passwordConfirmation"
-					    placeholder="Enter your password again"
-						onChange={this.onChange}
-						help={this.state.errors.passwordConfirmation}
-				    />
-					<FormGroup validationState={this.state.errors.timezone ? "error": null}>
-				      <ControlLabel>Timezone</ControlLabel>
-				      <FormControl componentClass="select" value={this.state.timezone} name="timezone" onChange={this.onChange} placeholder="Choose your timezone">
-				      	<option value="" disabled>Choose Your Timezone</option>
-				      	{options}
-				      </FormControl>
-				    </FormGroup>
-				    <FormGroup  validationState= "error">
-				      <Recaptcha    	
-						sitekey={siteKey}
-						render="explicit"
-						verifyCallback={this.verifyCallbackBot}
-						onloadCallback={this.callbackBot}
-						expiredCallback={this.expiredCallbackBot}
-						size="compact"
-					   />
-				      <ControlLabel>{this.state.errors.isHuman ? this.state.errors.isHuman:""}</ControlLabel>
-					</FormGroup>
-				      
-				  
-					<FormGroup >
-				      	<div>By clicking Sign Up, I agree to the <a href="#" onClick={this.onOpenModal} ref="terms" onFocus={this.onTermsFocus}>Terms and Conditions</a>.
-				      	</div>
-						<Button disabled={this.state.isLoading} type="submit">Sign Up</Button>
-						<TermsConditionsModal {...this.props} show={this.state.showModal} onHide={this.onCloseModal} />
 
-					</FormGroup>
-				</Form>
-			  );
-	}
 }
 SignupForm.propTypes =
 {
