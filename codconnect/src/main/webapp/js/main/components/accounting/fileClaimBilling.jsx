@@ -2,10 +2,9 @@ import React from "react";
 import PropTypes from 'prop-types';
 import {withStyles} from "@material-ui/core/styles";
 import Typography from '@material-ui/core/Typography';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 
 import Grid from '@material-ui/core/Grid';
-import Tooltip from '@material-ui/core/Tooltip';
+
 import InputMask from "react-input-mask";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -22,6 +21,8 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import IconButton from '@material-ui/core/IconButton';
 import {Alert, AlertTitle} from '@material-ui/lab';
+import { trackPromise } from 'react-promise-tracker';
+
 
 import FileClaimBillingSummary from './fileClaimBillingSummary.jsx';
 
@@ -277,7 +278,7 @@ class FileClaimBilling extends React.Component
 				//call server for the claim file
 				console.log("[INFO, No errors in all columns]: ", isAllValid);
 				let dataToServer = {careProviderNumber: this.state.careProviderNumber, ohipClaimList: this.state.ohipClaimList};
-				this.props.getClaimFile(dataToServer);
+				trackPromise(this.props.getClaimFile(dataToServer));
 				localStorage.setItem("claimFileData", JSON.stringify(dataToServer));
 			}
 			this.setState({isFormValid: isAllValid});

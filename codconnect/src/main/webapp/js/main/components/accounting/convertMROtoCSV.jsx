@@ -10,7 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
 import Alert from '@material-ui/lab/Alert';
 import Collapse from '@material-ui/core/Collapse';
-import CircularProgress from '@material-ui/core/CircularProgress';
+
 import Button from '@material-ui/core/Button';
 import { green } from '@material-ui/core/colors';
 import ReactToPrint from "react-to-print";
@@ -23,6 +23,8 @@ import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
 import RAReport from "./raReport.jsx";
 import ClaimErrorReport from "./claimErrorReport.jsx";
 import BatchEditReport from "./batchEditReport.jsx";
+
+import { trackPromise } from 'react-promise-tracker';
 
 const styles = (theme) =>
 ({
@@ -51,11 +53,6 @@ const styles = (theme) =>
 	{
 		backgroundColor: '#fcfaf5',
 		padding: '10px 25px 10px 25px'
-	},
-	wrapper: 
-	{
-	    margin: theme.spacing(1),
-	    position: 'relative'
 	},
 	buttonProgress: 
 	{
@@ -115,19 +112,15 @@ class ConvertMROtoCSV extends React.Component
 	  */
 		
 		//console.info('[REGEX]: ', EXPECTED_FILE_NAME.test("EL990000.123"));
-		
-		//When you are here, check if any previous data is allocated and nullify before choosing a file for conversion
-		//if (this.props.rootReducer.convertFetched && this.props.rootReducer.data.isItValid) this.props.resetMROData();
-
 	}
 	componentDidUpdate(prevProps, prevState)
 	{
-		console.log("[INFO componentDidUpdate(...) of convertMROtoCSV.jsx] nextProps.rootReducer: " , prevProps.rootReducer);
+		//console.log("[INFO componentDidUpdate(...) of convertMROtoCSV.jsx] nextProps.rootReducer: " , prevProps.rootReducer);
 	}
 	onChangeHandler = (event) =>
 	{
 		if (!event.target.files[0]) return; //it may be undefined due to unselection
-    	console.log("file: ", event.target.files[0], "|", typeof event.target.files[0].size);
+    	//console.log("file: ", event.target.files[0], "|", typeof event.target.files[0].size);
 		let fileName = event.target.files[0].name;
 		
 		this.setState
@@ -147,12 +140,12 @@ class ConvertMROtoCSV extends React.Component
 	*/
 	onConvertButtonClick = () =>
 	{
-		this.setState({converting: true});
+		this.setState({converting: true, returnStatus: 0, returnMessage: ""});
 
 		const data = new FormData();
 		data.append('mroFile', this.state.mroFile);
-		this.setState({returnStatus: 0, returnMessage: ""});
-		this.props.convertMroToCSV(data);
+	
+		trackPromise(this.props.convertMroToCSV(data));
 	}
 	render()
 	{
@@ -246,7 +239,6 @@ class ConvertMROtoCSV extends React.Component
 									    </Collapse>
 									</Grid>
 									<Grid item>
-										<div className={classes.wrapper}>
 									        <Button
 									          variant="contained"
 									          color="primary"
@@ -255,8 +247,6 @@ class ConvertMROtoCSV extends React.Component
 									        >
 									          Convert to Excel CSV
 									        </Button>
-									        {this.state.converting && <CircularProgress size={24} className={classes.buttonProgress} />}
-									    </div>
 									</Grid>
 								</Grid>
 							</Paper>

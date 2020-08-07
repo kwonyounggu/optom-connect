@@ -15,7 +15,7 @@
 
 <%
 	response.setContentType("application/json");
-	
+	//try{Thread.sleep(5000);}catch(InterruptedException e){}
 	
 	/*
 		See https://stackoverflow.com/questions/8100634/get-the-post-request-body-from-httpservletrequest

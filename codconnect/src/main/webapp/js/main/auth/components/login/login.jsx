@@ -12,12 +12,12 @@ class Login extends React.Component
 	constructor(props)
 	{
 		super(props);
-		console.log("INFO (constructor() of login.jsx, this.props: ", this.props);
+		//console.log("INFO (constructor() of login.jsx, this.props: ", this.props);
 	}
 	
 	render()
 	{
-		console.log("----INFO (render() of login.jsx) is called------");
+		//console.log("----INFO (render() of login.jsx) is called------");
 		
 		return (
 				<Grid container>

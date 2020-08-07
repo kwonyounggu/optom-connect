@@ -2,7 +2,7 @@ import React from "react";
 //import {Form, FormGroup,  FormControl, HelpBlock, Button, Alert} from "react-bootstrap";
 
 import {Link} from "react-router-dom";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import timezones from "../../data/timezones.jsx";
 import {PropTypes} from "prop-types";
 import map from "lodash/map";
@@ -36,9 +36,6 @@ import {StyledBreadcrumb} from "../../../components/common/styledBreadcrumb.jsx"
 
 import TermsCondition from "../../../data/termsfeed-privacy-policy-html-english.html";
 
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -52,10 +49,6 @@ const styles = (theme) =>
 		backgroundColor: '#fcfaf5',
 		padding: '10px 25px 10px 25px'
 	},
-	backdrop: 
-	{
-	    zIndex: theme.zIndex.drawer + 1
-    },
 	buttonProgress: 
 	{
 	    color: green[500],
@@ -79,6 +72,13 @@ const styles = (theme) =>
 	}
 });
 
+const useStyles = makeStyles((theme) => 
+({
+	stepper:
+	{
+		backgroundColor: 'inherit'
+	}
+}));
 export const MyBreadcrumbs = (props) => 
 {
 	//console.info("MyBreadscrumbs: props, ", props.location.pathname);
@@ -110,8 +110,9 @@ const steps = ['SignUp', 'Activation/Confirmation by email', 'Login'];
 
 export const DisplaySteps = (props) =>
 {
+	const classes = useStyles();
 	return (
-			 <Stepper alternativeLabel nonLinear activeStep={props.activeStep}>
+			 <Stepper alternativeLabel nonLinear activeStep={props.activeStep} className={classes.stepper}>
 		     {
 				steps.map
 				(
@@ -143,8 +144,7 @@ class SignupForm extends React.Component
 			invalid: false,
 			isHuman: false,
 			showTermsCondition: false,
-			agreeTermsCondition: false,
-			openBackdrop: false
+			agreeTermsCondition: false
 		};
 		
 		this.onChange = this.onChange.bind(this);
@@ -198,7 +198,6 @@ class SignupForm extends React.Component
 
 	onSubmit(e)
 	{
-		this.setState({openBackdrop: true});
 		e.preventDefault();
 		console.log("---INFO (onSubmit() of signupForm.jsx) is called---, ",this.state);
 		if (this.state.showTermsCondition) this.setState({showTermsCondition: false}); //close if it is open
@@ -220,10 +219,11 @@ class SignupForm extends React.Component
 			(
 				(response) =>
 				{
-					console.log("successful, the response object=",response);
+					//console.log("successful, the response object=",response);
+					this.setState({isLoading: false});
 					if(response.data.invalid)
 					{
-						this.setState({errors: response.data.errors, isLoading: false});
+						this.setState({errors: response.data.errors});
 					}
 					else
 					{
@@ -236,15 +236,23 @@ class SignupForm extends React.Component
 			(
 				(error) =>			
 				{
-					/*show this error in a page or a top of the current page - Oct-19-2017*/
-					/*this error consists of an html page cotents*/
-					console.log("ERROR: ", error);
-					this.setState({isLoading: false, errors: {serverAPI: error+":::"}});
+					console.log("[INFO in catch error of Submit() in signupForm.jsx]: ", error);
+					this.setState({isLoading: false, errors: {overall: error}});
 				}
 			)
+			/*.
+			finally
+			(
+				() =>
+				{
+					//console.log("[INFO in finally of Submit() in signupForm.jsx]: ", params);
+					this.setState({isLoading: false});
+				}
+				
+			)*/
+			
 			);//trackPromise(
 		}
-		this.setState({openBackdrop: false});
 	}
 
     render()
@@ -408,7 +416,7 @@ class SignupForm extends React.Component
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Button variant="outlined" color="primary" onClick={this.onSubmit}>Sign Up</Button>
+							<Button variant="outlined" color="primary" disabled={this.state.isLoading} onClick={this.onSubmit}>Sign Up</Button>
 						</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
@@ -416,11 +424,6 @@ class SignupForm extends React.Component
 						</Grid>
 						</Grid>
 					</Paper> 
-				  </Grid>
-				  <Grid item xs={12}>
-					<Backdrop className={classes.backdrop} open={this.state.openBackdrop} invisible={true} onClick={()=>this.setState({openBackdrop: false})}>
-				        <CircularProgress color="primary" />
-				     </Backdrop>
 				  </Grid>
 				</Grid>
 			  );

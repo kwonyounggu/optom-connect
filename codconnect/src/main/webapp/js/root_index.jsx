@@ -138,7 +138,7 @@ class MainApp extends React.Component
 		
         return(
         		<Provider store={store}>
-		        	<MemoryRouter>
+		        	<BrowserRouter>
 						<Route component={(props) => <NavRoot {...props} isLargeScreen={this.state.isLargeScreen} changeBodyMargin={this.changeBodyMargin}/> } />
         				<React.Suspense fallback={<div style={styles.loadingIndicator}><Loader type="ThreeDots" color="#2BAD60" height="100" width="100" /></div>}>	
 							<LoadingIndicator />
@@ -169,7 +169,7 @@ class MainApp extends React.Component
 	        				</div>
         				</React.Suspense>
         					 
-		            </MemoryRouter>
+		            </BrowserRouter>
     			</Provider>
               );
     }

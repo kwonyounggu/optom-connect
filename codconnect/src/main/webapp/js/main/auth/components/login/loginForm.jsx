@@ -123,7 +123,8 @@ class LoginForm extends React.Component
 					(
 						(response) =>
 						{
-							console.log("successful, the response object=",response);
+							//console.log("successful, the response object=",response);
+							this.setState({isLoading: false});
 							if(!response.data.invalid)
 							{
 								setAuthorizationToken(response.data.token);
@@ -136,20 +137,18 @@ class LoginForm extends React.Component
 							}
 							else if (response.data.invalid)
 							{
-								this.setState({errors: response.data.errors, isLoading: false});
+								this.setState({errors: response.data.errors});
 							}
 						}
 					).
-					catch /* Without returning a response object */
+					catch
 					(
 						(error) =>			
 						{
-							//Show this error just like email/password in the way making another <Collapse> tag -JULY 28
-							console.log("[ERROR in loginForm.jsx:] ", error);
-							this.setState({isLoading: false});
-							//this.setState({isLoading: false, errors: {serverAPI: error+":::"}});
+							console.log("[INFO in catch error of Submit() in loginForm.jsx]: ", error);
+							this.setState({isLoading: false, errors: {overall: error}});
 						}
-					)    
+					)
 					); //trackPromise
 				}
 			);
@@ -222,7 +221,7 @@ class LoginForm extends React.Component
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Button variant="outlined" color="primary" onClick={this.onSubmit}>Log In</Button>
+							<Button variant="outlined" color="primary" disabled={this.state.isLoading} onClick={this.onSubmit}>Log In</Button>
 						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
