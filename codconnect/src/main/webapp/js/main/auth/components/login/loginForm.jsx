@@ -16,7 +16,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
 import {Alert, AlertTitle} from '@material-ui/lab';
 import Collapse from '@material-ui/core/Collapse';
-import { green } from '@material-ui/core/colors';
+
 import { trackPromise } from 'react-promise-tracker';
 
 import HomeIcon from '@material-ui/icons/Home';
@@ -31,15 +31,6 @@ const styles = (theme) =>
 	{
 		backgroundColor: '#fcfaf5',
 		padding: '10px 25px 10px 25px'
-	},
-	buttonProgress: 
-	{
-	    color: green[500],
-	    position: 'absolute',
-	    top: '50%',
-	    left: '50%',
-	    marginTop: -12,
-	    marginLeft: -12,
 	}
 });
 
@@ -76,7 +67,8 @@ class LoginForm extends React.Component
 		    password: "",
 		    errors: {},
 		    isLoading: false,
-			invalid: false
+			invalid: false,
+			keepMeLoggedIn: true
 		};
 		
 		this.onChange = this.onChange.bind(this);
@@ -216,7 +208,7 @@ class LoginForm extends React.Component
 						</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Checkbox defaultChecked color="primary"/>&nbsp;<span>Keep me logged in</span>
+							<Checkbox checked={this.state.keepMeLoggedIn} onChange={(e)=>this.setState({keepMeLoggedIn: e.target.checked})} color="primary"/>&nbsp;<span>Keep me logged in</span>
 						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>

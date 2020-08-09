@@ -109,9 +109,8 @@
 					{
 						if (ab.getAuthUserAccountStatusId() == 1)//Normally confirmation done
 						{
-							//TokenUtil tokenUtil = new TokenUtil();
 							TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
-							jsonObj.put("token", tokenUtil.getJWT(jsonObj.getString("email"), ab.getFullName(), "internalLogin", TokenUtil.expMinutes*60*1000));
+							jsonObj.put("token", tokenUtil.getJWT(jsonObj.getString("email"), ab.getFullName(), "internalLogin", (jsonObj.getBoolean("keepMeLoggedIn") ? 0 : -1)));
 						}
 						else //Activation or Confirmation is not done
 						{
@@ -130,6 +129,7 @@
 				//Clean unnecessary properties from the jsonObj
 				jsonObj.remove("email");
 				jsonObj.remove("password");
+				jsonObj.remove("isLoading");
 			}
 		}
 		catch(Exception e)

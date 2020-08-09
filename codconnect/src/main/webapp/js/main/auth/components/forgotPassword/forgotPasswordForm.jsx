@@ -1,9 +1,17 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {Form, FormGroup, FormControl, HelpBlock, Button, Alert} from "react-bootstrap";
+import { withStyles } from "@material-ui/core/styles";
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Collapse from '@material-ui/core/Collapse';
+import {Alert, AlertTitle} from '@material-ui/lab';
+
+import { trackPromise } from 'react-promise-tracker';
 
 import {PropTypes} from "prop-types";
-import FieldGroup from "../../../components/common/fieldGroup.jsx";
+
 import queryString from "query-string";
 
 import validator from "validator";
@@ -11,6 +19,42 @@ import isEmpty from "lodash/isEmpty";
 
 import {siteKey} from "../../../utils/utils.jsx";
 import Recaptcha from "react-recaptcha";
+
+import HomeIcon from '@material-ui/icons/Home';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import {StyledBreadcrumb} from "../../../components/common/styledBreadcrumb.jsx";
+
+import {DisplaySteps} from "../signup/signupForm.jsx";
+
+const styles = (theme) =>
+({
+	paper:
+	{
+		backgroundColor: '#fcfaf5',
+		padding: '10px 25px 10px 25px'
+	}
+});
+
+const MyBreadcrumbs = (props) => 
+{
+	console.info("MyBreadscrumbs: props, ", props);
+	let path = props.location.pathname.split("\/");
+    return (
+		    <Breadcrumbs aria-label="breadcrumb" maxItems={2}>
+				{
+					path.map
+					(
+						(item, i) =>
+						(
+						   (i == 0) ? 
+								<StyledBreadcrumb key={i} component="a" href="/" label="Home" icon={<HomeIcon fontSize="small" />}/> : 
+								<StyledBreadcrumb key={i} component="a" href={props.location.pathname.substring(0, props.location.pathname.indexOf(item)+item.length)} label={item}/>
+						)
+					)
+				}
+		    </Breadcrumbs>
+		  );
+}
 
 class ForgotPasswordForm extends React.Component
 {
@@ -128,8 +172,86 @@ class ForgotPasswordForm extends React.Component
 	}
 	
 	render()
-	{
-		return (<div>forgot form</div>);
+	{	
+		const {classes} = this.props;
+		return(
+				<Grid container spacing={1}>
+			      <Grid item xs={12}>
+			        <Typography variant="h6">
+			          FORGOT PASSWORD
+			        </Typography>
+			      </Grid>
+				  <Grid item xs={10}>
+			        <MyBreadcrumbs {...this.props} />
+			      </Grid>
+				  <Grid item xs={12}>
+			       	<hr />
+			      </Grid>
+				  <Grid item xs={12}>
+			       	<Paper variant="outlined" className={classes.paper}>
+					  <Grid container>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={12} style={{textAlign: 'center'}}>
+							<Typography variant="h6">
+						          Enter your email, then we'll email you a password reset link.
+						    </Typography><br />
+							<Typography variant="subtitle2" align={"center"} color={"textSecondary"}>
+					          <span style={{color: 'red'}}>*</span>&nbsp;This field is required
+					        </Typography>
+						</Grid>
+						<Grid item xs={12}><DisplaySteps activeStep={2}/></Grid>
+						<Grid item xs={12} style={{paddingLeft: '10%', paddingRight: '10%'}}>
+							<Collapse in={this.state.errors.hasOwnProperty('overall')}>
+								<Alert severity="error">{this.state.errors.overall} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3} style={{textAlign: 'right'}}>
+							<strong>Email</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+						</Grid>
+						<Grid item xs={9} style={{textAlign: 'left'}}>
+							<input name="email" type="email" value={this.state.email} onChange={this.onChange} placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>		
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('email')}>
+								<Alert severity="error" style={{width: '70%'}}>{this.state.errors.email} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							{/* https://www.google.com/recaptcha/admin/site/431367291/settings used domain with 192.168.1.81 */}
+							<Recaptcha    	
+								sitekey={"6Ld7JLYZAAAAAO_-4oa94JbgLHKBOIDeUZG3LYAI"}
+								render="explicit"
+								verifyCallback={this.verifyCallbackBot}
+								onloadCallback={this.callbackBot}
+								expiredCallback={this.expiredCallbackBot}
+								size="compact"
+							   />
+						</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}>
+							<Collapse in={this.state.errors.hasOwnProperty('isHuman')}>
+								<Alert severity="error" style={{width: '70%'}}>{this.state.errors.isHuman} — check it out!</Alert>
+						    </Collapse>
+						</Grid>
+
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Button variant="outlined" color="primary" disabled={this.state.isLoading} onClick={this.onSubmit}>Submit</Button>
+						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={3}>&nbsp;</Grid>
+						<Grid item xs={9}  style={{textAlign: 'left'}}>
+							<Button size="small" color="primary" component={Link} to="/myAccount/login"> Back to Login? </Button>
+						</Grid>
+						</Grid>
+					</Paper> 
+				  </Grid>
+				</Grid>
+			  );
 	}
 	renderOrg()
 	{	
@@ -180,10 +302,5 @@ ForgotPasswordForm.propTypes =
 		forgotPasswordRequest: PropTypes.func.isRequired,
 		addAlertMessage: PropTypes.func.isRequired
 };
-//This allows to use this.context.router...
-ForgotPasswordForm.contextTypes =
-{
-		router: PropTypes.object.isRequired
-};
-export default ForgotPasswordForm;
 
+export default withStyles(styles)(ForgotPasswordForm);

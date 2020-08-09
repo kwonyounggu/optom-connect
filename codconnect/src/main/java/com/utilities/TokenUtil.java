@@ -32,6 +32,10 @@ public class TokenUtil
 	private static final byte[] secretBytes = secret.getEncoded();
 	private static final String base64SecretBytes = java.util.Base64.getEncoder().encodeToString(secretBytes);
 	
+	/*
+	 * Note if (ttlMillis == -1) then 'Keep me logged in' is false
+	 * 		else if (ttlMillis >= 0 ) then 'Keep me logged in' is true
+	 */
 	public String getJWT(String id, String issuer, String subject, long ttlMillis)
 	{
 		long nowMills = System.currentTimeMillis();
@@ -49,15 +53,15 @@ public class TokenUtil
 			c.add(Calendar.DATE, expDays);
 			//c.add(Calendar.MINUTE, 1);
 			builder.setExpiration(c.getTime());
-			
-			
-			/* The following are used to set expMinutes
-			long expMillis = nowMills + ttlMillis;
-			Date exp = new Date(expMillis);
-			builder.setExpiration(exp);
-			***********************************************/
 		}
-		
+		else if(ttlMillis == -1) //'keep me logged in' is off/false
+		{
+			Calendar c = Calendar.getInstance();
+			c.setTime(now);
+			//c.add(Calendar.DATE, expDays);
+			c.add(Calendar.HOUR, 2);//set 2 hours of expiration from the current time
+			builder.setExpiration(c.getTime());
+		}
 		return builder.compact();
 	}
 	

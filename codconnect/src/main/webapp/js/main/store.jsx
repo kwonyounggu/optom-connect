@@ -27,7 +27,7 @@ if (localStorage.authToken)
 	//if the token is expired after 365 days then call logout so that it will clean localStorage
 
 	let user = jwtDecode(localStorage.authToken);
-	console.log("[INFO in store.jsx] token expire time: " + new Date(user.exp * 1000) +" | current time: " + new Date());
+	console.log("[INFO in store.jsx] user: ", user, " | token expire time: " + new Date(user.exp * 1000) +" | current time: " + new Date());
 	if (user.exp < (Date.now()/1000)) 
 	{
 		console.log("[INFO in store.jsx]: the access token is expired.");

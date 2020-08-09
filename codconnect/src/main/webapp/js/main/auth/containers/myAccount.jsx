@@ -9,6 +9,7 @@ const Login = React.lazy( () => import("../components/login/login.jsx") );
 const Signup = React.lazy( () => import("../components/signup/signup.jsx") );
 const Activation = React.lazy( () => import("../components/signup/activation.jsx") );
 const ResetPassword = React.lazy( () => import("../components/resetPassword/resetPassword.jsx") );
+const ForgotPassword = React.lazy( () => import("../components/forgotPassword/forgotPassword.jsx") );
 
 const styles = (theme) =>
 ({
@@ -50,6 +51,7 @@ class MyAccount extends React.Component
                     <Switch>
 						<Redirect exact from="/myAccount" to="/myAccount/login" />
 						<Route path="/myAccount/login"  component={ (props) => <Login {...props} />} />
+						<Route path="/myAccount/forgotPassword"  component={ (props) => <ForgotPassword {...props} /> } /> 
 						<Route path="/myAccount/resetPassword"  component={ (props) => <ResetPassword {...props} /> } /> 
 						<Route path="/myAccount/signup"    component={ (props) => <Signup {...props} /> } /> 
 						<Route path="/myAccount/activation"     component={ (props) => <Activation {...props} /> } />
