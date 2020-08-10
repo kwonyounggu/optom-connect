@@ -84,7 +84,7 @@ public class ActivateServlet extends HttpServlet
 						AuthUserDetailsInternalBean ab = authDao.getRecord(token, "password_reminder_token");
 						if(ab.getId()>0)//there exists a record
 						{
-							/*
+							/* Aug 10 2020 - Ignore about TOKEN EXPIRE
 							 * Think of no cron jobs for this password_reminder_token then what possible cases could be
 							 * Note that status==1: Go ahead for resetting
 							 * 			 status==2: Expired
@@ -99,9 +99,12 @@ public class ActivateServlet extends HttpServlet
 							 * 		-show 'warning that time 'Your request to reset a new password is expired, please do again'
 							 * 		-nullify two fields
 							 * */
+							
+							//The following if-statement is commented in Aug 10 2020 because of no consideration about EXPIRE
+							/*
 							if(ab.getPasswordReminderExpire().after(new Timestamp(System.currentTimeMillis())))
 								response.sendRedirect(request.getContextPath()+"/myAccount/resetPassword?status=1&email="+ab.getEmail()+"&token="+ab.getPasswordReminderToken()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));						
-							else
+							else */
 								response.sendRedirect(request.getContextPath()+"/myAccount/resetPassword?status=2&email="+ab.getEmail()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));						
 						}
 						else

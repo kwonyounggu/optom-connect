@@ -37,7 +37,7 @@ const styles = (theme) =>
 
 const MyBreadcrumbs = (props) => 
 {
-	console.info("MyBreadscrumbs: props, ", props);
+	//console.info("MyBreadscrumbs: props, ", props);
 	let path = props.location.pathname.split("\/");
     return (
 		    <Breadcrumbs aria-label="breadcrumb" maxItems={2}>
@@ -135,39 +135,34 @@ class ForgotPasswordForm extends React.Component
 		if(this.isValid())
 		{
 			this.setState({errors: {}, isLoading: true});
-			
-			this.props.forgotPasswordRequest(this.state).then
+			trackPromise(
+			this.props.forgotPasswordRequest({email: this.state.email, errors: {}}).then
 			(
 				(response) =>
 				{
 					console.log("successful, the response object=",response);
+
+					this.setState({isLoading: false});
 					if(response.data.invalid)
 					{
-						this.setState({errors: response.data.errors, isLoading: false});
+						this.setState({errors: response.data.errors});
 					}
 					else
 					{
-						this.props.addAlertMessage
-						(
-							{
-								type: "success",
-								text: "Please check your email for the password reset link."
-							}
-						);
-						this.context.router.history.push("/");
-					}
+						this.props.addAlertMessage({turnOn: true, type: "success", level: 2, text: "Please check your email for the password reset link!!"});
+						this.props.history.push("/myAccount/login");
+					}	
 				}
 			).
 			catch
 			(
 				(error) =>			
 				{
-					/*show this error in a page or a top of the current page - Oct-19-2017*/
-					/*this error consists of an html page cotents*/
-					console.log("ERROR: ", error);
-					this.setState({isLoading: false, errors: {serverAPI: error+":::"}});
+					console.log("[INFO in catch error of Submit() in forgotpaswordForm.jsx]: ", error);
+					this.setState({isLoading: false, errors: {overall: error}});
 				}
-			);
+			)
+			);//trackPromise
 		}
 	}
 	
@@ -194,12 +189,9 @@ class ForgotPasswordForm extends React.Component
 						<Grid item xs={12} style={{textAlign: 'center'}}>
 							<Typography variant="h6">
 						          Enter your email, then we'll email you a password reset link.
-						    </Typography><br />
-							<Typography variant="subtitle2" align={"center"} color={"textSecondary"}>
-					          <span style={{color: 'red'}}>*</span>&nbsp;This field is required
-					        </Typography>
+						    </Typography>
 						</Grid>
-						<Grid item xs={12}><DisplaySteps activeStep={2}/></Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={12} style={{paddingLeft: '10%', paddingRight: '10%'}}>
 							<Collapse in={this.state.errors.hasOwnProperty('overall')}>
 								<Alert severity="error">{this.state.errors.overall} — check it out!</Alert>
@@ -207,7 +199,7 @@ class ForgotPasswordForm extends React.Component
 						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3} style={{textAlign: 'right'}}>
-							<strong>Email</strong>&nbsp;<span style={{color: 'red'}}>*</span>&nbsp;:&nbsp;
+							<strong>Email</strong>&nbsp;:&nbsp;
 						</Grid>
 						<Grid item xs={9} style={{textAlign: 'left'}}>
 							<input name="email" type="email" value={this.state.email} onChange={this.onChange} placeholder="email@example.com" style={{padding: '5px', width: '70%'}}/>		
@@ -218,11 +210,12 @@ class ForgotPasswordForm extends React.Component
 								<Alert severity="error" style={{width: '70%'}}>{this.state.errors.email} — check it out!</Alert>
 						    </Collapse>
 						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
 							{/* https://www.google.com/recaptcha/admin/site/431367291/settings used domain with 192.168.1.81 */}
 							<Recaptcha    	
-								sitekey={"6Ld7JLYZAAAAAO_-4oa94JbgLHKBOIDeUZG3LYAI"}
+								sitekey={siteKey}
 								render="explicit"
 								verifyCallback={this.verifyCallbackBot}
 								onloadCallback={this.callbackBot}
@@ -251,49 +244,6 @@ class ForgotPasswordForm extends React.Component
 					</Paper> 
 				  </Grid>
 				</Grid>
-			  );
-	}
-	renderOrg()
-	{	
-		return(
-				<Form onSubmit={this.onSubmit}>
-					<h1>Forgot Password?</h1>
-					{this.state.errors.serverAPI && 
-						<Alert bsStyle="danger" >
-							<h4>{this.state.errors.serverAPI.split(":::")[0]}</h4>
-							<h6>{this.state.errors.serverAPI.split(":::")[1]}</h6>
-						</Alert>
-					}
-
-					<h4>Enter your email, then we'll email you a password reset link.</h4>
-					<FieldGroup
-						id="email"
-					 	type="email"
-					    label="Email"
-						value={this.state.email}
-						name="email"
-					    placeholder="example@example.com"
-						onChange={this.onChange}
-						help={this.state.errors.email}
-					/>
-					<FormGroup  validationState= "error">
-				      <Recaptcha    	
-						sitekey={siteKey}
-						render="explicit"
-						verifyCallback={this.verifyCallbackBot}
-						onloadCallback={this.callbackBot}
-						expiredCallback={this.expiredCallbackBot}
-						size="compact"
-					   />
-				      <ControlLabel>{this.state.errors.isHuman ? this.state.errors.isHuman:""}</ControlLabel>
-					</FormGroup>
-					<FormGroup >
-						<Button disabled={this.state.isLoading} type="submit">Submit</Button>
-					</FormGroup>
-					<FormGroup >
-						<Link to="/login">Back to Login?</Link>
-					</FormGroup>
-				</Form>
 			  );
 	}
 }

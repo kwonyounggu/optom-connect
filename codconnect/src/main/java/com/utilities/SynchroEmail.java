@@ -27,7 +27,7 @@ public class SynchroEmail extends Authenticator
       /*
        * Instantiate the following constructor if you want to use 'Signup Confirmation'
        */
-      public SynchroEmail(List<String> toAddr, List<String> name, String subject, String message, AuthUserDetailsInternalBean ab) throws EmailException
+      public SynchroEmail(List<String> toAddr, List<String> name, String subject, String message, AuthUserDetailsInternalBean ab, boolean isSignUp) throws EmailException
       {
     	  try
     	  {
@@ -94,11 +94,21 @@ public class SynchroEmail extends Authenticator
 	    	  log.info("EMail from "+Utils.SMPT_SENDER+" to "+toAddr+" was sent successfully.");
 
  	     }
+    	 catch (SendFailedException se)
+    	 {
+    		 log.severe("(SendFailedException) Unable to email to "+toAddr+" in using Yahoo SMPT Server, SynchroEmail.java");
+ 	    	 if(ab != null && ab.getId() > 0 && isSignUp)
+ 	    	 {
+ 	    		 //Delete records if not successful in email of Signup Confirmation
+ 	    		 new AuthDao(DatasourceUtil.getDataSource()).deleteRecords(ab);
+ 	    	 }
+        	 throw new EmailException(se);
+    	 }
  	     catch (Exception e) 
  	     {
 
- 	    	 log.severe("Unable to email to "+toAddr+" in using Yahoo SMPT Server.java");
- 	    	 if(ab != null && ab.getId() > 0)
+ 	    	 log.severe("Unable to email to "+toAddr+" in using Yahoo SMPT Server, SynchroEmail.java");
+ 	    	 if(ab != null && ab.getId() > 0 && isSignUp)
  	    	 {
  	    		 //Delete records if not successful in email of Signup Confirmation
  	    		 new AuthDao(DatasourceUtil.getDataSource()).deleteRecords(ab);

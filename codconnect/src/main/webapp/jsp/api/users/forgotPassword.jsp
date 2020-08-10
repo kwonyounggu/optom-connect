@@ -11,9 +11,11 @@
 <%@ page import = "com.beans.AuthUserDetailsInternalBean" %>
 <%@ page import = "com.dao.AuthDao" %>
 <%@ page import = "org.apache.commons.dbcp2.BasicDataSource" %>
+<%@ page import = "com.exceptions.EmailException" %>
 
 <%
 /*
+  Aug 10 2020, the followings are not implemeted
   ForgotPassword -> password_reminder_expire=(now + 30minutes)
   Cron every 10 minutes and 
   Null 'password_reminder_token' and 'password_reminder_expire' if password_reminder_expire_time is over.
@@ -22,6 +24,7 @@
 */
 	response.setContentType("application/json");
 
+    try{Thread.sleep(5000);}catch(InterruptedException e){}
 	if(request.getMethod().equals("POST"))
 	{
 		String payloadString = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
@@ -37,15 +40,19 @@
 			if(!jsonObj.getBoolean("invalid"))
 			{
 				
-				BasicDataSource _ds = (BasicDataSource)request.getServletContext().getAttribute("osClusterDs");	
-				AuthUserDetailsInternalBean ab = new AuthDao(_ds).getRecord(jsonObj.getString("email"), "email");
+				AuthDao dao = new AuthDao(DatasourceUtil.getDataSource());
+				AuthUserDetailsInternalBean ab = dao.getRecord(jsonObj.getString("email"), "email");
 				
+				/*
+				 * Aug 10 2020, ignore password_reminder_expire but only consider password_reminder_token
+				 * password_reminder_token is valid overtime
+				 */
 				if( ab.getId() != -1 && ab.getPasswordHash() != null && !ab.getEmail().isEmpty())
-					//When the user doesn't click the reset link given last time, i.e: doing forgotPassword over one time with resetting.
+					//When the user doesn't click the reset link given last time, provide the same token now again which is still valid
 					if(ab.getPasswordReminderToken() != null && ab.getPasswordReminderExpire() != null)
 					{
 						ab.setPasswordReminderExpire(new Timestamp(System.currentTimeMillis()+30*60*1000));
-						new AuthDao(DatasourceUtil.getDataSource()).updateTable
+						dao.updateTable
 						(
 							"update auth_user_details_internal "+
 							"set password_reminder_expire='"+ab.getPasswordReminderExpire()+"' "+
@@ -62,7 +69,7 @@
 						ab.setPasswordReminderExpire(new Timestamp(System.currentTimeMillis()+30*60*1000));
 						
 						//update two fields of the record for the person's email
-						new AuthDao(DatasourceUtil.getDataSource()).updateTable
+						dao.updateTable
 						(
 							"update auth_user_details_internal "+
 							"set password_reminder_token='"+ab.getPasswordReminderToken()+"', password_reminder_expire='"+ab.getPasswordReminderExpire()+"' "+
@@ -77,10 +84,16 @@
 				}
 			}			
 		}
+		catch(EmailException e)
+		{
+			System.err.println("ERROR in emailexception (forgotPassword.jsp): " + e);
+			jsonObj.getJSONObject("errors").put("overall", "Oops! Emailing is failed, please try again later.:::"+e.getMessage());
+			jsonObj.put("invalid", true);
+		}
 		catch(Exception e)
 		{
 			System.err.println("ERROR (forgotPassword.jsp): "+ e);
-			jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
+			jsonObj.getJSONObject("errors").put("overall", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
 			jsonObj.put("invalid", true);
 		}
 		

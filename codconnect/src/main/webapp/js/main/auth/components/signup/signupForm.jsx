@@ -12,7 +12,7 @@ import validator from "validator";
 import FieldGroup from "../../../components/common/fieldGroup.jsx";
 import TermsConditionsModal from "../../../components/common/termsConditionsModal.jsx";
 import isEmpty from "lodash/isEmpty";
-import {FullNameKoreanPlaceholder, siteKey} from "../../../utils/utils.jsx";
+import {siteKey} from "../../../utils/utils.jsx";
 import jwtDecode from "jwt-decode";
 
 import Recaptcha from "react-recaptcha";
@@ -399,7 +399,7 @@ class SignupForm extends React.Component
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
 							{/* https://www.google.com/recaptcha/admin/site/431367291/settings used domain with 192.168.1.81 */}
 							<Recaptcha    	
-								sitekey={"6Ld7JLYZAAAAAO_-4oa94JbgLHKBOIDeUZG3LYAI"}
+								sitekey={siteKey}
 								render="explicit"
 								verifyCallback={this.verifyCallbackBot}
 								onloadCallback={this.callbackBot}

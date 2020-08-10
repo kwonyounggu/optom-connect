@@ -46,7 +46,7 @@ public class MyEmail
 				   "<div>Thank you.</div>" +
 				   "<div><a href='https://www.optom-connect.ca'>www.optom-connect.ca</a></div>";
 
-		new SynchroEmail(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Optom-Connect Signup Confirmation", message, ab);
+		new SynchroEmail(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Optom-Connect Signup Confirmation", message, ab, true);
 	}
 	public static void emailResetPassword(AuthUserDetailsInternalBean ab) throws EmailException
 	{
@@ -61,9 +61,8 @@ public class MyEmail
 				   
 				   "<div>If you don't want to change your password, you can ignore this email.</div>" +
 				   "<div>Thank you.</div>" +
-				   "<div><a href='http://www.webmonster.ca'>www.webmonster.ca</a></div>";
-		
-				log.info("key is "+Email.smtpAccessPwd+", "+Email.smtpAccessEmail);
-		new SynchroEmail(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Password Reset", message, ab);
+				   "<div><a href='https://www.optom-connect.ca'>www.optom-connect.ca</a></div>";
+		//new SynchroEmail(Arrays.asList("abcdef@hello"), Arrays.asList(ab.getFullName()), "Password Reset", message, ab, false);
+		new SynchroEmail(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Password Reset", message, ab, false);
 	}
 }
