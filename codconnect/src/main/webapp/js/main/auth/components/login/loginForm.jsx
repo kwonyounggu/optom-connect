@@ -54,7 +54,7 @@ const MyBreadcrumbs = (props) =>
 		    </Breadcrumbs>
 		  );
 }
-
+const steps = ['SignUp', 'Confirm Link In Email', 'Login'];
 class LoginForm extends React.Component
 {
 	constructor(props)
@@ -175,7 +175,7 @@ class LoginForm extends React.Component
 					          <span style={{color: 'red'}}>*</span>&nbsp;This field is required
 					        </Typography>
 						</Grid>
-						<Grid item xs={12}><DisplaySteps activeStep={2}/></Grid>
+						<Grid item xs={12}><DisplaySteps activeStep={2} steps={steps}/></Grid>
 						<Grid item xs={12} style={{paddingLeft: '10%', paddingRight: '10%'}}>
 							<Collapse in={this.state.errors.hasOwnProperty('overall')}>
 								<Alert severity="error">{this.state.errors.overall} — check it out!</Alert>
@@ -218,7 +218,7 @@ class LoginForm extends React.Component
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Button size="small" color="primary" component={Link} to="/myAccount/resetPassword">Reset Password</Button>
+							<Button size="small" color="primary" component={Link} to="/myAccount/forgotPassword">Forgot Password</Button>
 						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>

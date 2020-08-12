@@ -106,7 +106,7 @@ const provinceInfo =
 	{value: 'ON', label: 'Ontario', providerDesc: 'OHIP Provider/Billing Number', placeholder: "Six digits required"}
 ];
 
-const steps = ['SignUp', 'Activation/Confirmation by email', 'Login'];
+const steps = ['SignUp', 'Confirm Link In Email', 'Login'];
 
 export const DisplaySteps = (props) =>
 {
@@ -114,7 +114,7 @@ export const DisplaySteps = (props) =>
 	return (
 			 <Stepper alternativeLabel nonLinear activeStep={props.activeStep} className={classes.stepper}>
 		     {
-				steps.map
+				props.steps.map
 				(
 					(label) => 
 					 <Step key={label}>
@@ -287,7 +287,7 @@ class SignupForm extends React.Component
 					          <span style={{color: 'red'}}>*</span>&nbsp;This field is required
 					        </Typography>
 						</Grid>
-						<Grid item xs={12}><DisplaySteps activeStep={0}/></Grid>
+						<Grid item xs={12}><DisplaySteps activeStep={0} steps={steps}/></Grid>
 						<Grid item xs={12} style={{paddingLeft: '10%', paddingRight: '10%'}}>
 							<Collapse in={this.state.errors.hasOwnProperty('overall')}>
 								<Alert severity="error">{this.state.errors.overall} — check it out!</Alert>
@@ -418,6 +418,7 @@ class SignupForm extends React.Component
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
 							<Button variant="outlined" color="primary" disabled={this.state.isLoading} onClick={this.onSubmit}>Sign Up</Button>
 						</Grid>
+						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
 							<Button size="small" color="primary" component={Link} to="/myAccount/login">Already have an account? Login here</Button>

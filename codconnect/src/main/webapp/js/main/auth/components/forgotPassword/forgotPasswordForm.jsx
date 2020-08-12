@@ -55,7 +55,7 @@ const MyBreadcrumbs = (props) =>
 		    </Breadcrumbs>
 		  );
 }
-
+const steps = ['Submit ForgotPassword', 'Activate Link In Email', 'Reset'];
 class ForgotPasswordForm extends React.Component
 {
 	constructor(props)
@@ -191,7 +191,8 @@ class ForgotPasswordForm extends React.Component
 						          Enter your email, then we'll email you a password reset link.
 						    </Typography>
 						</Grid>
-						<Grid item xs={12}>&nbsp;</Grid>
+						<Grid item xs={12}><DisplaySteps activeStep={0} steps={steps}/></Grid>
+
 						<Grid item xs={12} style={{paddingLeft: '10%', paddingRight: '10%'}}>
 							<Collapse in={this.state.errors.hasOwnProperty('overall')}>
 								<Alert severity="error">{this.state.errors.overall} — check it out!</Alert>

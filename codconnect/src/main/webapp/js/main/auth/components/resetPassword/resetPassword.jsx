@@ -1,6 +1,7 @@
 import React from "react";
-import {Container, Row, Col} from "react-bootstrap";
-//import ResetPasswordForm from "./resetPasswordForm.jsx";
+import Grid from '@material-ui/core/Grid';
+import {Alert, AlertTitle} from '@material-ui/lab';
+import ResetPasswordForm from "./resetPasswordForm.jsx";
 import {connect} from "react-redux";
 import {PropTypes} from "prop-types";
 import queryString from "query-string";
@@ -14,54 +15,58 @@ class ResetPassword extends React.Component
 	constructor(props)
 	{
 		super(props);
-		console.log("INFO (constructor() of resetPassword.jsx");
+		this.params = queryString.parse(props.location.search);
+		this.renderResetPasswordForm = (this.params.status != null && 
+									     parseInt(this.params.status) == 1 && 
+										 this.params.email !=null && 
+										 this.params.name != null && 
+									     this.params.token != null);
 	}
 
+	componentDidMount()
+	{
+		if (!this.renderResetPasswordForm)
+		{
+			let errorMsg = "Oops! You can only reset your password following through your email link without any modification!!";
+			if (this.params.status != null && parseInt(this.params.status) == 3)
+				errorMsg = "Oops! We can't find a record with the given information. Please try again!!";
+			this.props.addAlertMessage({turnOn: true, type: "error", level: 2, text: errorMsg});
+		}
+	}
 	render()
 	{
 		console.log("----INFO (render() of resetPassword.jsx) is called------");
 		
-		const params = queryString.parse(this.props.location.search);
-		//console.log("params", params);
-		if(params.status != null && parseInt(params.status) == 1 && params.email !=null && params.name != null && params.token != null)
+		if (this.renderResetPasswordForm)
 		{
 			return (
-					<Container>
-						<Row>
-							<Col md={4} mdOffset={4} >
-								{/*<ResetPasswordForm 
-									email={params.email}
-									name={params.name}
-									token={params.token}
+				<Grid container>
+					<Grid item xs={12}>
+						{
+					    	this.props.auth.isAuthenticated ?
+					    			
+					    	<Alert severity="warning" >
+								<AlertTitle>Ooops! You forgot to logout first, please try again after.</AlertTitle>
+							</Alert>
+								:
+							<ResetPasswordForm 
+									email={this.params.email}
+									name={this.params.name}
+									token={this.params.token}
 									resetPasswordRequest={this.props.resetPasswordRequest}
 									addAlertMessage={this.props.addAlertMessage}
-									{...this.props.location}
-								/>*/}
-							</Col>
-						</Row>
-					</Container>
-				   );
+									{...this.props}
+								/>
+					    }	
+					</Grid>
+				</Grid>
+			   );
+
 		}
 		else
 		{
-			let status = params.status != null ? parseInt(params.status) : -1;
-			let msg = "Oops! You can only reset your password following through your email link.";
-			if(status == 2)
-				msg = "Oops! Resetting your password time is expired! please do again."
-			else if(status == 3)
-				msg = "Oops! Resetting your password is already done! please do again."
-			
-			this.props.addAlertMessage
-			(
-				{
-					type: "failure",
-					text: msg
-				}
-		    );
-			return (<div><Redirect to="/forgotPassword" /></div>);
+			return (<div><Redirect to="/myAccount/forgotPassword" /></div>);
 		}
-		
-
 	}
 }
 
@@ -71,6 +76,11 @@ ResetPassword.propTypes=
 	resetPasswordRequest: PropTypes.func.isRequired,
 	addAlertMessage: PropTypes.func.isRequired
 }
-//export default ResetPassword;
+function mapStateToProps(state) 
+{
+  return {
+		    auth: state.authReducer
+		 };
+}
 //connect(incoming, outgoing)(ResetPassword)
-export default connect(null, {resetPasswordRequest, addAlertMessage})(ResetPassword);
+export default connect(mapStateToProps, {resetPasswordRequest, addAlertMessage})(ResetPassword);

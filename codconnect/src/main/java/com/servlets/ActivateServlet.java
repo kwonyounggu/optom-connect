@@ -100,12 +100,15 @@ public class ActivateServlet extends HttpServlet
 							 * 		-nullify two fields
 							 * */
 							
+							response.sendRedirect(request.getContextPath()+"/myAccount/resetPassword?status=1&email="+ab.getEmail()+"&token="+ab.getPasswordReminderToken()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));	
+							
 							//The following if-statement is commented in Aug 10 2020 because of no consideration about EXPIRE
 							/*
 							if(ab.getPasswordReminderExpire().after(new Timestamp(System.currentTimeMillis())))
 								response.sendRedirect(request.getContextPath()+"/myAccount/resetPassword?status=1&email="+ab.getEmail()+"&token="+ab.getPasswordReminderToken()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));						
-							else */
-								response.sendRedirect(request.getContextPath()+"/myAccount/resetPassword?status=2&email="+ab.getEmail()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));						
+							else
+								response.sendRedirect(request.getContextPath()+"/myAccount/resetPassword?status=2&email="+ab.getEmail()+"&name="+URLEncoder.encode(ab.getFullName(), "UTF-8"));		
+							*/
 						}
 						else
 						{

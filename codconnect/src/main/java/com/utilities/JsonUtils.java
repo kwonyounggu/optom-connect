@@ -253,29 +253,29 @@ public static JSONObject validateResetPassword(JSONObject jsonObj)
 			case "fullName":
 				if(jsonObj.getString(keyStr).isEmpty())
 				{
-					jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Something went wrong.:::Your name seems interrupted.");
+					jsonObj.getJSONObject("errors").put("overall", "Oops! Something went wrong.:::Your name seems interrupted.");
 				}
-				else if(!isFullNameValid(jsonObj.getString(keyStr)))
-				{
-					jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Something went wrong.:::Your name seems interrupted (ie: invalid name).");
-				}
+				//else if(!isFullNameValid(jsonObj.getString(keyStr)))
+				//{
+				//	jsonObj.getJSONObject("errors").put("overall", "Oops! Something went wrong.:::Your name seems interrupted (ie: invalid name).");
+				//}
 				break;
 			case "token":
 				if(jsonObj.getString(keyStr).isEmpty())
 				{
-					jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Something went wrong.:::The token value seems interrupted.");
+					jsonObj.getJSONObject("errors").put("overall", "Oops! Something went wrong.:::The token value seems interrupted.");
 				}
 				break;
 			case "email":
 				if(!EmailValidator.getInstance().isValid(jsonObj.getString(keyStr)))
 				{
-					 jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Something went wrong.:::The email seems interrupted.");
+					 jsonObj.getJSONObject("errors").put(keyStr, "Oops! Something went wrong.:::The email seems interrupted.");
 				}
 				break;
 			case "password":
-				if(!isBetweenMinMax(jsonObj.getString(keyStr), 2, 30))
+				if(!isBetweenMinMax(jsonObj.getString(keyStr), 6, 30))
 				{
-					jsonObj.getJSONObject("errors").put(keyStr, "The field requires in size between 2 and 30.");
+					jsonObj.getJSONObject("errors").put(keyStr, "The field requires in size between 6 and 30.");
 				}
 				break;
 			case "passwordConfirmation": 

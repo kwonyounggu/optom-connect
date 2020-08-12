@@ -41,16 +41,17 @@
 				{
 					if(!ab.getEmail().equals(jsonObj.getString("email")))
 						throw new Exception("It seems the given email is interrupted.");
-					else if(!ab.getFullName().equals(jsonObj.getString("fullName")))
-						throw new Exception("It seems the given name is interrupted.");
-					else if(ab.getPasswordReminderExpire().before(new Timestamp(System.currentTimeMillis()+(10*60*1000L))))
-						throw new Exception("The token time is expired, please request again.");
+					//Aug 11 2020 commented in since you don't have to consider fullname and expiry time
+					//else if(!ab.getFullName().equals(jsonObj.getString("fullName")))
+					//	throw new Exception("It seems the given name is interrupted.");
+					//else if(ab.getPasswordReminderExpire().before(new Timestamp(System.currentTimeMillis()+(10*60*1000L))))
+					//	throw new Exception("The token time is expired, please request again.");
 					else
 					{
 						ab.setPasswordSalt(BCrypt.gensalt(12));//default 10
 						ab.setPasswordHash(BCrypt.hashpw(jsonObj.getString("password"), ab.getPasswordSalt()));
 						
-						new AuthDao(DatasourceUtil.getDataSource()).updateTable
+						authDao.updateTable
 						(
 							"update auth_user_details_internal " +
 							"set password_salt='" + ab.getPasswordSalt() + "', " +
@@ -62,13 +63,13 @@
 					}
 				}
 				else
-					throw new Exception("It seems the given token value is interrupted.");		
+					throw new Exception("There is no record found with the given token value.");		
 			}	
 		}
 		catch(Exception e)
 		{
 			System.err.println("ERROR (resetPassword.jsp): "+ e);
-			jsonObj.getJSONObject("errors").put("serverAPI", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
+			jsonObj.getJSONObject("errors").put("overall", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
 			jsonObj.put("invalid", true);
 		}
 		
@@ -76,6 +77,9 @@
 		jsonObj.remove("email");
 		jsonObj.remove("fullName");
 		jsonObj.remove("token");
+		jsonObj.remove("password");
+		jsonObj.remove("passwordConfirmation");
+		jsonObj.remove("isLoading");
 					
 		out.print(jsonObj);
 		
