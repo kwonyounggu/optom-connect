@@ -83,6 +83,15 @@ public class SynchroEmail extends Authenticator
 	          Multipart multipart = new MimeMultipart();
 	          multipart.addBodyPart(bodyPart1);
 	          if(bodyPart2 != null) multipart.addBodyPart(bodyPart2);
+	          
+	          if (isSignUp)
+	          {
+		          BodyPart imagePart = new MimeBodyPart();
+		          imagePart.setDataHandler(new DataHandler(new FileDataSource("/home/younggu/git/codconnect/src/main/webapp/images/general/connect-png-2.png")));
+		          imagePart.setHeader("Content-ID", "<optom_connect_logo>");    
+		          multipart.addBodyPart(imagePart);
+	          }
+	         
 	          /*********** A Multipart Body END ************/
 	          
 	          mimeMsg.setSubject(subject,"UTF-8");

@@ -29,7 +29,7 @@ public class MailTest
 			ab.setFullName("EYE CARE PROVIDER");
 			ab.setEmail("kwon_younggu@yahoo.ca");
 			ab.setEmailConfirmationToken("1234567890");
-			MyEmail.emailSignupConfirmation(ab);
+			MyEmail.emailSignupConfirmationHtml(ab);
 		}
 		catch(Exception e)
 		{

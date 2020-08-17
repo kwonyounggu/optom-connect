@@ -5,31 +5,37 @@
 	table, tr{border: 1px solid gray}
 	thead {background-color: purple; color: white; text-align: center}
 	tfoot {background-color: gray; color: white; text-align: center}
-	tfoot tr, a{height: 50px; color: white}
+	tfoot tr, a{color: white}
 	thead > th {height: 100px}
-	
+	.logoAlign {vertical-align: middle; display: table-cell}
 </style>
 <body>
 <table>
 	<thead>
 		<tr>
-			<th colspan='5'>
-				<h1>Optom-Connect</h1>
+			<th colspan='5' >
+				<h1 style='display: table; width: 80%'><span class='logoAlign'><img src='../../images/general/optom_connect.png' width='67px' height='45px'/></span><span class='logoAlign'>Optom-Connect</span></h1>
 			</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
+		<tr  >
 			<td></td>	
 			<td colspan='3'>
-				<p>Dear ......</p>
+				<p style='padding: 10px'>Dear EYE CARE PROVIDER<br /><br />
+				   Thank you for joining Optom-Connect!<br /><br />
+				   Please complete the signing up process by clicking following link:
+				   
+				    <a style='color: inherit' href='/activate?op=signup&token=0000000'>Confirmation Link</a><br />
+						   <p> -------------- </p><br />
+				</p>
 			</td>
 			<td></td>
 		</tr>
 	</tbody>
 	<tfoot>
 		<tr>	
-			<td colspan='5'>
+			<td colspan='5' height='50px'>
 				<a href='https://www.optom-connect.ca'>www.optom-connect.ca</a>
 			</td>
 		</tr>
