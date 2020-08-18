@@ -25,11 +25,14 @@ public class MailTest
 			System.out.println("--- sent ----");
 			
 			*/
+			
+			//Note it will generate an error due to gContext's null value
 			AuthUserDetailsInternalBean ab = new AuthUserDetailsInternalBean();
 			ab.setFullName("EYE CARE PROVIDER");
 			ab.setEmail("kwon_younggu@yahoo.ca");
 			ab.setEmailConfirmationToken("1234567890");
-			MyEmail.emailSignupConfirmationHtml(ab);
+			//MyEmail.emailSignupConfirmationHtml(ab);
+			//MyEmail.emailResetPasswordHtml(ab);
 		}
 		catch(Exception e)
 		{

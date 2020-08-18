@@ -12,6 +12,7 @@ import javax.mail.internet.*;
 import com.beans.AuthUserDetailsInternalBean;
 import com.dao.AuthDao;
 import com.exceptions.EmailException;
+import com.service.MainContextListener;
 
 /*
  * Note the following class is used for a synchronized email using yahoo smtp server.
@@ -84,11 +85,15 @@ public class SynchroEmail extends Authenticator
 	          multipart.addBodyPart(bodyPart1);
 	          if(bodyPart2 != null) multipart.addBodyPart(bodyPart2);
 	          
-	          if (isSignUp)
+	          //temp: /home/younggu/git/codconnect/src/main/webapp/images/general/connect-png-2.png
+	          String optomConnectLogoPath = MainContextListener.gContext.getRealPath("images/general/connect-png-2.png");
+	          
+	          if (optomConnectLogoPath != null)
 	          {
-		          BodyPart imagePart = new MimeBodyPart();
-		          imagePart.setDataHandler(new DataHandler(new FileDataSource("/home/younggu/git/codconnect/src/main/webapp/images/general/connect-png-2.png")));
-		          imagePart.setHeader("Content-ID", "<optom_connect_logo>");    
+	        	  BodyPart imagePart = new MimeBodyPart();
+		          imagePart.setDataHandler(new DataHandler(new FileDataSource(optomConnectLogoPath)));
+		          imagePart.setHeader("Content-ID", "<optom_connect_logo>");  
+		          imagePart.setDisposition(MimeBodyPart.INLINE);
 		          multipart.addBodyPart(imagePart);
 	          }
 	         

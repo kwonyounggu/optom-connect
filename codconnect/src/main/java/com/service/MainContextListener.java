@@ -70,6 +70,7 @@ public class MainContextListener implements ServletContextListener
 {
 	private  Logger log = Logger.getLogger(this.getClass().getName());
 	////private Scheduler uploadHvacManualsScheduler=null;
+	public static ServletContext gContext = null;
 	
 	public MainContextListener()
 	{		
@@ -138,6 +139,7 @@ public class MainContextListener implements ServletContextListener
 			*/
 			
 			ServletContext context=event.getServletContext();
+			MainContextListener.gContext = context;//Used for Global variable
 			context.setAttribute("osClusterDs", osClusterDs);
 			context.setAttribute("tokenUtil", new TokenUtil());
 
@@ -278,6 +280,7 @@ public class MainContextListener implements ServletContextListener
 		log.info("MainContextListener started being destroyed ...");
 		ServletContext context=event.getServletContext();		
 		context.removeAttribute("osClusterDs");
+		MainContextListener.gContext = null;
 		
 		//if(uploadHvacManualsScheduler!=null && uploadHvacManualsScheduler.isStarted()) uploadHvacManualsScheduler.stop();
 	}
