@@ -204,6 +204,7 @@ class SignupForm extends React.Component
 		
 		if(this.isValid())
 		{
+			window.scrollTo(0, 0);
 			this.setState({errors: {}, isLoading: true});
 			trackPromise(
 			this.props.userSignupRequest

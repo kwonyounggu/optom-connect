@@ -22,6 +22,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
 
 import {connect} from "react-redux";
 import {logout} from "../auth/actions/loginActions.jsx";
@@ -137,7 +139,43 @@ const useStyles = makeStyles((theme) =>
     [theme.breakpoints.up('md')]: {display: 'none'}
   }
 }));
-//logo.width=1000*50/667, height: 50
+
+const StyledMenu = withStyles(
+{
+  paper: 
+  {
+    border: '1px solid #d3d4d5',
+	borderRadius: '0px'
+  }
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+));
+const StyledMenuItem = withStyles((theme) => (
+{
+  root: 
+  {
+    '&:focus': 
+    {
+      backgroundColor: theme.palette.primary.main,
+      '& .MuiListItemIcon-root, & .MuiListItemText-primary': 
+      {
+        color: theme.palette.common.white,
+      }
+    }
+  }
+}))(MenuItem);
 
 const NavRoot=(props)=>
 {
@@ -170,6 +208,7 @@ const NavRootMenuBar = (props) =>
 	console.log("[NavRootMenuBar] props: ", props);
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = React.useState(props.isLargeScreen);  
+  const [anchorEl, setAnchorEl] = React.useState(null);
   //const loginLink = props.location.pathname.includes("login") ? "/login" : ("/login?prevPath=" + props.location.pathname);
   const loginLink = props.location.pathname.includes("login") ? "/myAccount/login" : ({pathname: "/myAccount/login", search: "?prevPath=" + props.location.pathname, state: {fromDashboard: true}});
   //This will be called whenever any props value changed or UI events updated such as a GUI clicks
@@ -259,9 +298,8 @@ const NavRootMenuBar = (props) =>
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
-              aria-label="show more"
-              aria-haspopup="true"
-              color="inherit"
+              aria-label="show more" aria-haspopup="true" color="inherit"
+			  onClick={(e)=>setAnchorEl(e.currentTarget)}
             >
               <MoreIcon />
             </IconButton>
@@ -292,6 +330,19 @@ const NavRootMenuBar = (props) =>
 			}
             <Menubar {...props} setDrawerOpen={setDrawerOpen}/>
           </Drawer>
+
+		<StyledMenu
+		  id="more_menu_popover_id"
+		  anchorEl={anchorEl}
+		  keepMounted
+		  open={Boolean(anchorEl)}
+		  onClose={()=>setAnchorEl(null)}
+
+		>
+		  <StyledMenuItem onClick={()=>setAnchorEl(null)}>Edit</StyledMenuItem>
+		  <StyledMenuItem onClick={()=>setAnchorEl(null)}>Save</StyledMenuItem>
+		  <StyledMenuItem onClick={()=>setAnchorEl(null)}>Delete</StyledMenuItem>
+		</StyledMenu>
 	</div>
   );
 }
