@@ -24,6 +24,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import {connect} from "react-redux";
 import {logout} from "../auth/actions/loginActions.jsx";
@@ -166,9 +167,9 @@ const StyledMenuItem = withStyles((theme) => (
 {
   root: 
   {
-    '&:focus': 
+	'&:hover': 
     {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.info.light,
       '& .MuiListItemIcon-root, & .MuiListItemText-primary': 
       {
         color: theme.palette.common.white,
@@ -339,9 +340,40 @@ const NavRootMenuBar = (props) =>
 		  onClose={()=>setAnchorEl(null)}
 
 		>
-		  <StyledMenuItem onClick={()=>setAnchorEl(null)}>Edit</StyledMenuItem>
-		  <StyledMenuItem onClick={()=>setAnchorEl(null)}>Save</StyledMenuItem>
-		  <StyledMenuItem onClick={()=>setAnchorEl(null)}>Delete</StyledMenuItem>
+		  <StyledMenuItem onClick={()=>setAnchorEl(null)}>
+			<ListItemIcon>
+				<AccountCircle  fontSize="small" />
+          	</ListItemIcon>
+			<Typography variant="inherit">My Account</Typography>
+		  </StyledMenuItem>
+		  
+		  {
+				props.auth.isAuthenticated ?
+				(
+					<StyledMenuItem onClick={()=>{props.logout(); setAnchorEl(null);}}>
+						<ListItemIcon>
+							<ExitToAppIcon  fontSize="small" />
+			          	</ListItemIcon>
+						<Typography variant="inherit">Logout</Typography>
+					</StyledMenuItem>
+				):
+				(
+					<StyledMenuItem onClick={()=>setAnchorEl(null)} component={Link} to={loginLink}>
+						<ListItemIcon>
+							<SvgIcon>
+						      <path d="M11,7L9.6,8.4l2.6,2.6H2v2h10.2l-2.6,2.6L11,17l5-5L11,7z M20,19h-8v2h8c1.1,0,2-0.9,2-2V5c0-1.1-0.9-2-2-2h-8v2h8V19z"/>
+						    </SvgIcon>
+			          	</ListItemIcon>
+						<Typography variant="inherit">Login</Typography>
+					</StyledMenuItem>
+				)
+		  }
+		  <StyledMenuItem disabled={true}>
+			<ListItemIcon>
+				<NotificationsIcon  fontSize="small" />
+          	</ListItemIcon>
+			<Typography variant="inherit">Blogs</Typography>
+		  </StyledMenuItem>
 		</StyledMenu>
 	</div>
   );

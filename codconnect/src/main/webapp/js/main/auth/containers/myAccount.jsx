@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {Redirect, Route, Switch} from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import {connect} from "react-redux";
+import {ErrorBoundary} from "../../components/common/errorBoundary.jsx";
 
 
 const Login = React.lazy( () => import("../components/login/login.jsx") );
@@ -48,6 +49,7 @@ class MyAccount extends React.Component
 		
 		return(	
 				<div >
+				    <ErrorBoundary>
                     <Switch>
 						<Redirect exact from="/myAccount" to="/myAccount/login" />
 						<Route path="/myAccount/login"  component={ (props) => <Login {...props} />} />
@@ -56,6 +58,7 @@ class MyAccount extends React.Component
 						<Route path="/myAccount/signup"    component={ (props) => <Signup {...props} /> } /> 
 						<Route path="/myAccount/activation"     component={ (props) => <Activation {...props} /> } />
 					</Switch>
+					</ErrorBoundary>
 				</div>
 			  );
 	}
