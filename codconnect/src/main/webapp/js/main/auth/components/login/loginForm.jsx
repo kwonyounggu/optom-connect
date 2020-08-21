@@ -110,37 +110,38 @@ class LoginForm extends React.Component
 				{errors: {}, isLoading: true}, 
 				() => 
 				{
-					trackPromise(
-					this.props.loginRequest(this.state).then
+					trackPromise
 					(
-						(response) =>
-						{
-							//console.log("successful, the response object=",response);
-							this.setState({isLoading: false});
-							if(!response.data.invalid)
+						this.props.loginRequest(this.state).then
+						(
+							(response) =>
 							{
-								setAuthorizationToken(response.data.token);
-								
-								this.props.setCurrentUser(jwtDecode(response.data.token));
-								
-								this.params.prevPath ? 
-									(this.params.prevPath.toLowerCase().includes("myaccount") ? this.props.history.push("/") : this.props.history.push(this.params.prevPath)) : 
-									this.props.history.push("/");
+								//console.log("successful, the response object=",response);
+								this.setState({isLoading: false});
+								if(!response.data.invalid)
+								{
+									setAuthorizationToken(response.data.token);
+									
+									this.props.setCurrentUser(jwtDecode(response.data.token));
+									
+									this.params.prevPath ? 
+										(this.params.prevPath.toLowerCase().includes("myaccount") ? this.props.history.push("/") : this.props.history.push(this.params.prevPath)) : 
+										this.props.history.push("/");
+								}
+								else if (response.data.invalid)
+								{
+									this.setState({errors: response.data.errors});
+								}
 							}
-							else if (response.data.invalid)
+						).
+						catch
+						(
+							(error) =>			
 							{
-								this.setState({errors: response.data.errors});
+								console.log("[INFO in catch error of Submit() in loginForm.jsx]: ", error);
+								this.setState({isLoading: false, errors: {overall: error}});
 							}
-						}
-					).
-					catch
-					(
-						(error) =>			
-						{
-							console.log("[INFO in catch error of Submit() in loginForm.jsx]: ", error);
-							this.setState({isLoading: false, errors: {overall: error}});
-						}
-					)
+						)
 					); //trackPromise
 				}
 			);

@@ -31,6 +31,10 @@ import {logout} from "../auth/actions/loginActions.jsx";
 import {addAlertMessage} from "../actions/alertMessageActions.jsx";
 import {menuLinks} from "./common/menuLinks.jsx";
 
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import {searchMenu} from "./common/searchMenu.jsx";
+
 export const DRAWER_WIDTH = 240;
 
 const useStyles = makeStyles((theme) => 
@@ -129,6 +133,7 @@ const useStyles = makeStyles((theme) =>
     width: '100%',
     [theme.breakpoints.up('md')]: {width: '20ch'}
   },
+  input: {color: 'white'},
   sectionDesktop: 
   {
     display: 'none',
@@ -243,6 +248,8 @@ const NavRootMenuBar = (props) =>
           <Typography className={classes.title} variant="h6" noWrap>
             Optom Connect
           </Typography>
+
+		  {/*
 		  <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -255,7 +262,34 @@ const NavRootMenuBar = (props) =>
               }}
               inputProps={{ 'aria-label': 'search' }}
             />
-          </div>
+          </div> 
+			*/}
+			
+		<div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+			<TextField style={{marginLeft: '50px', marginRight: '20px', width: '70%'}}
+				InputProps={{ disableUnderline: true, className: classes.input }}
+				placeholder="Search..."
+				renderInput=
+				{
+					(params) =>
+					(
+						<InputBase
+							ref={params.ref}
+							fullWidth={true}
+			              
+			              classes={{
+			                root: classes.inputRoot,
+			                input: classes.inputInput,
+			              }}
+			              inputProps={{ 'aria-label': 'search' }}
+			            />
+					)
+				}
+            />
+          </div> 
 		  <div className={classes.flexGrow} />
           <div className={classes.sectionDesktop}>
 			<Tooltip title="Newly uploaded blogs (COMING SOON)" arrow>
@@ -340,7 +374,7 @@ const NavRootMenuBar = (props) =>
 		  onClose={()=>setAnchorEl(null)}
 
 		>
-		  <StyledMenuItem onClick={()=>setAnchorEl(null)}>
+		  <StyledMenuItem onClick={()=>setAnchorEl(null)} disabled={true}>
 			<ListItemIcon>
 				<AccountCircle  fontSize="small" />
           	</ListItemIcon>

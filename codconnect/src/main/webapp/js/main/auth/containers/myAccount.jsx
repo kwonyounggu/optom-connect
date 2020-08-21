@@ -50,14 +50,14 @@ class MyAccount extends React.Component
 		return(	
 				<div >
 				    <ErrorBoundary>
-                    <Switch>
-						<Redirect exact from="/myAccount" to="/myAccount/login" />
-						<Route path="/myAccount/login"  component={ (props) => <Login {...props} />} />
-						<Route path="/myAccount/forgotPassword"  component={ (props) => <ForgotPassword {...props} /> } /> 
-						<Route path="/myAccount/resetPassword"  component={ (props) => <ResetPassword {...props} /> } /> 
-						<Route path="/myAccount/signup"    component={ (props) => <Signup {...props} /> } /> 
-						<Route path="/myAccount/activation"     component={ (props) => <Activation {...props} /> } />
-					</Switch>
+	                    <Switch>
+							<Redirect exact from="/myAccount" to="/myAccount/login" />
+							<Route path="/myAccount/login"  component={ (props) => <Login {...props} />} />
+							<Route path="/myAccount/forgotPassword"  component={ (props) => <ForgotPassword {...props} /> } /> 
+							<Route path="/myAccount/resetPassword"  component={ (props) => <ResetPassword {...props} /> } /> 
+							<Route path="/myAccount/signup"    component={ (props) => <Signup {...props} /> } /> 
+							<Route path="/myAccount/activation"     component={ (props) => <Activation {...props} /> } />
+						</Switch>
 					</ErrorBoundary>
 				</div>
 			  );
