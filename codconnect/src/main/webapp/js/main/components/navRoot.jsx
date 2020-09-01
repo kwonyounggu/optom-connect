@@ -29,11 +29,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import {connect} from "react-redux";
 import {logout} from "../auth/actions/loginActions.jsx";
 import {addAlertMessage} from "../actions/alertMessageActions.jsx";
-import {menuLinks} from "./common/menuLinks.jsx";
+import {menuLinks, searchMenu} from "./common/menuLinks.jsx";
 
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import {searchMenu} from "./common/searchMenu.jsx";
+import Popper from '@material-ui/core/Popper';
 
 export const DRAWER_WIDTH = 240;
 
@@ -131,7 +131,15 @@ const useStyles = makeStyles((theme) =>
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
-    [theme.breakpoints.up('md')]: {width: '20ch'}
+    //[theme.breakpoints.up('md')]: {width: '20ch'}
+    [theme.breakpoints.up('sm')]: 
+    {
+      width: '12ch',
+      '&:focus': 
+      {
+        width: '20ch'
+      }
+    }
   },
   input: {color: 'white'},
   sectionDesktop: 
@@ -182,6 +190,9 @@ const StyledMenuItem = withStyles((theme) => (
     }
   }
 }))(MenuItem);
+
+//https://github.com/mui-org/material-ui/issues/19376
+const AutocompletePopper = (props) => <Popper {...props} style={{ width: 350 }} placement='bottom-end' />;
 
 const NavRoot=(props)=>
 {
@@ -245,50 +256,26 @@ const NavRootMenuBar = (props) =>
           <IconButton color="inherit" aria-label="optom connect" component={Link} to="/">
             <img src={"/images/general/connect-png-2.png"} alt="logo" className={classes.logo} />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography className={classes.title} variant="h5" component="h6"noWrap>
             Optom Connect
           </Typography>
-
-		  {/*
 		  <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div> 
-			*/}
-			
-		<div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-			<TextField style={{marginLeft: '50px', marginRight: '20px', width: '70%'}}
-				InputProps={{ disableUnderline: true, className: classes.input }}
-				placeholder="Search..."
+			<Autocomplete freeSolo options={searchMenu} getOptionLabel={(option)=>option.title} disableClearable PopperComponent={AutocompletePopper}
+				onChange={(e, vo)=>props.history.push(vo.path)}
 				renderInput=
 				{
-					(params) =>
+					(params)=>
 					(
-						<InputBase
-							ref={params.ref}
-							fullWidth={true}
-			              
-			              classes={{
-			                root: classes.inputRoot,
-			                input: classes.inputInput,
-			              }}
-			              inputProps={{ 'aria-label': 'search' }}
-			            />
+						<TextField {...params} style={{marginLeft: '50px', marginRight: '20px', width: '75%'}}
+							InputProps={{ ...params.InputProps, disableUnderline: true, className: classes.input, type: 'search' }}
+							placeholder="Search..."
+		            	/>
 					)
 				}
-            />
+			/>
           </div> 
 		  <div className={classes.flexGrow} />
           <div className={classes.sectionDesktop}>
