@@ -2,6 +2,7 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
+import Collapse from '@material-ui/core/Collapse';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import TermsConditionPage from "../data/termsfeed-privacy-policy-html-english.html";
@@ -34,7 +35,7 @@ const NavRootFooter = (props) =>
 			    <Grid container justify={"center"} spacing={2}>
 			      <Grid item xs={12} sm={6} md={3}>
 						<Button style={{textTransform: 'none'}}
-										onClick={()=>{setAbout(!about); setTermsCondition(false); setContactus(false); setSelected(AboutPage);}}
+										onClick={()=>{about? setSelected() : setSelected(AboutPage); setAbout(!about); setTermsCondition(false); setContactus(false);}}
 										endIcon={about ? <ExpandLessIcon /> : <ExpandMoreIcon />}
 								>
 									About
@@ -48,7 +49,7 @@ const NavRootFooter = (props) =>
 			          
 			        </Typography>
 					<Button style={{textTransform: 'none'}}
-									onClick={()=>{setAbout(false); setTermsCondition(!termsCondition); setContactus(false);  setSelected(TermsConditionPage);}}
+									onClick={()=>{setAbout(false); termsCondition? setSelected() : setSelected(TermsConditionPage); setTermsCondition(!termsCondition); setContactus(false);}}
 									endIcon={termsCondition ? <ExpandLessIcon /> : <ExpandMoreIcon />}
 							>
 								Terms & Conditions
@@ -56,12 +57,17 @@ const NavRootFooter = (props) =>
 			      </Grid>
 			      <Grid item xs={12} sm={6} md={3}>
 			        <Button style={{textTransform: 'none'}}
-									onClick={()=>{setAbout(false); setTermsCondition(false); setContactus(!contactus); setSelected(ContactusPage);}}
+									onClick={()=>{setAbout(false); setTermsCondition(false); contactus? setSelected() : setSelected(ContactusPage); setContactus(!contactus); }}
 									endIcon={contactus ? <ExpandLessIcon /> : <ExpandMoreIcon />}
 							>
 								Contact us
 					</Button>
 			      </Grid>
+				  <Grid item xs={12} style={{paddingLeft: '10%', paddingRight: '10%'}}>
+						<Collapse in={selected != null}>
+							<div dangerouslySetInnerHTML={ {__html: selected} } style={{paddingLeft: '5px', paddingRight: '5px', border: '1px solid grey'}}/>
+					    </Collapse>
+				  </Grid>
 			    </Grid>
 				<div style={{height: '20px'}} />
 				<Typography variant="caption" align={"center"}>
