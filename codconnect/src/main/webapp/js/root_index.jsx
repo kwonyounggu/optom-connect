@@ -165,7 +165,7 @@ class MainApp extends React.Component
 			                        <Route component={ (props) => <NotFound {...props} /> } />
 		        				</Switch>
 								</div>
-								{/*<Route component={(props) => <NavRootFooter {...props} /> }/> */}
+								<Route component={(props) => <NavRootFooter {...props} /> }/>
 	        				</div>
         				</React.Suspense>
         					 

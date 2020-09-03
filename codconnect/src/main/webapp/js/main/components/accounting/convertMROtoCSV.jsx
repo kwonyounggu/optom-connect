@@ -252,16 +252,7 @@ class ConvertMROtoCSV extends React.Component
 							</Paper>
 					      </Grid>
 						  }
-					      <Grid item xs={12}>
-					        <Typography variant="caption" align={"center"} gutterBottom color={"textSecondary"}>
-					          Terms & Conditions
-					        </Typography>
-					      </Grid>
-					      <Grid item xs={12}>
-					        <Typography variant="caption" align={"center"} gutterBottom color={"textSecondary"}>
-					          Contact us
-					        </Typography>
-					      </Grid>
+					      
 					    </Grid>
 				  </div>
 				);

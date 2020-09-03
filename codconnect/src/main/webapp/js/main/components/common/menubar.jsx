@@ -94,50 +94,50 @@ const Menubar = (props) =>
 	    <div>
 	      <List component="nav">
 	          <ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[0]} selected={selectedItem==menuLinks[0]} onClick={menuClick(menuLinks[0])}>
-				<ListItemIcon color="inherit"><HomeIcon  color="primary"/></ListItemIcon>
+				<ListItemIcon color="inherit"><HomeIcon  color="primary" fontSize="small"/></ListItemIcon>
 	            <ListItemText primary="Home" />
 	          </ListItem>
 			  <ListItem button classes={{ selected: classes.activeItem }} dense={true} selected={selectedItem==menuLinks[1]} onClick={menuClick(menuLinks[1])}>
-				<ListItemIcon><FolderOpenIcon color="inherit"/></ListItemIcon>
+				<ListItemIcon><FolderOpenIcon color="inherit" fontSize="small"/></ListItemIcon>
 				<ListItemText primary="Accounting" />
 				{accountingMenuOpen ? <ExpandLess /> : <ExpandMore />}
 	          </ListItem>
 			  <Collapse in={accountingMenuOpen} timeout="auto" unmountOnExit>
 				<List>
 					<ListItem button classes={{ selected: classes.activeItem }} dense={true} selected={selectedItem==menuLinks[2]} onClick={menuClick(menuLinks[2])}>
-						<ListItemIcon><AccountTreeIcon color="inherit"/></ListItemIcon>
+						<ListItemIcon><AccountTreeIcon color="inherit" fontSize="small"/></ListItemIcon>
 						<ListItemText className={classes.nest_1st_level} primary="OHIP" />
 						{ohipMenuOpen ? <ExpandLess /> : <ExpandMore />}
 			        </ListItem>
 					<Collapse in={ohipMenuOpen} timeout="auto" unmountOnExit>
 						<List>
 							<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[3]} selected={selectedItem==menuLinks[3]} onClick={menuClick(menuLinks[3])}>
-								<ListItemIcon><AutorenewIcon color="inherit"/></ListItemIcon>
+								<ListItemIcon><AutorenewIcon color="inherit" fontSize="small"/></ListItemIcon>
 					            <ListItemText primary="Convert file"  className={classes.nest_2nd_level}/>
 					         </ListItem>
 							 <ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[4]} selected={selectedItem==menuLinks[4]} onClick={menuClick(menuLinks[4])}>
-								<ListItemIcon><MonetizationOnIcon color="inherit"/></ListItemIcon>
+								<ListItemIcon><MonetizationOnIcon color="inherit" fontSize="small"/></ListItemIcon>
 					            <ListItemText primary="Billing" className={classes.nest_2nd_level}/>
 					         </ListItem>
 							<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[5]} selected={selectedItem==menuLinks[5]} onClick={menuClick(menuLinks[5])}>
-								<ListItemIcon><AlbumIcon color="inherit"/></ListItemIcon>
+								<ListItemIcon><AlbumIcon color="inherit" fontSize="small"/></ListItemIcon>
 					            <ListItemText primary="My Record" className={classes.nest_2nd_level} />
 					         </ListItem>
 						</List>
 					</Collapse>
 					<ListItem button classes={{ selected: classes.activeItem }} dense={true} selected={selectedItem==menuLinks[6]} onClick={menuClick(menuLinks[6])}>
-						<ListItemIcon><AccountTreeIcon color="inherit"/></ListItemIcon>
+						<ListItemIcon><AccountTreeIcon color="inherit" fontSize="small"/></ListItemIcon>
 						<ListItemText className={classes.nest_1st_level} primary="NON-OHIP" />
 						{nonohipMenuOpen ? <ExpandLess /> : <ExpandMore />}
 			        </ListItem>
 					<Collapse in={nonohipMenuOpen} timeout="auto" unmountOnExit>
 						<List>
 							 <ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[7]} selected={selectedItem==menuLinks[7]} onClick={menuClick(menuLinks[7])}>
-								<ListItemIcon><MonetizationOnIcon color="inherit"/></ListItemIcon>
+								<ListItemIcon><MonetizationOnIcon color="inherit" fontSize="small"/></ListItemIcon>
 					            <ListItemText primary="Billing" className={classes.nest_2nd_level}/>
 					         </ListItem>
 							<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[8]} selected={selectedItem==menuLinks[8]} onClick={menuClick(menuLinks[8])}>
-								<ListItemIcon><AlbumIcon color="inherit"/></ListItemIcon>
+								<ListItemIcon><AlbumIcon color="inherit" fontSize="small"/></ListItemIcon>
 					            <ListItemText primary="My Record" className={classes.nest_2nd_level} />
 					         </ListItem>
 						</List>
@@ -145,11 +145,11 @@ const Menubar = (props) =>
 				</List>
 			  </Collapse>
 			  <ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[9]} selected={selectedItem==menuLinks[9]} onClick={menuClick(menuLinks[9])}>
-				<ListItemIcon><DynamicFeedIcon color="inherit"/></ListItemIcon>
+				<ListItemIcon><DynamicFeedIcon color="inherit" fontSize="small"/></ListItemIcon>
 	            <ListItemText primary="Referrals" />
 	          </ListItem>
 	          <ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[10]} selected={selectedItem==menuLinks[10]} onClick={menuClick(menuLinks[10])}>
-				<ListItemIcon><InfoIcon color="inherit"/></ListItemIcon>
+				<ListItemIcon><InfoIcon color="inherit" fontSize="small"/></ListItemIcon>
 	            <ListItemText primary="About" />
 	          </ListItem>
 	      </List>

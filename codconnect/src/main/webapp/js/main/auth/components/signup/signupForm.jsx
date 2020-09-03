@@ -3,15 +3,11 @@ import React from "react";
 
 import {Link} from "react-router-dom";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import timezones from "../../data/timezones.jsx";
+
 import {PropTypes} from "prop-types";
-import map from "lodash/map";
+
 import validateSignupForm from "./validateSignupForm.jsx";
 
-import validator from "validator";
-import FieldGroup from "../../../components/common/fieldGroup.jsx";
-import TermsConditionsModal from "../../../components/common/termsConditionsModal.jsx";
-import isEmpty from "lodash/isEmpty";
 import {siteKey} from "../../../utils/utils.jsx";
 import jwtDecode from "jwt-decode";
 

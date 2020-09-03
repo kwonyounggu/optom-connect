@@ -263,8 +263,9 @@ const NavRootMenuBar = (props) =>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
+			{/* props.history.push does not update the drawer menu path */}
 			<Autocomplete freeSolo options={searchMenu} getOptionLabel={(option)=>option.title} disableClearable PopperComponent={AutocompletePopper}
-				onChange={(e, vo)=>props.history.push(vo.path)}
+				onChange={(e, vo)=>window.location.replace(vo.path)} 
 				renderInput=
 				{
 					(params)=>
