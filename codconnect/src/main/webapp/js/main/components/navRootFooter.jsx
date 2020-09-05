@@ -63,9 +63,9 @@ const NavRootFooter = (props) =>
 								Contact us
 					</Button>
 			      </Grid>
-				  <Grid item xs={12} style={{paddingLeft: '10%', paddingRight: '10%'}}>
+				  <Grid item xs={12} style={{paddingLeft: '5%', paddingRight: '5%'}}>
 						<Collapse in={selected != null}>
-							<div dangerouslySetInnerHTML={ {__html: selected} } style={{paddingLeft: '5px', paddingRight: '5px', border: '1px solid grey'}}/>
+							<div dangerouslySetInnerHTML={ {__html: selected} } style={{textAlign: 'left', padding: '10px', borderRadius: '3px', border: '1px solid #DCDCDC'}}/>
 					    </Collapse>
 				  </Grid>
 			    </Grid>

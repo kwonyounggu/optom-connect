@@ -385,9 +385,9 @@ class SignupForm extends React.Component
 								<Alert severity="error" style={{width: '70%'}}>{this.state.errors.agreeTermsCondition} — check it out!</Alert>
 						    </Collapse>
 						</Grid>
-						<Grid item xs={12} style={{paddingLeft: '10%', paddingRight: '10%'}}>
+						<Grid item xs={12} style={{paddingLeft: '5%', paddingRight: '5%'}}>
 							<Collapse in={this.state.showTermsCondition}>
-								<div dangerouslySetInnerHTML={ {__html: TermsCondition} } style={{paddingLeft: '5px', paddingRight: '5px', border: '1px solid grey'}}/>
+								<div dangerouslySetInnerHTML={ {__html: TermsCondition} } style={{padding: '10px', borderRadius: '3px', border: '1px solid #DCDCDC'}}/>
 						    </Collapse>
 						</Grid>
 						
