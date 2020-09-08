@@ -206,7 +206,7 @@ const NavRoot=(props)=>
 		case (pathname.match(/^\/about[\/]?/i) || {}).input: { currentMenu=<Redirect to='/about' />; break;}
 		case (pathname.match(/^\/referrals[\/]?/i) || {}).input: { currentMenu=<Redirect to='/referrals' />; break;}
 		case (pathname.match(/^\/accounting[\/]?/i) || {}).input: { currentMenu=<Redirect to='/accounting' />; break;}
-		//case (pathname.match(/^\/login[\/]?/i) || {}).input: {currentMenu=<NavRootMenuBar {...props} />; break;}
+		case (pathname.match(/^\/contactus[\/]?/i) || {}).input: {currentMenu=<NavRootMenuBar {...props} />; break;}
 		case (pathname.match(/^\/myaccount[\/]?/i) || {}).input: {currentMenu=<NavRootMenuBar {...props} />; break;}
 		/*case (pathname.match(/^\/login[\/]?/i) || {}).input: { pathname = "/login"; break;}
 		case (pathname.match(/^\/signup[\/]?/i) || {}).input: { pathname = "/signup"; break;}

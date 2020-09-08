@@ -8,6 +8,8 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import TermsConditionPage from "../data/termsfeed-privacy-policy-html-english.html";
 import AboutPage from "../data/about.html";
 import ContactusPage from "../data/contactus.html";
+//import DOMPurify from "dompurify";
+import InnerHTML from 'dangerously-set-html-content'
 
 import { makeStyles} from '@material-ui/core/styles';
 
@@ -65,7 +67,8 @@ const NavRootFooter = (props) =>
 			      </Grid>
 				  <Grid item xs={12} style={{paddingLeft: '5%', paddingRight: '5%'}}>
 						<Collapse in={selected != null}>
-							<div dangerouslySetInnerHTML={ {__html: selected} } style={{textAlign: 'left', padding: '10px', borderRadius: '3px', border: '1px solid #DCDCDC'}}/>
+							<InnerHTML html={selected} style={{textAlign: 'left', padding: '10px', borderRadius: '3px', border: '1px solid #DCDCDC'}} />
+							{/*<div dangerouslySetInnerHTML={ {__html: selected} } style={{textAlign: 'left', padding: '10px', borderRadius: '3px', border: '1px solid #DCDCDC'}}/>*/}
 					    </Collapse>
 				  </Grid>
 			    </Grid>
