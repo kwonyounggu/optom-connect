@@ -16,7 +16,7 @@
 
 <%
 	response.setContentType("application/json");
-    System.err.println("contact.jsp is called");
+    System.err.println("contactus.jsp is called");
     //try{Thread.sleep(5000);}catch(InterruptedException e){}
 	if(request.getMethod().equals("POST"))
 	{
@@ -27,16 +27,21 @@
 		{
 
 			JsonUtils.printJsonObject(jsonObj);
-			
-			
+			jsonObj.put("isItValid", true);
 		}
 		catch(Exception e)
 		{
-			System.err.println("ERROR (login.jsp): "+ e);
-			jsonObj.getJSONObject("errors").put("overall", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
-			jsonObj.put("invalid", true);
+			System.err.println("ERROR (contactus.jsp): "+ e);
+			jsonObj.put("errorMessage", "Oops! Something went wrong, please try again later.:::"+e.getMessage());
+			jsonObj.put("isItValid", false);
 		}
-					
+		finally
+		{
+			jsonObj.remove("country");
+			jsonObj.remove("name");
+			jsonObj.remove("email");
+			jsonObj.remove("message");
+		}
 		out.print(jsonObj);
 		System.err.println("contact.jsp is ended");
 		

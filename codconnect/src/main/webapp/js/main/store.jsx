@@ -77,7 +77,7 @@ axios.interceptors.response.use
 				{
 					store.dispatch(addAlertMessage({turnOn: true, type: "error", level: 2, text: response.data.errorMessage}));
 				}
-				else if (response.data.hasOwnProperty('invalid') && response.data.invalid && response.data.errors.hasOwnProperty('serverAPI'))
+				else if (response.data.hasOwnProperty('invalid') && response.data.invalid && response.data.errors.hasOwnProperty('overall'))
 				{
 					let errorMsg = "There exists an error in that ", count = 0;
 					for (const [key, value] of Object.entries(response.data.errors)) 
