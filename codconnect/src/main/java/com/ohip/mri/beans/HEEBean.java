@@ -1,14 +1,7 @@
 package com.ohip.mri.beans;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;

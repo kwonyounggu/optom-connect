@@ -1,7 +1,7 @@
 package com.dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
+//import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,12 +12,12 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.json.JSONArray;
+//import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.beans.MusicTracksBean;
 import com.exceptions.DAOException;
-import com.utilities.JsonUtils;
+//import com.utilities.JsonUtils;
 
 public class MusicDao
 {

@@ -1,11 +1,11 @@
 package com.ohip.payments.beans;
 
 import java.io.Serializable;
-import java.text.NumberFormat;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+
 import java.util.logging.Logger;
 
 import org.json.JSONObject;

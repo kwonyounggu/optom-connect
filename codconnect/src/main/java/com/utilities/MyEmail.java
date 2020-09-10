@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.json.JSONObject;
+
 import com.beans.AuthUserDetailsInternalBean;
 import com.exceptions.EmailException;
 
@@ -85,23 +87,17 @@ public class MyEmail
 
 		new SynchroEmail(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Optom-Connect Signup Confirmation", emailMsg, ab, true);
 	}
-	public static void emailSignupConfirmationOrg(AuthUserDetailsInternalBean ab) throws EmailException
+	public static void emailContactus(JSONObject contactForm) throws EmailException
 	{
-		//https://support.aminoapps.com/hc/en-us/articles/115002381673-Signing-Up-and-Activation
-		//https://www.acepforprofessionals.com/users/activate-account.php
-		//https://mailchimp.com/help/i-signed-up-with-mailchimp-but-didnt-get-an-activation-email/
+
 		String message =
-				   "<div>Dear " + ab.getFullName() + ",</div><br />" +
+				   "<div>Dear Optom-Connect,</div><br />" +
 				   
-				   "<div>Thank you for joining us!" + "</div>" +
-				   "<div>(Activation time within a certain hour)Please complete your signup process by clicking/visiting the following link:" + "</div>" +
-		
-				   "<div><a href='"+Utils.MYHOST_DOMAIN + "/activate?op=signup&token=" +ab.getEmailConfirmationToken() + "'>Confirmation Link</a></div>" +
-				   "<div>" + Utils.MYHOST_DOMAIN + "/activate?op=signup&token=" +ab.getEmailConfirmationToken() + "</div><br />" +
-				   "<div>Thank you.</div>" +
+				   "<div>Contactus Information</div>" +
+				   "<div>Sender Name:  </div>"+
 				   "<div><a href='https://www.optom-connect.ca'>www.optom-connect.ca</a></div>";
 
-		new SynchroEmail(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Optom-Connect Signup Confirmation", message, ab, true);
+		//new SynchroEmail(Arrays.asList(ab.getEmail()), Arrays.asList(ab.getFullName()), "Optom-Connect Signup Confirmation", message, ab, true);
 	}
 	/* Can be used for more images later
 	public static Map<String, String> signupImages()

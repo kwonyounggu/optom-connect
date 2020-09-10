@@ -2,7 +2,6 @@ package com.servlets;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.sql.Timestamp;
 
 import java.util.logging.Logger;
 

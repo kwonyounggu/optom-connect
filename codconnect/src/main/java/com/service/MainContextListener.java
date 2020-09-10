@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Base64;
+//import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -22,8 +22,8 @@ import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import com.beans.AuthUserDetailsInternalBean;
-import com.dao.AuthDao;
+//import com.beans.AuthUserDetailsInternalBean;
+//import com.dao.AuthDao;
 
 //*****************************************************************************************************************************************
 //see jdbc.postgresql.org/documentation/81/ds-ds.html
@@ -44,11 +44,11 @@ import com.dao.AuthDao;
 
 
 import com.utilities.DatasourceUtil;
-import com.utilities.Email;
+//import com.utilities.Email;
 import com.utilities.JdbcDriver;
-import com.utilities.SynchroEmail;
+//import com.utilities.SynchroEmail;
 import com.utilities.TokenUtil;
-import com.utilities.Utils;
+//import com.utilities.Utils;
 
 //import com.scheduled.UploadHvacManualsTask;
 
