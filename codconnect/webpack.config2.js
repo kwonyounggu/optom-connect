@@ -6,23 +6,11 @@ const SRC_DIR = path.resolve(__dirname, "src");
 
 console.log(">>>>path: ", path);
 console.log(">>>SRC_DIR: ", SRC_DIR);
-/*
-	Date: Jan 09 - 2021
-	Note that publicPath has been changed because you use Ract.lazy() 
-	which produces n_index_bundle.js and being called from <script src="js/built/root_index_bundle.js"></script>
-	in webapp/index.html, as a result not loading chunk-bundles properly, generating errors in loading failures.
-	
-	solution: changed publicPath: "/" to "/js/built", from '1)' below
-	see: 
-		1) https://stackoverflow.com/questions/53704950/webpack-code-splitting-loading-chunk-failed-error-wrong-file-path
-		2) https://medium.com/@botfather/react-loading-chunk-failed-error-88d0bb75b406
-	
-	
-*/
+
 module.exports=
 {
 		
-		mode: "production",
+		mode: "development",
 		entry: 
 		{
 			root: "./src/main/webapp/js/root_index.jsx",
@@ -32,8 +20,7 @@ module.exports=
 		{
 			path: path.resolve(__dirname, "src/main/webapp/js/built"),
 			filename: "[name]_index_bundle.js",
-			chunkFilename: "[name]_index_bundle.js",
-			publicPath: "/js/built/"
+			publicPath: "/"
 		},	
 		resolve:
 		{
@@ -44,12 +31,16 @@ module.exports=
 			rules:
 			[
 				{ 
-					test: /.(js|jsx)$/,
-					exclude: /node_modules/,
+					test: /\.m?js$/, 
+					exclude: /(node_modules|bower_components)/,
 					//include: SRC_DIR+"/main/webapp/js", 
 					use: 
 					{
-						loader: "babel-loader"
+						loader: "babel-loader",
+						options: 
+						{
+          					presets: ["@babel/preset-env", "@babel/preset-react", "@babel/preset-stage-0"]
+          				}
 					}
 					
 				},
@@ -84,10 +75,6 @@ module.exports=
 		watchOptions:
 		{
 			poll: true
-		},
-		performance: 
-		{
-		    hints: false
 		},
 		plugins:
 		[

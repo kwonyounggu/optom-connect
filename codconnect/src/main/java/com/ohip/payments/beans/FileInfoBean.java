@@ -1,4 +1,4 @@
-package com.ohip.payments.beans;
+ package com.ohip.payments.beans;
 
 import java.io.Serializable;
 
@@ -115,6 +115,13 @@ public class FileInfoBean implements Serializable
 		return "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_tx_history', 'ohip_mro_tx_history_id'));";
 	}
 	public String getSqlIfArecordExists(int auth_user_account_id)
+	{
+		return "select 1 from ohip_mro_tx_history where file_name='" + fileName + "' " +
+				 "and auth_user_account_id=" + auth_user_account_id + " limit 1;";
+	}
+	//From batch edit table records
+	// batch_number, etc
+	public String getSqlIfArecordInHB1Exists(int auth_user_account_id)
 	{
 		return "select 1 from ohip_mro_tx_history where file_name='" + fileName + "' " +
 				 "and auth_user_account_id=" + auth_user_account_id + " limit 1;";

@@ -14,8 +14,8 @@ export function setAuthorizationToken(token)
 	  }
 }
 
-axios.defaults.baseURL = 'https://192.168.1.81:8443/';
-
+axios.defaults.baseURL = 'https://192.168.1.85:8443/';
+//axios.defaults.baseURL = 'https://localhost:8443/';
 /*
 https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index
  */

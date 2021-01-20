@@ -4,14 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:server": "webpack-dev-server --content-base src/main/webapp/ --open --host 192.168.1.81 --port 8083",
-    "build": "webpack -d && webpack-dev-server --content-base src/main/webapp/ --open --host 192.168.1.81 --port 8083",
+    "dev:server-org": "webpack-dev-server --content-base src/main/webapp/ --open --host 192.168.1.85 --port 8083",
+    "dev:server": "webpack serve  --mode development --content-base src/main/webapp/ --open --host 192.168.1.85 --port 8083",
+    "build": "webpack --mode production",
+    "develop": "webpack --mode development",
     "prod": "webpack -p",
     "dev": "webpack -d",
     "express": "webpack -d && cp src/main/webapp/index.html src/main/webapp/js/build/index.html && webpack-dev-server --inline --port 9999",
-    "test": "webpack-dev-server --content-base src/main/webapp/ --open --inline --hot --port 9999"
+    "test": "webpack-dev-server --content-base src/main/webapp/ --open --inline --hot --port 9999",
+    "help": "webpack --help",
+    "start": "webpack-dev-server --mode development --open"
   },
-  "babel": {
+   "babel": 
+   {
     "presets": [
       "@babel/env",
       "@babel/react"
@@ -44,16 +49,16 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.43",
     "@material-ui/pickers": "^3.2.10",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "classnames": "^2.2.6",
     "dangerously-set-html-content": "^1.0.8",
     "date-fns": "^2.14.0",
-    "dompurify": "^2.0.15",
+    "dompurify": "^2.2.6",
     "eslint": "^5.14.0",
     "jquery": "^3.3.1",
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.20",
     "material-ui-dropzone": "^3.0.0",
     "prismjs": "^1.15.0",
     "prop-types": "^15.6.2",
@@ -98,25 +103,25 @@
     "xregexp": "^3.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-proposal-decorators": "^7.8.3",
-    "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
-    "@babel/preset-env": "^7.9.5",
-    "@babel/preset-react": "^7.9.4",
-    "babel-loader": "^8.1.0",
+    "@babel/core": "^7.12.10",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-proposal-decorators": "^7.12.12",
+    "@babel/plugin-proposal-object-rest-spread": "^7.12.1",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "babel-loader": "^8.2.2",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "css-loader": "^3.5.3",
-    "file-loader": "^6.0.0",
-    "html-loader": "^1.1.0",
-    "html-webpack-plugin": "^4.2.0",
-    "image-webpack-loader": "^6.0.0",
-    "style-loader": "^1.2.0",
+    "css-loader": "^5.0.1",
+    "file-loader": "^6.2.0",
+    "html-loader": "^1.3.2",
+    "html-webpack-plugin": "^4.5.1",
+    "image-webpack-loader": "^7.0.1",
+    "style-loader": "^2.0.0",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-cli": "^4.3.1",
+    "webpack-dev-server": "^3.11.1"
   },
   "bugs": {
     "url": "https://github.com/kwonyounggu/connectOOD/issues"

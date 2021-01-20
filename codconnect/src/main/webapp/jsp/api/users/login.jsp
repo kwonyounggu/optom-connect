@@ -16,7 +16,7 @@
 
 <%
 	response.setContentType("application/json");
-    System.err.println("login.jsp is called");
+    System.out.println("login.jsp is called");
     //try{Thread.sleep(5000);}catch(InterruptedException e){}
 	if(request.getMethod().equals("POST"))
 	{
@@ -140,7 +140,7 @@
 		}
 					
 		out.print(jsonObj);
-		System.err.println("login.jsp is ended");
+		System.out.println("login.jsp is ended");
 		
 	}
 %>

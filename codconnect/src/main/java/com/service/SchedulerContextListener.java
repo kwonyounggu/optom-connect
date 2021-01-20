@@ -34,7 +34,9 @@ public class SchedulerContextListener implements ServletContextListener
 			context.setAttribute("scheduler", scheduler);
 			log.info("Scheudler cronned at ["+Utils.SIGNUP_CRON+"], valid_signup widthin "+Utils.VALID_SIGNUP+"hrs");
 			scheduler.schedule(Utils.SIGNUP_CRON, new InvalidatingSignupTask());
-			scheduler.start();
+			
+			//Dec 30 2020, uncomment the following statement later
+			//scheduler.start();
 
 			
 		}

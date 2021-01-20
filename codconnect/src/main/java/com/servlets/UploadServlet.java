@@ -20,6 +20,7 @@ import com.utilities.DatasourceUtil;
 import com.utilities.JsonUtils;
 import com.utilities.TokenUtil;
 
+import java.util.Enumeration;
 import java.util.logging.Logger;
 
 
@@ -38,8 +39,34 @@ public class UploadServlet extends HttpServlet
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	@SuppressWarnings("unused")
+	private void printRequestHeaders(HttpServletRequest request)
+	{
+		Enumeration<String> headerNames = request.getHeaderNames();
+		while(headerNames.hasMoreElements()) 
+		{
+		  String headerName = headerNames.nextElement();
+		  System.out.println("Header Name - " + headerName + ", Value - " + request.getHeader(headerName));
+		}
+	}
+	@SuppressWarnings("unused")
+	private void printAllRequestParameters(HttpServletRequest request)
+	{
+		System.out.println("printAllRequestParameters(...) is called " + request);
+		System.out.println("getContextPath() in printAllRequestParameters(...) " + request.getContextPath());
+		Enumeration<String> params = request.getParameterNames(); 
+		while(params.hasMoreElements())
+		{
+		 String paramName = params.nextElement();
+		 System.out.println("Parameter Name - "+paramName+", Value - "+request.getParameter(paramName));
+		}
+		
+		System.out.println("Authorization() in printAllRequestParameters(...) " + request.getHeader("Authorization"));
+		
+	}
 	private JSONObject validateHeaders(HttpServletRequest request) throws Exception
-	{		
+	{	printRequestHeaders(request);
+		printAllRequestParameters(request);
 		//Supposed to request through POST not GET or other method
 		if (!request.getMethod().equalsIgnoreCase("POST")) throw new Exception("Not expected method of request.");
 		//The following check can be expanded with other files being uploaded from other known path
@@ -63,7 +90,7 @@ public class UploadServlet extends HttpServlet
 		return decodedToken;
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
+	{ 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		BufferedReader reader = null;

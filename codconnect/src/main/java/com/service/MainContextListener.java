@@ -122,7 +122,7 @@ public class MainContextListener implements ServletContextListener
 			rs = stmt.executeQuery(showTablesSQL);
 			int totalRows = 0;
 
-			log.info("Connected to DB of webmonster");
+			log.info("Connected to DB of optometry");
 			while (rs.next())
 			{
 				totalRows++;

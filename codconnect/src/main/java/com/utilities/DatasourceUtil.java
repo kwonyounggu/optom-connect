@@ -39,7 +39,7 @@ public class DatasourceUtil
 	public static BasicDataSource getDataSource(String url, String username, String password)
 	{
 		BasicDataSource ds = new BasicDataSource();
-		ds.setUrl(url);
+		ds.setUrl(url); 
 		ds.setUsername(username);
 		ds.setPassword(password);
 		ds.setMinIdle(5);
