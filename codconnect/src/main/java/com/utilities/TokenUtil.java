@@ -5,6 +5,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.json.JSONObject;
 
+import com.beans.AuthUserDetailsInternalBean;
 import com.dao.AuthDao;
 
 import java.util.Calendar;
@@ -134,12 +135,18 @@ public class TokenUtil
 	        	if (subject.equals("internalLogin"))
 	        	{
 					AuthDao aDao = new AuthDao(DatasourceUtil.getDataSource());
-	        		Object o = aDao.queryObject("select name from auth_user_details_internal where email='" + jsonObj.getString("jti") +"'");
-	        	    if (o==null || !jsonObj.getString("iss").equals(o))	
-	        	    	throw new Exception("Personal data not matching, please logout and login. -- Do it again!");
+					
+					//Commented on 2021-01-21
+	        		//Object o = aDao.queryObject("select name from auth_user_details_internal where email='" + jsonObj.getString("jti") +"'");
+	        	    //if (o==null || !jsonObj.getString("iss").equals(o))	
+	        	    //	throw new Exception("Personal data not matching, please logout and login. -- Do it again!");
 
-
+					//Added the below instead of the above three lines statement on 2021-01-21
+					AuthUserDetailsInternalBean ab = aDao.getRecord(jsonObj.getString("jti"), "email");
+					if (ab.getId() == -1) throw new Exception("Personal data not matching, please logout and login. -- Do it again!");
+					else jsonObj.put("providerNumber", ab.getProviderNumber());
 	        	}
+	        	//The following else-if statement is not being used for this application, optom.connect
 	        	else if (subject.equals("externalLogin"))
 	        	{
 	        		AuthDao aDao = new AuthDao(DatasourceUtil.getDataSource());

@@ -53,3 +53,28 @@ insert into ohip_mri_creation_history values(default, 'HG123456.001', '123456', 
 
 //select concat(claim_file_name, ':', date(date_creation)) as file_name_date from ohip_mri_creation_history where date_creation = 
 //				     (select max(date_creation) from ohip_mri_creation_history where care_provider_number='123456');
+
+JAN-07-2021
+1. When conversion is performed on this machine
+16:14:08,366 SEVERE [com.servlets.UploadServlet] (default task-1) Not expected referer of request.
+16:14:08,366 SEVERE [com.servlets.UploadServlet] (default task-1) JSONObject["report"] not found.
+-- it is due to the cross domain and improper security disabled from a client
+JAN-08-2021
+1. ChunkLoadError: Loading chunk 13 failed -- seems that path error because as you see, there is no file https://localhost:8443/13_index_bundle.js
+-- it is mis-configuration of webpack.config.js 
+-- solution as follows:
+-- webpack: 4.x
+-- @babel/core: 7.x
+-- bable-loader: 8.x
+-- exclude: /node-moudel/
+JAN-14-2021
+1. Only one login allowed at a time so as to prevent data mis-alignments from database
+2. password input and enter->login execution
+
+JAN-14-2021
+1. Check a duplicated file submission over again accidentally, periodically
+   -- option 1) allow but filter it when a query is performed
+JAN-17-2021
+1. getSqlIfArecordExists in FileInfoBean:
+   - this is check user id and file name: this is not enough since the same file name is can be uploaded again over time gone through
+   - see insertBatchEditData in OHIPReportDao from line 325

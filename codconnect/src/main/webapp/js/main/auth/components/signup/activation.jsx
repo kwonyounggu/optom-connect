@@ -19,7 +19,7 @@ class Activation extends React.Component
 	
 	render()
 	{
-		//url: https://192.168.1.81:8443/activation?status=2&email=kwon_younggu@yahoo.ca&name=Eye+Care+Provider
+		//url: https://192.168.1.85:8443/activation?status=2&email=kwon_younggu@yahoo.ca&name=Eye+Care+Provider
 		const params = queryString.parse(this.props.location.search);
 		if(params.status != null)
 			if (parseInt(params.status) == 3)

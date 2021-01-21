@@ -330,7 +330,7 @@ public class OHIPReportDao
 				//2). else say ohip_mro_hb1 record including batch-etc information and corresponding tx-file name
 				// Don't say to correct the file name now
 			}
-			else if ((rs=s.executeQuery(fb.getSqlIfArecordInHB1Exists(0))).next())
+			else if ((rs=s.executeQuery(fb.getSqlIfArecordInHB1Exists(0))).next())// compare in 2).
 			{
 				//
 			}

@@ -27,15 +27,9 @@ class MainApp extends React.Component
     }
 
     render()
-    {
-        return(
-        		<div>This is the admin page</div>
-              );
+    { return(<div>This is the admin page</div>);
     }
 }
 
 ReactDOM.render
-(  
-    <MainApp />,
-	window.document.getElementById("app")
-);
+( <MainApp />,window.document.getElementById("app"));

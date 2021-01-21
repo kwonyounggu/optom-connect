@@ -125,7 +125,6 @@ public class UploadServlet extends HttpServlet
 					line = reader.readLine();
 				}
 
-				//if (fb.getfType() == 'P')
 				switch (fb.getfType())
 				{
 					case 'B':  
@@ -218,6 +217,7 @@ public class UploadServlet extends HttpServlet
 		if (decodedToken != null)
 		{
 			//Check if the user allows data insertion in terms of auth_user_matrix_with_settings
+			//? here ???Check if the file is for the user by checking provider number
 			//Insert into db
 			OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
 			reportDao.insertBatchEditData(batchEditJson, fb, decodedToken);
