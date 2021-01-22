@@ -111,8 +111,8 @@ public class TokenUtil
 	        System.out.println("JWT Body : "+body);  
 	        
 	        JSONObject jsonObj = new JSONObject(body);
-	        JsonUtils.printJsonObject(jsonObj);
-	        if (jsonObj.getString("sub").equalsIgnoreCase("login"))
+	        //JsonUtils.printJsonObject(jsonObj);
+	        if (jsonObj.getString("sub").contains("Login"))
 	        {
 	        	//Check the expiration time
 	        	//Check the login id and email
@@ -135,7 +135,7 @@ public class TokenUtil
 	        	if (subject.equals("internalLogin"))
 	        	{
 					AuthDao aDao = new AuthDao(DatasourceUtil.getDataSource());
-					
+
 					//Commented on 2021-01-21
 	        		//Object o = aDao.queryObject("select name from auth_user_details_internal where email='" + jsonObj.getString("jti") +"'");
 	        	    //if (o==null || !jsonObj.getString("iss").equals(o))	
@@ -156,6 +156,7 @@ public class TokenUtil
 	        	}
 	        	else throw new Exception("Authorization subject not matching, please logout and login. -- Do it again!");
 	        }
+	        JsonUtils.printJsonObject(jsonObj);
 	        return jsonObj;
 	}
 }

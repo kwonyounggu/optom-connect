@@ -326,13 +326,13 @@ public class OHIPReportDao
 			if (rs.next()) //check the file name through ohip_mro_tx_history
 			{
 				//There is already file info in the tables so update it, do it later for updating hr1 to hr8 and ohip_mro_tx_history
-				//1). if the same file exists then say 'there exists the same file already in'
-				//2). else say ohip_mro_hb1 record including batch-etc information and corresponding tx-file name
-				// Don't say to correct the file name now
+				
+				log.info("The file, " + fb.getFileName() + ", is already in the database.");//ignore data insertion
 			}
 			else if ((rs=s.executeQuery(fb.getSqlIfArecordInHB1Exists(0))).next())// compare in 2).
 			{
-				//
+				//say ohip_mro_hb1 record including batch-etc information and corresponding tx-file name
+				//do here on 2021-01-23
 			}
 			else
 			{

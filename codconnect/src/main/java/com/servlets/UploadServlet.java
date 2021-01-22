@@ -135,11 +135,13 @@ public class UploadServlet extends HttpServlet
 					case 'E':  
 					case 'F':  
 					{
+						//check if the file name matches the provider number if logged-in. 
 						returnJson.put("claimError", handleClaimErrorFile(reader, fb, decodedToken)); 
 						break;
 					}
 					case 'P':  
 					{
+						//check if the file name matches the provider number if logged-in. 
 						returnJson.put("report", handleRemittanceAdviceFile(reader, fb, decodedToken)); 
 						break;
 					}
@@ -203,6 +205,9 @@ public class UploadServlet extends HttpServlet
 			{
 				BEHB1Bean bean = new BEHB1Bean(line);
 				System.out.println(bean.toString());
+				
+				if (decodedToken != null && !decodedToken.getString("providerNumber").equals(bean.getProviderNumber()))
+					throw new Exception("The provider number is not matching in between yours and file's. -- Please try again with yours !");
 				batchEditJson.put(bean.getJson());
 			}
 
@@ -217,8 +222,7 @@ public class UploadServlet extends HttpServlet
 		if (decodedToken != null)
 		{
 			//Check if the user allows data insertion in terms of auth_user_matrix_with_settings
-			//? here ???Check if the file is for the user by checking provider number
-			//Insert into db
+			
 			OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
 			reportDao.insertBatchEditData(batchEditJson, fb, decodedToken);
 		

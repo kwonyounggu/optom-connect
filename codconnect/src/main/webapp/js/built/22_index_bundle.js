@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[22],{507:function(e,n,t){"use strict";t.r(n);var a=t(0),r=t.n(a);n.default=function(e){return r.a.createElement("div",{style:{width:"100%",height:"100%",margin:"20% auto"}},r.a.createElement("h1",null,r.a.createElement("p",null,"This Referrals page is under construction. Please come back soon!")))}}}]);

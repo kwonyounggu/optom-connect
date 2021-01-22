@@ -103,7 +103,7 @@ public class FileInfoBean implements Serializable
 	public String getInsertStmtTo_ohip_mro_tx_history(int auth_user_account_id)
 	{
 		return "insert into ohip_mro_tx_history values(default, '" + fileName + "', " +
-														       "'" + fType + "', " +
+													 	       "'" + fType + "', " +
 														       "'" + fNumber + "', " +
 														           + fMonth + ", " +
 														       "'" + fExt + "', " +

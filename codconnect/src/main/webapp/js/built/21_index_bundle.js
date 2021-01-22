@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[21],{509:function(e,n,o){"use strict";o.r(n);var t=o(0),l=o.n(t);n.default=function(e){return console.log("INFO: ",e),l.a.createElement("article",null,l.a.createElement("h1",null,"NOT FOUND from Root"))}}}]);
