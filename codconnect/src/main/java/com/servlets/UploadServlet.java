@@ -206,6 +206,7 @@ public class UploadServlet extends HttpServlet
 				BEHB1Bean bean = new BEHB1Bean(line);
 				System.out.println(bean.toString());
 				
+				//Check if the provider number in the file is equal to the one of the logged-in person
 				if (decodedToken != null && !decodedToken.getString("providerNumber").equals(bean.getProviderNumber()))
 					throw new Exception("The provider number is not matching in between yours and file's. -- Please try again with yours !");
 				batchEditJson.put(bean.getJson());

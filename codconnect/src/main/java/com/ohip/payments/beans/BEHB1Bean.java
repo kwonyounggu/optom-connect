@@ -252,6 +252,19 @@ public class BEHB1Bean implements Serializable
 		ps.setInt(18, ohip_mro_tx_history_id);
 		return ps;
 	}
+	public static PreparedStatement getSelectStmtIfArecordInHB1Exists(Connection c, JSONObject json) throws SQLException, Exception
+	{
+		String sqlCmd = "select 1 from ohip_mro_hb1 where provider_number=? and batch_process_date=? and micro_type=? and micro_start=?";
+		PreparedStatement ps = c.prepareStatement(sqlCmd);
+		
+		ps.setString(1, json.getString("providerNumber"));
+		ps.setDate(2, java.sql.Date.valueOf(json.getString("batchProcessDate").replace("/", "-")));
+		ps.setString(3, json.getString("microType"));
+		ps.setString(4, json.getString("microStart")); 
+		
+		System.out.println("[INFO] BEHB1Bean.getSelectStmtIfArecordInHB1Exists(..) : " + ps.toString());
+		return ps;
+	}
 	public static String getSqlOfAutoIncrementId()
 	{
 		return "SELECT CURRVAL(pg_get_serial_sequence('ohip_mro_hx1', 'ohip_mro_hx1_id'));";

@@ -74,7 +74,10 @@ JAN-14-2021
 JAN-14-2021
 1. Check a duplicated file submission over again accidentally, periodically
    -- option 1) allow but filter it when a query is performed
-JAN-17-2021
+JAN-17-2021: DONE
 1. getSqlIfArecordExists in FileInfoBean:
    - this is check user id and file name: this is not enough since the same file name is can be uploaded again over time gone through
    - see insertBatchEditData in OHIPReportDao from line 325
+JAN-23-2021
+-- ERROR to prevent as BE 
+-- RA to prevent as BE

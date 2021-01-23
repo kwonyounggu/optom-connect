@@ -319,22 +319,27 @@ public class OHIPReportDao
 			else
 				throw new DAOException("Unknown subject of token out of expecting 'internalLogin' or 'externalLogin'");
 
+			//Find the id of the logged-in person from the table, auth_user_account
 			rs = s.executeQuery(sqlCmd);
 			if (rs.next()) token.put("authUserAccountId", rs.getInt(1));
 			else throw new DAOException("Oops DB corrupted, please logout and login. -- Do it again!");
+			
+			//Check if the given file name exists with the person logged-in
 			rs = s.executeQuery(fb.getSqlIfArecordExists(token.getInt("authUserAccountId")));
-			if (rs.next()) //check the file name through ohip_mro_tx_history
+			if (rs.next()) //Just ignore if the file with the person is already databased
 			{
-				//There is already file info in the tables so update it, do it later for updating hr1 to hr8 and ohip_mro_tx_history
-				
 				log.info("The file, " + fb.getFileName() + ", is already in the database.");//ignore data insertion
 			}
-			else if ((rs=s.executeQuery(fb.getSqlIfArecordInHB1Exists(0))).next())// compare in 2).
+			//Check one more to prevent any file having the same record
+			else if (BEHB1Bean.getSelectStmtIfArecordInHB1Exists(c, jsonData.getJSONObject(0)).executeQuery().next())
 			{
-				//say ohip_mro_hb1 record including batch-etc information and corresponding tx-file name
-				//do here on 2021-01-23
+				log.info("There already exists a record having the same batch process date, micro type and micro start values.");
+				//The below is commented since you don't have to stop showing the result to the person
+				//though the file name and its contents is corrupted in a way. - JAN 23 2021
+				
+				//throw new DAOException("Oops there exists the same data in the table. -- Do it again with the original file!");
 			}
-			else
+			else //maximized to prevent the same contents to be added/inserted
 			{
 				int ohipMroTxHistoryId = -1;
 
@@ -345,7 +350,7 @@ public class OHIPReportDao
 				for (int i=0, size=jsonData.length(); i < size; i++)
 				{
 					JSONObject jo = jsonData.getJSONObject(i);
-					//s.executeUpdate(BEHB1Bean.getInsertStmtTo_ohip_mro_hb1(jo, ohipMroTxHistoryId));
+					@SuppressWarnings("unused")
 					int count = BEHB1Bean.getInsertStmtTo_ohip_mro_hb1(c, jo, ohipMroTxHistoryId).executeUpdate();
 					//System.err.println("count="+count);
 				}

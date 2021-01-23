@@ -119,12 +119,4 @@ public class FileInfoBean implements Serializable
 		return "select 1 from ohip_mro_tx_history where file_name='" + fileName + "' " +
 				 "and auth_user_account_id=" + auth_user_account_id + " limit 1;";
 	}
-	//From batch edit table records
-	// batch_number, etc
-	public String getSqlIfArecordInHB1Exists(int auth_user_account_id)
-	{
-		return "select 1 from ohip_mro_tx_history where file_name='" + fileName + "' " +
-				 "and auth_user_account_id=" + auth_user_account_id + " limit 1;";
-	}
-	
 }
