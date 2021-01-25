@@ -107,7 +107,7 @@ public class UploadServlet extends HttpServlet
 				FileInfoBean fb = new FileInfoBean();
 				//find file information in detail
 				for (int i=0; line != null; i++)
-				{//log.info(line);
+				{    log.info(line);
 					if (line.startsWith("Content-Disposition:"))
 					{						
 						String[] dispInfo = extractDispositionInfo(line);
@@ -119,7 +119,12 @@ public class UploadServlet extends HttpServlet
 						
 						if (Integer.parseInt(fb.getfNumber()) == 0)
 							throw new Exception("Group/Provider number is not valid. -- Try again with the original!");
-						
+						//check if the file name matches the provider number if logged-in.
+						else if (decodedToken != null &&
+								 Character.toString(fb.getfType()).matches("[EFP]") && 
+								 !decodedToken.getString("providerNumber").equals(fb.getfNumber())
+								)
+							throw new Exception("Your provider number is not valid. -- Try again with your file!");
 						break;
 					}
 					line = reader.readLine();
@@ -134,14 +139,12 @@ public class UploadServlet extends HttpServlet
 					}
 					case 'E':  
 					case 'F':  
-					{
-						//check if the file name matches the provider number if logged-in. 
+					{				 
 						returnJson.put("claimError", handleClaimErrorFile(reader, fb, decodedToken)); 
 						break;
 					}
 					case 'P':  
 					{
-						//check if the file name matches the provider number if logged-in. 
 						returnJson.put("report", handleRemittanceAdviceFile(reader, fb, decodedToken)); 
 						break;
 					}
