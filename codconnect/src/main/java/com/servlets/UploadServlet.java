@@ -139,7 +139,7 @@ public class UploadServlet extends HttpServlet
 					}
 					case 'E':  
 					case 'F':  
-					{				 
+					{			 
 						returnJson.put("claimError", handleClaimErrorFile(reader, fb, decodedToken)); 
 						break;
 					}
@@ -207,7 +207,7 @@ public class UploadServlet extends HttpServlet
 			if (line.startsWith("HB1"))
 			{
 				BEHB1Bean bean = new BEHB1Bean(line);
-				System.out.println(bean.toString());
+				//System.out.println(bean.toString());
 				
 				//Check if the provider number in the file is equal to the one of the logged-in person
 				if (decodedToken != null && !decodedToken.getString("providerNumber").equals(bean.getProviderNumber()))
@@ -245,6 +245,10 @@ public class UploadServlet extends HttpServlet
 			{
 				CEHX1Bean bean = new CEHX1Bean(line);
 				//System.out.println(bean.toString());
+				
+				//Check if the provider number in the file is equal to the one of the logged-in person
+				if (decodedToken != null && !decodedToken.getString("providerNumber").equals(bean.getProviderNumber()))
+					throw new Exception("The provider number is not matching in between yours and file's. -- Please try again with yours !");
 				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.startsWith("HXH"))
