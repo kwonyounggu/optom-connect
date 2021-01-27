@@ -326,6 +326,10 @@ public class UploadServlet extends HttpServlet
 			{
 				RVHR1Bean hrBean = new RVHR1Bean(line);
 				//hrBean.printRecord();
+				//==>
+				//Check if the provider number in the file is equal to the one of the logged-in person
+				//if (decodedToken != null && !decodedToken.getString("providerNumber").equals(bean.getProviderNumber()))
+				//	throw new Exception("The provider number is not matching in between yours and file's. -- Please try again with yours !");
 				
 				if (fb.getfNumber().length()==4 && !hrBean.getGroupNumber().equals(fb.getfNumber()))
 					throw new Exception("Group number is not matching. -- Try again with the original!");

@@ -185,7 +185,7 @@ public class OHIPReportDao
 			rs = s.executeQuery(fb.getSqlIfArecordExists(token.getInt("authUserAccountId")));
 			if (rs.next())
 			{
-				//There is already file info in the tables so update it, do it later for updating hr1 to hr8 and ohip_mro_tx_history
+				log.info("The file, " + fb.getFileName() + ", is already in the database.");//ignore data insertion
 			}
 			// ********** INSERT INTO TABLES SUCH AS HX1 ... HX9 AND HISTORY TABLE **********
 			else
