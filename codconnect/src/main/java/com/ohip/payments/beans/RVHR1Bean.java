@@ -107,6 +107,10 @@ public class RVHR1Bean implements Serializable
 	{
 		return healthCareProvider;
 	}
+	public String getProviderNumber()
+	{
+		return Integer.toString(healthCareProvider);
+	}
     /*public boolean isEqualHealthCareProvider(int providerNumber)
     {
     	return healthCareProvider == providerNumber;

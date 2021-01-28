@@ -247,8 +247,10 @@ public class UploadServlet extends HttpServlet
 				//System.out.println(bean.toString());
 				
 				//Check if the provider number in the file is equal to the one of the logged-in person
+				//ie: compare the registered provider to one in the file contents
 				if (decodedToken != null && !decodedToken.getString("providerNumber").equals(bean.getProviderNumber()))
 					throw new Exception("The provider number is not matching in between yours and file's. -- Please try again with yours !");
+				
 				claminErrorJson.put(bean.getJson());
 			}
 			else if (line.startsWith("HXH"))
@@ -327,16 +329,17 @@ public class UploadServlet extends HttpServlet
 				RVHR1Bean hrBean = new RVHR1Bean(line);
 				//hrBean.printRecord();
 				//==>
-				//Check if the provider number in the file is equal to the one of the logged-in person
-				//if (decodedToken != null && !decodedToken.getString("providerNumber").equals(bean.getProviderNumber()))
-				//	throw new Exception("The provider number is not matching in between yours and file's. -- Please try again with yours !");
-				
+								
 				if (fb.getfNumber().length()==4 && !hrBean.getGroupNumber().equals(fb.getfNumber()))
 					throw new Exception("Group number is not matching. -- Try again with the original!");
 				else if (fb.getfNumber().length()==6 && hrBean.getHealthCareProvider() != fb.getfNumberInt())
 					throw new Exception("Provider number is not matching. -- Try again with the original!");
 				else if (hrBean.getSpeciality() != 56)
-					throw new Exception("The remittance advice report is only for eye doctors (O.D)!");
+					throw new Exception("The remittance advice report is only for eye doctors (O.D)!");			
+				//Check if the provider number in the file is equal to the one of the logged-in person
+				else if (decodedToken != null && !decodedToken.getString("providerNumber").equals(hrBean.getProviderNumber()))//compare the registered provider to one in the file contents
+					throw new Exception("The provider number is not matching in between yours and file's. -- Please try again with yours !");
+
 				reportJson.put("hr1", hrBean.getJson());
 			}
 			else if (line.startsWith("HR2"))
@@ -449,10 +452,7 @@ public class UploadServlet extends HttpServlet
 		if (decodedToken != null)
 		{
 			//Check if the user allows data insertion in terms of auth_user_matrix_with_settings
-			//Insert into db
-			//OHIPReportDao reportDao = new OHIPReportDao(DatasourceUtil.getDataSource());
 			reportDao.insertRAData(reportJson, fb, decodedToken);
-		
 		}
 		
 		reportJson.put("total", total);
