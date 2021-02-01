@@ -86,3 +86,11 @@ Copy the app password above and paste it into the password field
 
 JAN 5 -
 WEBPACK, BABEL LOADER CORE : incompatible so it create loader error
+
+FEB 1 2021
+1. in wepapp/index.html, comment <script src=root_index_bundle.js></script> section
+2. in terminal>npm run build
+3. in webapp/index.html, uncomment <script src=root_index_bundle.js></script> section
+4. export to a war file
+5. undeploy the existing war file
+6. upload to deploy the new war file.
