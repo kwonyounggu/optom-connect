@@ -22,7 +22,7 @@ console.log(">>>SRC_DIR: ", SRC_DIR);
 module.exports=
 {
 		
-		mode: "development",
+		mode: "development ",
 		entry: 
 		{
 			root: "./src/main/webapp/js/root_index.jsx",
