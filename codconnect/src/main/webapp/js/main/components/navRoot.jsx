@@ -257,7 +257,7 @@ const NavRootMenuBar = (props) =>
             <img src={"/images/general/connect-png-2.png"} alt="logo" className={classes.logo} />
           </IconButton>
           <Typography className={classes.title} variant="h5" component="h6"noWrap>
-            Optom Connect
+            OD Connect
           </Typography>
 		  <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -345,7 +345,7 @@ const NavRootMenuBar = (props) =>
 						 <img src={"/images/general/connect-png-2.png"} alt="logo" className={classes.logo} />
 						 
 			             <Typography variant="h6" noWrap>
-				            Optom Connect
+				            OD Connect&nbsp;&nbsp;&nbsp; 
 				          </Typography>
 					    </div>
 					    <Divider />

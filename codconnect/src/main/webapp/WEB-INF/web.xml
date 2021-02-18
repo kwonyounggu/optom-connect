@@ -42,4 +42,14 @@
     <error-code>503</error-code>
     <location>/general-error.html</location>
   </error-page>
+  <security-constraint>
+  	<display-name>HTTPS</display-name>
+  	<web-resource-collection>
+  		<web-resource-name>https</web-resource-name>
+  		<url-pattern>/*</url-pattern>
+  	</web-resource-collection>
+    <user-data-constraint>
+        <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
 </web-app>
