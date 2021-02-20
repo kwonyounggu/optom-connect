@@ -17,5 +17,5 @@ export function getLang()
 }
 
 //Got Recaptcha siteKey for domain: webmonster.ca, email: kwon.younggu@gmail.com, label: Optom Connect
-export const siteKey = "6Ld7JLYZAAAAAO_-4oa94JbgLHKBOIDeUZG3LYAI";
+export const siteKey = "6LeFlGAaAAAAAA8dqccJIG-ocDuubz7ss3-kQKaK"; //V2
 
