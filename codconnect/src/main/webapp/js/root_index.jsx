@@ -1,4 +1,4 @@
-/**
+ /**
  * This is the file, entry point, defined in webpack.config.js
  */
 import React from "react";
@@ -14,31 +14,9 @@ import Loader from 'react-loader-spinner';
 
 import {addAlertMessage} from "./main/actions/alertMessageActions.jsx";
 
-/*
-import Home from "./main/components/home.jsx";
-import Accounting from "./main/containers/accounting.jsx";
-import Referrals from "./main/components/referrals.jsx";
-import About from "./main/components/about.jsx";
-import NotFound from "./main/components/notFound.jsx";
-
-import NavRoot from "./main/components/navRoot.jsx";
-import NavRootFooter from "./main/components/navRootFooter.jsx";
-import {DRAWER_WIDTH} from "./main/components/navRoot.jsx";
-
-import MyAccount from "./main/auth/containers/myAccount.jsx";
-import Signup from "./main/auth/components/signup/signup.jsx";
-import Activation from "./main/auth/components/signup/activation.jsx";
-import Login from "./main/auth/components/login/login.jsx";
-import ResetPassword from "./main/auth/components/resetPassword/resetPassword.jsx";
-import ForgotPassword from "./main/auth/components/forgotPassword/forgotPassword.jsx";
-
-import Error from "./main/components/common/error.jsx";
-import GlobalAlert from "./main/components/common/globalAlert.jsx";
-*/
-
 const Home = React.lazy( () => import("./main/components/home.jsx") );
 const Accounting = React.lazy( () => import("./main/containers/accounting.jsx") );
-const Referrals = React.lazy( () => import("./main/components/referrals.jsx") );
+const Referrals = React.lazy( () => import("./main/containers/referrals.jsx") );
 const About = React.lazy( () => import("./main/components/about.jsx") );
 const NotFound = React.lazy( () => import("./main/components/notFound.jsx") );
 
@@ -55,8 +33,6 @@ const ForgotPassword = React.lazy( () => import("./main/auth/components/forgotPa
 
 const Error = React.lazy( () => import("./main/components/common/error.jsx") );
 const GlobalAlert = React.lazy( () => import("./main/components/common/globalAlert.jsx") );
-
-
 
 //import "./main/css/root.css";
 //import "./main/css/footer.css";

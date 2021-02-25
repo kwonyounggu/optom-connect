@@ -16,6 +16,7 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import VisibilityIcon from "@material-ui/icons/Visibility";
 
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import { ListItemIcon } from '@material-ui/core';
@@ -56,6 +57,7 @@ const Menubar = (props) =>
 	const [accountingMenuOpen, setAccuntingMenuOpen] = React.useState(true);
 	const [ohipMenuOpen, setOhipMenuOpen] = React.useState(true);
 	const [nonohipMenuOpen, setNonohipMenuOpen] = React.useState(true);
+	const [referralsMenuOpen, setReferralsMenuOpen] = React.useState(true);
 	const [selectedItem, setSelectedItem] = React.useState(props.location.pathname);
 	
 	console.log("[INFO Menubar() of menubar.jsx ]: props.location.pathname", props.location.pathname, "|", props);
@@ -69,13 +71,17 @@ const Menubar = (props) =>
 			case "/accounting": setAccuntingMenuOpen(!accountingMenuOpen); break;
 			case "/accounting/ohip": setOhipMenuOpen(!ohipMenuOpen); break;
 			case "/accounting/non_ohip": setNonohipMenuOpen(!nonohipMenuOpen);break;
+			case "/referrals": setReferralsMenuOpen(!referralsMenuOpen); break;
 			case "/":
 			case "/accounting/ohip/convert": //if rootReducer.data is not null, nullify by sending DATA_RESET
 			case "/accounting/ohip/billing":
 			case "/accounting/ohip/myrecord":
 			case "/accounting/non-ohip/billing":
 			case "/accounting/non-ohip/myrecord":
-			case "/referrals":
+			case "/referrals/patient_referral_form":
+			case "/referrals/ocular_exam_report":
+			case "/referrals/blind_low_vision_referral_form":
+			case "/referrals/blind_low_vision_early_report":
 			case "/about": 
 				if (!props.isLargeScreen) props.setDrawerOpen(false);
 				//else props.changeBodyMargin(true);
@@ -144,10 +150,34 @@ const Menubar = (props) =>
 					</Collapse>
 				</List>
 			  </Collapse>
-			  <ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[9]} selected={selectedItem==menuLinks[9]} onClick={menuClick(menuLinks[9])}>
+	
+			  <ListItem button classes={{ selected: classes.activeItem }} dense={true} selected={selectedItem==menuLinks[9]} onClick={menuClick(menuLinks[9])}>
 				<ListItemIcon><DynamicFeedIcon color="inherit" fontSize="small"/></ListItemIcon>
-	            <ListItemText primary="Referrals" />
+				<ListItemText primary="Referrals" />
+				{referralsMenuOpen ? <ExpandLess /> : <ExpandMore />}
 	          </ListItem>
+			  <Collapse in={referralsMenuOpen} timeout="auto" unmountOnExit>
+				<List>
+					<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[12]} selected={selectedItem==menuLinks[12]} onClick={menuClick(menuLinks[12])}>
+						<ListItemIcon><VisibilityIcon color="inherit" fontSize="small"/></ListItemIcon>
+			            <ListItemText primary="Patient Referrals Form" className={classes.nest_1st_level}/>
+			        </ListItem>
+					<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[13]} selected={selectedItem==menuLinks[13]} onClick={menuClick(menuLinks[13])}>
+						<ListItemIcon><VisibilityIcon color="inherit" fontSize="small"/></ListItemIcon>
+			            <ListItemText primary="Ocular Exam Report" className={classes.nest_1st_level} />
+			        </ListItem>
+					<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[14]} selected={selectedItem==menuLinks[14]} onClick={menuClick(menuLinks[14])}>
+						<ListItemIcon><VisibilityIcon color="inherit" fontSize="small"/></ListItemIcon>
+			            <ListItemText primary="Low Vision Referrals Form" className={classes.nest_1st_level}/>
+			         </ListItem>
+					<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[15]} selected={selectedItem==menuLinks[15]} onClick={menuClick(menuLinks[15])}>
+						<ListItemIcon><VisibilityIcon color="inherit" fontSize="small"/></ListItemIcon>
+			            <ListItemText primary="Low Vision Eearly Report" className={classes.nest_1st_level} />
+			         </ListItem>
+				</List>
+			   </Collapse>
+	
+	
 	          <ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[10]} selected={selectedItem==menuLinks[10]} onClick={menuClick(menuLinks[10])}>
 				<ListItemIcon><InfoIcon color="inherit" fontSize="small"/></ListItemIcon>
 	            <ListItemText primary="About" />

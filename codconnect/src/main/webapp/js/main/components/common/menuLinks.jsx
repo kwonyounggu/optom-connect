@@ -12,6 +12,10 @@ export const menuLinks =
 	"/referrals", //[9]
 	"/about",  //[10]
 	"/accounting/ohip/billing/wsdl", //[11]
+	"/referrals/patient_referral_form", //[12]
+	"/referrals/ocular_exam_report", //[13]
+	"/referrals/blind_low_vision_referral_form", //[14]
+	"/referrals/blind_low_vision_early_report" //[15]
 ];
 
 export const searchMenu = 
@@ -26,5 +30,9 @@ export const searchMenu =
   { title: 'Accounting>NON-OHIP>Billing', path: menuLinks[7] },
   { title: 'Accounting>NON-OHIP>My Record', path: menuLinks[8] },
   { title: 'Referrals', path: menuLinks[9] },
+  { title: 'Referrals>Patient Referral Form', path: menuLinks[12] },
+  { title: 'Referrals>Ocular Exam Report', path: menuLinks[13] },
+  { title: 'Referrals>Blind Low Vision Referral Form', path: menuLinks[14] },
+  { title: 'Referrals>Blind Low Vision Early Report', path: menuLinks[15] },
   { title: 'About', path: menuLinks[10] }
 ];
