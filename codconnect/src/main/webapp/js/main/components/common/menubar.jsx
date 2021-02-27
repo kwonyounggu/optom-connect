@@ -13,13 +13,16 @@ import AlbumIcon from '@material-ui/icons/Album';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import HealingIcon from '@material-ui/icons/Healing';
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import { ListItemIcon } from '@material-ui/core';
+import {Typography} from "@material-ui/core"
 
 import {menuLinks} from "./menuLinks.jsx";
 
@@ -57,7 +60,8 @@ const Menubar = (props) =>
 	const [accountingMenuOpen, setAccuntingMenuOpen] = React.useState(true);
 	const [ohipMenuOpen, setOhipMenuOpen] = React.useState(true);
 	const [nonohipMenuOpen, setNonohipMenuOpen] = React.useState(true);
-	const [referralsMenuOpen, setReferralsMenuOpen] = React.useState(true);
+	const [referralsMenuOpen, setReferralsMenuOpen] = React.useState(false );
+	const [eyeHealthMenuOpen, setEyeHealthMenuOpen] = React.useState(false );
 	const [selectedItem, setSelectedItem] = React.useState(props.location.pathname);
 	
 	console.log("[INFO Menubar() of menubar.jsx ]: props.location.pathname", props.location.pathname, "|", props);
@@ -68,10 +72,11 @@ const Menubar = (props) =>
 
 		switch(key)
 		{
-			case "/accounting": setAccuntingMenuOpen(!accountingMenuOpen); break;
+			case "/accounting": setAccuntingMenuOpen(!accountingMenuOpen); setReferralsMenuOpen(false); setEyeHealthMenuOpen(false); break;
 			case "/accounting/ohip": setOhipMenuOpen(!ohipMenuOpen); break;
 			case "/accounting/non_ohip": setNonohipMenuOpen(!nonohipMenuOpen);break;
-			case "/referrals": setReferralsMenuOpen(!referralsMenuOpen); break;
+			case "/referrals": setReferralsMenuOpen(!referralsMenuOpen); setAccuntingMenuOpen(false); setEyeHealthMenuOpen(false); break;
+			case "/eye_health": setEyeHealthMenuOpen(!eyeHealthMenuOpen); setAccuntingMenuOpen(false); setReferralsMenuOpen(false); break;
 			case "/":
 			case "/accounting/ohip/convert": //if rootReducer.data is not null, nullify by sending DATA_RESET
 			case "/accounting/ohip/billing":
@@ -82,6 +87,9 @@ const Menubar = (props) =>
 			case "/referrals/ocular_exam_report":
 			case "/referrals/blind_low_vision_referral_form":
 			case "/referrals/blind_low_vision_early_report":
+			case "/eye_health/eye_medication":
+			case "/eye_health/common_eye_diseases":
+			case "/eye_health/ocular_news":
 			case "/about": 
 				if (!props.isLargeScreen) props.setDrawerOpen(false);
 				//else props.changeBodyMargin(true);
@@ -119,11 +127,27 @@ const Menubar = (props) =>
 						<List>
 							<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[3]} selected={selectedItem==menuLinks[3]} onClick={menuClick(menuLinks[3])}>
 								<ListItemIcon><AutorenewIcon color="inherit" fontSize="small"/></ListItemIcon>
-					            <ListItemText primary="Convert file"  className={classes.nest_2nd_level}/>
+								<ListItemText 
+									primary="Convert file" 
+									secondary=
+									{
+										<React.Fragment>
+											<Typography component="span" variant="caption">Convert MRO files given from ON gov</Typography>
+										</React.Fragment>
+									}
+									className={classes.nest_2nd_level} />
 					         </ListItem>
 							 <ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[4]} selected={selectedItem==menuLinks[4]} onClick={menuClick(menuLinks[4])}>
 								<ListItemIcon><MonetizationOnIcon color="inherit" fontSize="small"/></ListItemIcon>
-					            <ListItemText primary="Billing" className={classes.nest_2nd_level}/>
+								<ListItemText 
+									primary="Billing" 
+									secondary=
+									{
+										<React.Fragment>
+											<Typography component="span" variant="caption">Create a billing file to submit to ON gov</Typography>
+										</React.Fragment>
+									}
+									className={classes.nest_2nd_level} />
 					         </ListItem>
 							<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[5]} selected={selectedItem==menuLinks[5]} onClick={menuClick(menuLinks[5])}>
 								<ListItemIcon><AlbumIcon color="inherit" fontSize="small"/></ListItemIcon>
@@ -150,7 +174,58 @@ const Menubar = (props) =>
 					</Collapse>
 				</List>
 			  </Collapse>
+
+			  <ListItem button classes={{ selected: classes.activeItem }} dense={true} selected={selectedItem==menuLinks[16]} onClick={menuClick(menuLinks[16])}>
+				<ListItemIcon><HealingIcon color="inherit" fontSize="small"/></ListItemIcon>
+				<ListItemText primary="Eye Health" />
+				{eyeHealthMenuOpen ? <ExpandLess /> : <ExpandMore />}
+	          </ListItem>
+			  <Collapse in={eyeHealthMenuOpen} timeout="auto" unmountOnExit>
+				<List>
+					<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[17]} selected={selectedItem==menuLinks[17]} onClick={menuClick(menuLinks[17])}>
+						<ListItemIcon><VisibilityIcon color="inherit" fontSize="small"/></ListItemIcon>
+						<ListItemText 
+							primary="Eye Medication" 
+							secondary=
+							{
+								<React.Fragment>
+									<Typography component="span" variant="caption">Eye Care Medicine</Typography>
+								</React.Fragment>
+							}
+							className={classes.nest_1st_level} />
+			        </ListItem>
+					<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[18]} selected={selectedItem==menuLinks[18]} onClick={menuClick(menuLinks[18])}>
+						<ListItemIcon><VisibilityIcon color="inherit" fontSize="small"/></ListItemIcon>
+						<ListItemText 
+							primary="Eye Diseases" 
+							secondary=
+							{
+								<React.Fragment>
+									<Typography component="span" variant="caption">Common Eye Diseases</Typography>
+								</React.Fragment>
+							}
+							className={classes.nest_1st_level} />
+			        </ListItem>
+					<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[19]} selected={selectedItem==menuLinks[19]} onClick={menuClick(menuLinks[19])}>
+						<ListItemIcon><VisibilityIcon color="inherit" fontSize="small"/></ListItemIcon>
+						<ListItemText 
+							primary="Ocular News" 
+							secondary=
+							{
+								<React.Fragment>
+									<Typography component="span" variant="caption">Eye Care News</Typography>
+								</React.Fragment>
+							}
+							className={classes.nest_1st_level} />
+			         </ListItem>
+				</List>
+			  </Collapse>
 	
+			  <ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[20]} selected={selectedItem==menuLinks[20]} onClick={menuClick(menuLinks[20])}>
+				<ListItemIcon><LocalHospitalIcon color="inherit" fontSize="small"/></ListItemIcon>
+	            <ListItemText primary="Optometrists" />
+	          </ListItem>
+
 			  <ListItem button classes={{ selected: classes.activeItem }} dense={true} selected={selectedItem==menuLinks[9]} onClick={menuClick(menuLinks[9])}>
 				<ListItemIcon><DynamicFeedIcon color="inherit" fontSize="small"/></ListItemIcon>
 				<ListItemText primary="Referrals" />
@@ -160,19 +235,51 @@ const Menubar = (props) =>
 				<List>
 					<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[12]} selected={selectedItem==menuLinks[12]} onClick={menuClick(menuLinks[12])}>
 						<ListItemIcon><VisibilityIcon color="inherit" fontSize="small"/></ListItemIcon>
-			            <ListItemText primary="Patient Referrals Form" className={classes.nest_1st_level}/>
+						<ListItemText 
+							primary="Patient Referrals" 
+							secondary=
+							{
+								<React.Fragment>
+									<Typography component="span" variant="caption">Patient Referrals Form</Typography>
+								</React.Fragment>
+							}
+							className={classes.nest_1st_level} />
 			        </ListItem>
 					<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[13]} selected={selectedItem==menuLinks[13]} onClick={menuClick(menuLinks[13])}>
 						<ListItemIcon><VisibilityIcon color="inherit" fontSize="small"/></ListItemIcon>
-			            <ListItemText primary="Ocular Exam Report" className={classes.nest_1st_level} />
+						<ListItemText 
+							primary="Ocular Exam" 
+							secondary=
+							{
+								<React.Fragment>
+									<Typography component="span" variant="caption">Ocular Examination Report</Typography>
+								</React.Fragment>
+							}
+							className={classes.nest_1st_level} />
 			        </ListItem>
 					<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[14]} selected={selectedItem==menuLinks[14]} onClick={menuClick(menuLinks[14])}>
 						<ListItemIcon><VisibilityIcon color="inherit" fontSize="small"/></ListItemIcon>
-			            <ListItemText primary="Low Vision Referrals Form" className={classes.nest_1st_level}/>
+						<ListItemText 
+							primary="L-Vision Referrals" 
+							secondary=
+							{
+								<React.Fragment>
+									<Typography component="span" variant="caption">Blind Low Vision Referrals Form</Typography>
+								</React.Fragment>
+							}
+							className={classes.nest_1st_level} />
 			         </ListItem>
 					<ListItem button classes={{ selected: classes.activeItem }} dense={true} component={Link} to={menuLinks[15]} selected={selectedItem==menuLinks[15]} onClick={menuClick(menuLinks[15])}>
 						<ListItemIcon><VisibilityIcon color="inherit" fontSize="small"/></ListItemIcon>
-			            <ListItemText primary="Low Vision Eearly Report" className={classes.nest_1st_level} />
+			            <ListItemText 
+							primary="L-Vision Report" 
+							secondary=
+							{
+								<React.Fragment>
+									<Typography component="span" variant="caption">Blind Low Vision Early Report</Typography>
+								</React.Fragment>
+							}
+							className={classes.nest_1st_level} />
 			         </ListItem>
 				</List>
 			   </Collapse>

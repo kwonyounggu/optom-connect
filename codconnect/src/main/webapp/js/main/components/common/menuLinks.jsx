@@ -15,7 +15,12 @@ export const menuLinks =
 	"/referrals/patient_referral_form", //[12]
 	"/referrals/ocular_exam_report", //[13]
 	"/referrals/blind_low_vision_referral_form", //[14]
-	"/referrals/blind_low_vision_early_report" //[15]
+	"/referrals/blind_low_vision_early_report", //[15]
+	"/eye_health", //[16]
+	"/eye_health/eye_medication", //[17]
+	"/eye_health/common_eye_diseases", //[18]
+	"/eye_health/ocular_news", //[19]
+	"/optometrists"  //[20]
 ];
 
 export const searchMenu = 
@@ -34,5 +39,10 @@ export const searchMenu =
   { title: 'Referrals>Ocular Exam Report', path: menuLinks[13] },
   { title: 'Referrals>Blind Low Vision Referral Form', path: menuLinks[14] },
   { title: 'Referrals>Blind Low Vision Early Report', path: menuLinks[15] },
+  { title: 'Eype Health', path: menuLinks[16] },
+  { title: 'Eye Health>Eye Medication', path: menuLinks[17] },
+  { title: 'Eye Health>Common Eye Diseases', path: menuLinks[18] },
+  { title: 'Eye Health>Ocular News', path: menuLinks[19] },
+  { title: 'Optometrists in Ontario', path: menuLinks[20] },
   { title: 'About', path: menuLinks[10] }
 ];
