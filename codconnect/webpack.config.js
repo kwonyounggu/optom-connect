@@ -53,7 +53,10 @@ module.exports=
 					}
 					
 				},
-				{ test: /\.css$/, use: ["style-loader", "css-loader"]},
+				
+				//{ test: /\.css$/, use: ["style-loader", "css-loader"]},
+				{ test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"]},
+				
 				{				
 				  //see https://www.youtube.com/watch?v=cDLfpth5a3s
 				  test: /\.(jpe?g|png|gif|svg)$/i, 
