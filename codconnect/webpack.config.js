@@ -55,7 +55,15 @@ module.exports=
 				},
 				
 				//{ test: /\.css$/, use: ["style-loader", "css-loader"]},
-				{ test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"]},
+				{ 
+					test: /\.(sa|sc|c)ss$/, 
+					use: 
+					[
+						{ loader: "style-loader" }, 
+						{ loader: "css-loader" }, 
+						{ loader: "sass-loader"}
+					]
+				},
 				
 				{				
 				  //see https://www.youtube.com/watch?v=cDLfpth5a3s

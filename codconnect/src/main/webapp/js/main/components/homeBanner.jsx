@@ -19,9 +19,10 @@ import
     Slider
 } from '@material-ui/core';
 
+/*
 function Banner(props) 
 {
-    if (props.newProp) console.log(props.newProp)
+	if (props.newProp) console.log(props.newProp)
     const contentPosition = props.contentPosition ? props.contentPosition : "left"
     const totalItems = props.length ? props.length : 3;
     const mediaLength = totalItems - 1;
@@ -140,7 +141,63 @@ const items =
         ]
     }
 ]
+*/
 
+function EyeCareBanner(props)
+{
+	console.log("props of EyeCareBanner: ", props.item.image);
+	 return (
+        <Card raised className="Banner">
+            <Grid container spacing={0} className="BannerGrid">
+                <Grid item key={props.item.name}>
+	                <CardMedia
+	                    className="Media"
+	                    image={props.item.image}
+	                    title={props.item.name}
+	                >
+	                    <Typography className="MediaCaption">
+	                        {props.item.name}
+	                    </Typography>
+	                </CardMedia>
+	            </Grid>
+            </Grid>
+        </Card>
+    )
+}
+
+const eyeCareItems =
+[
+	{
+		name: "first",
+		image: "/images/home_image0.jpg",
+		description: ""
+	},
+	{
+		name: "second",
+		image: "/images/home_image1.jpg",
+		description: ""
+	},
+	{
+		name: "third",
+		image: "/images/home_image2.jpg",
+		description: ""
+	},
+	{
+		name: "fourth",
+		image: "/images/home_image3.jpg",
+		description: ""
+	},
+	{
+		name: "fifth",
+		image: "/images/home_image4.jpg",
+		description: ""
+	},
+	{
+		name: "sixth",
+		image: "/images/home_image5.jpg",
+		description: ""
+	}
+];
 class HomeBanner extends React.Component 
 {
     constructor(props) 
@@ -214,16 +271,14 @@ class HomeBanner extends React.Component
                     next={(now, previous) => console.log(`Next User Callback: Now displaying child${now}. Previously displayed child${previous}`)}
                     prev={(now, previous) => console.log(`Prev User Callback: Now displaying child${now}. Previously displayed child${previous}`)}
                     onChange={(now, previous) => console.log(`OnChange User Callback: Now displaying child${now}. Previously displayed child${previous}`)}
-                    // fullHeightHover={false}
-                    // navButtonsProps={{style: {backgroundColor: 'cornflowerblue', borderRadius: 0}}}
-                    // navButtonsWrapperProps={{style: {bottom: '0', top: 'unset', }}}
-                    // indicatorContainerProps={{style: {margin: "20px"}}}
-                    // NextIcon='next'
                 >
                     {
-                        items.map((item, index) => {
-                            return <Banner item={item} key={index} contentPosition={item.contentPosition} />
-                        })
+                        eyeCareItems.map
+						((item, index) => 
+						 {
+                            return <EyeCareBanner item={item} key={index}  />
+                         }
+						)
                     }
                 </Carousel>
 
