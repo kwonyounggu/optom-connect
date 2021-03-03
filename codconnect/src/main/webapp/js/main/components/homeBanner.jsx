@@ -145,10 +145,24 @@ const items =
 
 function EyeCareBanner(props)
 {
+	 return (
+        <Card raised className="Banner">
+	                <CardMedia
+	                    className="Media"
+	                    image={props.item.image}
+	                    title={props.item.name}
+	                >  
+	                </CardMedia>
+        </Card>
+    )
+}
+/*
+function EyeCareBanner(props)
+{
 	console.log("props of EyeCareBanner: ", props.item.image);
 	 return (
         <Card raised className="Banner">
-            <Grid container spacing={0} className="BannerGrid">
+            <Grid container className="BannerGrid">
                 <Grid item key={props.item.name}>
 	                <CardMedia
 	                    className="Media"
@@ -163,8 +177,7 @@ function EyeCareBanner(props)
             </Grid>
         </Card>
     )
-}
-
+}*/
 const eyeCareItems =
 [
 	{
@@ -256,11 +269,8 @@ class HomeBanner extends React.Component
     render() 
 	{
         return (
-            <div style={{ marginTop: "50px", color: "#494949" }}>
-                <h2>Example: eBay&trade; style</h2>
-
-                <Carousel
-                    className="Example"
+            <div style={{ marginTop: "0px"}}>
+                <Carousel    
                     autoPlay={this.state.autoPlay}
                     animation={this.state.animation}
                     indicators={this.state.indicators}
@@ -268,9 +278,6 @@ class HomeBanner extends React.Component
                     cycleNavigation={this.state.cycleNavigation}
                     navButtonsAlwaysVisible={this.state.navButtonsAlwaysVisible}
                     navButtonsAlwaysInvisible={this.state.navButtonsAlwaysInvisible}
-                    next={(now, previous) => console.log(`Next User Callback: Now displaying child${now}. Previously displayed child${previous}`)}
-                    prev={(now, previous) => console.log(`Prev User Callback: Now displaying child${now}. Previously displayed child${previous}`)}
-                    onChange={(now, previous) => console.log(`OnChange User Callback: Now displaying child${now}. Previously displayed child${previous}`)}
                 >
                     {
                         eyeCareItems.map
@@ -281,81 +288,6 @@ class HomeBanner extends React.Component
 						)
                     }
                 </Carousel>
-
-
-                <FormLabel component="legend">Options</FormLabel>
-                <FormControlLabel
-                    control=
-					{
-                        <Checkbox onChange={this.toggleAutoPlay} checked={this.state.autoPlay} value="autoplay"
-                            color="primary" />
-                    }
-                    label="Auto-play"
-                />
-                <FormControlLabel
-                    control=
-					{
-                        <Checkbox onChange={this.toggleIndicators} checked={this.state.indicators} value="indicators"
-                            color="primary" />
-                    }
-                    label="Indicators"
-                />
-                <FormControlLabel
-                    control=
-					{
-                        <Checkbox onChange={this.toggleNavButtonsAlwaysVisible} checked={this.state.navButtonsAlwaysVisible} value="NavButtonsAlwaysVisible" color="primary" />
-                    }
-                    label="NavButtonsAlwaysVisible"
-                />
-
-                <FormControlLabel
-                    control=
-					{
-                        <Checkbox onChange={this.toggleNavButtonsAlwaysInvisible} checked={this.state.navButtonsAlwaysInvisible} value="NavButtonsAlwaysInvisible" color="primary" />
-                    }
-                    label="NavButtonsAlwaysInvisible"
-                />
-                <FormControlLabel
-                    control=
-					{
-                        <Checkbox onChange={this.toggleCycleNavigation} checked={this.state.cycleNavigation} value="CycleNavigation" color="primary" />
-                    }
-                    label="CycleNavigation"
-                />
-
-                <FormControlLabel
-                    control=
-					{
-                        <RadioGroup name="animation" value={this.state.animation} onChange={this.changeAnimation} row
-                            style={{ marginLeft: "10px" }}>
-                            <FormControlLabel value="fade" control={<Radio color="primary" />} label="Fade" />
-                            <FormControlLabel value="slide" control={<Radio color="primary" />} label="Slide" />
-                        </RadioGroup>
-                    }
-                />
-
-                <FormControlLabel
-                    control=
-					{
-                        <div style={{ width: 300 }}>
-                            <Typography id="discrete-slider" gutterBottom>
-                                Animation Duration (Timeout) in ms
-                            </Typography>
-                            <Slider
-                                defaultValue={500}
-                                getAriaValueText={() => `${this.state.timeout}ms`}
-                                aria-labelledby="discrete-slider"
-                                valueLabelDisplay="auto"
-                                step={100}
-                                marks
-                                min={100}
-                                max={2000}
-                                onChange={this.changeTimeout}
-                            />
-                        </div>
-                    }
-                />
-
             </div>
 
         )
