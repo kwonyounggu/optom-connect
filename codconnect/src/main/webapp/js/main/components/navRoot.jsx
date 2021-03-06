@@ -11,7 +11,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
 
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Menubar from "./common/menubar.jsx";
@@ -200,6 +199,7 @@ const NavRoot=(props)=>
 
 	let currentMenu = null;
 	let pathname = props.location.pathname.toLowerCase();
+	
 	if (menuLinks.includes(pathname)) currentMenu=<NavRootMenuBar {...props} />;
     else switch(pathname)
     {

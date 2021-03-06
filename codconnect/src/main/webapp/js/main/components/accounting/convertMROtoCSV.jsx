@@ -18,6 +18,8 @@ import PrintIcon from '@material-ui/icons/Print';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
 import IconButton from '@material-ui/core/IconButton';
 
+import MyModal from "./myModal.jsx";
+
 import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
 
 import RAReport from "./raReport.jsx";
@@ -105,13 +107,6 @@ class ConvertMROtoCSV extends React.Component
 	}
 	componentDidMount()
 	{
-		/*
-		fetch(accountingText)
-      .then((res) => res.json())
-      .then((data) => console.log("[TEST]: ", data.fileNameError));
-	  */
-		
-		//console.info('[REGEX]: ', EXPECTED_FILE_NAME.test("EL990000.123"));
 	}
 	componentDidUpdate(prevProps, prevState)
 	{
@@ -254,6 +249,7 @@ class ConvertMROtoCSV extends React.Component
 						  }
 					      
 					    </Grid>
+					{!this.props.auth.isAuthenticted && <MyModal to={{pathname: "/myAccount/login", search: "?prevPath=" + this.props.location.pathname, state: {fromDashboard: true}}} />}
 				  </div>
 				);
 	}
@@ -262,21 +258,5 @@ class ConvertMROtoCSV extends React.Component
 export default withStyles(styles)(ConvertMROtoCSV);
 
 /***********************************************************
-		let extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-	    console.info("file extension is supported: ", extension, "|", extension.length, "|", /^\d+$/.test(extension), "|", (extension.length == 3) && /^\d+$/.test(extension));
-		this.setState
-		(
-			{
-				isFileExtensionValid: (extension.length == 3) && /^\d+$/.test(extension), 
-				isFileChosen: true,
-				isFileSizeValid: event.target.files[0].size < MRO_MAX_FILE_SIZE,
-				mroFile: event.target.files[0],
-				returnStatus: 0, //0: initial, 1:successful, 3: errorneous
-				returnMessage: "" //from the servlet
-			}
-		);
-		
-		--------------
-		
-		//console.info("[REGEX]: ", /(^[EFPX]{1})+([ABCDEFGHIJKL]{1})+([0-9]{4,6})+(.\d{3})$/.test("EL990000.123"));
+	Note: do it Mar 05 2021 https://material-ui.com/components/modal/
  */
