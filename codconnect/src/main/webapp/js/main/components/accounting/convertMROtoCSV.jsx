@@ -249,14 +249,10 @@ class ConvertMROtoCSV extends React.Component
 						  }
 					      
 					    </Grid>
-					{!this.props.auth.isAuthenticted && <MyModal to={{pathname: "/myAccount/login", search: "?prevPath=" + this.props.location.pathname, state: {fromDashboard: true}}} />}
+					{!this.props.auth.isAuthenticated && <MyModal to={{pathname: "/myAccount/login", search: "?prevPath=" + this.props.location.pathname, state: {fromDashboard: true}}} />}
 				  </div>
 				);
 	}
 }
 
 export default withStyles(styles)(ConvertMROtoCSV);
-
-/***********************************************************
-	Note: do it Mar 05 2021 https://material-ui.com/components/modal/
- */

@@ -50,7 +50,7 @@ const MyModal = (props) =>
 				>
 					<Fade in={open}>
 						<div className={classes.paper}> {/* <div> ... </div>, otherwise there occurs an error */}
-							<h2 id="modal-title">Sorry, the login is required</h2>
+							<h2 id="modal-title">Sorry, the login is required.</h2>
 							<div>
 								<Button href="/" color="primary">Home</Button>
 								<Button component={Link} to={props.to} color="primary"><b>Login</b></Button>

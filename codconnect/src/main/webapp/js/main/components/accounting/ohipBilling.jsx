@@ -1,14 +1,15 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
-import Typography from '@material-ui/core/Typography';
+
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 
-import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import DescriptionIcon from '@material-ui/icons/Description';
 import LanguageIcon from '@material-ui/icons/Language';
+
+import MyModal from "./myModal.jsx";
 
 import {StyledBreadcrumb} from "../common/styledBreadcrumb.jsx";
 import {menuLinks} from "../common/menuLinks.jsx";
@@ -49,8 +50,8 @@ const MyBreadcrumbs = (props) =>
 		  );
 }
 
-const MRO_MAX_FILE_SIZE = 1000000;
-const EXPECTED_FILE_NAME = /(^[BEFPX]{1})+([ABCDEFGHIJKL]{1})+([0-9]{4,6})+(.\d{3})$/;
+//const MRO_MAX_FILE_SIZE = 1000000;
+//const EXPECTED_FILE_NAME = /(^[BEFPX]{1})+([ABCDEFGHIJKL]{1})+([0-9]{4,6})+(.\d{3})$/;
 class OHIPBilling extends React.Component
 {
 	constructor(props)
@@ -111,7 +112,7 @@ class OHIPBilling extends React.Component
 							<p stype={{padding: '10%'}}><strong>This page is under construction !!!</strong></p>
 						</div>
 					}
-
+					{!this.props.auth.isAuthenticated && <MyModal to={{pathname: "/myAccount/login", search: "?prevPath=" + this.props.location.pathname, state: {fromDashboard: true}}} />}
 				</React.Fragment>
 				);
 	}
