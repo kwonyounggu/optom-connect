@@ -5,6 +5,8 @@ import { withStyles } from "@material-ui/core/styles";
 import {connect} from "react-redux";
 import {convertMroToCSV, resetMROData, resetClaimFileData, getBillingCodes, getClaimFile} from "../actions/rootActions.jsx";
 import {addAlertMessage} from "../actions/alertMessageActions.jsx";
+import DisplaySinglePage from "../components/refferals/displaySinglePage.jsx";
+import {PDFViewer} from "react-view-pdf";
 
 /*
  * flex-direction: row | row-reverse | column | column-reverse;
@@ -52,8 +54,8 @@ class Referrals extends React.Component
 						<Route exact path="/referrals"  ><h3>show avaliable links for referrals sections</h3></Route>
 						<Route exact path="/referrals/patient_referral_form"  ><h3>patient-refferals-form</h3></Route>
 						<Route exact path="/referrals/ocular_exam_report"  ><h3>ocular-exam-report</h3></Route>
-						<Route exact path="/referrals/blind_low_vision_referral_form"  ><h3>blind-low-vision-refferal-form</h3></Route>
-						<Route exact path="/referrals/blind_low_vision_early_report"  ><h3>blind-low-vision-early-report</h3></Route>
+						<Route exact path="/referrals/blind_low_vision_referral_form"  ><DisplaySinglePage src="/docs/blv-referral-form-feb-12-2018.pdf" /></Route>
+						<Route exact path="/referrals/blind_low_vision_early_report"  ><PDFViewer url="/docs/blv-vision-report-form-feb-12-2018.pdf" /></Route>
 					</Switch>
 				</div>
 			  );
