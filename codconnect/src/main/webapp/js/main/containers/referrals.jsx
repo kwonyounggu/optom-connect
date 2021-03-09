@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {convertMroToCSV, resetMROData, resetClaimFileData, getBillingCodes, getClaimFile} from "../actions/rootActions.jsx";
 import {addAlertMessage} from "../actions/alertMessageActions.jsx";
 import DisplaySinglePage from "../components/refferals/displaySinglePage.jsx";
+import IframePDF from "../components/refferals/iframePDF.jsx";
 import {PDFViewer} from "react-view-pdf";
 
 /*
@@ -53,7 +54,9 @@ class Referrals extends React.Component
                     <Switch>
 						<Route exact path="/referrals"  ><h3>show avaliable links for referrals sections</h3></Route>
 						<Route exact path="/referrals/patient_referral_form"  ><h3>patient-refferals-form</h3></Route>
-						<Route exact path="/referrals/ocular_exam_report"  ><h3>ocular-exam-report</h3></Route>
+						<Route exact path="/referrals/ocular_exam_report"  >
+							<IframePDF src="/docs/blv-vision-report-form-feb-12-2018.pdf" />
+						</Route>
 						<Route exact path="/referrals/blind_low_vision_referral_form"  ><DisplaySinglePage src="/docs/blv-referral-form-feb-12-2018.pdf" /></Route>
 						<Route exact path="/referrals/blind_low_vision_early_report"  ><PDFViewer url="/docs/blv-vision-report-form-feb-12-2018.pdf" /></Route>
 					</Switch>

@@ -60,6 +60,7 @@
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.20",
     "material-ui-dropzone": "^3.0.0",
+    "pdf-viewer-reactjs": "^2.2.3",
     "precise-ui": "^1.5.1",
     "prismjs": "^1.15.0",
     "prop-types": "^15.6.2",
