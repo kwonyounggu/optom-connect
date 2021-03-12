@@ -104,7 +104,7 @@ class MainApp extends React.Component
 		};
 		this.bodyContainer = React.createRef();
 		this.isMobile = window.mobileAndTabletCheck();
-		console.log("MOBILE: ", this.isMobile);
+		//console.log("MOBILE: ", this.isMobile);
     }
     componentDidMount()
     {
@@ -133,7 +133,7 @@ class MainApp extends React.Component
 			500
 	);
 	onInternetConnection = (e) =>
-	{	console.log("[INFO onInternetConnection of root_idnex.jsx] status: ", navigator.onLine);
+	{	//console.log("[INFO onInternetConnection of root_idnex.jsx] status: ", navigator.onLine);
 		let alertMsg = navigator.onLine ?
 					   {turnOn: false, text: "", type:"success", level: 1} :
 					   {turnOn: true, text: "Your internet connection is off. -- Check it out!", type: "error", level: 1};

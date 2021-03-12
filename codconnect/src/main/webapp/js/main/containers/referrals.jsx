@@ -1,13 +1,12 @@
-import React from "react";
+ import React from "react";
 import PropTypes from "prop-types";
 import {Route, Switch} from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import {connect} from "react-redux";
 import {convertMroToCSV, resetMROData, resetClaimFileData, getBillingCodes, getClaimFile} from "../actions/rootActions.jsx";
 import {addAlertMessage} from "../actions/alertMessageActions.jsx";
-import DisplaySinglePage from "../components/refferals/displaySinglePage.jsx";
+import DisplayAllPages from "../components/refferals/displayAllPages.jsx";
 import IframePDF from "../components/refferals/iframePDF.jsx";
-import {PDFViewer} from "react-view-pdf";
 
 /*
  * flex-direction: row | row-reverse | column | column-reverse;
@@ -36,18 +35,18 @@ class Referrals extends React.Component
 	constructor(props)
 	{
 		super(props);
+		this.isMobile = window.mobileAndTabletCheck();
 	}
 	componentWillUnmount()
 	{
 	}
 	componentDidMount()
 	{
-
 	}
 	
 	render()
 	{
-		console.log("INFO: Referrals.render() is called, this.props: ", this.props);
+		console.log("INFO: ===> Referrals.render() is called, this: ", this);
 		
 		return(	
 				<div >
@@ -57,8 +56,18 @@ class Referrals extends React.Component
 						<Route exact path="/referrals/ocular_exam_report"  >
 							<IframePDF src="/docs/blv-vision-report-form-feb-12-2018.pdf" />
 						</Route>
-						<Route exact path="/referrals/blind_low_vision_referral_form"  ><DisplaySinglePage src="/docs/blv-referral-form-feb-12-2018.pdf" /></Route>
-						<Route exact path="/referrals/blind_low_vision_early_report"  ><PDFViewer url="/docs/blv-vision-report-form-feb-12-2018.pdf" /></Route>
+						<Route exact path="/referrals/blind_low_vision_referral_form"  >
+							{
+								this.isMobile ? <DisplayAllPages src="/docs/blv-referral-form-feb-12-2018.pdf" /> :
+												<IframePDF src="/docs/blv-referral-form-feb-12-2018.pdf" />
+							}
+						</Route>
+						<Route exact path="/referrals/blind_low_vision_early_report"  >
+							{
+								this.isMobile ? <DisplayAllPages src="/docs/blv-vision-report-form-feb-12-2018.pdf" /> :
+												<IframePDF src="/docs/blv-vision-report-form-feb-12-2018.pdf" />
+							}
+						</Route>
 					</Switch>
 				</div>
 			  );

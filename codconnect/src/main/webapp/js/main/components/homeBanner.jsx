@@ -231,6 +231,16 @@ class HomeBanner extends React.Component
         autoBind(this);
     }
 
+	//This is to prevent a warning about a memory leak.
+	//See https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component
+	componentWillUnmount() 
+	{
+	    // fix Warning: Can't perform a React state update on an unmounted component
+	    this.setState = (state,callback) =>
+		{
+	        return;
+	    };
+	}
     toggleAutoPlay() 
     {
         this.setState({ autoPlay: !this.state.autoPlay })
