@@ -11,7 +11,7 @@ export default function DisplayAllPages (props)
 	}
 		
 	return (
-			<Document file={props.src}
+			<Document file={props.src} 
 					  onLoadSuccess={onDocumentLoadSuccess}
 			>
 				{
