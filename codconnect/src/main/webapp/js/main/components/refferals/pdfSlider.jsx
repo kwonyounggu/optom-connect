@@ -2,25 +2,13 @@ import React from 'react';
 import Carousel from "react-material-ui-carousel"
 import autoBind from "auto-bind"
 import '../../css/homeBanner.scss';
-
-import 
-{
-    Card,
-    CardMedia,
-    Slider
-} from '@material-ui/core';
+import IframePDF from "./iframePDF.jsx";
+import {Card} from '@material-ui/core';
 
 function EachSlider(props)
 {
 	 return (
-        <Card raised className="Banner">
-	                <CardMedia
-	                    className="Media"
-	                    image={props.item.image}
-	                    title={props.item.name}
-	                >  
-	                </CardMedia>
-        </Card>
+        <IframePDF src={props.item.image} />
     )
 }
 
@@ -33,7 +21,7 @@ const pdfItems =
 	},
 	{
 		name: "second",
-		image: "/docs/patientReferralForm.pdf",
+		image: "/docs/patientReferralFormEditable.pdf",
 		description: ""
 	},
 	{

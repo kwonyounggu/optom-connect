@@ -7,7 +7,6 @@ import {convertMroToCSV, resetMROData, resetClaimFileData, getBillingCodes, getC
 import {addAlertMessage} from "../actions/alertMessageActions.jsx";
 import DisplayAllPages from "../components/refferals/displayAllPages.jsx";
 import IframePDF from "../components/refferals/iframePDF.jsx";
-import PDFSlider from "../components/refferals/pdfSlider.jsx";
 
 /*
  * flex-direction: row | row-reverse | column | column-reverse;
@@ -52,7 +51,7 @@ class Referrals extends React.Component
 		return(	
 				<div >
                     <Switch>
-						<Route exact path="/referrals"  ><h3>show avaliable links for referrals sections</h3></Route>
+						<Route exact path="/referrals"  ><h3>show avaliable links for referrals sections - {this.isMobile ? "true" : "false"}</h3></Route>
 						<Route exact path="/referrals/patient_referral_form"  >
 							{
 								this.isMobile ? <DisplayAllPages src="/docs/patientReferralFormEditable.pdf" /> :
@@ -60,7 +59,10 @@ class Referrals extends React.Component
 							}
 						</Route>
 						<Route exact path="/referrals/ocular_exam_report"  >
-							<PDFSlider />
+							{
+								this.isMobile ? <DisplayAllPages src="/docs/ocularExamReportEditable.pdf" /> :
+												<IframePDF src="/docs/ocularExamReportEditable.pdf" />
+							}
 						</Route>
 						<Route exact path="/referrals/blind_low_vision_referral_form"  >
 							{
