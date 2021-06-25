@@ -22,7 +22,7 @@ console.log(">>>SRC_DIR: ", SRC_DIR);
 module.exports=
 {
 		
-		mode: "development ",
+		mode: "development",
 		entry: 
 		{
 			root: "./src/main/webapp/js/root_index.jsx",
@@ -116,7 +116,7 @@ module.exports=
 				{
 					minify: {callapseWhitespace: true},
 					filename: "admin_index.html",
-					template: "src/main/webapp/index.html",
+					template: "src/main/webapp/admin_index.html",
 					chunks: ["admin"]
 				}
 			)

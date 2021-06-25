@@ -1,0 +1,80 @@
+body
+{
+	font-family: -apple-sytem, BlinkMacSystemFont, Segoe UI, 
+					Roboto, Oxygen-Sans, Ubuntu, Cantarell, H
+					elvetica Neue, sans-serif;
+	/*padding-top: 70px;
+	background-color: #dedede;*/
+}
+
+.root-container
+{
+	/*max-width: 1200px;*/
+	/*width: 860px;
+	margin: 0 auto;*/
+	/*margin-top: 64px;*/
+	/*padding: 0px;*/
+	
+
+/*
+  display: flex;
+  align-items: center;
+  justifyContent: flex-end;
+  padding: 0 8px;
+  min-height: 64px;
+ */
+
+}
+
+.help-block
+{
+	text-align: left;
+}
+.caret
+{
+	color: gray;
+}
+.glyphicon
+{
+	color: gray;
+	margin-left: 5px;
+}
+/*center a object inside div*/
+.centerObj
+{
+	height: 100%; 
+	width: 100%; 
+	display: flex; 
+	align-items: center; 
+	justify-content: center;
+}
+
+/*
+	The following is to diplay a vertical cursor for abcjs music sheet when animation start
+*/
+/*
+.cursor
+{
+	background-color: rgba(196, 196, 196, .5);
+}
+*/
+
+
+/***********************************************************************************
+For the responsive layout
+see http://getbootstrap.com/2.3.2/scaffolding.html#layouts
+************************************************************************************/
+
+/* Large desktop */
+@media (min-width: 1200px) { }
+ 
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {  }
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) 
+{  
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) {  }

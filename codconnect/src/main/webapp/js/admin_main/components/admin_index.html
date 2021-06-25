@@ -2,18 +2,18 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Connect Optometry Doctors</title>
+	<title>OD Connect</title>
 	
 	<!-- the following public_url stuff is from auth0.com/blog/reactjs-authentication-tutorial 
 	<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
 	-->
-	<link rel="stylesheet" media="print" href="/css/index.css" />
+	<link rel="stylesheet" media="print" href="/css/index.css">
 
 	
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" >
-	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<script src="https://www.google.com/recaptcha/api.js" async defer="defer"></script>
 	
 	<script type="text/javascript">
 		if(typeof(Storage) === "undefined")
@@ -86,7 +86,7 @@
 	-->
 	<!-- 	<script type="text/javascript" src="js/built/root_index_bundle.js"></script> -->
 	<!-- <div style="height: 100%; width: 100%; display: flex; position: fixed; align-items: center; justify-content: center;"><h1>Uploading ...</h1></div> -->
-</head>
+<script defer="defer" src="/js/built/admin_index_bundle.js"></script></head>
 <body>
 	<noscript>
       You need to enable JavaScript to run this app.
@@ -104,11 +104,9 @@
 
 <!-- The following is to be uncommented when the webpack-dev-server is not being used and instead,  WildFly21 will be used-->
 
-<!-- 
-<script type="text/javascript" src="/js/built/admin_index_bundle.js"></script>
--->
 
-<script type="text/javascript" src="/js/built/root_index_bundle.js"></script>
+<script type="text/javascript" src="/js/built/admin_index_bundle.js"></script>
+
 
 </body>
 </html>
