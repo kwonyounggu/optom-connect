@@ -14,14 +14,10 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
-import {Alert, AlertTitle} from '@material-ui/lab';
+import {Alert} from '@material-ui/lab';
 import Collapse from '@material-ui/core/Collapse';
 
 import { trackPromise } from 'react-promise-tracker';
-
-import HomeIcon from '@material-ui/icons/Home';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import {StyledBreadcrumb} from "../../../components/common/styledBreadcrumb.jsx";
 
 import {DisplaySteps} from "../signup/signupForm.jsx";
 
@@ -34,26 +30,6 @@ const styles = (theme) =>
 	}
 });
 
-const MyBreadcrumbs = (props) => 
-{
-	//console.info("MyBreadscrumbs: props, ", props.location.pathname);
-	let path = props.location.pathname.split("\/");
-    return (
-		    <Breadcrumbs aria-label="breadcrumb" maxItems={2}>
-				{
-					path.map
-					(
-						(item, i) =>
-						(
-						   (i == 0) ? 
-								<StyledBreadcrumb key={i} component="a" href="/" label="Home" icon={<HomeIcon fontSize="small" />}/> : 
-								<StyledBreadcrumb key={i} component="a" href={props.location.pathname.substring(0, props.location.pathname.indexOf(item)+item.length)} label={item}/>
-						)
-					)
-				}
-		    </Breadcrumbs>
-		  );
-}
 const steps = ['SignUp', 'Confirm Link In Email', 'Login'];
 class LoginForm extends React.Component
 {
@@ -75,9 +51,9 @@ class LoginForm extends React.Component
 		this.onSubmit = this.onSubmit.bind(this);
 		this.isValid = this.isValid.bind(this);
 	
-		this.params = queryString.parse(props.location.search);
+		//this.params = queryString.parse(props.location.search);
 			
-		console.log("[INFO] in main/auth/components/login/loginForm.jsx -> constructor(..), this.props: ", this.props);
+		console.log("[INFO] in admin_main/auth/components/login/loginForm.jsx -> constructor(..), this.props: ", this.props);
 	}
 
 	onChange(e)
@@ -124,9 +100,9 @@ class LoginForm extends React.Component
 									
 									this.props.setCurrentUser(jwtDecode(response.data.token));
 									
-									this.params.prevPath ? 
-										(this.params.prevPath.toLowerCase().includes("myaccount") ? this.props.history.push("/") : this.props.history.push(this.params.prevPath)) : 
-										this.props.history.push("/");
+									//this.params.prevPath ? 
+									//	(this.params.prevPath.toLowerCase().includes("myaccount") ? this.props.history.push("/") : this.props.history.push(this.params.prevPath)) : 
+									//	this.props.history.push("/");
 								}
 								else if (response.data.invalid)
 								{
@@ -150,20 +126,11 @@ class LoginForm extends React.Component
 
 	render()
 	{	
+		  console.log("INFO [render() of loginForm.jsx] this.props: ", this.props);
 		const {classes} = this.props;
 		return(
 				<Grid container spacing={1}>
-			      <Grid item xs={12}>
-			        <Typography variant="h6">
-			          LOGIN
-			        </Typography>
-			      </Grid>
-				  <Grid item xs={10}>
-			        <MyBreadcrumbs {...this.props} />
-			      </Grid>
-				  <Grid item xs={12}>
-			       	<hr />
-			      </Grid>
+				  <Grid item xs={12}>&nbsp;</Grid>
 				  <Grid item xs={12}>
 			       	<Paper variant="outlined" className={classes.paper}>
 					  <Grid container>
@@ -216,20 +183,10 @@ class LoginForm extends React.Component
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
 							<Button variant="outlined" color="primary" disabled={this.state.isLoading} onClick={this.onSubmit}>Log In</Button>
 						</Grid>
-						<Grid item xs={12}>&nbsp;</Grid>
-						<Grid item xs={3}>&nbsp;</Grid>
-						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Button size="small" color="primary" component={Link} to="/myAccount/forgotPassword">Forgot Password</Button>
-						</Grid>
-						<Grid item xs={12}>&nbsp;</Grid>
-						<Grid item xs={3}>&nbsp;</Grid>
-						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Button size="small" color="primary" component={Link} to="/myAccount/signup"> Simple Sign Up </Button>
-						</Grid>
-						</Grid>
-					</Paper> 
-				  </Grid>
-				</Grid>
+					</Grid>
+				</Paper> 
+			</Grid>
+		</Grid>
 			  );
 	}
 }
@@ -237,7 +194,6 @@ LoginForm.propTypes =
 {
 	classes: PropTypes.object.isRequired,
 	loginRequest: PropTypes.func.isRequired,
-	addAlertMessage: PropTypes.func.isRequired,
 	setCurrentUser: PropTypes.func.isRequired
 };
 

@@ -13,6 +13,7 @@ import Loader from 'react-loader-spinner';
 
 const Home = React.lazy( () => import("./admin_main/components/home.jsx") );
 const NotFound = React.lazy( () => import("./admin_main/components/notFound.jsx") );
+const Login = React.lazy( () => import("./admin_main/auth/components/login/login.jsx") );
 
 import NavigationBar from "./admin_main/components/navigationBar.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -50,48 +51,25 @@ class MainApp extends React.Component
 		
     }
 
-	transformLocation = (location) =>
-	{
-		console.log("transformLocation: ", location);
-		const stringParams = parseQuery(location.search);
-		if (stringParams.page === undefined) return location;
-		return {...location, pathname: "/" + stringParams.page};
-	}
 	render()
 	{
+		console.log("INFO [admin_index.jsx]: this.", this);
 		return (
 				<Provider store={store}>
 		        	<BrowserRouter>
 						<Route component={(props) => <NavigationBar {...props} /> } />
         				<React.Suspense fallback={<div style={styles.loadingIndicator}><Loader type="ThreeDots" color="#2BAD60" height="100" width="100" /></div>}>	
 							<LoadingIndicator />
-								{console.log("HERE: ", this)}
+								
 			                    <Switch>
-									
-			                        <Route path="/admin_index.html/home"    component  ={ (props) => <Home {...props} /> } /> 
-									<Route path="/amin_index.html/other"    component={ <div>heel</div> } />
-									<Route path="#link"     component={ (props) => <div>thank you</div> } />
-			                        <Route path="/privacy-policy" render={ () => {window.location.href="termsfeed-privacy-policy-html-english.html"}} />
-			                        
 									<Route exact path="/admin_index.html"    component={ (props) => <Home {...props} /> } /> 
+			                        <Route path="/admin_index.html/home"    component={ (props) => <Home {...props} /> } /> 
+									<Route path="/admin_index.html/other"    component={ (props) => <div>heel</div> } />
+									<Route path="/admin_index.html/login" component={ (props) => <Login {...props} /> } /> 
+			                        <Route path="/privacy-policy" render={ () => {window.location.href="termsfeed-privacy-policy-html-english.html"}} />			                        
+																
 									<Route component={ (props) => <NotFound {...props} /> } />
 		        				</Switch>
-								
-							{/*}
-							<Route   component={ (props) => <NotFound {...props} /> } />
-							<Route 
-								component=
-								{
-									
-									(props) =>
-									(
-										<Switch location={transformLocation(props.location)}>
-											<Route path="/home" component={ (props) => <Home {...props} /> } /> 
-											<Route path="*" component={ (props) => <NotFound {...props} /> } />
-										</Switch>
-									)
-								}
-							/>*/}
         				</React.Suspense>		 
 		            </BrowserRouter >
     			</Provider>
