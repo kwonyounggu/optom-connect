@@ -44,7 +44,7 @@ class LoginForm extends React.Component
 		    errors: {},
 		    isLoading: false,
 			invalid: false,
-			keepMeLoggedIn: true
+			keepMeLoggedIn: false
 		};
 		
 		this.onChange = this.onChange.bind(this);
@@ -76,7 +76,7 @@ class LoginForm extends React.Component
 	onSubmit(e)
 	{
 		e.preventDefault();
-		console.log("INFO-1 (onSubmit() of loginForm.jsx) is called, ",this.state);
+		console.log("INFO [onSubmit() of loginForm.jsx --1] is called, ",this.state, this.props);
 		
 		if(this.isValid())
 		{
@@ -92,17 +92,21 @@ class LoginForm extends React.Component
 						(
 							(response) =>
 							{
-								//console.log("successful, the response object=",response);
+								console.log("INFO reponse object [onSubmit(e) of loginnForm.jsp] --2: ",response);
 								this.setState({isLoading: false});
 								if(!response.data.invalid)
 								{
-									setAuthorizationToken(response.data.token);
-									
-									this.props.setCurrentUser(jwtDecode(response.data.token));
-									
-									//this.params.prevPath ? 
-									//	(this.params.prevPath.toLowerCase().includes("myaccount") ? this.props.history.push("/") : this.props.history.push(this.params.prevPath)) : 
-									//	this.props.history.push("/");
+									if (response.data.authorizationLevelId == 1) //super user
+									{
+										setAuthorizationToken(response.data.token);									
+										this.props.setCurrentUser(jwtDecode(response.data.token));	
+										this.props.history.push("/admin_index.html");
+									}
+									else
+									{
+										//You are not allowed to proceed these functions here so goback to the normal user home page.
+										window.location.href="/";
+									}
 								}
 								else if (response.data.invalid)
 								{
@@ -176,7 +180,7 @@ class LoginForm extends React.Component
 						</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>
 						<Grid item xs={9}  style={{textAlign: 'left'}}>
-							<Checkbox checked={this.state.keepMeLoggedIn} onChange={(e)=>this.setState({keepMeLoggedIn: e.target.checked})} color="primary"/>&nbsp;<span>Keep me logged in</span>
+							<Checkbox checked={this.state.keepMeLoggedIn} disabled onChange={(e)=>this.setState({keepMeLoggedIn: e.target.checked})} color="primary"/>&nbsp;<span>Keep me logged in</span>
 						</Grid>
 						<Grid item xs={12}>&nbsp;</Grid>
 						<Grid item xs={3}>&nbsp;</Grid>

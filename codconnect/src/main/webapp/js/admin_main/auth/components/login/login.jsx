@@ -24,14 +24,14 @@ class Login extends React.Component
 						{
 					    	this.props.auth.isAuthenticated ?
 					    			
-					    	<Alert bsStyle="danger" >
-								<h4>Ooops! You forgot to logout first, please try again after.</h4>
+					    	<Alert valiant="warning">
+								Ooops! You forgot to logout first, please try again after. 
 							</Alert>
 								:
 							<LoginForm 
 								loginRequest={this.props.loginRequest}
 								setCurrentUser={this.props.setCurrentUser}
-								{...this.props.location}
+								{...this.props}
 							/>
 							
 					    }

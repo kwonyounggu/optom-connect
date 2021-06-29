@@ -14,8 +14,13 @@ export function setAuthorizationToken(token)
 	  }
 }
 
+//PRODUCTION
 //axios.defaults.baseURL = 'https://od.webmonster.ca/';
-axios.defaults.baseURL = 'https://localhost:8443/';
+
+//DEVELOPMENT
+//axios.defaults.baseURL = 'https://localhost:8443/';
+axios.defaults.baseURL = 'https://192.168.1.3:8443/';
+
 /*
 https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index
  */

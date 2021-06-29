@@ -21,26 +21,11 @@ const store = createStore(combinedReducers, middleware);
 export default createStore(combinedReducers, middleware);
 */
 
+//Invalidate if any data is locally stored not only authToken but also for others
 if (localStorage.authToken) 
 {
-	//New token expiring 365 days later will be allocated whenever a new login is performed
-	//if the token is expired after 365 days then call logout so that it will clean localStorage
-
-	let user = jwtDecode(localStorage.authToken);
-	console.log("[INFO in store.jsx] user: ", user, " | token expire time: " + new Date(user.exp * 1000) +" | current time: " + new Date());
-	if (user.exp < (Date.now()/1000)) 
-	{
-		console.log("[INFO in store.jsx]: the access token is expired.");
-		//The following two statements are the same as in logout() function
-		setAuthorizationToken(false);
-	  	store.dispatch(setCurrentUser({}));
-	}
-	else
-	{
-		console.log("[INFO in store.jsx]: the access token is not expired yet.")
-	  	setAuthorizationToken(localStorage.authToken);
-	  	store.dispatch(setCurrentUser(user));
-	}
+	setAuthorizationToken(false);
+	store.dispatch(setCurrentUser({}));
 }
 
 axios.interceptors.request.use

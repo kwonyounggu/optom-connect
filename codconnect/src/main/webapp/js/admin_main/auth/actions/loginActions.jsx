@@ -21,19 +21,6 @@ export function logout()
 	  };
 }
 
-/*
-export function login(data) 
-{
-	  return dispatch => 
-	  {
-	    return axios.post('/api/auth', data).then(res => 
-	    {
-	      setAuthorizationToken(res.data.token);
-	      dispatch(setCurrentUser(jwtDecode(res.data.token)));
-	    });
-	  };
-}
-*/
 export function loginRequest(data) 
 {   
 	console.log("[INFO IN loginRequest(..) in loginActions.jsx] axios.post(jsp/api/users/login.jsp", data, ")");

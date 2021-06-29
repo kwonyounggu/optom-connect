@@ -111,6 +111,8 @@
 						{
 							TokenUtil tokenUtil = (TokenUtil)request.getServletContext().getAttribute("tokenUtil");
 							jsonObj.put("token", tokenUtil.getJWT(jsonObj.getString("email"), ab.getFullName(), "internalLogin", (jsonObj.getBoolean("keepMeLoggedIn") ? 0 : -1)));
+							//Added on June 29 2021
+							jsonObj.put("authorizationLevelId", ab.getAuthUserAuthorizationLevelId());
 						}
 						else //Activation or Confirmation is not done
 						{

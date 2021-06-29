@@ -5,5 +5,13 @@
       http://www.jboss.com/xml/ns/javaee
       http://www.jboss.org/j2ee/schema/jboss-web_5_1.xsd">
    <context-root>/</context-root>
+   <!-- 
    <virtual-host>od-host</virtual-host>
+   -->
 </jboss-web>
+
+<!-- 
+Added June 28 2021
+Before releasing to the production, uncomment <virtual-host>od-host</virtual-host> above and add the following statement
+<host name="od-host" alias="od.webmonster.ca" default-web-module="codconnect-0.1"/> under <host default-host ...> in standalone.xml 
+-->

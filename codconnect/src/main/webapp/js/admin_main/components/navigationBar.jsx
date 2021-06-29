@@ -42,7 +42,7 @@ class NavigationBar extends React.Component
 					<Nav>
 						{
 			          		this.props.auth.isAuthenticated ?		
-								<Nav.Link onSelect={(e)=>onLogoutClick(e, this.props)}>Logout</Nav.Link> :
+								<Nav.Link onClick={(e)=>this.onLogoutClick(e, this.props)}>Logout</Nav.Link> :
 								<LinkContainer to="/admin_index.html/login"><Nav.Link>Login</Nav.Link></LinkContainer>
 			        	}
 						
