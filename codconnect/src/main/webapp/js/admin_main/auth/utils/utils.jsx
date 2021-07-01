@@ -4,12 +4,12 @@ export function setAuthorizationToken(token)
 {
 	  if (token) 
 	  {
-		  localStorage.setItem("authToken", token);
+		  localStorage.setItem("authTokenForAdmin", token);
 		  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	  } 
 	  else 
 	  {
-		  localStorage.removeItem('authToken');
+		  localStorage.removeItem('authTokenForAdmin');
 		  delete axios.defaults.headers.common['Authorization'];
 	  }
 }

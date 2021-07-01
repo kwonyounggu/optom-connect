@@ -22,7 +22,7 @@ export default createStore(combinedReducers, middleware);
 */
 
 //Invalidate if any data is locally stored not only authToken but also for others
-if (localStorage.authToken) 
+if (localStorage.authTokenForAdmin) 
 {
 	setAuthorizationToken(false);
 	store.dispatch(setCurrentUser({}));
