@@ -65,6 +65,8 @@ class MainApp extends React.Component
 									<Route exact path="/admin_index.html"    component={ (props) => <Home {...props} /> } /> 
 			                        <Route path="/admin_index.html/home"    component={ (props) => <Home {...props} /> } /> 
 									<Route path="/admin_index.html/other"    component={ (props) => <div>heel</div> } />
+									<Route path="/admin_index.html/medicineInput"    component={ (props) => <div>Medicine Data Input]</div> } />
+									<Route path="/admin_index.html/eyeConditionInput"    component={ (props) => <div>Eye Condition Data Input</div> } />
 									<Route path="/admin_index.html/login" component={ (props) => <Login {...props} /> } /> 
 			                        <Route path="/privacy-policy" render={ () => {window.location.href="termsfeed-privacy-policy-html-english.html"}} />			                        
 																

@@ -20,6 +20,8 @@ class NavigationBar extends React.Component
 		e.preventDefault();
 		props.logout();
 	}
+	
+	//<NavDropdown.Item><LinkContainer to="/admin_index.html/medicineInput">Medicines</LinkContainer></NavDropdown.Item>
 	render()
 	{
 		console.log("INFO [navigationBar.jsx] props: ", this.props);
@@ -31,9 +33,9 @@ class NavigationBar extends React.Component
 				    <Nav className="mr-auto">
 				      <LinkContainer to="/admin_index.html/home"><Nav.Link>Home</Nav.Link></LinkContainer>
 				      <LinkContainer to="/admin_index.html/other"><Nav.Link>Other</Nav.Link></LinkContainer>
-				      <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-				        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-				        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+				      <NavDropdown title="Health Data Input" id="basic-nav-dropdown">
+				        <LinkContainer to="/admin_index.html/medicineInput"><NavDropdown.Item>Input Medicines</NavDropdown.Item></LinkContainer>
+						<LinkContainer to="/admin_index.html/eyeConditionInput"><NavDropdown.Item>Input Eye Conditions</NavDropdown.Item></LinkContainer>		        
 				        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
 				        <NavDropdown.Divider />
 				        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>

@@ -13,8 +13,9 @@ create table medicine
 	medicine_name varchar(255) not null,
 	medicine_type smallint not null, -- 1: brand, 0: generic
 	generic_name varchar(255),
-	brand_name varchar(255),
+	brand_names varchar[], -- self brand name and other alternatives
 	alternative_medicine_ids int[], -- store multiple medicine_ids into the array
+	drug_class varchar(255), -- will be used later
 	warnings text, --it's different from each medicine
 	what_is_this text,
 	before_taking_this text,
@@ -30,9 +31,18 @@ create table medicine
 	during_breastfeeding text,
 	dosage_forms varchar(255),
 	eye_condition_ids int[], -- array of eye_condition_ids, mapping to the corresponding eye conditions
-	data_reference_urls varchar(255)[]	
+	data_reference_urls varchar(255)[],
+	url_about_this_medicine_local_html_description varchar(255),
+	reviewer_account_id int references auth_user_account(id),
+	review_time timestamp,
+	reviewer_profile_url varchar(255)	
 );
 
+create table medicine_faq
+(
+	--medicine_faq_id
+	--see faq in drugs.com
+);
 -- DONE 2021-06-20
 create table medicine_image
 (
